@@ -5,12 +5,12 @@ import Image from "next/image";
 import vakilGiriAuth from "@/app/assets/vakilgiri_auth.png"
 import Login from "./Login";
 import ForgetPassword from "./ForgetPassword";
-import Regester from "./Regester";
+import Register from "./Register";
 
 const Form = () => {
   const [login, setLogin] = useState<boolean>(true);
   const [forgetPassword, setForgetPassword] = useState<boolean>(false);
-  const [regestration, setRegestration] = useState<boolean>(false);
+  const [registration, setRegistration] = useState<boolean>(false);
 
   const handleForgetPassword = () => {
     setLogin(false);
@@ -23,21 +23,21 @@ const Form = () => {
   };
 
   const alreadyLogin = () => {
-      setRegestration(false);
+      setRegistration(false);
       setLogin(true);
   };
 
-  const handleRegestration = () => {
+  const handleRegistration = () => {
     setLogin(false);
-    setRegestration(true);
+    setRegistration(true);
   }
 
 
   return (
     <>
       <div className="font-poppins min-h-screen w-full flex justify-center items-center">
-        <div className="bg-white h-[28rem]  w-[999.99px] rounded-xl flex justify-center items-center gap-[6.5rem] p-5">
-          <div className="md:hidden sm:hidden lg:block xl:block hidden">
+        <div className="bg-white h-full min-h-[23rem] lg:w-[61rem] rounded-xl flex justify-center items-center">
+          <div className="lg:block hidden">
             <Image
               src={vakilGiriAuth}
               alt="Example"
@@ -47,7 +47,7 @@ const Form = () => {
           </div>
 
           {login && (
-            <Login handleForgetPassword={handleForgetPassword} handleRegestration={handleRegestration}/>
+            <Login handleForgetPassword={handleForgetPassword} handleRegistration={handleRegistration}/>
           ) }
 
           {forgetPassword && 
@@ -56,8 +56,8 @@ const Form = () => {
           )
         }
 
-          {regestration && (
-            <Regester alreadyLogin={alreadyLogin}/>
+          {registration && (
+            <Register alreadyLogin={alreadyLogin}/>
           )}
         </div>
       </div>
