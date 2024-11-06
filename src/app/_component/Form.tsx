@@ -35,8 +35,8 @@ const Form = () => {
 
   return (
     <>
-      <div className="font-poppins min-h-screen w-full flex justify-center items-center">
-        <div className="bg-white h-full min-h-[23rem] lg:w-[61rem] rounded-xl flex justify-center items-center">
+      <div className="font-poppins min-h-screen w-full flex justify-center items-center p-4 lg:p-10">
+        <div className="bg-white h-full min-h-[23rem] w-full lg:w-[61rem] rounded-xl flex justify-center items-center">
           <div className="lg:block hidden">
             <Image
               src={vakilGiriAuth}
