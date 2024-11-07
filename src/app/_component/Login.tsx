@@ -1,45 +1,47 @@
-"use client"
+"use client";
 
-import Image from 'next/image'
-import React from 'react'
-import logo from "@/app/assets/logo.png"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, Controller } from "react-hook-form"
-import { z } from "zod"
-import { Input } from "@/components/ui/input"
+import { z } from "zod";
+import React from "react";
+import Image from "next/image";
+
+import logo from "@/app/assets/logo.png";
+import { Input } from "@/components/ui/input";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Select,
-  SelectContent,
-  SelectGroup,
   SelectItem,
   SelectLabel,
-  SelectTrigger,
+  SelectGroup,
   SelectValue,
-} from "@/components/ui/select"
+  SelectTrigger,
+  SelectContent,
+} from "@/components/ui/select";
 
 import {
   Form,
-  FormControl,
-  FormField,
   FormItem,
   FormLabel,
+  FormField,
+  FormControl,
   FormMessage,
-} from "@/components/ui/form"
-import { DatePicker } from '@/components/ui/date-picker'
-import { Button } from '@/components/ui/button'
+} from "@/components/ui/form";
+import { DatePicker } from "@/components/ui/date-picker";
 
 // Define schema with gender and birthdate fields
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   pan: z.string().min(10, { message: "Pan number should be 10 digits" }),
-  gender: z.enum(["male", "female", "not-specified"], { message: "Gender is required" }),
+  gender: z.enum(["male", "female", "not-specified"], {
+    message: "Gender is required",
+  }),
   birthdate: z.date({ required_error: "Birthdate is required" }),
-})
+});
 
 interface LoginProps {
-  handleForgetPassword: () => void; 
-  handleRegistration: () => void;    
+  handleForgetPassword: () => void;
+  handleRegistration: () => void;
 }
 
 const Login: React.FC<LoginProps> = ({
@@ -53,10 +55,11 @@ const Login: React.FC<LoginProps> = ({
       pan: "",
       birthdate: undefined,
     },
-  })
+  });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    alert("Login Successful")
+    console.log("DATA>>>", data);
+    alert("Login Successful");
   }
 
   return (
@@ -68,19 +71,28 @@ const Login: React.FC<LoginProps> = ({
         <span className="text-[#002537] font-medium text-base">
           Please sign-in to your account and start the adventure
         </span>
-      
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center gap-4 w-[16rem] sm:w-[20rem]'>
 
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col items-center justify-center gap-4 w-[16rem] sm:w-[20rem]"
+          >
             {/* Email Field */}
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem className="grid w-full max-w-sm items-center text-left">
-                  <FormLabel className='text-sm font-semibold mt-1 p-0 text-blue-950'>Email ID</FormLabel>
+                  <FormLabel className="text-sm font-semibold mt-1 p-0 text-blue-950">
+                    Email ID
+                  </FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="Enter Email" {...field} className='bg-slate-100 w-full p-2 shadow-sm shadow-slate-500/50'/>
+                    <Input
+                      type="email"
+                      placeholder="Enter Email"
+                      {...field}
+                      className="bg-slate-100 w-full p-2 shadow-sm shadow-slate-500/50"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -93,70 +105,89 @@ const Login: React.FC<LoginProps> = ({
               name="pan"
               render={({ field }) => (
                 <FormItem className="grid w-full max-w-sm items-center text-left">
-                  <FormLabel className='text-sm font-[600] mt-1 p-0 text-blue-950'>Pan Number</FormLabel>
+                  <FormLabel className="text-sm font-[600] mt-1 p-0 text-blue-950">
+                    Pan Number
+                  </FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="Pan Number" {...field} className='bg-slate-100 w-full p-2 shadow-sm shadow-slate-500/50'/>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-           <div className='flex flex-col md:flex-row gap-4 justify-between items-start sm:items-center w-full p-0 m-0'>
-            {/* Gender Selection */}
-            <FormField
-              control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2 justify-center items-center">
-                  <FormControl>
-                    <Select {...field}>
-                      <SelectTrigger className="bg-slate-100 w-[16rem] md:w-full">
-                        <SelectValue placeholder="Select Gender" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Select Gender</SelectLabel>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
-                          <SelectItem value="not-specified">Prefer not to say</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Date Picker */}
-            <FormField
-              control={form.control}
-              name="birthdate"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-1">
-                  <FormControl>
-                    <Controller
-                      control={form.control}
-                      name="birthdate"
-                      render={({ field: controllerField }) => (
-                        <DatePicker {...controllerField} onChange={controllerField.onChange} className="bg-slate-100 w-[16rem] md:w-full" />
-                      )}
+                    <Input
+                      type="text"
+                      placeholder="Pan Number"
+                      {...field}
+                      className="bg-slate-100 w-full p-2 shadow-sm shadow-slate-500/50"
                     />
                   </FormControl>
-                  <FormMessage className="text-red-500" />
+                  <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
 
-            <div className="text-xs w-full text-right font-medium text-[#F20101] cursor-pointer" onClick={handleForgetPassword}>
+            <div className="flex flex-col md:flex-row gap-4 justify-between items-start sm:items-center w-full p-0 m-0">
+              {/* Gender Selection */}
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-2 justify-center items-center">
+                    <FormControl>
+                      <Select {...field}>
+                        <SelectTrigger className="bg-slate-100 w-[16rem] md:w-full">
+                          <SelectValue placeholder="Select Gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Select Gender</SelectLabel>
+                            <SelectItem value="male">Male</SelectItem>
+                            <SelectItem value="female">Female</SelectItem>
+                            <SelectItem value="not-specified">
+                              Prefer not to say
+                            </SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Date Picker */}
+              <FormField
+                control={form.control}
+                name="birthdate"
+                render={() => (
+                  <FormItem className="flex flex-col gap-1">
+                    <FormControl>
+                      <Controller
+                        control={form.control}
+                        name="birthdate"
+                        render={({ field: controllerField }) => (
+                          <DatePicker
+                            {...controllerField}
+                            onChange={controllerField.onChange}
+                            className="bg-slate-100 w-[16rem] md:w-full"
+                          />
+                        )}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div
+              className="text-xs w-full text-right font-medium text-[#F20101] cursor-pointer"
+              onClick={handleForgetPassword}
+            >
               Forget password?
             </div>
 
             <div className="text-center font-medium py-2">
               Not a Vakilgiri Client?{" "}
-              <span className="text-[#F20101] cursor-pointer" onClick={handleRegistration}>
+              <span
+                className="text-[#F20101] cursor-pointer"
+                onClick={handleRegistration}
+              >
                 Register
               </span>
             </div>
@@ -164,7 +195,7 @@ const Login: React.FC<LoginProps> = ({
         </Form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
