@@ -41,8 +41,8 @@ const Form = () => {
             <Image
               src={vakilGiriAuth}
               alt="Example"
-              height={1000}
-              width={1000}
+              height={1040}
+              width={1200}
               />
           </div>
 

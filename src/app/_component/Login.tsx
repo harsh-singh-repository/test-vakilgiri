@@ -150,6 +150,7 @@ const Login: React.FC<LoginProps> = ({
             />
           </div>
 
+            <Button type="submit" className="w-full hover:bg-[#091747] bg-[#F20101]">Login</Button>
             <div className="text-xs w-full text-right font-medium text-[#F20101] cursor-pointer" onClick={handleForgetPassword}>
               Forget password?
             </div>
