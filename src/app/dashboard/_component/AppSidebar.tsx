@@ -1,3 +1,5 @@
+
+
 import {LayoutDashboard,User,BriefcaseBusiness,IndianRupee,Landmark } from "lucide-react"
 
 import {
@@ -10,6 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { cn } from "@/lib/utils"
 
 // Menu items.
 const items = [
@@ -17,30 +20,37 @@ const items = [
     title: "Dashboard",
     url: "/dashboard",
     icon: LayoutDashboard,
+    classname:""
   },
   {
     title: "Client",
     url: "#",
     icon: User,
+    classname:""
   },
   {
     title: "Bussiness",
     url: "#",
     icon: BriefcaseBusiness,
+    classname:""
   },
   {
     title: "Sales",
     url: "#",
     icon: IndianRupee,
+    classname:""
   },
   {
     title: "Financials",
     url: "#",
     icon: Landmark,
+    classname:""
   },
 ]
 
 export function AppSidebar() {
+
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -50,7 +60,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title} className="">
-                  <SidebarMenuButton asChild className="hover:bg-[#FFCECE] focus:bg-[#F20101] focus:text-white">
+                  <SidebarMenuButton asChild className={cn("hover:bg-[#FFCECE] focus:bg-[#F20101] focus:text-white", item.classname)}>
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -65,3 +75,4 @@ export function AppSidebar() {
     </Sidebar>
   )
 }
+2

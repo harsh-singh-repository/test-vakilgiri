@@ -9,7 +9,7 @@ import { CiMenuBurger } from "react-icons/ci";
 const Navbar = () => {
   return (
     <>
-      <div className="w-full  sticky top-0 bg-white shadow-lg p-2 border-black flex items-center justify-between h-16">
+      <div className="w-full  sticky top-0 bg-white shadow-lg p-2 border-black flex items-center justify-between h-16 z-50">
         <div className="flex justify-center gap-2 items-center">
             <SidebarTrigger>
                <CiMenuBurger/>
