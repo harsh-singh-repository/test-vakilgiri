@@ -6,7 +6,6 @@ import {BarGraph} from "./_component/Graphs";
 
 const page = () => {
 
-
   return (
    <>
      <Results/>

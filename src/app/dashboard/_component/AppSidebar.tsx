@@ -1,6 +1,6 @@
 
 
-import {LayoutDashboard,User,BriefcaseBusiness,IndianRupee,Landmark } from "lucide-react"
+import { BriefcaseBusiness, IndianRupee, Landmark, LayoutDashboard, User } from "lucide-react"
 
 import {
   Sidebar,
@@ -75,4 +75,3 @@ export function AppSidebar() {
     </Sidebar>
   )
 }
-2

@@ -39,7 +39,6 @@ const chartConfig = {
 
 const SubscriptionGraph = () => {
   return (
-    <>
       <Card>
         <CardHeader className="flex flex-col justify-center items-center">
           <CardTitle>Subscription</CardTitle>
@@ -65,7 +64,6 @@ const SubscriptionGraph = () => {
           </ChartContainer>
         </CardContent>
       </Card>
-    </>
   );
 };
 

@@ -1,6 +1,5 @@
-import React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,14 +7,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const ClientTabs = () => {
   return (
-    <>
       <div className="p-4 w-full overflow-x-auto bg-red-50">
         <Tabs defaultValue="account" className="w-full">
           <TabsList className="grid w-full grid-cols-7 bg-green-200">
@@ -32,7 +30,7 @@ const ClientTabs = () => {
               <CardHeader>
                 <CardTitle>Account</CardTitle>
                 <CardDescription>
-                  Make changes to your account here. Click save when you're
+                  Make changes to your account here. Click save when you&apos;re
                   done.
                 </CardDescription>
               </CardHeader>
@@ -56,7 +54,7 @@ const ClientTabs = () => {
               <CardHeader>
                 <CardTitle>Password</CardTitle>
                 <CardDescription>
-                  Change your password here. After saving, you'll be logged out.
+                  Change your password here. After saving, you&apos;ll be logged out.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
@@ -76,7 +74,6 @@ const ClientTabs = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </>
   );
 };
 

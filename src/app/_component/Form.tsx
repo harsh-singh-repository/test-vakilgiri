@@ -1,10 +1,10 @@
 "use client"
 
-import {useState } from "react";
+import vakilGiriAuth from "@/app/assets/vakilgiri_auth.png";
 import Image from "next/image";
-import vakilGiriAuth from "@/app/assets/vakilgiri_auth.png"
-import Login from "./Login";
+import { useState } from "react";
 import ForgetPassword from "./ForgetPassword";
+import Login from "./Login";
 import Regester from "./Regester";
 
 const Form = () => {

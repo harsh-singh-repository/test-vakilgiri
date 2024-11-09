@@ -39,7 +39,6 @@ const chartConfig = {
 
 const RevenueGraph = () => {
   return (
-    <>
       <Card>
         <CardHeader className="flex flex-col justify-center items-center">
           <CardTitle>Revenue & Expenses</CardTitle>
@@ -65,7 +64,6 @@ const RevenueGraph = () => {
           </ChartContainer>
         </CardContent>
       </Card>
-    </>
   );
 };
 
