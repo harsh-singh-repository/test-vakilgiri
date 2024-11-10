@@ -1,14 +1,15 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { Client } from '@/constants/data';
 import { cn } from '@/lib/utils';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
-import { columns } from './_component/columns';
-import { ClientTable } from './_component/client-table';
+import { columns } from '../client/_component/columns';
+import { ClientTable } from '../client/_component/client-table';
 import { fakeUsers } from '@/constants/client-table-data';
+import ClientCard from './_component/client-card';
 
 const breadcrumbItems = [
   { title: 'Dashboard', link: '/dashboard' },
@@ -42,14 +43,15 @@ export default async function ClientPage({ searchParams }: paramsProps) {
         <div className="flex items-start justify-between">
           <div className='text-2xl font-bold text-[#042559]'>{`Clients (${totalUsers})`}</div>
 
-          <Link
-            href={'/dashboard/client/new'}
-            className={cn(buttonVariants({ variant: 'destructive' }))}
+          <Button
+            className='bg-[#f21300] text-white'
           >
             <Plus className="mr-2 h-4 w-4" /> Add New Client
-          </Link>
+          </Button>
         </div>
         <Separator />
+
+        <ClientCard/>
 
         <ClientTable
           searchKey="search"

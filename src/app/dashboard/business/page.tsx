@@ -1,5 +1,5 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Business } from '@/constants/data';
 import { cn } from '@/lib/utils';
@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { columns } from './_component/columns';
 import { BusinessTable } from './_component/business-table';
 import { fakeBusinesss } from '@/constants/business-table-data';
+import BusinessCardSection from './_component/business-card';
 
 const breadcrumbItems = [
   { title: 'Dashboard', link: '/dashboard' },
@@ -41,14 +42,15 @@ export default async function BusinessPage({ searchParams }: paramsProps) {
         <div className="flex items-start justify-between">
           <div className='text-2xl font-bold'>{`Businesses (${totalUsers})`}</div>
 
-          <Link
-            href={'/dashboard/client/new'}
-            className={cn(buttonVariants({ variant: 'destructive' }))}
+          <Button
+            className='bg-[#f21300] text-white'
           >
-            <Plus className="mr-2 h-4 w-4" /> Add New Busuiness
-          </Link>
+           <Plus className="mr-2 h-4 w-4" /> Add New Busuiness
+          </Button>
         </div>
         <Separator />
+
+        <BusinessCardSection />
 
         <BusinessTable
           searchKey="search"

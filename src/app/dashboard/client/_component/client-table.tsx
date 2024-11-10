@@ -33,7 +33,7 @@ import {
 } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import Image from 'next/image'; // Assuming you're using Next.js Image component
-import profileImage from '../../../../public/assets/profile-image.png'
+import profileImage from '../../../../../public/assets/profile-image.png'
 import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
@@ -109,7 +109,7 @@ export function ClientTable<TData, TValue>({
     if (columnId === 'kyc') {
       // Render KYC cell with specific styles
       return (
-        <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-red-600 text-white text-sm">
+        <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-[#f21300] text-white text-sm">
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </div>
       );
@@ -210,30 +210,8 @@ export function ClientTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`text-[#042559] font-medium text-center ${cell.column.id === `name` ?`text-red-500 hover:text-[#042559]` : ``}`}
+                      className={`text-[#042559] font-medium text-center ${cell.column.id === `name` ?`text-[#f21300] hover:text-[#042559]` : ``}`}
                     >
-                      {/* {cell.column.id === 'kyc' ? (
-              <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-red-600 text-white text-sm font-semibold">
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </div>
-            ) : (
-              flexRender(cell.column.columnDef.cell, cell.getContext())
-            )}
-            {
-              cell.column.id === 'profile-image' || cell.column.id === 'manager' ? (
-                <div className="flex items-center justify-center w-full h-full">
-                  <Image
-                    src={cell.value}
-                    alt="Profile Image"
-                    width={50}
-                    height={50}
-                    className="rounded-full"
-                  />
-                </div>
-              ) : (
-                flexRender(cell.column.columnDef.cell, cell.getContext())
-              )
-            } */}
                       {
                         renderCellContent(cell)
                       }
