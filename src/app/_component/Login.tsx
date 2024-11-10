@@ -30,7 +30,6 @@ import {
   Form,
   FormControl,
   FormField,
-  FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
@@ -74,7 +73,7 @@ const Login: React.FC<LoginProps> = ({
     <div className="text-black flex flex-col justify-center items-center text-center w-[48rem] p-4">
       <Image src={logo} alt="vakilgiri_logo" height={150} width={150} />
       <h1 className="text-black font-bold text-2xl">Welcome Back!</h1>
-      <span className="text-[#002537] font-medium text-base">
+      <span className="text-[#091747] font-[600] text-[15px]">
         Please sign in to your account and start the adventure
       </span>
 
@@ -88,13 +87,11 @@ const Login: React.FC<LoginProps> = ({
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email ID</FormLabel>
-                <FormControl>
+              <div>
+                <FormLabel className="text-[#091747] font-[600] text-[13px]">Email ID</FormLabel>
                   <Input type="email" placeholder="Enter Email" {...field} />
-                </FormControl>
                 <FormMessage />
-              </FormItem>
+              </div>
             )}
           />
 
@@ -103,8 +100,8 @@ const Login: React.FC<LoginProps> = ({
             control={form.control}
             name="pan"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>PAN Number</FormLabel>
+              <div>
+                <FormLabel className="text-[#091747] font-[600] text-[13px]">PAN Number</FormLabel>
                 <FormControl>
                   <Input
                     type="text"
@@ -113,14 +110,14 @@ const Login: React.FC<LoginProps> = ({
                   />
                 </FormControl>
                 <FormMessage />
-              </FormItem>
+              </div>
             )}
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <FormLabel htmlFor="payment-date" className="text-xs">
-                Birth Date
+            <div>
+              <FormLabel className="text-[#091747] font-[600] text-[13px]" htmlFor="payment-date">
+                Birthdate
               </FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
@@ -142,15 +139,17 @@ const Login: React.FC<LoginProps> = ({
                   />
                 </PopoverContent>
               </Popover>
+              <FormMessage>{form.formState.errors.birthdate?.message}</FormMessage>
             </div>
+
             <div className="space-y-2">
               {/* Gender Selection */}
               <FormField
                 control={form.control}
                 name="gender"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Gender</FormLabel>
+                  <div>
+                    <FormLabel className="text-[#091747] font-[600] text-[13px]">Gender</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={(value) => field.onChange(value)}
@@ -171,27 +170,27 @@ const Login: React.FC<LoginProps> = ({
                       </Select>
                     </FormControl>
                     <FormMessage />
-                  </FormItem>
+                  </div>
                 )}
               />
             </div>
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" className="hover:bg-[#091747] bg-[#F20101]">
+          <Button type="submit" className="hover:bg-[#091747] bg-[#f21300]">
             Login
           </Button>
 
           {/* Forget Password */}
           <div
-            className="text-xs w-full text-right font-medium text-[#F20101] cursor-pointer"
+            className="text-xs w-full text-right font-medium text-[#f21300] cursor-pointer"
             onClick={handleForgetPassword}
           >
             Forget password?
           </div>
 
           {/* Registration Link */}
-          <div className="flex gap-1 items-center justify-center text-sky-950 font-medium">
+          <div className="flex gap-1 items-center justify-center text-[#091747] font-medium">
             Not a Vakilgiri Client?{" "}
             <span
               className="font-medium text-[#F20101] cursor-pointer"
