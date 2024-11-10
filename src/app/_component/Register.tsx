@@ -13,7 +13,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 
@@ -141,10 +140,10 @@ const Register: React.FC<RegisterProps> = ({ alreadyLogin }) => {
             />
           </div>
 
-          <Button type="submit" className="hover:bg-[#091747] bg-[#F20101]">Register</Button>
+          <Button type="submit" className="hover:bg-[#091747] bg-[#f21300]">Register</Button>
 
           <div className="flex gap-1 items-center justify-center text-sky-950 font-medium">
-            Already a Client? <span className="font-medium text-[#F20101] cursor-pointer" onClick={alreadyLogin}>Login</span>
+            Already a Client? <span className="font-medium text-[#f21300] cursor-pointer" onClick={alreadyLogin}>Login</span>
           </div>
         </form>
       </Form>
