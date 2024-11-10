@@ -122,8 +122,8 @@ export function ClientTable<TData, TValue>({
           <Image
             src={profileImage}
             alt="Profile Image"
-            width={50}
-            height={50}
+            width={35}
+            height={35}
             className="rounded-full"
           />
         </div>
