@@ -37,7 +37,7 @@ const ForgetPassword: React.FC<ForgetPasswordProps> = ({
   })
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    alert("Reset Password Successful")
+    alert("Reset Password Successful"+data)
   }
 
   return (
