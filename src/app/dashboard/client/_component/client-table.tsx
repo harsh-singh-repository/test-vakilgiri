@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ColumnDef,
   PaginationState,
@@ -12,28 +12,12 @@ import {
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table';
-import {
-  DoubleArrowLeftIcon,
-  DoubleArrowRightIcon
-} from '@radix-ui/react-icons';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import Image from 'next/image'; // Assuming you're using Next.js Image component
-import profileImage from '../../../../../public/assets/profile-image.png'
+import Image from 'next/image';
+import profileImage from '../../../../../public/assets/profile-image.png';
 import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
@@ -42,6 +26,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey: string;
+  searchValue: string; // Add searchValue here
   pageNo: number;
   totalUsers: number;
   pageSizeOptions?: number[];
@@ -60,94 +45,53 @@ export function ClientTable<TData, TValue>({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [searchValue, setSearchValue] = React.useState(
-    searchParams?.get(searchKey) ?? ''
-  );
-
+  const [searchValue, setSearchValue] = React.useState<string>(searchParams?.get(searchKey) || '');
+  
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: pageNo - 1,
-    pageSize: parseInt(searchParams?.get('limit') || '10')
+    pageSize: parseInt(searchParams?.get('limit') || '10', 10),
+    
   });
 
-  // Sync pagination and search state with URL on the first load
+  // Handle search params and update pagination or search value
   React.useEffect(() => {
-    if (searchParams) {
-      const pageFromParams = parseInt(searchParams.get('page') || `${pageNo}`);
-      const limitFromParams = parseInt(searchParams.get('limit') || '10');
-      const searchFromParams = searchParams.get(searchKey) || '';
+    if (!searchParams) return;
 
-      setPagination({
-        pageIndex: pageFromParams - 1,
-        pageSize: limitFromParams,
-      });
-      setSearchValue(searchFromParams);
-    }
+    const pageFromParams = parseInt(searchParams.get('page') || `${pageNo}`);
+    const limitFromParams = parseInt(searchParams.get('limit') || '10');
+    const searchFromParams = searchParams.get(searchKey) || '';
+
+    setPagination({
+      pageIndex: pageFromParams - 1,
+      pageSize: limitFromParams,
+    });
+    setSearchValue(searchFromParams);
   }, [searchParams, pageNo, searchKey]);
 
-  const createQueryString = React.useCallback(
-    (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
+  // Handle query string creation based on search parameters
+  const createQueryString = React.useCallback((params: Record<string, string | number | null>) => {
+    const newSearchParams = new URLSearchParams(searchParams?.toString() || '');
 
-      for (const [key, value] of Object.entries(params)) {
-        if (value === null) {
-          newSearchParams.delete(key);
-        } else {
-          newSearchParams.set(key, String(value));
-        }
+    for (const [key, value] of Object.entries(params)) {
+      if (value === null) {
+        newSearchParams.delete(key);
+      } else {
+        newSearchParams.set(key, String(value));
       }
-
-      return newSearchParams.toString();
-    },
-    [searchParams]
-  );
-
-  function renderCellContent(cell: any) {
-    // Destructure column id and value for readability
-    const { id: columnId } = cell.column;
-    const cellValue = cell.value;
-
-    if (columnId === 'kyc') {
-      // Render KYC cell with specific styles
-      return (
-        <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-[#f21300] text-white text-sm">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </div>
-      );
     }
+    return newSearchParams.toString();
+  }, [searchParams]);
 
-    if (columnId === 'profile-image' || columnId === 'manager') {
-      // Render profile image or manager image with rounded styling
-      return (
-        <div className="flex items-center justify-center w-full h-full rounded-full">
-          <Image
-            src={profileImage}
-            alt="Profile Image"
-            width={35}
-            height={35}
-            className="rounded-full"
-          />
-        </div>
-      );
-    }
-
-    if (columnId === 'action') {
-      return <ActionButton />
-    }
-
-    // Default rendering for other cell types
-    return flexRender(cell.column.columnDef.cell, cell.getContext());
-  }
-
-  // Update URL when pageIndex, pageSize, or searchValue changes
-  React.useEffect(() => {
-    router.push(
-      `${pathname}?${createQueryString({
+  // Handle push to the router with updated params
+  useEffect(() => {
+    if (searchParams) {
+      const newQueryParams = {
         page: pageIndex + 1,
         limit: pageSize,
         [searchKey]: searchValue || null
-      })}`,
-      { scroll: false }
-    );
+      };
+      router.push(`${pathname}?${createQueryString(newQueryParams)}`, { scroll: false });
+    }
   }, [pageIndex, pageSize, searchValue, pathname, router, createQueryString, searchKey]);
 
   const table = useReactTable({
@@ -165,38 +109,49 @@ export function ClientTable<TData, TValue>({
     manualFiltering: true
   });
 
-  React.useEffect(() => {
-    router.push(
-      `${pathname}?${createQueryString({
-        page: pageIndex + 1,
-        limit: pageSize,
-        [searchKey]: searchValue || null
-      })}`,
-      { scroll: false }
-    );
-  }, [pageIndex, pageSize, searchValue, pathname, router, createQueryString, searchKey]);
+  const renderCellContent = (cell: any) => {
+    const { id: columnId } = cell.column;
+    const cellValue = cell.value;
+
+    if (columnId === 'kyc') {
+      return (
+        <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-[#f21300] text-white text-sm">
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </div>
+      );
+    }
+
+    if (columnId === 'profile-image' || columnId === 'manager') {
+      return (
+        <div className="flex items-center justify-center w-full h-full rounded-full">
+          <Image
+            src={profileImage}
+            alt="Profile Image"
+            width={35}
+            height={35}
+            className="rounded-full"
+          />
+        </div>
+      );
+    }
+
+    if (columnId === 'action') {
+      return <ActionButton />;
+    }
+
+    return flexRender(cell.column.columnDef.cell, cell.getContext());
+  };
 
   return (
     <>
-      <Input
-        placeholder={'Search name...'}
-        value={searchValue}
-        onChange={(event) => setSearchValue(event.target.value)}
-        className="w-full md:max-w-sm ml-auto bg-white"
-      />
-      <ScrollArea className='w-full overflow-y-auto max-h-[24rem] border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar'>
-        <Table className='border rounded-2xl bg-white'>
-          <TableHeader className='bg-[#042559] text-white text-center'>
+      <ScrollArea className="w-full overflow-y-auto max-h-[24rem] border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+        <Table className="border rounded-2xl bg-white">
+          <TableHeader className="bg-[#042559] text-white text-center">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className='text-white text-center'>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                  <TableHead key={header.id} className="text-white text-center">
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
               </TableRow>
@@ -210,11 +165,9 @@ export function ClientTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`text-[#042559] font-medium text-center ${cell.column.id === `name` ?`text-[#f21300] hover:text-[#042559]` : ``}`}
+                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'name' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
                     >
-                      {
-                        renderCellContent(cell)
-                      }
+                      {renderCellContent(cell)}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -228,11 +181,10 @@ export function ClientTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        <ScrollBar orientation='horizontal' />
+        <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
       <div className="flex flex-col items-center justify-end gap-2 py-4 sm:flex-row">
-
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Rows per page</p>
           <Select

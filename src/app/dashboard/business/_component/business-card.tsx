@@ -1,4 +1,5 @@
-import { Building2, Users, Megaphone } from "lucide-react"
+import { Building2, Megaphone } from "lucide-react"
+import { FaUserAlt } from "react-icons/fa";
 
 interface BusinessStats {
   businesses: {
@@ -51,101 +52,88 @@ export default function BusinessCardSection() {
     }
   }
 
+  // Helper function to render key-value pairs
+  const renderStatItems = (statObj: { [key: string]: number }, label: { [key: string]: string }) => {
+    return Object.entries(statObj).map(([key, value]) => (
+      <div className="flex flex-col justify-center items-center" key={key}>
+        <span className="font-medium text-xl text-black">{value}</span>
+        <span className="text-xs font-semibold text-nowrap">{label[key as keyof typeof label]}</span>
+      </div>
+    ));
+  };
+  
+
+  const businessLabels = {
+    all: "All",
+    unverified: "Unverified",
+    forSale: "For Sale"
+  };
+
+  const businessTypeLabels = {
+    pvtLtd: "Pvt Ltd",
+    public: "Public",
+    llps: "LLPs",
+    section8: "Section 8",
+    trust: "Trust",
+    society: "Society",
+    micro: "Micro",
+    producer: "Producer",
+    proprietor: "Proprietor",
+    partnership: "Partnership"
+  };
+
+  const statusLabels = {
+    registered: "Registered",
+    pending: "Pending",
+    suspended: "Suspended"
+  };
+
   return (
-    <div className="grid gap-4 p-4 md:grid-cols-4">
+    <div className="w-full flex justify-between items-center gap-4">
       {/* Businesses Section */}
-      <div className="rounded-lg bg-purple-100 p-4">
-        <div className="flex items-center gap-2 text-purple-900">
-          <Users className="h-5 w-5" />
-          <h2 className="font-semibold">Businesses</h2>
-        </div>
-        <div className="mt-2 flex justify-between">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-900">{stats.businesses.all}</div>
-            <div className="text-sm text-purple-700">All</div>
+      <div className="w-full flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#eabfff4d]">
+        <div className="w-full flex flex-col justify-center items-center">
+          <div className="w-full flex justify-center gap-x-2 items-center p-2">
+            <div className="w-14 h-14 rounded-2xl flex justify-center items-center bg-[#3009494d]">
+              <span className="text-xl text-[#300949]"><FaUserAlt /></span>
+            </div>
+            <div className="w-full flex justify-between items-center gap-1 text-[#300949]">
+              {renderStatItems(stats.businesses, businessLabels)}
+            </div>
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-900">{stats.businesses.unverified}</div>
-            <div className="text-sm text-purple-700">Unverified</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-900">{stats.businesses.forSale}</div>
-            <div className="text-sm text-purple-700">For Sale</div>
-          </div>
+          <div className="w-full m-0 bg-[#300949] text-white rounded-b-xl text-center text-xs">Businesses</div>
         </div>
       </div>
 
       {/* Business Types Section */}
-      <div className="rounded-lg bg-teal-100 p-4 col-span-2">
-        <div className="flex items-center gap-2 text-teal-900">
-          <Building2 className="h-5 w-5" />
-          <h2 className="font-semibold">Business Types</h2>
-        </div>
-        <div className="mt-2 grid grid-cols-5 text-center text-sm">
-          <div>
-            <div className="text-lg font-semibold text-teal-900">{stats.businessTypes.pvtLtd}</div>
-            <div className="text-teal-700">Pvt Ltd</div>
+      <div className="w-full flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#c0f0ff4d]">
+        <div className="w-full flex flex-col justify-center items-center">
+          <div className="w-full flex justify-center gap-x-2 items-center p-2">
+            <div className="w-14 h-14 rounded-2xl flex justify-center items-center bg-[#093a494d]">
+              <span className="text-xl text-[#093a49]"><Building2 /></span>
+            </div>
+            <div className="w-full flex justify-between items- gap-2 text-[#093a49] text-center">
+              {renderStatItems(stats.businessTypes, businessTypeLabels)}
+            </div>
           </div>
-          <div>
-            <div className="text-lg font-semibold text-teal-900">{stats.businessTypes.public}</div>
-            <div className="text-teal-700">Public</div>
-          </div>
-          <div>
-            <div className="text-lg font-semibold text-teal-900">{stats.businessTypes.llps}</div>
-            <div className="text-teal-700">LLPs</div>
-          </div>
-          <div>
-            <div className="text-lg font-semibold text-teal-900">{stats.businessTypes.section8}</div>
-            <div className="text-teal-700">Section-8</div>
-          </div>
-          <div>
-            <div className="text-lg font-semibold text-teal-900">{stats.businessTypes.trust}</div>
-            <div className="text-teal-700">Trust</div>
-          </div>
-          <div>
-            <div className="text-lg font-semibold text-teal-900">{stats.businessTypes.society}</div>
-            <div className="text-teal-700">Society</div>
-          </div>
-          <div>
-            <div className="text-lg font-semibold text-teal-900">{stats.businessTypes.micro}</div>
-            <div className="text-teal-700">Micro</div>
-          </div>
-          <div>
-            <div className="text-lg font-semibold text-teal-900">{stats.businessTypes.producer}</div>
-            <div className="text-teal-700">Producer</div>
-          </div>
-          <div>
-            <div className="text-lg font-semibold text-teal-900">{stats.businessTypes.proprietor}</div>
-            <div className="text-teal-700">Proprietor</div>
-          </div>
-          <div>
-            <div className="text-lg font-semibold text-teal-900">{stats.businessTypes.partnership}</div>
-            <div className="text-teal-700">Partnership</div>
-          </div>
+          <div className="w-full m-0 bg-[#093a49] text-white rounded-b-xl text-center text-xs">Business Types</div>
         </div>
       </div>
 
       {/* Status Section */}
-      <div className="rounded-lg bg-blue-100 p-4">
-        <div className="flex items-center gap-2 text-blue-900">
-          <Megaphone className="h-5 w-5" />
-          <h2 className="font-semibold">By Status</h2>
-        </div>
-        <div className="mt-2 flex justify-between">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-blue-900">{stats.status.registered}</div>
-            <div className="text-sm text-blue-700">Registered</div>
+      <div className="w-full flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#ccd7ff]">
+        <div className="w-full flex flex-col justify-center items-center">
+          <div className="w-full flex justify-center gap-x-2 items-center p-2">
+            <div className="w-14 h-14 rounded-2xl flex justify-center items-center bg-[#0917474d]">
+              <span className="text-[#091747]"><Megaphone /></span>
+            </div>
+            <div className="w-full flex justify-between items- gap-1">
+              {renderStatItems(stats.status, statusLabels)}
+            </div>
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-blue-900">{stats.status.pending}</div>
-            <div className="text-sm text-blue-700">Pending</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-blue-900">{stats.status.suspended}</div>
-            <div className="text-sm text-blue-700">Suspended</div>
-          </div>
+          <div className="w-full m-0 bg-[#091747] text-white rounded-b-xl text-center text-xs">Status</div>
         </div>
       </div>
     </div>
-  )
+  );
 }
