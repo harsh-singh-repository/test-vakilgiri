@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { CalendarIcon } from "lucide-react";
 
 import {
@@ -35,11 +34,12 @@ import {
 } from "@/components/ui/form";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 // Define schema with gender and birthdate fields
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
-  pan: z.string().min(10, { message: "Pan number should be 10 digits" }),
+  password: z.string().min(8, { message: "Password should contain 8 digit" }),
   gender: z.enum(["male", "female", "not-specified"], {
     message: "Gender is required",
   }),
@@ -59,14 +59,47 @@ const Login: React.FC<LoginProps> = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      pan: "",
+      password: "",
       birthdate: undefined,
     },
   });
   const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log("Login Successful", data);
+ async function onSubmit(data: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        "https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/user/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
+
+      const responseData = await response.json();
+
+      // Printing response data
+      // console.log('Login response:', responseData.data.token) 
+
+      // Save the token in local storage
+      localStorage.setItem("token", responseData.data.token);
+      
+      // Redirect to dashboard or home page
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -88,8 +121,10 @@ const Login: React.FC<LoginProps> = ({
             name="email"
             render={({ field }) => (
               <div>
-                <FormLabel className="text-[#091747] font-[600] text-[13px]">Email ID</FormLabel>
-                  <Input type="email" placeholder="Enter Email" {...field} />
+                <FormLabel className="text-[#091747] font-[600] text-[13px]">
+                  Email ID
+                </FormLabel>
+                <Input type="email" placeholder="Enter Email" {...field} />
                 <FormMessage />
               </div>
             )}
@@ -98,14 +133,16 @@ const Login: React.FC<LoginProps> = ({
           {/* PAN Field */}
           <FormField
             control={form.control}
-            name="pan"
+            name="password"
             render={({ field }) => (
               <div>
-                <FormLabel className="text-[#091747] font-[600] text-[13px]">PAN Number</FormLabel>
+                <FormLabel className="text-[#091747] font-[600] text-[13px]">
+                  Password
+                </FormLabel>
                 <FormControl>
                   <Input
-                    type="text"
-                    placeholder="Enter PAN Number"
+                    type="password"
+                    placeholder="Enter password"
                     {...field}
                   />
                 </FormControl>
@@ -116,7 +153,10 @@ const Login: React.FC<LoginProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <FormLabel className="text-[#091747] font-[600] text-[13px]" htmlFor="payment-date">
+              <FormLabel
+                className="text-[#091747] font-[600] text-[13px]"
+                htmlFor="payment-date"
+              >
                 Birthdate
               </FormLabel>
               <Popover>
@@ -139,17 +179,20 @@ const Login: React.FC<LoginProps> = ({
                   />
                 </PopoverContent>
               </Popover>
-              <FormMessage>{form.formState.errors.birthdate?.message}</FormMessage>
+              <FormMessage>
+                {form.formState.errors.birthdate?.message}
+              </FormMessage>
             </div>
 
             <div className="space-y-2">
-              {/* Gender Selection */}
               <FormField
                 control={form.control}
                 name="gender"
                 render={({ field }) => (
                   <div>
-                    <FormLabel className="text-[#091747] font-[600] text-[13px]">Gender</FormLabel>
+                    <FormLabel className="text-[#091747] font-[600] text-[13px]">
+                      Gender
+                    </FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={(value) => field.onChange(value)}
