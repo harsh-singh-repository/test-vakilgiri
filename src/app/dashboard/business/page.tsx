@@ -28,7 +28,7 @@ export default async function BusinessPage({ searchParams }: paramsProps) {
   const offset = (page - 1) * pageLimit;
 
 
-  const totalUsers = 20; //1000
+  const totalUsers = 10; //1000
   const pageCount = Math.ceil(totalUsers / pageLimit);
   const { businesses: paginatedUsers } = await fakeBusinesss.getBusinesses({ page, limit: pageLimit, search }) || { users: [] };
   const fallbackUsers = paginatedUsers.length > 0 ? paginatedUsers : await fakeBusinesss.getAll({ search });
@@ -40,12 +40,12 @@ export default async function BusinessPage({ searchParams }: paramsProps) {
         <Breadcrumbs items={breadcrumbItems} />
 
         <div className="flex items-start justify-between">
-          <div className='text-2xl font-bold'>{`Businesses (${totalUsers})`}</div>
+          <div className='text-2xl font-bold text-[#042559]'>{`Businesses (${totalUsers})`}</div>
 
           <Button
             className='bg-[#f21300] text-white'
           >
-           <Plus className="mr-2 h-4 w-4" /> Add New Busuiness
+           <Plus className="mr-2 h-4 w-4" />
           </Button>
         </div>
         <Separator />
