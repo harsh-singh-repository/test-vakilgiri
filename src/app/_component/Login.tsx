@@ -8,15 +8,6 @@ import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CalendarIcon } from "lucide-react";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
-import { Calendar } from "@/components/ui/calendar";
 import {
   Select,
   SelectContent,
@@ -33,17 +24,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { DatePicker } from "@/components/ui/date-picker";
 import { Button } from "@/components/ui/button";
 
 // Define schema with gender and birthdate fields
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
-  pan: z.string().min(10, { message: "Pan number should be 10 digits" }),
-  gender: z.enum(["male", "female", "not-specified"], {
-    message: "Gender is required",
-  }),
-  birthdate: z.date({ required_error: "Birthdate is required" }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
 });
 
 interface LoginProps {
@@ -59,8 +45,6 @@ const Login: React.FC<LoginProps> = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      pan: "",
-      birthdate: undefined,
     },
   });
   const [date, setDate] = React.useState<Date | undefined>(new Date());
@@ -88,8 +72,10 @@ const Login: React.FC<LoginProps> = ({
             name="email"
             render={({ field }) => (
               <div>
-                <FormLabel className="text-[#091747] font-[600] text-[13px]">Email ID</FormLabel>
-                  <Input type="email" placeholder="Enter Email" {...field} />
+                <FormLabel className="text-[#091747] font-[600] text-[13px]">
+                  Email ID
+                </FormLabel>
+                <Input type="email" placeholder="Enter Email" {...field} />
                 <FormMessage />
               </div>
             )}
@@ -98,83 +84,25 @@ const Login: React.FC<LoginProps> = ({
           {/* PAN Field */}
           <FormField
             control={form.control}
-            name="pan"
+            name="password"
             render={({ field }) => (
               <div>
-                <FormLabel className="text-[#091747] font-[600] text-[13px]">PAN Number</FormLabel>
+                <FormLabel className="text-[#091747] font-[600] text-[13px]">
+                  Password
+                </FormLabel>
                 <FormControl>
                   <Input
-                    type="text"
-                    placeholder="Enter PAN Number"
+                    type="password"
+                    placeholder="Enter password"
                     {...field}
                   />
                 </FormControl>
                 <FormMessage />
               </div>
-            )}
-          />
+            )}
+          />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <FormLabel className="text-[#091747] font-[600] text-[13px]" htmlFor="payment-date">
-                Birthdate
-              </FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    id="payment-date"
-                    variant="outline"
-                    className="w-full justify-start text-left font-normal"
-                  >
-                    {date ? date.toDateString() : "Pick a date"}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage>{form.formState.errors.birthdate?.message}</FormMessage>
-            </div>
-
-            <div className="space-y-2">
-              {/* Gender Selection */}
-              <FormField
-                control={form.control}
-                name="gender"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel className="text-[#091747] font-[600] text-[13px]">Gender</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) => field.onChange(value)}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Gender" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="female">Female</SelectItem>
-                            <SelectItem value="not-specified">
-                              Prefer not to say
-                            </SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                )}
-              />
-            </div>
-          </div>
+          
 
           {/* Submit Button */}
           <Button type="submit" className="hover:bg-[#091747] bg-[#f21300]">
