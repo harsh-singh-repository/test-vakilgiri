@@ -9,6 +9,10 @@ import { columns } from './_component/columns';
 import { BusinessTable } from './_component/business-table';
 import { fakeBusinesss } from '@/constants/business-table-data';
 import BusinessCardSection from './_component/business-card';
+import { Dialog } from '@/components/ui/dialog';
+import { DialogTrigger } from '@radix-ui/react-dialog';
+import AddNewBusinessForm from './_component/add-new-business-form';
+import AddNewBussinessDialog from './_component/add-new-bussiness-dialog';
 
 const breadcrumbItems = [
   { title: 'Dashboard', link: '/dashboard' },
@@ -36,17 +40,19 @@ export default async function BusinessPage({ searchParams }: paramsProps) {
 
   return (
     <>
+    <Dialog>
       <div className="flex-1 space-y-4  p-4 pt-6 md:p-8">
         <Breadcrumbs items={breadcrumbItems} />
 
         <div className="flex items-start justify-between">
           <div className='text-2xl font-bold text-[#042559]'>{`Businesses (${totalUsers})`}</div>
 
-          <Button
-            className='bg-[#f21300] text-white'
-          >
-           <Plus className="mr-2 h-4 w-4" />
-          </Button>
+          <DialogTrigger>
+             <div className='bg-[#f21300] text-white flex px-3 py-1 rounded-md'>
+               <Plus/>
+             </div>
+          </DialogTrigger>
+           <AddNewBussinessDialog/>
         </div>
         <Separator />
 
@@ -61,6 +67,7 @@ export default async function BusinessPage({ searchParams }: paramsProps) {
           pageCount={pageCount}
         />
       </div>
+      </Dialog>
     </>
   );
 }
