@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { ApiResponse } from "../../../../types";
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -26,7 +27,7 @@ export const authOptions: NextAuthOptions = {
                     return res.data;
                 } catch (error) {
                     // type error
-                    const axiosError = error as AxiosError;
+                    const axiosError = error as AxiosError<ApiResponse>;
                     throw new Error(axiosError.response?.data?.message || "Something went wrong");
                 }
             },

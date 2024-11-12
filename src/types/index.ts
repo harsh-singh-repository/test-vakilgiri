@@ -29,6 +29,13 @@ export interface FooterItem {
   }[];
 }
 
+
+export interface ApiResponse{
+    success:boolean;
+    message:string;
+}
+
+
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
