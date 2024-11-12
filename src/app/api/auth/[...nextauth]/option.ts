@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -26,7 +26,8 @@ export const authOptions: NextAuthOptions = {
                     return res.data;
                 } catch (error) {
                     // type error
-                    throw new Error(error.response?.data?.message || "Something went wrong");
+                    const axiosError = error as AxiosError;
+                    throw new Error(axiosError.response?.data?.message || "Something went wrong");
                 }
             },
         }),
