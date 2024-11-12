@@ -1,23 +1,16 @@
 "use client";
-
-import {signIn,signOut,useSession} from "next-auth/react"
-import Image from "next/image";
-import React, { KeyboardEvent, useState } from "react";
+ 
 import logo from "@/app/assets/logo.png";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import Image from "next/image";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -25,8 +18,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 // Define schema with gender and birthdate fields
 const formSchema = z.object({
@@ -49,43 +42,48 @@ const Login: React.FC<LoginProps> = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      password:"",
+      password: "",
     },
   });
   // const [date, setDate] = React.useState<Date | undefined>(new Date());
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loader, setloader] = useState<boolean>(false);
+
+  const { toast } = useToast();
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data.email);
-    console.log(data.password);
-    try {
-      const result = await signIn("credentials", {
-        redirect: true,
-        email: data.email,
-        password: data.password,
-        callbackUrl: "/dashboard",
-      });
-  
-      if (result?.error) {
-        // Handle error case
-        console.error("Error:", result.error);
+    setloader(true);
+   
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+    setloader(false);
+    console.log(result);
+    if (result?.error) {
+      if (result.error === "CredentialsSignin") {
+        toast({
+          title: "Login Failed",
+          description: result.error || "Incorrect username or password",
+          variant: "destructive",
+        });
       } else {
-        // Authentication was successful, you can redirect or update the UI here
-        console.log("Logged in successfully!");
+        toast({
+          title: "Error",
+          description: result.error,
+          variant: "destructive",
+        });
       }
+    }
 
-      // Printing response data
-      console.log('Login response:')
-
-      // Save the token in local storage
-      // localStorage.setItem("token", responseData.data.token);
-
-      // Redirect to dashboard or home page
-    } catch (error) {
-      console.error("Login error:", error);
-    } finally {
-      setIsLoading(false);
+    if (result?.url) {
+      router.replace("/dashboard");
+      toast({
+        title: "Login Success",
+        description: "Login Success",
+        variant: "default",
+      });
     }
   }
 
@@ -127,10 +125,10 @@ const Login: React.FC<LoginProps> = ({
                   Password
                 </FormLabel>
                 <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Enter password"
-                  {...field}
+                  <Input
+                    type="password"
+                    placeholder="Enter password"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -140,7 +138,9 @@ const Login: React.FC<LoginProps> = ({
 
           {/* Submit Button */}
           <Button type="submit" className="hover:bg-[#091747] bg-[#f21300]">
-            Login
+            {
+              loader ? <Loader2 className="animate-spin" /> : "Login"
+            }
           </Button>
 
           {/* Forget Password */}
