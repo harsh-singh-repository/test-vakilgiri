@@ -56,7 +56,7 @@ export default function BusinessPage() {
   }
 
   return (
-    <div className="flex-1 space-y-2 p-4 pt-6 md:p-8">
+    <div className="flex-1 space-y-4 p-4 pt-6 md:p-4">
       {/* <Breadcrumbs items={breadcrumbItems} /> */}
       <div className="flex items-start justify-between">
         <div className="text-2xl font-bold text-[#042559]">{`Businesses (${responseData.totalBusinesses})`}</div>

@@ -25,3 +25,17 @@ export type Business = {
   manager: string;
   status: string;
 };
+
+
+export type Leads = {
+  leadId: number;
+  date: string;
+  service: string;
+  businessOrClient: string;
+  companyName: string | null;
+  mobile: string;
+  value: string;
+  assigned: string;
+  convertedOn: string | null;
+  status: string;
+};
