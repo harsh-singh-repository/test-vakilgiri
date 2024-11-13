@@ -1,6 +1,7 @@
 import { RxAvatar } from "react-icons/rx";
 
 const ClientShowcase = () => {
+  
   const tables = [
     {
       tableId: 1,

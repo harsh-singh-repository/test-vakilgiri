@@ -12,7 +12,7 @@ const Providers = ({ children }: Props) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        retry: 1,
+        retry: 2,
         cacheTime: 5000,
         staleTime: 0,
       },
