@@ -15,3 +15,12 @@ export interface UserPayload {
     phone?: string;
     role?: "MASTER" | "ADMIN" | "AGENT";
 }
+
+
+export interface ApiResponse {
+    success: boolean;
+    statusCode: number;
+    message: string;
+    data?: object | null;
+    errors: string[];
+}

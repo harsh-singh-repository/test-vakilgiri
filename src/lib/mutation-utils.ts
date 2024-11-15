@@ -1,5 +1,5 @@
-import { QueryClient, useQueryClient } from '@tanstack/react-query';
-import { ApiResponse } from '@/types/index.d';
+import { QueryClient } from '@tanstack/react-query';
+import { ApiResponse } from '../types/index.d';
 
 interface ToastInterface {
     success: (params: { message: string }) => void;

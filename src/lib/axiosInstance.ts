@@ -15,7 +15,7 @@ axiosInstance.interceptors.request.use(
         // Skip token addition for login requests
         if (!config.url?.endsWith('/admin/login')) {
             const session = await getSession()  ;
-            const token = session?.user.token;
+            const token = session?.user.accessToken;
 
             // Add Authorization header if token exists
             if (token) {
