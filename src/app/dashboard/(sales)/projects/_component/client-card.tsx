@@ -6,7 +6,7 @@ const ClientCard = () => {
     const clientCardData = [
         {
             logo: <MdPerson2 size={"45"} />,
-            title: "All Users",
+            title: "All Projects",
             value: "19",
             iconBgColor: "bg-[#0917c84d]",
             bgColor: "bg-[#ccd7ff]",
@@ -14,7 +14,7 @@ const ClientCard = () => {
         },
         {
             logo: <MdPeople size={"45"} />,
-            title: "Today",
+            title: "Completed",
             value: "0",
             iconBgColor: "bg-[#007b234d]",
             bgColor: "bg-[#def9b9]",
@@ -22,7 +22,7 @@ const ClientCard = () => {
         },
         {
             logo: <MdAddReaction size={"45"} />,
-            title: "Active",
+            title: "In Progress",
             value: "4",
             iconBgColor: "bg-[#b9100033]",
             bgColor: "bg-[#f9e2c6]",
@@ -30,7 +30,7 @@ const ClientCard = () => {
         },
         {
           logo: <MdPerson2 size={"45"} />,
-          title: "Inactive",
+          title: "On hold",
           value: "16",
           iconBgColor: "bg-[#f2130033]",
           bgColor: "bg-[#ffe6e6]",

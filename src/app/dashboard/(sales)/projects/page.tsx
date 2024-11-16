@@ -11,7 +11,6 @@ import { useSearchParams } from 'next/navigation';
 import { ClientPageServer } from './_component/ClientPageServer';
 import { Client } from '@/constants/data';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
-import AddClientDialog from './_component/AddClientDialog';
 
 type ResponseData = {
   employee: Client[];
@@ -49,7 +48,7 @@ export default function ClientPage() {
     <div className="flex-1 space-y-4 p-4 pt-6 md:p-4">
       {/* <Breadcrumbs items={breadcrumbItems} /> */}
       <div className="flex items-start justify-between">
-        <div className='text-2xl font-bold text-[#042559]'>{`Clients (${responseData.totalUsers})`}</div>
+        <div className='text-[20px] font-bold text-[#042559]'>{`Clients (${responseData.totalUsers})`}</div>
 
         <div className="flex justify-center item-center gap-4">
           <Input
@@ -64,7 +63,6 @@ export default function ClientPage() {
             <Plus className="h-6 w-6"/>
           </div>
           </DialogTrigger>
-          <AddClientDialog/>
         </div>
       </div>
       <Separator />
@@ -84,3 +82,4 @@ export default function ClientPage() {
     </Dialog>
   );
 }
+

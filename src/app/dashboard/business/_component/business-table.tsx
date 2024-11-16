@@ -32,7 +32,7 @@ import {
   DoubleArrowRightIcon
 } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import Image from 'next/image'; // Assuming you're using Next.js Image component
+import Image from 'next/image';
 import profileImage from '../../../../../public/assets/profile-image.png';
 import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
@@ -42,6 +42,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey: string;
+  searchValue: string; // Added this prop
   pageNo: number;
   totalUsers: number;
   pageSizeOptions?: number[];
@@ -53,15 +54,14 @@ export function BusinessTable<TData, TValue>({
   data,
   pageNo,
   searchKey,
+  searchValue,
   totalUsers,
   pageSizeOptions = [10, 20, 30, 40, 50]
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [searchValue, setSearchValue] = React.useState(
-    searchParams?.get(searchKey) ?? ''
-  );
+  const [searchValueState, setSearchValue] = React.useState(searchValue);
 
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: pageNo - 1,
@@ -128,8 +128,8 @@ export function BusinessTable<TData, TValue>({
           <Image
             src={profileImage}
             alt="Profile Image"
-            width={50}
-            height={50}
+            width={35}
+            height={35}
             className="rounded-full"
           />
         </div>
@@ -148,11 +148,11 @@ export function BusinessTable<TData, TValue>({
       `${pathname}?${createQueryString({
         page: pageIndex + 1,
         limit: pageSize,
-        [searchKey]: searchValue || null
+        [searchKey]: searchValueState || null
       })}`,
       { scroll: false }
     );
-  }, [pageIndex, pageSize, searchValue, pathname, router, createQueryString, searchKey]);
+  }, [pageIndex, pageSize, searchValueState, pathname, router, createQueryString, searchKey]);
 
   const table = useReactTable({
     data,
@@ -171,12 +171,6 @@ export function BusinessTable<TData, TValue>({
 
   return (
     <>
-      <Input
-        placeholder={'Search name...'}
-        value={searchValue}
-        onChange={(event) => setSearchValue(event.target.value)}
-        className="w-full md:max-w-sm ml-auto bg-white"
-      />
       <ScrollArea className='w-full overflow-y-auto max-h-[24rem] border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar'>
         <Table className='border rounded-2xl bg-white'>
           <TableHeader className='bg-[#042559]'>
@@ -242,10 +236,9 @@ export function BusinessTable<TData, TValue>({
           </Select>
         </div>
 
-        <p className="text-sm text-center py-2 mx-4">
+        <p className="text-sm text-center py-2 sm:text-left">
           Page {pageIndex + 1} of {pageCount}
         </p>
-
         <div className="flex items-center space-x-2">
           <Button
             aria-label="Go to first page"
@@ -284,4 +277,3 @@ export function BusinessTable<TData, TValue>({
     </>
   );
 }
-

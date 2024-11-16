@@ -1,30 +1,16 @@
 "use client";
-
+ 
+import logo from "@/app/assets/logo.png";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import React, { useState } from "react";
-import logo from "@/app/assets/logo.png";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { CalendarIcon } from "lucide-react";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -32,18 +18,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { DatePicker } from "@/components/ui/date-picker";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 // Define schema with gender and birthdate fields
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
-  password: z.string().min(8, { message: "Password should contain 8 digit" }),
-  gender: z.enum(["male", "female", "not-specified"], {
-    message: "Gender is required",
-  }),
-  birthdate: z.date({ required_error: "Birthdate is required" }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters" }),
 });
 
 interface LoginProps {
@@ -60,45 +43,47 @@ const Login: React.FC<LoginProps> = ({
     defaultValues: {
       email: "",
       password: "",
-      birthdate: undefined,
     },
   });
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  // const [date, setDate] = React.useState<Date | undefined>(new Date());
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loader, setloader] = useState<boolean>(false);
 
- async function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        "https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/user/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+  const { toast } = useToast();
 
-      if (!response.ok) {
-        throw new Error("Login failed");
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    setloader(true);
+   
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+    setloader(false);
+    console.log(result);
+    if (result?.error) {
+      if (result.error === "CredentialsSignin") {
+        toast({
+          title: "Login Failed",
+          description: result.error || "Incorrect username or password",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: result.error,
+          variant: "destructive",
+        });
       }
+    }
 
-      const responseData = await response.json();
-
-      // Printing response data
-      // console.log('Login response:', responseData.data.token) 
-
-      // Save the token in local storage
-      localStorage.setItem("token", responseData.data.token);
-      
-      // Redirect to dashboard or home page
-      router.push("/dashboard");
-    } catch (error) {
-      console.error("Login error:", error);
-    } finally {
-      setIsLoading(false);
+    if (result?.url) {
+      router.replace("/dashboard");
+      toast({
+        title: "Login Success",
+        description: "Login Success",
+        variant: "default",
+      });
     }
   }
 
@@ -130,7 +115,7 @@ const Login: React.FC<LoginProps> = ({
             )}
           />
 
-          {/* PAN Field */}
+          {/* Password Field */}
           <FormField
             control={form.control}
             name="password"
@@ -151,77 +136,11 @@ const Login: React.FC<LoginProps> = ({
             )}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <FormLabel
-                className="text-[#091747] font-[600] text-[13px]"
-                htmlFor="payment-date"
-              >
-                Birthdate
-              </FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    id="payment-date"
-                    variant="outline"
-                    className="w-full justify-start text-left font-normal"
-                  >
-                    {date ? date.toDateString() : "Pick a date"}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage>
-                {form.formState.errors.birthdate?.message}
-              </FormMessage>
-            </div>
-
-            <div className="space-y-2">
-              <FormField
-                control={form.control}
-                name="gender"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel className="text-[#091747] font-[600] text-[13px]">
-                      Gender
-                    </FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) => field.onChange(value)}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Gender" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="female">Female</SelectItem>
-                            <SelectItem value="not-specified">
-                              Prefer not to say
-                            </SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                )}
-              />
-            </div>
-          </div>
-
           {/* Submit Button */}
           <Button type="submit" className="hover:bg-[#091747] bg-[#f21300]">
-            Login
+            {
+              loader ? <Loader2 className="animate-spin" /> : "Login"
+            }
           </Button>
 
           {/* Forget Password */}

@@ -17,7 +17,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import Image from 'next/image';
-import profileImage from '../../../../../public/assets/profile-image.png';
+import profileImage from '../../../../../../public/assets/profile-image.png';
 import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
@@ -113,15 +113,49 @@ export function ClientTable<TData, TValue>({
     const { id: columnId } = cell.column;
     const cellValue = cell.value;
 
-    if (columnId === 'kyc') {
+    if (columnId === "status") {
       return (
-        <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-[#f21300] text-white text-sm">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-[#fab515] text-white text-sm">
+          Completed
         </div>
       );
     }
 
-    if (columnId === 'profile-image' || columnId === 'manager') {
+    if(columnId === "id"){
+      return(
+         <span className='text-[#f21300]'>P57</span>
+      )
+    }
+
+    if(columnId === "project"){
+      return(
+         <span className='text-[#091747]'>80G (Final) Registration</span>
+      )
+    }
+    if(columnId === "bussiness"){
+      return(
+         <span className='text-[#f21300]'>LEELASHREE NIDHI LIMITED</span>
+      )
+    }
+    if(columnId === "created"){
+      return(
+         <span className='text-[#091747]'>12-11-24</span>
+      )
+    }
+    if(columnId === "date"){
+      return(
+         <span className='text-[#091747]'>23-01-25</span>
+      )
+    }
+    if(columnId === "progress"){
+      return(
+         <div className="bg-slate-200 w-full h-1 justify rounded-md">
+             <div className="bg-red-600 w-[20%] rounded-md h-1"></div>
+         </div>
+      )
+    }
+
+    if (columnId === 'profile-image' || columnId === 'assigned') {
       return (
         <div className="flex items-center justify-center w-full h-full rounded-full">
           <Image
