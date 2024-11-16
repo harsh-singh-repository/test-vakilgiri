@@ -57,7 +57,7 @@ export default function BusinessCardSection() {
     return Object.entries(statObj).map(([key, value]) => (
       <div className="flex flex-col justify-center items-center" key={key}>
         <span className="font-medium text-xl text-black">{value}</span>
-        <span className="text-xs font-semibold text-nowrap">{label[key as keyof typeof label]}</span>
+        <span className="text-xs font-semibold lg:text-nowrap">{label[key as keyof typeof label]}</span>
       </div>
     ));
   };
@@ -89,12 +89,12 @@ export default function BusinessCardSection() {
   };
 
   return (
-    <div className="w-full flex justify-between items-center gap-4">
+    <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-between items-center gap-4">
       {/* Businesses Section */}
-      <div className="w-full flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#eabfff4d]">
+      <div className="w-full xl:order-1 flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#eabfff4d]">
         <div className="w-full flex flex-col justify-center items-center">
           <div className="w-full flex justify-center gap-x-2 items-center p-2">
-            <div className="w-14 h-14 rounded-2xl flex justify-center items-center bg-[#3009494d]">
+            <div className="w-14 h-12 rounded-2xl flex justify-center items-center bg-[#3009494d]">
               <span className="text-xl text-[#300949]"><FaUserAlt /></span>
             </div>
             <div className="w-full flex justify-between items-center gap-1 text-[#300949]">
@@ -106,13 +106,13 @@ export default function BusinessCardSection() {
       </div>
 
       {/* Business Types Section */}
-      <div className="w-full flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#c0f0ff4d]">
+      <div className="w-full flex md:col-span-2 md:order-2 xl:order-2 justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#c0f0ff4d]">
         <div className="w-full flex flex-col justify-center items-center">
           <div className="w-full flex justify-center gap-x-2 items-center p-2">
-            <div className="w-14 h-14 rounded-2xl flex justify-center items-center bg-[#093a494d]">
+            <div className="w-14 h-12 rounded-2xl flex justify-center items-center bg-[#093a494d]">
               <span className="text-xl text-[#093a49]"><Building2 /></span>
             </div>
-            <div className="w-full flex justify-between items- gap-2 text-[#093a49] text-center">
+            <div className="w-full flex flex-wrap lg:flex-nowrap justify-between items- gap-2 text-[#093a49] text-center">
               {renderStatItems(stats.businessTypes, businessTypeLabels)}
             </div>
           </div>
@@ -121,10 +121,10 @@ export default function BusinessCardSection() {
       </div>
 
       {/* Status Section */}
-      <div className="w-full flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#ccd7ff]">
+      <div className="w-full xl:order-4 flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#ccd7ff]">
         <div className="w-full flex flex-col justify-center items-center">
           <div className="w-full flex justify-center gap-x-2 items-center p-2">
-            <div className="w-14 h-14 rounded-2xl flex justify-center items-center bg-[#0917474d]">
+            <div className="w-14 h-12 rounded-2xl flex justify-center items-center bg-[#0917474d]">
               <span className="text-[#091747]"><Megaphone /></span>
             </div>
             <div className="w-full flex justify-between items- gap-1">

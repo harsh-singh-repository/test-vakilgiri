@@ -29,6 +29,29 @@ export interface FooterItem {
   }[];
 }
 
+
+export interface ApiResponse{
+    success:boolean;
+    message:string;
+}
+
+export interface CreateClientData{
+  First_Name: string;
+  Last_Name: string;
+  PAN: string;
+  email: string;
+  gender: "Male" | "Female" | "Other";
+  Mobile_Number: string;
+  City: string;
+  State: string;
+  Pincode: string;
+  Address_1: string;
+  Alternate_Mobile_Number?: string; // Optional
+  Address_2?: string; // Optional
+  Aadhaar?: string; // Optional
+  sendMailToClient: boolean;
+}
+
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;

@@ -1,5 +1,6 @@
 import React from 'react';
 import  Poppins  from 'next/font/google';
+import Providers from '@/components/Providers';
 
 export default function RootLayout({
   children,
@@ -8,7 +9,9 @@ export default function RootLayout({
 }>) {
   return (
     <div className='bg-gray-50'>
+      <Providers>
         {children}
+      </Providers>
     </div>
   );
 }

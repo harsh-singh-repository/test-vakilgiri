@@ -39,7 +39,7 @@ const ClientCard = () => {
     ]
 
   return (
-      <div className="w-full grid grid-cols-2 md:grid-cols-4 justify-between items-start rounded-lg gap-4">
+      <div className="w-full grid grid-cols-2 lg:grid-cols-4 justify-between items-start rounded-lg gap-4">
         {clientCardData.map((data,index) => {
           return (
               <div className={`w-full flex justify-start items-start border border-gray-300 rounded-xl p-2 shadow-md shadow-gray-300 ${data.bgColor}`} key={data.title+index}>

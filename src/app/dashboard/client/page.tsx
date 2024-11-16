@@ -46,7 +46,7 @@ export default function ClientPage() {
 
   return (
     <Dialog>
-    <div className="flex-1 space-y-4 p-4 pt-6 md:p-4">
+    <div className="w-full flex-1 space-y-4 p-4 pt-6 md:p-4  overflow-hidden">
       {/* <Breadcrumbs items={breadcrumbItems} /> */}
       <div className="flex items-start justify-between">
         <div className='text-2xl font-bold text-[#042559]'>{`Clients (${responseData.totalUsers})`}</div>
@@ -71,6 +71,7 @@ export default function ClientPage() {
 
       <ClientCard />
 
+      <div className='p-0 m-0 overflow-x-auto flex flex-col'>
       <ClientTable
         searchKey="search"
         searchValue={searchValue}
@@ -80,6 +81,7 @@ export default function ClientPage() {
         data={responseData.employee}
         pageCount={responseData.pageCount}
       />
+      </div>
     </div>
     </Dialog>
   );
