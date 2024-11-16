@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAddClient } from "@/hooks/users/manage-client";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 // Validation schema
 const formSchema = z.object({
@@ -96,11 +96,11 @@ const AddClientDialog = () => {
     setIsSubmitting(true);
     addUser(formData, {
       onSuccess: () => {
-        toast.success("Client created successfully!");
+        // toast.success("Client created successfully!");
         form.reset();
       },
       onError: (error) => {
-        toast.error(`Failed to create client: ${error.message}`);
+        // toast.error(`Failed to create client: ${error.message}`);
       },
       onSettled: () => setIsSubmitting(false),
     });
