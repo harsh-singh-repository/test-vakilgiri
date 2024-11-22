@@ -12,6 +12,8 @@ import BusinessCardSection from './_component/business-card';
 import { useSearchParams } from 'next/navigation';
 import { Business } from '@/constants/data';
 import { fakeBusinesss } from '@/constants/business-table-data';
+import Spinner from '@/components/smooth-spinner';
+import {Oval} from "react-loader-spinner"
 
 type ResponseData = {
   businesses: Business[];
@@ -52,7 +54,19 @@ export default function BusinessPage() {
   }, [page, pageLimit, searchValue]);
 
   if (!responseData) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center item-center h-[100vh]">
+            <Oval
+          visible={true}
+          height="40"
+          width="40"
+          color="#f21300"
+          ariaLabel="oval-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+       </div>
+    );
   }
 
   return (

@@ -40,7 +40,7 @@ export function ClientTable<TData, TValue>({
   searchKey,
   totalUsers,
   pageCount,
-  pageSizeOptions = [10, 20, 30, 40, 50]
+  pageSizeOptions = [20, 30, 50, 100]
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -49,7 +49,7 @@ export function ClientTable<TData, TValue>({
   
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: pageNo - 1,
-    pageSize: parseInt(searchParams?.get('limit') || '10', 10),
+    pageSize: parseInt(searchParams?.get('limit') || '20', 10),
     
   });
 
@@ -58,7 +58,7 @@ export function ClientTable<TData, TValue>({
     if (!searchParams) return;
 
     const pageFromParams = parseInt(searchParams.get('page') || `${pageNo}`);
-    const limitFromParams = parseInt(searchParams.get('limit') || '10');
+    const limitFromParams = parseInt(searchParams.get('limit') || '20');
     const searchFromParams = searchParams.get(searchKey) || '';
 
     setPagination({
@@ -136,7 +136,9 @@ export function ClientTable<TData, TValue>({
     }
 
     if (columnId === 'action') {
-      return <ActionButton />;
+      const uniqueId = cell.row.original.id; 
+      // console.log("UniqueId",uniqueId);
+      return <ActionButton id={uniqueId}/>;
     }
 
     return flexRender(cell.column.columnDef.cell, cell.getContext());
@@ -144,7 +146,7 @@ export function ClientTable<TData, TValue>({
 
   return (
     <>
-      <ScrollArea className="w-full overflow-y-auto max-h-[24rem] border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+      <ScrollArea className="w-full h-[100vh] overflow-y-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
         <Table className="border rounded-2xl bg-white">
           <TableHeader className="bg-[#042559] text-white text-center">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -165,7 +167,7 @@ export function ClientTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'name' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
+                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'firstName' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
                     >
                       {renderCellContent(cell)}
                     </TableCell>

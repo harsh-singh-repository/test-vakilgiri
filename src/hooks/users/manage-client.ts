@@ -5,12 +5,13 @@ import { useCustomToast } from '@/components/providers/toaster-provider';
 import {clientService } from '@/service/client/manage-client';
 import { ApiResponse, CreateClientData } from '@/types';
 
-// export const useUsers = () => {
-//     return useQuery({
-//         queryKey: ['users'],
-//         queryFn: userService.getAll,
-//     });
-// };
+export const useGetClients = () => {
+    const query =  useQuery({
+        queryKey: ['clients'],
+        queryFn: clientService.get,
+    });
+    return query;
+};
 
 export const useAddClient = () => {
     const queryClient = useQueryClient();
@@ -23,6 +24,14 @@ export const useAddClient = () => {
         onError: (error: any) => handleMutationError(error, toast),
     });
 };
+
+export const useGetClientsById = (id:string) =>{
+    const query =  useQuery({
+        queryKey: ['clients'],
+        queryFn:() => clientService.getClientById(id),
+    });
+    return query;
+}
 
 // export const useEditUser = () => {
 //     const queryClient = useQueryClient();

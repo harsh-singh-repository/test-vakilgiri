@@ -1,14 +1,13 @@
 // THIS IS EXMAPLE
 import { ApiResponse, CreateClientData } from '../../types';
-import { fetchHandler } from '../../lib/api-utils';
 import axiosInstance from '@/lib/axiosInstance';
 
 const CLIENT_API = {
-    CREATE: '/client/create-client',
-    // EDIT: (id: number) => `/admin/master/edit-user/${id}`,
-    // DELETE: (id: number) => `/admin/master/delete-user/${id}`,
-    // GET_ALL: '/admin/master/get-users',
-    // GET_BY_ID: (id: number) => `/admin/master/get-user/${id}`,
+    CREATE: '/client',
+    EDIT: (id: number) => `/user/edit-client/${id}`,
+    DELETE: (id: number) => `/client/delete-client/${id}`,
+    GET_ALL: '/client/',
+    GET_BY_ID: (id: any) => `/client/${id}`,
     // GET_CURRENT: '/admin/current-user'
 } as const;
 
@@ -16,22 +15,31 @@ export const clientService = {
     // add: (userData: UserPayload) =>
     //     fetchHandler<ApiResponse>(USER_API.ADD, 'POST', userData),
 
+    getClientById:async(id:any)=>{
+        const response =  await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_BY_ID(id)}`);
+        return response.data.data;
+    },
+
+    get: async()=>{
+        const response =  await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_ALL}`);
+            // console.log("Response",response)
+            return response.data.data;
+    },
+
     create: async (clientData: CreateClientData) => {
-        return await axiosInstance.post(CLIENT_API.CREATE, clientData);
-      },
+        return await axiosInstance.post(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.CREATE}`, clientData,);
+    },
 
-    // edit: (userId: number, userData: Partial<Omit<UserPayload, 'password'>>) =>
-    //     fetchHandler<ApiResponse>(USER_API.EDIT(userId), 'PUT', userData),
+    edit: async (clientData: CreateClientData) => {
+        return await axiosInstance.put(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.EDIT}`, clientData,);
+    },
 
-    // delete: (userId: number) =>
-    //     fetchHandler<ApiResponse>(USER_API.DELETE(userId), 'DELETE'),
+    // delete: async (clientData: CreateClientData) => {
+    //     return await axiosInstance.delete(
+    //       `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE}`, clientData);
+    // },
+    
 
-    // getAll: () =>
-    //     fetchHandler<ApiResponse>(USER_API.GET_ALL, 'GET'),
-
-    // getById: (userId: number) =>
-    //     fetchHandler<ApiResponse>(USER_API.GET_BY_ID(userId), 'GET'),
-
-    // getCurrent: () =>
-    //     fetchHandler<ApiResponse>(USER_API.GET_CURRENT, 'GET')
 };

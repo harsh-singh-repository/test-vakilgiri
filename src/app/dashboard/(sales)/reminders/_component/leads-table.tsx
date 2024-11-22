@@ -41,7 +41,7 @@ export function LeadsTable<TData, TValue>({
   searchKey,
   totalUsers,
   pageCount,
-  pageSizeOptions = [10, 20, 30, 40, 50]
+  pageSizeOptions = [20, 30, 40, 50,100]
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -50,7 +50,7 @@ export function LeadsTable<TData, TValue>({
 
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: pageNo - 1,
-    pageSize: parseInt(searchParams?.get('limit') || '10', 10),
+    pageSize: parseInt(searchParams?.get('limit') || '20', 10),
 
   });
 
@@ -59,7 +59,7 @@ export function LeadsTable<TData, TValue>({
     if (!searchParams) return;
 
     const pageFromParams = parseInt(searchParams.get('page') || `${pageNo}`);
-    const limitFromParams = parseInt(searchParams.get('limit') || '10');
+    const limitFromParams = parseInt(searchParams.get('limit') || '20');
     const searchFromParams = searchParams.get(searchKey) || '';
 
     setPagination({
@@ -180,7 +180,7 @@ export function LeadsTable<TData, TValue>({
 
   return (
     <>
-      <ScrollArea className="w-full overflow-y-auto max-h-[24rem] border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+      <ScrollArea className="w-full overflow-y-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
         <Table className="border rounded-2xl bg-white">
           <TableHeader className="bg-[#042559] text-white text-center">
             {table.getHeaderGroups().map((headerGroup) => (

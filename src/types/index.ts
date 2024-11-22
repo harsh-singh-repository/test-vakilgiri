@@ -40,7 +40,7 @@ export interface CreateClientData{
   Last_Name: string;
   PAN: string;
   email: string;
-  gender: "Male" | "Female" | "Other";
+  // gender: "male" | "female" | "other";
   Mobile_Number: string;
   City: string;
   State: string;

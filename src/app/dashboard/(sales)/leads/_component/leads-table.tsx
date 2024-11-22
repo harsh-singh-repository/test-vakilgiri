@@ -40,7 +40,7 @@ export function LeadsTable<TData, TValue>({
   searchKey,
   totalUsers,
   pageCount,
-  pageSizeOptions = [10, 20, 30, 40, 50]
+  pageSizeOptions = [20, 30, 50, 100]
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -49,7 +49,7 @@ export function LeadsTable<TData, TValue>({
 
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: pageNo - 1,
-    pageSize: parseInt(searchParams?.get('limit') || '10', 10),
+    pageSize: parseInt(searchParams?.get('limit') || '20', 10),
 
   });
 
@@ -58,7 +58,7 @@ export function LeadsTable<TData, TValue>({
     if (!searchParams) return;
 
     const pageFromParams = parseInt(searchParams.get('page') || `${pageNo}`);
-    const limitFromParams = parseInt(searchParams.get('limit') || '10');
+    const limitFromParams = parseInt(searchParams.get('limit') || '20');
     const searchFromParams = searchParams.get(searchKey) || '';
 
     setPagination({
@@ -157,6 +157,27 @@ export function LeadsTable<TData, TValue>({
         </div>
       );
     }
+
+    if(columnId === 'date'){
+      return(
+          <span className="">23-09-24</span>
+      )
+    }
+    if(columnId === 'service'){
+      return(
+          <span className="">ISO certification</span>
+      )
+    }
+    if(columnId === 'leadId'){
+      return(
+          <span className="">1</span>
+      )
+    }
+    if(columnId === 'businessOrClient'){
+      return(
+          <span className="">Karan Garg</span>
+      )
+    }
   
     if (columnId === 'action') {
       return <ActionButton />;
@@ -167,8 +188,8 @@ export function LeadsTable<TData, TValue>({
 
   return (
     <>
-      <ScrollArea className="w-full overflow-y-auto max-h-[24rem] border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
-        <Table className="border rounded-2xl bg-white">
+      <ScrollArea className="w-full max-h-fit overflow-y-auto border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+        <Table className="border rounded-2xl bg-white h-full">
           <TableHeader className="bg-[#042559] text-white text-center">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -183,7 +204,7 @@ export function LeadsTable<TData, TValue>({
 
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+             table.getRowModel().rows.slice(0, 20).map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell

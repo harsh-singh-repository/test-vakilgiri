@@ -1,19 +1,20 @@
-import { NextResponse,NextRequest } from 'next/server'
-import { getToken } from 'next-auth/jwt'
+import { NextResponse, NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 export { default } from "next-auth/middleware";
- 
-// This function can be marked `async` if using `await` inside
+
 export async function middleware(request: NextRequest) {
-//     const token = await getToken({req:request});
-//     const url = request.nextUrl;
-    
-//     if(token && url.pathname.startsWith("/")){
-//         return NextResponse.redirect(new URL("/dashboard",request.url))
-//     }
-//   return NextResponse.redirect(new URL('/', request.url));
+    const token = await getToken({ req: request });
+    const url = request.nextUrl;
+
+    if (!token && url.pathname.startsWith("/dashboard")) {
+        console.log("Unauthorized access to /dashboard, redirecting to home");
+        return NextResponse.redirect(new URL('/', request.url));
+    }
+
+    console.log("Authorized request or non-protected path");
+    return NextResponse.next();
 }
- 
-// See "Matching Paths" below to learn more
+
 export const config = {
-//   matcher: ['/dashboard/:path*'],
-}
+    matcher: ['/dashboard/:path*'],
+};

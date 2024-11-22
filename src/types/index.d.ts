@@ -1,11 +1,13 @@
 
-export interface ApiResponse {
-    success: boolean;
-    statusCode: number;
-    message: string;
-    data?: object | null;
-    errors: string[];
-}
+// export interface ApiResponse {
+//     success: boolean;
+//     statusCode: number;
+//     message: string;
+//     data?: object | null;
+//     errors: string[];
+// }
+
+export type ApiResponse = AxiosResponse<any, any>;
 
 export interface UserPayload {
     first_name: string;

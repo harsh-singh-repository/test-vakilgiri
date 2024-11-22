@@ -28,30 +28,63 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAddClient } from "@/hooks/users/manage-client";
-// import { toast } from "sonner";
+import { toast } from "sonner";
+
+const panZodSchema = z
+    .string()
+    .min(1, "PAN is required")
+    .transform((value) => value.toUpperCase())
+    .refine(
+    (value) => /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value),
+    { message: "Invalid PAN format" }
+)
 
 // Validation schema
 const formSchema = z.object({
-  First_Name: z.string().min(1, "First name is required"),
+  PAN: panZodSchema, // Transform to uppercase
+  First_Name: z.string().min(1, "First name is required"), // Ensures the field is not empty
   Last_Name: z.string().min(1, "Last name is required"),
-  PAN: z
-    .string()
-    .length(10, "PAN must be exactly 10 characters")
-    .regex(/^[A-Z0-9]+$/, "Invalid PAN format"),
-  email: z.string().email("Invalid email address"),
-  gender: z.enum(["Male", "Female", "Other"]),
   Mobile_Number: z
     .string()
-    .length(10, "Mobile number must be exactly 10 digits")
-    .regex(/^\d+$/, "Mobile number must contain only digits"),
+    .regex(/^[6-9]\d{9}$/, "Invalid mobile number") // Validates 10-digit Indian mobile numbers starting with 6-9
+    .min(1, "Mobile number is required"),
+  email: z
+    .string()
+    .email("Invalid email address") // Validates email format
+    .min(1, "Email is required"),
+  Address_1: z.string().min(1, "Address 1 is required"),
   City: z.string().min(1, "City is required"),
   State: z.string().min(1, "State is required"),
-  Pincode: z.string().regex(/^\d{6}$/, "Pincode must be exactly 6 digits"),
-  Address_1: z.string().min(1, "Address is required"),
-  Alternate_Mobile_Number: z.string().optional(),
+  Pincode: z
+    .string()
+    .regex(/^\d{6}$/, "Invalid pincode") // Validates 6-digit Indian postal codes
+    .min(1, "Pincode is required"),
+ 
+  // Optional fields
+  Alternate_Mobile_Number: z
+    .string()
+    .regex(/^[6-9]\d{9}$/, "Invalid alternate mobile number") // Validates 10-digit Indian mobile numbers starting with 6-9
+    .optional()
+    .or(z.literal("")),
   Address_2: z.string().optional(),
-  Aadhaar: z.string().optional(),
-  sendMailToClient: z.boolean(),
+  Aadhaar: z
+    .string()
+    .regex(/^\d{12}$/, "Invalid Aadhaar number") // Validates 12-digit Aadhaar numbers
+    .optional()
+    .or(z.literal("")),
+  gender: z.enum(["Male", "Female", "Other"]).optional(),
+  loginStatus : z.enum(["None", "Active", "Inactive"]).optional(),
+  kycStatus : z.enum(["Approved", "Pending"]).optional(),
+ 
+  //optional
+  dscStatus : z.enum(["None","Not_Applicable", "With_Vakilgiri", "With_Client"]).optional(),
+  dscExpiry : z.string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format, expected YYYY-MM-DD")
+  .refine((date) => !isNaN(new Date(date).getTime()), { message: "Invalid date" })
+  .transform((date) => new Date(date)).optional(),
+  dscVault : z.string().optional(),
+  // Boolean field for sending email to client, with a default value of `false`
+  sendMailToClient: z.boolean().default(false),
 });
 
 // States array
@@ -75,7 +108,7 @@ const AddClientDialog = () => {
       Last_Name: "",
       PAN: "",
       email: "",
-      gender: "Male",
+      // gender: "male",
       Mobile_Number: "",
       City: "",
       State: "",
@@ -93,14 +126,17 @@ const AddClientDialog = () => {
   });
 
   async function onSubmit(formData: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
+    
+    const jsonData = JSON.stringify(formData, null, 2);
+    console.log("Form Data:", formData);
+    console.log("Form Data:", jsonData);
     addUser(formData, {
       onSuccess: () => {
-        // toast.success("Client created successfully!");
+        toast.success("Client created successfully!");
         form.reset();
       },
       onError: (error) => {
-        // toast.error(`Failed to create client: ${error.message}`);
+        toast.error(`Failed to create client: ${error.message}`);
       },
       onSettled: () => setIsSubmitting(false),
     });
@@ -116,22 +152,6 @@ const AddClientDialog = () => {
       </DialogHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-          <FormField
-            control={form.control}
-            name="PAN"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  PAN<span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="10 Digit PAN" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -165,6 +185,22 @@ const AddClientDialog = () => {
               )}
             />
           </div>
+
+          <FormField
+            control={form.control}
+            name="PAN"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  PAN<span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="10 Digit PAN" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
@@ -273,6 +309,34 @@ const AddClientDialog = () => {
               </FormItem>
             )}
           />
+
+          {/* <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Gender<span className="text-red-500">*</span>
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Gender" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          /> */}
 
           <div className="grid grid-cols-2 gap-4">
             <FormField

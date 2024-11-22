@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react';
 
 // Create an axios instance with default configuration
 const axiosInstance = axios.create({
-    baseURL: "https://vg-backend-082f56fdbc53.herokuapp.com/api/v1",
+    baseURL: `${process.env.API_BASE_URL}`,
     headers: {
         'Content-Type': 'application/json',
     },
