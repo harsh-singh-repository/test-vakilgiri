@@ -15,16 +15,20 @@ import { useRouter } from 'next/navigation'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
+  // DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+// import { Label } from "@/components/ui/label"
 
 import { format } from "date-fns"
-import { CalendarIcon, Plus, X } from 'lucide-react'
+import { 
+  CalendarIcon, 
+  Plus,
+  //  X 
+  } from 'lucide-react'
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -52,8 +56,8 @@ import {
 } from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { useGetClients, useGetClientsById } from '@/hooks/users/manage-client'
+// import { Badge } from "@/components/ui/badge"
+// import { useGetClients, useGetClientsById } from '@/hooks/users/manage-client'
 
 const formSchema = z.object({
   discussion: z.string().min(1, "Discussion is required"),
@@ -64,7 +68,7 @@ const formSchema = z.object({
 })
 
 const StackExchangeDialog = (id:any) => {
-  const [date, setDate] = React.useState<Date>()
+  // const [date, setDate] = React.useState<Date>()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -297,7 +301,7 @@ const ActionButton = (id:any) => {
 
   const handleEditClick = () => {
     // console.log("id one",id)
-    router.push(`/dashboard/client/${id.id}`)
+    router.push(`/dashboard/client/${id}`)
   }
 
   return (
@@ -316,7 +320,7 @@ const ActionButton = (id:any) => {
             <FaStackExchange />
           </Button>
         </DialogTrigger>
-        <StackExchangeDialog id={id.id} />
+        <StackExchangeDialog id={id} />
       </Dialog>
       <Button
         className="bg-[#042559] text-white w-6 h-7 text-sm"

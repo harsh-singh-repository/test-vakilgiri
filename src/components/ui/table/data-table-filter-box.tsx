@@ -20,7 +20,7 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { PlusCircledIcon } from '@radix-ui/react-icons';
 import { CheckIcon } from 'lucide-react';
-import { Options } from 'nuqs';
+// import { Options } from 'nuqs';
 import React from 'react';
 
 interface FilterOption {
@@ -35,13 +35,13 @@ interface FilterBoxProps {
   options: FilterOption[];
   setFilterValue: (
     value: string | ((old: string) => string | null) | null,
-    options?: Options<any> | undefined
+    options?: unknown
   ) => Promise<URLSearchParams>;
   filterValue: string;
 }
 
 export function DataTableFilterBox({
-  filterKey,
+  // filterKey,
   title,
   options,
   setFilterValue,

@@ -1,7 +1,7 @@
 // "use client"
 
-import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { useState } from "react";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -12,24 +12,24 @@ import {
 import { FaPencilAlt } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Plus, X } from "lucide-react";
+// import { Plus, X } from "lucide-react";
 import { DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import EditClientPopover from "./EditClientPopover";
 
 export default function UpdateLeads() {
-  const [openAccordion, setOpenAccordion] = useState<string | undefined>(
-    "discussions"
-  );
+  // const [openAccordion, setOpenAccordion] = useState<string | undefined>(
+  //   "discussions"
+  // );
 
   return (
     <DialogContent className="max-w-[825px] px-5 py-1">

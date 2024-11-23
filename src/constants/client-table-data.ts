@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+// import { faker } from '@faker-js/faker';
 import { matchSorter } from 'match-sorter'; 
 
 export type User = {

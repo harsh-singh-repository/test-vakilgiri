@@ -45,7 +45,7 @@ interface RegisterProps {
 
 export default function Register({ alreadyLogin }: RegisterProps) {
   const [otpVerified, setOtpVerified] = useState<boolean>(false)
-  const [date, setDate] = useState<Date | undefined>(undefined)
+  const [, setDate] = useState<Date | undefined>(undefined)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -73,6 +73,7 @@ export default function Register({ alreadyLogin }: RegisterProps) {
       console.log("Form submitted:", data)
       setIsSuccess(true)
     } catch (err) {
+      console.error(err);
       setError("An error occurred while submitting the form. Please try again.")
     } finally {
       setIsSubmitting(false)

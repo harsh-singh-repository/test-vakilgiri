@@ -1,7 +1,7 @@
 // BusinessPage.tsx
 'use client'
 import { useEffect, useState } from 'react';
-import { Breadcrumbs } from '@/components/breadcrumbs';
+// import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
@@ -12,7 +12,7 @@ import BusinessCardSection from './_component/business-card';
 import { useSearchParams } from 'next/navigation';
 import { Business } from '@/constants/data';
 import { fakeBusinesss } from '@/constants/business-table-data';
-import Spinner from '@/components/smooth-spinner';
+// import Spinner from '@/components/smooth-spinner';
 import {Oval} from "react-loader-spinner"
 
 type ResponseData = {
@@ -21,10 +21,10 @@ type ResponseData = {
   pageCount: number;
 };
 
-const breadcrumbItems = [
-  { title: 'Dashboard', link: '/dashboard' },
-  { title: 'Business', link: '/dashboard/business' }
-];
+// const breadcrumbItems = [
+//   { title: 'Dashboard', link: '/dashboard' },
+//   { title: 'Business', link: '/dashboard/business' }
+// ];
 
 export default function BusinessPage() {
   const searchParams = useSearchParams();
@@ -35,7 +35,7 @@ export default function BusinessPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const offset = (page - 1) * pageLimit;
+      // const offset = (page - 1) * pageLimit;
       const totalBusinesses = 10; // You can replace this with actual business count
       const pageCount = Math.ceil(totalBusinesses / pageLimit);
       
@@ -79,7 +79,7 @@ export default function BusinessPage() {
           <Input
             placeholder="Search name..."
             value={searchValue}
-            onChange={(event) => setSearchValue(event.target.value)}
+            onChange={(event:any) => setSearchValue(event.target.value)}
             className="w-full md:max-w-sm ml-auto bg-white"
           />
 

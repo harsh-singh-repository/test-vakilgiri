@@ -1,6 +1,9 @@
-import { Dialog, DialogOverlay } from "@/components/ui/dialog";
-import { DialogTrigger } from "@/components/ui/dialog";
-import { Database } from "lucide-react";
+import { 
+  Dialog, 
+  // DialogOverlay
+ } from "@/components/ui/dialog";
+// import { DialogTrigger } from "@/components/ui/dialog";
+// import { Database } from "lucide-react";
 import React from "react";
 import { RxAvatar } from "react-icons/rx";
 import ClientDetailDialog from "./ClientDetailDialog";

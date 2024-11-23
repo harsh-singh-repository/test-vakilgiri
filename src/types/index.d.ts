@@ -7,7 +7,7 @@
 //     errors: string[];
 // }
 
-export type ApiResponse = AxiosResponse<any, any>;
+export type ApiResponse = any;
 
 export interface UserPayload {
     first_name: string;

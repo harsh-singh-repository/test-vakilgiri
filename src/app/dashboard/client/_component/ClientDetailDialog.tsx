@@ -58,7 +58,6 @@ type ClientDetailDialogProp = {
 const ClientDetailDialog: React.FC<ClientDetailDialogProp> = ({ tables }) => {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   return (
-    <>
       <DialogContent className="sm:max-w-[600px] p-4">
         {/* <DialogHeader className=''></DialogHeader>s */}
         <DialogTitle>
@@ -195,7 +194,6 @@ const ClientDetailDialog: React.FC<ClientDetailDialogProp> = ({ tables }) => {
           </div>
         </div>
       </DialogContent>
-    </>
   );
 };
 

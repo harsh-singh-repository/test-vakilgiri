@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PopoverContent,} from "@/components/ui/popover"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+// import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 
 const EditClientPopover = () => {
@@ -16,7 +16,7 @@ const EditClientPopover = () => {
         status: "Contacted",
       })
     
-      const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const handleChange = () => { // if need then add e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
         // const { name, value } = e.target
         // setFormData({ ...formData, [name]: value })
         console.log("SUBMITED");

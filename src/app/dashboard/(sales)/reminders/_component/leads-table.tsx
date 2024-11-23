@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
 import {
+  Cell,
   ColumnDef,
   PaginationState,
   flexRender,
@@ -11,7 +12,7 @@ import {
 } from '@tanstack/react-table';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+// import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
@@ -34,12 +35,16 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
+interface CustomCellProps {
+  cell: Cell<any, any>; // Adjust `any` for your data type
+}
+
 export function LeadsTable<TData, TValue>({
   columns,
   data,
   pageNo,
   searchKey,
-  totalUsers,
+  // totalUsers,
   pageCount,
   pageSizeOptions = [20, 30, 40, 50,100]
 }: DataTableProps<TData, TValue>) {
@@ -110,9 +115,9 @@ export function LeadsTable<TData, TValue>({
     manualFiltering: true
   });
 
-  const renderCellContent = (cell:any) => {
+  const renderCellContent = (cell:CustomCellProps['cell']) => {
     const columnId = cell.column.id;
-    const value = cell.getValue(); // Get the raw value directly
+    // const value = cell.getValue(); // Get the raw value directly
     const cellValue = flexRender(cell.column.columnDef.cell, cell.getContext());
 
     if(columnId==="id"){

@@ -22,13 +22,19 @@ type ResponseData = {
   pageCount: number;
 };
 
-const breadcrumbItems = [
-  { title: 'Dashboard', link: '/dashboard' },
-  { title: 'Client', link: '/dashboard/client' }
-];
+// const breadcrumbItems = [
+//   { title: 'Dashboard', link: '/dashboard' },
+//   { title: 'Client', link: '/dashboard/client' }
+// ];
 
 export default function ClientPage() {
-  const {data,isFetching,isSuccess,error,isError} = useGetClients();
+  const {
+    data,
+    // isFetching,
+    // isSuccess,
+    // error,
+    // isError
+  } = useGetClients();
   // console.log("Data",data);
   
 
@@ -73,7 +79,7 @@ export default function ClientPage() {
           <Input
             placeholder='Search name...'
             value={searchValue}
-            onChange={(event) => setSearchValue(event.target.value)}
+            onChange={(event:any) => setSearchValue(event.target.value)}
             className="w-full md:max-w-sm ml-auto bg-white"
           />
          

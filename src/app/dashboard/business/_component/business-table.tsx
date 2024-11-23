@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import {
+  Cell,
   ColumnDef,
   PaginationState,
   flexRender,
@@ -11,7 +12,7 @@ import {
 } from '@tanstack/react-table';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+// import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -47,6 +48,10 @@ interface DataTableProps<TData, TValue> {
   totalUsers: number;
   pageSizeOptions?: number[];
   pageCount: number;
+}
+
+interface CustomCellProps {
+  cell: Cell<any, any>; // Adjust `any` for your data type
 }
 
 export function BusinessTable<TData, TValue>({
@@ -102,9 +107,9 @@ export function BusinessTable<TData, TValue>({
     [searchParams]
   );
 
-  function renderCellContent(cell: any) {
+  function renderCellContent(cell: CustomCellProps['cell']) {
     const { id: columnId } = cell.column;
-    const cellValue = cell.value;
+    // const cellValue = cell.value;
 
     if (columnId === 'status') {
       return (

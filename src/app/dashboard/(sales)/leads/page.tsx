@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Breadcrumbs } from "@/components/breadcrumbs";
-import { Button } from "@/components/ui/button";
+// import { Breadcrumbs } from "@/components/breadcrumbs";
+// import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -21,10 +21,10 @@ type ResponseData = {
   pageCount: number;
 };
 
-const breadcrumbItems = [
-  { title: "Dashboard", link: "/dashboard" },
-  { title: "Leads", link: "/dashboard/leads" },
-];
+// const breadcrumbItems = [
+//   { title: "Dashboard", link: "/dashboard" },
+//   { title: "Leads", link: "/dashboard/leads" },
+// ];
 
 export default function LeadsPage() {
   const searchParams = useSearchParams();
@@ -73,7 +73,7 @@ export default function LeadsPage() {
           <Input
             placeholder="Search"
             value={searchValue}
-            onChange={(event) => setSearchValue(event.target.value)}
+            onChange={(event:any) => setSearchValue(event.target.value)}
             className="w-full md:max-w-sm ml-auto bg-white"
           />
 

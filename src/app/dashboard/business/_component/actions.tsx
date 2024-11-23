@@ -1,5 +1,5 @@
 import React from 'react'
-import { IoMdMail } from "react-icons/io";
+// import { IoMdMail } from "react-icons/io";
 import { FaStackExchange } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { Button } from '@/components/ui/button';

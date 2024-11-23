@@ -1,7 +1,6 @@
 import { RxAvatar } from "react-icons/rx";
 
 const ClientShowcase = () => {
-  
   const tables = [
     {
       tableId: 1,
@@ -83,22 +82,33 @@ const ClientShowcase = () => {
   ];
 
   return (
-    <>
-       <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 p-5 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 p-5 md:grid-cols-2 lg:grid-cols-4">
       {tables.map((table) => (
-        <div key={table.tableId} className="border px-2 py-4 rounded-md shadow bg-slate-200 h-[350px] overflow-y-auto">
-          <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">{table.tableName}</span>
+        <div
+          key={table.tableId}
+          className="border px-2 py-4 rounded-md shadow bg-slate-200 h-[350px] overflow-y-auto"
+        >
+          <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
+            {table.tableName}
+          </span>
           <div className="flex flex-col gap-2 mt-2">
             {table.clients.map((client, clientIndex) => (
-              <div key={clientIndex} className="mb-1 bg-white flex flex-row rounded-md p-2 gap-x-3 items-center">
-                <RxAvatar size={30}/>
+              <div
+                key={clientIndex}
+                className="mb-1 bg-white flex flex-row rounded-md p-2 gap-x-3 items-center"
+              >
+                <RxAvatar size={30} />
 
                 <div className="flex flex-col items-start">
-                    <span className="text-[10px] text-[#F20101] font-medium">{client.date}</span>
-                    <span className="text-[13px] text-[#091747] font-medium">{client.name}</span>
-                    <div className="text-[10px] text-white bg-[#FAB515] rounded-xl text-center px-1">
-                        <span>{client.workingStatus}</span>
-                    </div>
+                  <span className="text-[10px] text-[#F20101] font-medium">
+                    {client.date}
+                  </span>
+                  <span className="text-[13px] text-[#091747] font-medium">
+                    {client.name}
+                  </span>
+                  <div className="text-[10px] text-white bg-[#FAB515] rounded-xl text-center px-1">
+                    <span>{client.workingStatus}</span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -106,7 +116,6 @@ const ClientShowcase = () => {
         </div>
       ))}
     </div>
-    </>
   );
 };
 

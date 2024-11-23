@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { Breadcrumbs } from '@/components/breadcrumbs';
+// import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
@@ -10,7 +10,7 @@ import { LeadsTable } from './_component/leads-table';
 import { useSearchParams } from 'next/navigation';
 import { LeadsPageServer } from './_component/LeadsPageServer';
 import { Leads } from '@/constants/data';
-import Spinner from '@/components/smooth-spinner';
+// import Spinner from '@/components/smooth-spinner';
 import {Oval} from "react-loader-spinner"
 
 type ResponseData = {
@@ -19,10 +19,10 @@ type ResponseData = {
   pageCount: number;
 };
 
-const breadcrumbItems = [
-  { title: 'Dashboard', link: '/dashboard' },
-  { title: 'Leads', link: '/dashboard/leads' }
-];
+// const breadcrumbItems = [
+//   { title: 'Dashboard', link: '/dashboard' },
+//   { title: 'Leads', link: '/dashboard/leads' }
+// ];
 
 export default function ReminderPage() {
   const searchParams = useSearchParams();

@@ -3,7 +3,7 @@ import { handleMutationSuccess, handleMutationError } from '@/lib/mutation-utils
 // import { UserPayload } from '@/types/index.d';
 import { useCustomToast } from '@/components/providers/toaster-provider';
 import {clientService } from '@/service/client/manage-client';
-import { ApiResponse, CreateClientData } from '@/types';
+// import { ApiResponse, CreateClientData } from '@/types';
 
 export const useGetClients = () => {
     const query =  useQuery({
@@ -21,7 +21,7 @@ export const useAddClient = () => {
         mutationFn: clientService.create,
         onSuccess: (response) =>
             handleMutationSuccess(response, toast, queryClient, ["users"]),
-        onError: (error: any) => handleMutationError(error, toast),
+        onError: (error: any | unknown) => handleMutationError(error, toast),
     });
 };
 

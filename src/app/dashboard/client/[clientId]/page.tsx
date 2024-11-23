@@ -3,27 +3,28 @@ import Results from "../../_component/Results";
 import ClientDashboard from "../_component/ClientDashboard";
 import { Button } from "@/components/ui/button";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardFooter,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
 import { Eye, PlusCircle } from "lucide-react";
 import { RxAvatar } from "react-icons/rx";
 import Personal_Form from "../_component/Personal_Form";
 import Component from "../_component/Address_Form";
 import { Separator } from "@/components/ui/separator";
+import { Card } from "@/components/ui/card";
 
 const page = () => {
   const tabs = [

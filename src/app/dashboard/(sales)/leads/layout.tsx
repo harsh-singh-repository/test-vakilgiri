@@ -1,5 +1,4 @@
 import React from 'react';
-import  Poppins  from 'next/font/google';
 
 export default function RootLayout({
   children,

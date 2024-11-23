@@ -1,5 +1,8 @@
 // THIS IS EXMAPLE
-import { ApiResponse, CreateClientData } from '../../types';
+import { 
+    // ApiResponse, 
+    CreateClientData 
+} from '../../types';
 import axiosInstance from '@/lib/axiosInstance';
 
 const CLIENT_API = {
@@ -7,7 +10,7 @@ const CLIENT_API = {
     EDIT: (id: number) => `/user/edit-client/${id}`,
     DELETE: (id: number) => `/client/delete-client/${id}`,
     GET_ALL: '/client/',
-    GET_BY_ID: (id: any) => `/client/${id}`,
+    GET_BY_ID: (id: string) => `/client/${id}`,
     // GET_CURRENT: '/admin/current-user'
 } as const;
 
@@ -15,7 +18,7 @@ export const clientService = {
     // add: (userData: UserPayload) =>
     //     fetchHandler<ApiResponse>(USER_API.ADD, 'POST', userData),
 
-    getClientById:async(id:any)=>{
+    getClientById:async(id:string)=>{
         const response =  await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_BY_ID(id)}`);
         return response.data.data;
     },

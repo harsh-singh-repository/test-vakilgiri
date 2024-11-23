@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import React from 'react'
-import { FaWhatsapp, FaStackExchange, FaPencilAlt } from "react-icons/fa";
+import { FaStackExchange, FaPencilAlt } from "react-icons/fa"; // if need then add FaWhatsapp,
 import { RiDeleteBin6Line } from "react-icons/ri";
 const ActionButton = () => {
 

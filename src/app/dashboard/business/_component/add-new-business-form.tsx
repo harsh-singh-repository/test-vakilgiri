@@ -6,24 +6,24 @@ import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import {
     Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+    // FormControl,
+    // FormDescription,
+    // FormField,
+    // FormItem,
+    // FormLabel,
+    // FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+// import { Input } from "@/components/ui/input"
 
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
+// import {
+//     Select,
+//     SelectContent,
+//     SelectGroup,
+//     SelectItem,
+//     SelectLabel,
+//     SelectTrigger,
+//     SelectValue,
+// } from "@/components/ui/select"
 
 
 
@@ -103,32 +103,32 @@ const AddNewBusinessForm = () => {
         }
     ]
 
-    const selectBusinessTypeOptions = () => {
-        return (
-            <Select>
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select Business Type" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectGroup>
-                        {
-                            bussinessTypeOptions.map((option, index) => (
-                                <SelectItem key={index} value={option.value}>
-                                    {option.label}
-                                </SelectItem>
-                            ))
-                        }
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        )
-    }
+    // const selectBusinessTypeOptions = () => {
+    //     return (
+    //         <Select>
+    //             <SelectTrigger className="w-[180px]">
+    //                 <SelectValue placeholder="Select Business Type" />
+    //             </SelectTrigger>
+    //             <SelectContent>
+    //                 <SelectGroup>
+    //                     {
+    //                         bussinessTypeOptions.map((option, index) => (
+    //                             <SelectItem key={index} value={option.value}>
+    //                                 {option.label}
+    //                             </SelectItem>
+    //                         ))
+    //                     }
+    //                 </SelectGroup>
+    //             </SelectContent>
+    //         </Select>
+    //     )
+    // }
 
-    const formFeilds = [
-        {
+    // const formFeilds = [
+    //     {
 
-        }
-    ]
+    //     }
+    // ]
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

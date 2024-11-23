@@ -1,8 +1,8 @@
 'use client';
-import { Checkbox } from '@/components/ui/checkbox';
+// import { Checkbox } from '@/components/ui/checkbox';
 import { Business } from '@/constants/data';
 import { ColumnDef } from '@tanstack/react-table';
-import { CellAction } from './cell-action';
+// import { CellAction } from './cell-action';
 
 export const columns: ColumnDef<Business>[] = [
   // {

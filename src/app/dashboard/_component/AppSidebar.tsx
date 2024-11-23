@@ -1,8 +1,13 @@
 'use client'
-import react, { useState } from "react";
+import { useState } from "react";
 import { usePathname } from 'next/navigation';
 import {
-  BriefcaseBusiness, ChevronRightIcon, IndianRupee, Landmark, LayoutDashboard, User,
+  BriefcaseBusiness, 
+  // ChevronRightIcon,
+  IndianRupee, 
+  Landmark, 
+  LayoutDashboard, 
+  User,
 } from "lucide-react";
 import {
   MdOutlinePhoneCallback, MdEditDocument, MdOutlineArrowDropUp,
@@ -101,12 +106,12 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const [subMenuOpen, setSubMenuOpen] = useState<boolean>(false);
+  // const [subMenuOpen, setSubMenuOpen] = useState<boolean>(false);
   const pathname = usePathname();
 
-  const handleSubMenuOpen = () => {
-    setSubMenuOpen(!subMenuOpen);
-  };
+  // const handleSubMenuOpen = () => {
+  //   setSubMenuOpen(!subMenuOpen);
+  // };
 
   return (
     <Sidebar>
