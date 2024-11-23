@@ -79,7 +79,6 @@ const StackExchangeDialog = (id:any) => {
     },
   })
 
-  // const {dat} = useGetClientsById(id.id);
   console.log("Response",id);
   
 
