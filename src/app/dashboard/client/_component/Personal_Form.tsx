@@ -1,124 +1,298 @@
-import React from "react";
+"use client"
 
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select"
+import { useEditClient, useGetClientsById } from "@/hooks/users/manage-client"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import * as z from "zod"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+const formSchema = z.object({
+  pan: z.string().min(10, "PAN Card must be 10 characters"),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  // fatherName: z.string().min(1, "Father's name is required").optional(),
+  gender: z.enum(["Male", "Female", "Other"]),
+  mobileNumber: z.string().min(10, "Mobile number must be 10 digits").optional(),
+  aadhaar: z.string().min(12, "Aadhaar number must be 12 digits").optional(),
+  din: z.string().optional(),
+  dob:z.string().optional(),
+  dscInfo: z.enum(["None", "Not_Applicable", "With_Vakilgiri", "With_Client"]).optional(),
+  email: z.string().email("Invalid email address"),
+  kycStatus: z.enum(["Pending", "Completed", "Rejected"]),
+  loginStatus: z.enum(["Active", "Inactive"]),
+});
 
-const Personal_Form = () => {
+type clientIdProps = {
+   clientId:string,
+}
+
+const Personal_Form = ({clientId}:clientIdProps) => {
+   
+  const {data,isLoading} = useGetClientsById(clientId);
+  
+  // console.log("idDetails",data);
+  const {mutate} = useEditClient(clientId);
+
+  // if(isLoading){
+  //  return <h1>Loading....</h1>
+  // }
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues:{
+      pan: data?.pan,
+      firstName: data?.firstName,
+      lastName: data?.lastName,
+      email: data?.email ?? "",
+      gender: data?.gender ?? "Male",
+      mobileNumber: data?.mobileNumber ?? "",
+      dob: data?.dob ?? "11/07/2024",
+      aadhaar: data?.aadhaar ?? "112312312321",
+      din: data?.din ?? "",
+      dscInfo: data?.dscInfo ?? "Not_Applicable",
+      loginStatus: data?.loginStatus ?? "Active",
+      kycStatus: data?.kycStatus ?? "Pending",
+    },
+  });
+  
+  function onSubmit(values: z.infer<typeof formSchema>) {
+      mutate(values,{
+        onSuccess: () => {
+          toast.success("Client Updated successfully!");
+          // form.reset();
+        },
+        onError: (error) => {
+          toast.error(`Failed to create client: ${error.message}`);
+        },
+      })
+      
+      console.log("Values",values);
+  }
   return (
+    
     <>
-      <div className="flex justify-between items-center mt-3 gap-5 flex-col md:flex-col lg:flex-row xl:flex-row">
-        <div className="flex flex-col gap-y-7">
-          <div className="flex gap-x-5 items-center">
-            <div className="w-[7rem] text-xs font-medium">Pan Card</div>
-            <Input placeholder="Enter Name" />
-          </div>
-          <div className="flex gap-x-5 items-center">
-            <div className="w-[7rem] text-xs font-medium">Last Name</div>
-            <Input placeholder="Enter Name" />
-          </div>
-          <div className="flex gap-x-5 items-center">
-            <div className="w-[7rem] text-xs font-medium">Email Id</div>
-            <Input placeholder="Enter Name" />
-          </div>
-          <div className="flex gap-x-5 items-center">
-            <div className="w-[7rem] text-xs font-medium">Mobile No</div>
-            <Input placeholder="Enter Name" />
-          </div>
-          <div className="flex gap-x-5 items-center">
-            <div className="w-[7rem] text-xs font-medium">Adhar No</div>
-            <Input placeholder="Enter Name" />
-          </div>
-          <div className="flex gap-x-5 items-center">
-            <div className="w-[7rem] text-xs font-medium">DSC Status</div>
-            <Select>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Theme" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Not Applicable</SelectItem>
-                <SelectItem value="dark">with Vakilgiri</SelectItem>
-                <SelectItem value="system">with Client</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex gap-x-5 items-center">
-            <div className="w-[7rem] text-xs font-medium">KYC Status</div>
-            <Select>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Pending" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Pending</SelectItem>
-                <SelectItem value="dark">Completed</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div>
-          <div className="flex flex-col gap-y-7">
-            <div className="flex gap-x-5 items-center">
-              <div className="w-[7rem] text-xs font-medium">Pan Card</div>
-              <Input placeholder="Enter Name" />
-            </div>
-            <div className="flex gap-x-5 items-center">
-              <div className="w-[7rem] text-xs font-medium">Last Name</div>
-              <Input placeholder="Enter Name" />
-            </div>
-            <div className="flex gap-x-5 items-center">
-              <div className="w-[7rem] text-xs font-medium">Email Id</div>
-              <Input placeholder="Enter Name" />
-            </div>
-            <div className="flex gap-x-5 items-center">
-              <div className="w-[7rem] text-xs font-medium">Mobile No</div>
-              <Input placeholder="Enter Name" />
-            </div>
-            <div className="flex gap-x-5 items-center">
-              <div className="w-[7rem] text-xs font-medium">Adhar No</div>
-              <Input placeholder="Enter Name" />
-            </div>
-            <div className="flex gap-x-5 items-center">
-              <div className="w-[8rem] text-xs font-medium">Login Status</div>
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Theme" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">Not Applicable</SelectItem>
-                  <SelectItem value="dark">with Vakilgiri</SelectItem>
-                  <SelectItem value="system">with Client</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex gap-x-5 items-center">
-              <div className="w-[7rem] text-xs font-medium">KYC Status</div>
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Pending" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">Pending</SelectItem>
-                  <SelectItem value="dark">Completed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </div>
-      </div>
+       {data &&
+            <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-w-4xl mx-auto p-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="pan"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>PAN Card</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="bg-gray-100" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="bg-gray-100" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="bg-gray-100" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                {/* <FormField
+                  control={form.control}
+                  name="fatherName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Father Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="Father's Name's" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                /> */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email Id</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="email" className="bg-gray-100" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="gender"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Gender</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select gender" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Male">Male</SelectItem>
+                          <SelectItem value="Female">Female</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mobileNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Mobile No.</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="tel" className="bg-gray-100" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="dob"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Date of Birth</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="text" className="bg-gray-100" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="aadhaar"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Aadhaar No.</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="bg-gray-100" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="din"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>DIN</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="Enter DIN" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="dscInfo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>DSC Status</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="None">None</SelectItem>
+                          <SelectItem value="Not_Applicable">Not Applicable</SelectItem>
+                          <SelectItem value="With_Vakilgiri">With Vakilgiri</SelectItem>
+                          <SelectItem value="With_Client">With Client</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="loginStatus"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Login Status</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Active">Active</SelectItem>
+                          <SelectItem value="Inactive">Inactive</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="kycStatus"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>KYC Status</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Pending">Pending</SelectItem>
+                          <SelectItem value="Completed">Completed</SelectItem>
+                          <SelectItem value="Rejected">Rejected</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex justify-end">
+                <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">
+                  Save Profile
+                </Button>
+              </div>
+            </form>
+          </Form>
+          }
     </>
   );
 };

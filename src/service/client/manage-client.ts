@@ -1,10 +1,10 @@
 // THIS IS EXMAPLE
-import { ApiResponse, CreateClientData } from '../../types';
+import { ApiResponse, CreateClientData, EditClientData } from '../../types';
 import axiosInstance from '@/lib/axiosInstance';
 
 const CLIENT_API = {
     CREATE: '/client',
-    EDIT: (id: number) => `/user/edit-client/${id}`,
+    EDIT: (id: string) => `/client/${id}`,
     DELETE: (id: number) => `/client/delete-client/${id}`,
     GET_ALL: '/client/',
     GET_BY_ID: (id: any) => `/client/${id}`,
@@ -12,8 +12,6 @@ const CLIENT_API = {
 } as const;
 
 export const clientService = {
-    // add: (userData: UserPayload) =>
-    //     fetchHandler<ApiResponse>(USER_API.ADD, 'POST', userData),
 
     getClientById:async(id:any)=>{
         const response =  await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_BY_ID(id)}`);
@@ -22,7 +20,6 @@ export const clientService = {
 
     get: async()=>{
         const response =  await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_ALL}`);
-            // console.log("Response",response)
             return response.data.data;
     },
 
@@ -31,9 +28,9 @@ export const clientService = {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.CREATE}`, clientData,);
     },
 
-    edit: async (clientData: CreateClientData) => {
+    edit: async (clientData: EditClientData,id:string) => {
         return await axiosInstance.put(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.EDIT}`, clientData,);
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.EDIT(id)}`, clientData);
     },
 
     // delete: async (clientData: CreateClientData) => {

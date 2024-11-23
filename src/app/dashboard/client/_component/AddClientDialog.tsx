@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useForm, useFormState } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-
 import {
   DialogContent,
   DialogHeader,
@@ -72,12 +71,12 @@ const formSchema = z.object({
     .regex(/^\d{12}$/, "Invalid Aadhaar number") // Validates 12-digit Aadhaar numbers
     .optional()
     .or(z.literal("")),
+    
+  //optional
   gender: z.enum(["Male", "Female", "Other"]).optional(),
   loginStatus : z.enum(["None", "Active", "Inactive"]).optional(),
   kycStatus : z.enum(["Approved", "Pending"]).optional(),
- 
-  //optional
-  dscStatus : z.enum(["None","Not_Applicable", "With_Vakilgiri", "With_Client"]).optional(),
+  dscInfo : z.enum(["None","Not_Applicable", "With_Vakilgiri", "With_Client"]).optional(),
   dscExpiry : z.string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format, expected YYYY-MM-DD")
   .refine((date) => !isNaN(new Date(date).getTime()), { message: "Invalid date" })
@@ -108,7 +107,7 @@ const AddClientDialog = () => {
       Last_Name: "",
       PAN: "",
       email: "",
-      // gender: "male",
+      gender: "Male",
       Mobile_Number: "",
       City: "",
       State: "",
@@ -128,8 +127,6 @@ const AddClientDialog = () => {
   async function onSubmit(formData: z.infer<typeof formSchema>) {
     
     const jsonData = JSON.stringify(formData, null, 2);
-    console.log("Form Data:", formData);
-    console.log("Form Data:", jsonData);
     addUser(formData, {
       onSuccess: () => {
         toast.success("Client created successfully!");
@@ -310,7 +307,7 @@ const AddClientDialog = () => {
             )}
           />
 
-          {/* <FormField
+          <FormField
             control={form.control}
             name="gender"
             render={({ field }) => (
@@ -328,15 +325,15 @@ const AddClientDialog = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="Male">Male</SelectItem>
+                    <SelectItem value="Female">Female</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
 
           <div className="grid grid-cols-2 gap-4">
             <FormField
@@ -400,6 +397,7 @@ const AddClientDialog = () => {
                 : "bg-gray-400 hover:bg-gray-500"
             }`}
             disabled={isSubmitting}
+            // onClick={onSave}
           >
             {isSubmitting ? "Creating..." : "Create Client"}
           </Button>

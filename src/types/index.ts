@@ -1,4 +1,4 @@
-import { Icons } from '@/components/icons';
+import { Icons } from "@/components/icons";
 
 export interface NavItem {
   title: string;
@@ -29,18 +29,17 @@ export interface FooterItem {
   }[];
 }
 
-
-export interface ApiResponse{
-    success:boolean;
-    message:string;
+export interface ApiResponse {
+  success: boolean;
+  message: string;
 }
 
-export interface CreateClientData{
+export interface CreateClientData {
   First_Name: string;
   Last_Name: string;
   PAN: string;
   email: string;
-  // gender: "male" | "female" | "other";
+  gender: "Male" | "Female" | "Other";
   Mobile_Number: string;
   City: string;
   State: string;
@@ -51,6 +50,22 @@ export interface CreateClientData{
   Aadhaar?: string; // Optional
   sendMailToClient: boolean;
 }
+
+export interface EditClientData {
+  aadhaar?: string;
+  firstName: string;
+  lastName: string;
+  mobileNumber?: string;
+  pan: string;
+  dob?: string;
+  din?: string;
+  dscInfo?:"None"|"Not_Applicable" |  "With_Vakilgiri" | "With_Client"
+  email: string;
+  gender: "Male" | "Female" | "Other";
+  kycStatus: "Pending" | "Completed" | "Rejected";
+  loginStatus: "Active" | "Inactive";
+}
+
 
 export type MainNavItem = NavItemWithOptionalChildren;
 

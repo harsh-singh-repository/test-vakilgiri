@@ -29,7 +29,8 @@ const breadcrumbItems = [
 
 export default function ClientPage() {
   const {data,isFetching,isSuccess,error,isError} = useGetClients();
-  // console.log("Data",data);
+  console.log("ClinetData",data);
+  const [open,setOpen] = useState<boolean>(false);
   
 
   const searchParams = useSearchParams();
@@ -63,7 +64,6 @@ export default function ClientPage() {
     );
   };
   return (
-    <Dialog>
     <div className="w-full flex-1 space-y-4 p-4 pt-6 md:p-4  overflow-hidden">
       {/* <Breadcrumbs items={breadcrumbItems} /> */}
       <div className="flex items-start justify-between">
@@ -77,12 +77,12 @@ export default function ClientPage() {
             className="w-full md:max-w-sm ml-auto bg-white"
           />
          
-         <DialogTrigger>
-          <div className='bg-[#f21300] text-white p-2 rounded-md'>
+          <div className='bg-[#f21300] text-white p-2 rounded-md' onClick={()=>setOpen(true)}>
             <Plus className="h-6 w-6"/>
           </div>
-          </DialogTrigger>
-          <AddClientDialog/>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <AddClientDialog/>
+          </Dialog>
         </div>
       </div>
       <Separator />
@@ -104,6 +104,5 @@ export default function ClientPage() {
       
 
     </div>
-    </Dialog>
   );
 }

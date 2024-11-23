@@ -1,3 +1,4 @@
+"use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Results from "../../_component/Results";
 import ClientDashboard from "../_component/ClientDashboard";
@@ -24,8 +25,17 @@ import { RxAvatar } from "react-icons/rx";
 import Personal_Form from "../_component/Personal_Form";
 import Component from "../_component/Address_Form";
 import { Separator } from "@/components/ui/separator";
+import { useParams } from "next/navigation";
+
+type Params = {
+  clientId: string;
+};
 
 const page = () => {
+  
+  const params = useParams() as Params;
+  const {clientId} = params;
+
   const tabs = [
     { name: "Dashboard" },
     { name: "All Bussiness" },
@@ -118,7 +128,7 @@ const page = () => {
                       <TabsTrigger value="documents">Documents</TabsTrigger>
                     </TabsList>
                     <TabsContent value="personal">
-                          <Personal_Form/>
+                          <Personal_Form clientId={clientId}/>
                     </TabsContent>
                     <TabsContent value="address">
                       <Component/>
