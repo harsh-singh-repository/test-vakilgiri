@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react';
 
 // Create an axios instance with default configuration
 const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: `${process.env.API_BASE_URL}`,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -19,7 +19,7 @@ axiosInstance.interceptors.request.use(
 
             // Add Authorization header if token exists
             if (token) {
-                config.headers.Authorization = token;
+                config.headers.Authorization = `Bearer ${token}`;
             }
         }
         return config;

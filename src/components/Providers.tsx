@@ -2,8 +2,8 @@
 
 import { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { Toaster } from "./ui/toaster";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {Toaster} from "sonner"
 interface Props {
   children: ReactNode;
 }
@@ -13,7 +13,7 @@ const Providers = ({ children }: Props) => {
     defaultOptions: {
       queries: {
         retry: 2,
-        cacheTime: 5000,
+        // cacheTime: 5000,
         staleTime: 0,
       },
     },
@@ -22,9 +22,9 @@ const Providers = ({ children }: Props) => {
   
   return (
     <QueryClientProvider client={queryClient}>
-      <SessionProvider>{children}</SessionProvider>
-      <Toaster />
-    </QueryClientProvider>
+    <SessionProvider>{children}</SessionProvider>
+    <Toaster />
+  </QueryClientProvider>
   );
 };
 

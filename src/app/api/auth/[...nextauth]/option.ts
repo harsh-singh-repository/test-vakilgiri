@@ -13,17 +13,17 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials) {
                 try {
-                    const res = await axios.post(`${process.env.API_BASE_URL}/user/login`, {
+                    const user = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/login`, {
                         email: credentials?.email,
                         password: credentials?.password
                     });
-                    console.log(res);
+                    console.log(user);
+                    console.log(user.data.data.token);
 
-                    if(res.data.success === false){
-                        throw new Error(res.data.message);
+                    if(user.data.success === false){
+                        throw new Error(user.data.message);
                     }
-
-                    return res.data;
+                    return user.data;
                 } catch (error) {
                     // type error
                     const axiosError = error as AxiosError<ApiResponse>;
@@ -38,7 +38,8 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.accessToken = user.accessToken;
+                // console.log('User during JWT callback:', user);
+                token.accessToken = user.data?.token,
                 token.refreshToken = user.refreshToken;
             }
             return token;

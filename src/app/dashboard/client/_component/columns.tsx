@@ -1,43 +1,27 @@
 'use client';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Client } from '@/constants/data';
+import { useGetClients } from '@/hooks/users/manage-client';
 import { ColumnDef } from '@tanstack/react-table';
-import { CellAction } from './cell-action';
+
+const fetchData = ()=>{
+  const {data,isFetching,isSuccess,error,isError} = useGetClients();
+   console.log(data);
+   console.log(typeof(data));
+   return data;
+}
 
 export const columns: ColumnDef<Client>[] = [
-  // {
-    // id: 'select',
-    // header: ({ table }) => (
-    //   <Checkbox
-    //     checked={table.getIsAllPageRowsSelected()}
-    //     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //     aria-label="Select all"
-    //   />
-    // ),
-    // cell: ({ row }) => (
-    //   <Checkbox
-    //     checked={row.getIsSelected()}
-    //     onCheckedChange={(value) => row.toggleSelected(!!value)}
-    //     aria-label="Select row"
-    //   />
-    // ),
-  //   enableSorting: false,
-  //   enableHiding: false
-  // },
-  // {
-  //   accessorKey: 'id',
-  //   header: 'ID'
-  // },
   {
     accessorKey: 'profile-image',
     header: 'Profile'
   },
   {
-    accessorKey: 'cltid',
-    header: 'CLT ID'
+    accessorKey: 'id',
+    header: 'CLT ID',
   },
   {
-    accessorKey: 'name',
+    accessorKey: 'firstName',
     header: 'Name'
   },
   {

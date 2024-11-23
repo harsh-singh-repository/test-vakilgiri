@@ -17,10 +17,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import Image from 'next/image';
-import profileImage from '../../../../../public/assets/profile-image.png';
+import profileImage from '../../../../../../public/assets/profile-image.png';
 import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
+import { CgProfile } from 'react-icons/cg';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,24 +34,24 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
-export function ClientTable<TData, TValue>({
+export function LeadsTable<TData, TValue>({
   columns,
   data,
   pageNo,
   searchKey,
   totalUsers,
   pageCount,
-  pageSizeOptions = [20, 30, 50, 100]
+  pageSizeOptions = [20, 30, 40, 50,100]
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [searchValue, setSearchValue] = React.useState<string>(searchParams?.get(searchKey) || '');
-  
+
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: pageNo - 1,
     pageSize: parseInt(searchParams?.get('limit') || '20', 10),
-    
+
   });
 
   // Handle search params and update pagination or search value
@@ -109,21 +110,56 @@ export function ClientTable<TData, TValue>({
     manualFiltering: true
   });
 
-  const renderCellContent = (cell: any) => {
-    const { id: columnId } = cell.column;
-    const cellValue = cell.value;
+  const renderCellContent = (cell:any) => {
+    const columnId = cell.column.id;
+    const value = cell.getValue(); // Get the raw value directly
+    const cellValue = flexRender(cell.column.columnDef.cell, cell.getContext());
 
-    if (columnId === 'kyc') {
+    if(columnId==="id"){
+      return(
+        <div>
+            <CgProfile size={"30"} className=''/>
+        </div>
+      )
+    }
+  
+    if (columnId === 'status') {
       return (
-        <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-[#f21300] text-white text-sm">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        <div 
+          className={`flex items-center justify-center px-2 py-1 bg-yellow-400 rounded-full text-white text-xs w-fit mx-auto`}
+        >
+          Pending
         </div>
       );
     }
 
-    if (columnId === 'profile-image' || columnId === 'manager') {
+    if(columnId === "mode"){
+      return(
+        <div>
+          Call
+        </div>
+      )
+    }
+
+    if(columnId === "title"){
+      return(
+        <div>
+         <span className='text-red-500'>Follow up Call for MOA Discussion</span>
+        </div>
+      )
+    }
+
+    if(columnId === "description"){
+      return(
+        <div>
+         <span className='text-red-500'>Follow up Call for MOA Discussion</span>
+        </div>
+      )
+    }
+  
+    if (columnId === 'assigned') {
       return (
-        <div className="flex items-center justify-center w-full h-full rounded-full">
+        <div className="flex items-center justify-center w-full h-full">
           <Image
             src={profileImage}
             alt="Profile Image"
@@ -134,19 +170,17 @@ export function ClientTable<TData, TValue>({
         </div>
       );
     }
-
+  
     if (columnId === 'action') {
-      const uniqueId = cell.row.original.id; 
-      // console.log("UniqueId",uniqueId);
-      return <ActionButton id={uniqueId}/>;
+      return <ActionButton />;
     }
-
-    return flexRender(cell.column.columnDef.cell, cell.getContext());
+  
+    return cellValue;
   };
 
   return (
     <>
-      <ScrollArea className="w-full h-[100vh] overflow-y-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+      <ScrollArea className="w-full overflow-y-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
         <Table className="border rounded-2xl bg-white">
           <TableHeader className="bg-[#042559] text-white text-center">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -167,7 +201,7 @@ export function ClientTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'firstName' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
+                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'businessOrClient' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
                     >
                       {renderCellContent(cell)}
                     </TableCell>

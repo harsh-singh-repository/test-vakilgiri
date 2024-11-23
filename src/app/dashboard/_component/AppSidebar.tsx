@@ -115,51 +115,65 @@ export function AppSidebar() {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <Collapsible key={item.title} defaultOpen={false} className="group/collapsible">
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton
-                        onClick={() => item.children && handleSubMenuOpen()}
-                        className={cn(
-                          "hover:bg-[#FFCECE] font-medium",
-                          pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white", // Apply orange background if the current path matches
-                          item.classname
-                        )}
-                      >
-                        <a href={item.url} className={cn("w-full flex justify-between items-center text-[15px] focus:text-white text-[#00000080]", pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white",)}>
-                          <div className="inline-flex items-center space-x-2">
-                            <item.icon size={18}/>
-                            <span>{item.title}</span>
-                          </div>
-                          {item.children && (subMenuOpen? <MdOutlineArrowDropUp size={24}/> : <MdOutlineArrowDropDown size={24}/>)}
-                        </a>
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                    {item.children && (
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          {item.children.map((child) => (
-                            <SidebarMenuSubItem key={child.title}>
-                              <a
-                                href={child.url}
-                                className={cn(
-                                  "flex items-center space-x-2 text-[14px] focus:text-white text-[#00000080] p-1",
-                                  pathname === child.url && "bg-[#f21300] text-white", 
-                                  child.classname
-                                )}
-                              >
-                                <child.icon size={16}/>
-                                <span>{child.title}</span>
+            {items.map((item) => {
+                const isSubMenuOpen = item.children?.some((child) => child.url === pathname);
+                return (
+                  <Collapsible key={item.title} defaultOpen={isSubMenuOpen}>
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton
+                          className={cn(
+                            "hover:bg-[#FFCECE] hover:text-black font-medium",
+                            pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white"
+                          )}
+                        >
+                          <div className="w-full flex justify-between items-center text-[15px]">
+                            <div className="inline-flex items-center space-x-2">
+                            <a
+                                  href={item.url}
+                                  className={cn(
+                                    "flex items-center space-x-2 text-[14px] focus:text-black text-[#00000080] p-1",
+                                    pathname === item.url && "bg-[#f21300] text-white"
+                                  )}
+                                >
+                              <item.icon size={18} />
+                              <span>{item.title}</span>
                               </a>
-                            </SidebarMenuSubItem>
-                          ))}
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    )}
-                  </SidebarMenuItem>
-                </Collapsible>
-              ))}
+                            </div>
+                            {item.children && (
+                              isSubMenuOpen ? (
+                                <MdOutlineArrowDropUp size={24} />
+                              ) : (
+                                <MdOutlineArrowDropDown size={24} />
+                              )
+                            )}
+                          </div>
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      {item.children && (
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {item.children.map((child) => (
+                              <SidebarMenuSubItem key={child.title}>
+                                <a
+                                  href={child.url}
+                                  className={cn(
+                                    "flex items-center space-x-2 text-[14px] focus:text-black text-[#00000080] p-1",
+                                    pathname === child.url && "bg-[#f21300] text-white"
+                                  )}
+                                >
+                                  <child.icon size={16} />
+                                  <span>{child.title}</span>
+                                </a>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      )}
+                    </SidebarMenuItem>
+                  </Collapsible>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

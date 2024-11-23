@@ -1,8 +1,6 @@
 // ClientPage.tsx
 'use client'
 import { useEffect, useState } from 'react';
-import { Breadcrumbs } from '@/components/breadcrumbs';
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -12,6 +10,11 @@ import ClientCard from './_component/client-card';
 import { useSearchParams } from 'next/navigation';
 import { ClientPageServer } from './_component/ClientPageServer';
 import { Client } from '@/constants/data';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import AddClientDialog from './_component/AddClientDialog';
+// import Spinner from '@/components/smooth-spinner';
+import {Oval} from "react-loader-spinner"
+import { useGetClients } from '@/hooks/users/manage-client';
 
 type ResponseData = {
   employee: Client[];
@@ -25,6 +28,10 @@ const breadcrumbItems = [
 ];
 
 export default function ClientPage() {
+  const {data,isFetching,isSuccess,error,isError} = useGetClients();
+  // console.log("Data",data);
+  
+
   const searchParams = useSearchParams();
   const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1;
   const pageLimit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 10;
@@ -41,10 +48,22 @@ export default function ClientPage() {
   }, [page, pageLimit, searchValue]);
 
   if (!responseData) {
-    return <div>Loading...</div>;
-  }
-
+    return (
+      <div className="flex justify-center item-center h-[100vh]">
+             <Oval
+          visible={true}
+          height="40"
+          width="40"
+          color="#f21300"
+          ariaLabel="oval-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+       </div>
+    );
+  };
   return (
+    <Dialog>
     <div className="w-full flex-1 space-y-4 p-4 pt-6 md:p-4  overflow-hidden">
       {/* <Breadcrumbs items={breadcrumbItems} /> */}
       <div className="flex items-start justify-between">
@@ -57,27 +76,34 @@ export default function ClientPage() {
             onChange={(event) => setSearchValue(event.target.value)}
             className="w-full md:max-w-sm ml-auto bg-white"
           />
-
-          <Button className='bg-[#f21300] text-white'>
-            <Plus className="h-2 w-2" />
-          </Button>
+         
+         <DialogTrigger>
+          <div className='bg-[#f21300] text-white p-2 rounded-md'>
+            <Plus className="h-6 w-6"/>
+          </div>
+          </DialogTrigger>
+          <AddClientDialog/>
         </div>
       </div>
       <Separator />
 
       <ClientCard />
 
-      <div className='p-0 m-0 overflow-x-auto flex flex-col'>
-      <ClientTable
+      {/* <div className='p-0 m-0 overflow-x-auto flex flex-col'> */}
+      
+     {data && <ClientTable
         searchKey="search"
         searchValue={searchValue}
         pageNo={page}
         columns={columns}
         totalUsers={responseData.totalUsers}
-        data={responseData.employee}
+        data={data}
         pageCount={responseData.pageCount}
-      />
-      </div>
+      />}
+      {/* </div> */}
+      
+
     </div>
+    </Dialog>
   );
 }

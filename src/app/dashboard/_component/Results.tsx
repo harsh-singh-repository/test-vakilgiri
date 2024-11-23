@@ -1,9 +1,12 @@
+import { cn } from "@/lib/utils";
 import { CgProfile } from "react-icons/cg";
 
 const Results = () => {
   const DashboardElement = [
     {
       name: "Clients KYC's",
+      background:"bg-[#EABFFF]",
+      bottomBackgrounf:"bg-[#300949]",
       logo: <CgProfile size={"30"} />,
       options: [
         {
@@ -18,8 +21,10 @@ const Results = () => {
       ],
     },
     {
-      name: "Clients KYC's",
-      logo: <CgProfile size={"35"} />,
+      name: "Leads",
+      background:"bg-[#c0f0ff]",
+      bottomBackgrounf:"bg-[#093a49]",
+      logo: <CgProfile size={"30"} />,
       options: [
         {
           optionName: "Complete",
@@ -33,8 +38,10 @@ const Results = () => {
       ],
     },
     {
-      name: "Clients KYC's",
-      logo: <CgProfile size={"35"} />,
+      name: "Bussiness",
+      background:"bg-[#def9b9]",
+      bottomBackgrounf:"bg-[#007b23]",
+      logo: <CgProfile size={"30"} />,
       options: [
         {
           optionName: "Complete",
@@ -48,8 +55,10 @@ const Results = () => {
       ],
     },
     {
-      name: "Clients KYC's",
-      logo: <CgProfile size={"35"} />,
+      name: "Projects",
+      background:"bg-[#ccd7ff]",
+      bottomBackgrounf:"bg-[#091747]",
+      logo: <CgProfile size={"30"} />,
       options: [
         {
           optionName: "Complete",
@@ -63,8 +72,10 @@ const Results = () => {
       ],
     },
     {
-      name: "Clients KYC's",
-      logo: <CgProfile size={"35"} />,
+      name: "Subscription",
+      background:"bg-[#f9e2c6]",
+      bottomBackgrounf:"bg-[#fe8903]",
+      logo: <CgProfile size={"30"} />,
       options: [
         {
           optionName: "Complete",
@@ -78,8 +89,10 @@ const Results = () => {
       ],
     },
     {
-      name: "Clients KYC's",
-      logo: <CgProfile size={"35"} />,
+      name: "Turnover",
+      background:"bg-[#ffcef2]",
+      bottomBackgrounf:"bg-[#fe01bf]",
+      logo: <CgProfile size={"30"} />,
       options: [
         {
           optionName: "Complete",
@@ -93,8 +106,10 @@ const Results = () => {
       ],
     },
     {
-      name: "Clients KYC's",
-      logo: <CgProfile size={"35"} />,
+      name: "Transaction",
+      background:"bg-[#e6d2ff]",
+      bottomBackgrounf:"bg-[#7301fe]",
+      logo: <CgProfile size={"30"} />,
       options: [
         {
           optionName: "Complete",
@@ -108,8 +123,10 @@ const Results = () => {
       ],
     },
     {
-      name: "Clients KYC's",
-      logo: <CgProfile size={"35"} />,
+      name: "Tickets",
+      background:"bg-[#ffcfcc]",
+      bottomBackgrounf:"bg-[#f21300]",
+      logo: <CgProfile size={"30"} />,
       options: [
         {
           optionName: "Complete",
@@ -122,6 +139,7 @@ const Results = () => {
         },
       ],
     },
+   
   ];
 
   return (
@@ -129,7 +147,7 @@ const Results = () => {
       {DashboardElement.map((element, index) => {
         return (
           <div
-            className="flex flex-col bg-slate-400 pt-2 pb-0 rounded-lg gap-y-3"
+            className={cn("flex flex-col bg-slate-400 pt-2 pb-0 rounded-lg gap-y-3 text-[#091747] shadow-custom",element.background)}
             key={element.name + index}
           >
             <div className="px-5">
@@ -148,7 +166,7 @@ const Results = () => {
                 ))}
               </div>
             </div>
-            <div className="rounded-lg bg-slate-900 text-center text-white text-xs">{element.name}</div>
+            <div className={cn("rounded-b-lg bg-slate-900 text-center text-white text-[11px] leading-[15.4px]",element.bottomBackgrounf)}>{element.name}</div>
           </div>
         );
       })}
