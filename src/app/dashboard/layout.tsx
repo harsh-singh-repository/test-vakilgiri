@@ -13,7 +13,7 @@ export default function RootLayout({
       <AppSidebar />
       <div className="flex flex-col w-full">
       <Navbar />
-      <main className="">
+      <main className="bg-gray-50">
         {children}
       </main>
       </div>
