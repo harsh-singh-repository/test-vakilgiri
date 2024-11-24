@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import {
   Cell,
   ColumnDef,
@@ -34,8 +34,8 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
-interface CustomCellProps {
-  cell: Cell<any, any>; // Adjust `any` for your data type
+interface CustomCellProps<TData, TValue> {
+  cell: Cell<TData, TValue>;
 }
 
 export function LeadsTable<TData, TValue>({
@@ -114,7 +114,7 @@ export function LeadsTable<TData, TValue>({
     manualFiltering: true
   });
 
-  const renderCellContent = (cell: CustomCellProps['cell']) => {
+  const renderCellContent = (cell: CustomCellProps<TData, TValue>['cell']) => {
     const columnId = cell.column.id;
     const value = cell.getValue(); // Get the raw value directly
     const cellValue = flexRender(cell.column.columnDef.cell, cell.getContext());
@@ -123,28 +123,30 @@ export function LeadsTable<TData, TValue>({
       let statusClassName = '';
       
       // Use the raw value for the switch statement
-      switch (value?.toLowerCase()) {
-        case 'new':
-          statusClassName = 'bg-gray-400';
-          break;
-        case 'converted':
-          statusClassName = 'bg-green-700';
-          break;
-        case 'contacted':
-          statusClassName = 'bg-blue-900';
-          break;
-        case 'disqualified':
-          statusClassName = 'bg-red-600';
-          break;
-        default:
-          statusClassName = 'bg-gray-400';
+      if (typeof value === 'string') {
+        switch (value.toLowerCase()) {
+          case 'new':
+            statusClassName = 'bg-gray-400';
+            break;
+          case 'converted':
+            statusClassName = 'bg-green-700';
+            break;
+          case 'contacted':
+            statusClassName = 'bg-blue-900';
+            break;
+          case 'disqualified':
+            statusClassName = 'bg-red-600';
+            break;
+          default:
+            statusClassName = 'bg-gray-400';
+        }
       }
   
       return (
         <div 
           className={`flex items-center justify-center px-2 py-1 rounded-full text-white text-xs w-22 mx-auto ${statusClassName}`}
         >
-          {value}
+          {value as ReactNode}
         </div>
       );
     }

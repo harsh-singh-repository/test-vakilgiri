@@ -3,7 +3,11 @@ import { handleMutationSuccess, handleMutationError } from '@/lib/mutation-utils
 // import { UserPayload } from '@/types/index.d';
 import { useCustomToast } from '@/components/providers/toaster-provider';
 import {clientService } from '@/service/client/manage-client';
-import { ApiResponse, CreateClientData, EditClientData } from '@/types';
+import { 
+    // ApiResponse, 
+    // CreateClientData, 
+    EditClientData 
+} from '@/types';
 
 export const useGetClients = () => {
     const query =  useQuery({
@@ -21,7 +25,7 @@ export const useAddClient = () => {
         mutationFn: clientService.create,
         onSuccess: (response) =>
             handleMutationSuccess(response, toast, queryClient, ["clients"]),
-        onError: (error: any) => handleMutationError(error, toast),
+        onError: (error) => handleMutationError(error, toast),
     });
 };
 
@@ -40,7 +44,7 @@ export const useEditClient = (id:string) => {
     return useMutation({
         mutationFn:(clientData:EditClientData)=> clientService.edit(clientData,id),
         onSuccess: (response)=>  handleMutationSuccess(response, toast, queryClient, ["clients"]),
-        onError: (error: any) => handleMutationError(error, toast),
+        onError: (error) => handleMutationError(error, toast),
     })
 };
 

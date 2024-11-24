@@ -52,56 +52,56 @@ const formSchema = z.object({
 
 const AddNewBusinessForm = () => {
 
-    const bussinessTypeOptions = [
-        {
-            value: "proprietorship",
-            label: "Proprietorship"
-        },
-        {
-            value: "Patnership Firm",
-            label: "Patnership Firm"
-        },
-        {
-            value: "Private Limited",
-            label: "Private Limited"
-        },
-        {
-            value: "OPC",
-            label: "OPC"
-        },
-        {
-            value: "LLP",
-            label: "LLP"
-        },
-        {
-            value: "Public Limited",
-            label: "Public Limited"
-        },
-        {
-            value: "Nodhi Limited",
-            label: "Nodhi Limited"
-        },
-        {
-            value: "Micro Finance",
-            label: "Micro Finance"
-        },
-        {
-            value: "Producer Limited",
-            label: "Producer Limited"
-        },
-        {
-            value: "Trust",
-            label: "Trust"
-        },
-        {
-            value: "Society",
-            label: "Society"
-        },
-        {
-            value: "Section-8",
-            label: "Section-8"
-        }
-    ]
+    // const bussinessTypeOptions = [
+    //     {
+    //         value: "proprietorship",
+    //         label: "Proprietorship"
+    //     },
+    //     {
+    //         value: "Patnership Firm",
+    //         label: "Patnership Firm"
+    //     },
+    //     {
+    //         value: "Private Limited",
+    //         label: "Private Limited"
+    //     },
+    //     {
+    //         value: "OPC",
+    //         label: "OPC"
+    //     },
+    //     {
+    //         value: "LLP",
+    //         label: "LLP"
+    //     },
+    //     {
+    //         value: "Public Limited",
+    //         label: "Public Limited"
+    //     },
+    //     {
+    //         value: "Nodhi Limited",
+    //         label: "Nodhi Limited"
+    //     },
+    //     {
+    //         value: "Micro Finance",
+    //         label: "Micro Finance"
+    //     },
+    //     {
+    //         value: "Producer Limited",
+    //         label: "Producer Limited"
+    //     },
+    //     {
+    //         value: "Trust",
+    //         label: "Trust"
+    //     },
+    //     {
+    //         value: "Society",
+    //         label: "Society"
+    //     },
+    //     {
+    //         value: "Section-8",
+    //         label: "Section-8"
+    //     }
+    // ]
 
     // const selectBusinessTypeOptions = () => {
     //     return (

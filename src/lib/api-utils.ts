@@ -14,7 +14,7 @@ export async function fetchHandler<T>(
             data: options,
         });
         return response.data;
-    } catch (error: any | unknown) {
+    } catch (error) {
         if (error.response?.data) {
             throw error.response.data;
         }
@@ -41,7 +41,7 @@ export async function fetchHandlerWithFormData<T>(
         });
         
         return response.data;
-    } catch (error: any | unknown) {
+    } catch (error) {
         if (error.response?.data) {
             throw error.response.data;
         }

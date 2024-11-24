@@ -35,8 +35,8 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
-interface CustomCellProps {
-  cell: Cell<any, any>; // Adjust `any` for your data type
+interface CustomCellProps<TData, TValue> {
+  cell: Cell<TData, TValue>; // Adjust `any` for your data type
 }
 
 export function LeadsTable<TData, TValue>({
@@ -115,7 +115,7 @@ export function LeadsTable<TData, TValue>({
     manualFiltering: true
   });
 
-  const renderCellContent = (cell:CustomCellProps['cell']) => {
+  const renderCellContent = (cell:CustomCellProps<TData, TValue>['cell']) => {
     const columnId = cell.column.id;
     // const value = cell.getValue(); // Get the raw value directly
     const cellValue = flexRender(cell.column.columnDef.cell, cell.getContext());

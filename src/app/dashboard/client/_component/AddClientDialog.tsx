@@ -126,7 +126,7 @@ const AddClientDialog = () => {
 
   async function onSubmit(formData: z.infer<typeof formSchema>) {
     
-    const jsonData = JSON.stringify(formData, null, 2);
+    // const jsonData = JSON.stringify(formData, null, 2);
     addUser(formData, {
       onSuccess: () => {
         toast.success("Client created successfully!");

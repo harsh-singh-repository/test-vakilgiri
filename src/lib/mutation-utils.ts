@@ -18,7 +18,7 @@ export const handleMutationSuccess = (
     }
 };
 
-export const handleMutationError = (error: any, toast: ToastInterface) => {
+export const handleMutationError = (error: Error, toast: ToastInterface) => {
     if (error.message) {
         toast.error({ message: error.message });
     }

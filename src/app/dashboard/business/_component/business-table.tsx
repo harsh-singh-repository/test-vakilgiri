@@ -50,8 +50,8 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
-interface CustomCellProps {
-  cell: Cell<any, any>; // Adjust `any` for your data type
+interface CustomCellProps<TData, TValue> {
+  cell: Cell<TData, TValue>; // Adjust `any` for your data type
 }
 
 export function BusinessTable<TData, TValue>({
@@ -107,7 +107,7 @@ export function BusinessTable<TData, TValue>({
     [searchParams]
   );
 
-  function renderCellContent(cell: CustomCellProps['cell']) {
+  function renderCellContent(cell: CustomCellProps<TData, TValue>['cell']) {
     const { id: columnId } = cell.column;
     // const cellValue = cell.value;
 

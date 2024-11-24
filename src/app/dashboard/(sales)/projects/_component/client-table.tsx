@@ -34,8 +34,8 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
-interface CustomCellProps {
-  cell: Cell<any, any>; // Adjust `any` for your data type
+interface CustomCellProps<TData, TValue> {
+  cell: Cell<TData, TValue>; // Adjust `any` for your data type
 }
 
 export function ClientTable<TData, TValue>({
@@ -114,7 +114,7 @@ export function ClientTable<TData, TValue>({
     manualFiltering: true
   });
 
-  const renderCellContent = (cell: CustomCellProps['cell']) => {
+  const renderCellContent = (cell: CustomCellProps<TData, TValue>['cell']) => {
     const { id: columnId } = cell.column;
     // const cellValue = cell.value;
 

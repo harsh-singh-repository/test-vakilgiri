@@ -7,7 +7,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  // FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import {
@@ -45,7 +45,10 @@ type clientIdProps = {
 
 const Personal_Form = ({clientId}:clientIdProps) => {
    
-  const {data,isLoading} = useGetClientsById(clientId);
+  const {
+    data,
+    // isLoading
+  } = useGetClientsById(clientId);
   
   // console.log("idDetails",data);
   const {mutate} = useEditClient(clientId);

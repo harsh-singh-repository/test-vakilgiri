@@ -79,7 +79,7 @@ export default function BusinessPage() {
           <Input
             placeholder="Search name..."
             value={searchValue}
-            onChange={(event:any) => setSearchValue(event.target.value)}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
             className="w-full md:max-w-sm ml-auto bg-white"
           />
 

@@ -67,7 +67,7 @@ const formSchema = z.object({
   reminderDescription: z.string().min(1, "Description is required"),
 })
 
-const StackExchangeDialog = (id:any) => {
+const StackExchangeDialog = (id:string) => {
   // const [date, setDate] = React.useState<Date>()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -295,7 +295,7 @@ const StackExchangeDialog = (id:any) => {
   )
 }
 
-const ActionButton = (id:any) => {
+const ActionButton = (id: string) => {
   const router = useRouter()
 
   const handleEditClick = () => {
