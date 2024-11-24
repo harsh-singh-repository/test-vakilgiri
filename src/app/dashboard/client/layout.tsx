@@ -8,7 +8,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className='bg-gray-50'>
+    <div className='bg-gray-50 h-[100vh]'>
       <Providers>
         {children}
       </Providers>

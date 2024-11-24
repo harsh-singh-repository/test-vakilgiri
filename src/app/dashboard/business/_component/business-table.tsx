@@ -176,7 +176,7 @@ export function BusinessTable<TData, TValue>({
 
   return (
     <>
-      <ScrollArea className='w-full overflow-y-auto max-h-[24rem] border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar'>
+      <ScrollArea className='w-full overflow-y-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar'>
         <Table className='border rounded-2xl bg-white'>
           <TableHeader className='bg-[#042559]'>
             {table.getHeaderGroups().map((headerGroup) => (
