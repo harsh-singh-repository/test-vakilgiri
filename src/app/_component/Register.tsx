@@ -1,12 +1,9 @@
 'use client'
 
-import Image from 'next/image'
-import React, { useState } from 'react'
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import Logo from '@/app/assets/logo.png'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Calendar } from '@/components/ui/calendar'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -14,16 +11,19 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { OtpVerifyForm } from './OtpVerify'
-import { CalendarIcon } from "lucide-react"
+import { Input } from '@/components/ui/input'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Calendar } from '@/components/ui/calendar'
-import Logo from '@/app/assets/logo.png'
+import { zodResolver } from "@hookform/resolvers/zod"
+import { CalendarIcon } from "lucide-react"
+import Image from 'next/image'
+import { useState } from 'react'
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { OtpVerifyForm } from './OtpVerify'
 
 const formSchema = z.object({
   firstName: z.string().min(1, { message: "First Name is required" }),

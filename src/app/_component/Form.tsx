@@ -4,8 +4,8 @@ import vakilGiriAuth from "@/app/assets/vakilgiri_auth.png";
 import Image from "next/image";
 import { useState } from "react";
 import ForgetPassword from "./ForgetPassword";
-import Register from "./Register";
 import Login from "./Login";
+import Register from "./Register";
 
 const Form = () => {
   const [login, setLogin] = useState<boolean>(true);
