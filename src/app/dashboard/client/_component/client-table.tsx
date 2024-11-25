@@ -141,7 +141,7 @@ export function ClientTable<TData, TValue>({
     }
 
     if (columnId === 'action') {
-      const uniqueId = cell.row.original.id; 
+      const uniqueId = cell.row.original.id;
       // console.log("UniqueId",uniqueId);
       return <ActionButton id={uniqueId}/>;
     }

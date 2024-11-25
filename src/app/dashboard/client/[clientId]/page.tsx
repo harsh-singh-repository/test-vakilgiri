@@ -46,7 +46,6 @@ function Page() {
     { name: "SUMOHIT ONLINE PRIVATE LIMITED", company: "Private Limited" },
   ];
   return (
-    <>
     <Tabs defaultValue="Dashboard">
       <div className="relative rounded-sm h-full bg-muted flex flex-col top-0">
         <TabsList className="absolute flex flex-row justify-stretch w-full overflow-x-auto">
@@ -75,7 +74,7 @@ function Page() {
           <div className="flex gap-x-2 gap-y-2 flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
             {bussinessPerson.map((bussiness) => {
               return (
-                <Card className="w-[350px]">
+                <Card className="w-[350px]" key={bussiness.name}>
                   <div className="flex flex-col">
                     <div className="flex gap-x-4 p-3  items-center">
                       <div className="h-10 w-10 bg-slate-400 rounded-md drop-shadow-lg"></div>
@@ -141,7 +140,6 @@ function Page() {
         </TabsContent>
       </div>
     </Tabs>
-    </>
   );
 }
 
