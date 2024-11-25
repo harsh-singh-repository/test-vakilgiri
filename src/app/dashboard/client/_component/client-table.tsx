@@ -38,6 +38,11 @@ interface CustomCellProps<TData, TValue>{
   cell: Cell<TData, TValue>; // Adjust `any` for your data type
 }
 
+type RowData = {
+  id: string; // Ensure 'id' exists and is of the correct type
+  // Add other properties here if necessary
+};
+
 export function ClientTable<TData, TValue>({
   columns,
   data,
@@ -141,9 +146,15 @@ export function ClientTable<TData, TValue>({
     }
 
     if (columnId === 'action') {
-      const uniqueId = cell.row.original.id;
-      // console.log("UniqueId",uniqueId);
-      return <ActionButton id={uniqueId}/>;
+      const rowData = cell.row.original as RowData; // Cast to RowData
+      const uniqueId = rowData.id;
+    
+      if (typeof uniqueId === 'string') {
+        return <ActionButton id={uniqueId} />;
+      } else {
+        console.error('ID is not a string:', uniqueId);
+        return null; // Handle the error case appropriately
+      }
     }
 
     return flexRender(cell.column.columnDef.cell, cell.getContext());

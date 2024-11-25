@@ -12,6 +12,8 @@ export type User = {
   wallet: string;
   manager: string;
   kyc: string;
+  firstName?: string;
+  lastName?: string;
 };
 
 export const fakeUsers = {

@@ -1,6 +1,5 @@
 'use server'
-import { fakeUsers } from '@/constants/client-table-data';
-import { Client } from '@/constants/data';
+import { fakeUsers, User } from '@/constants/client-table-data';
 
 type ClientPageServerProps = {
   page: number;
@@ -9,7 +8,7 @@ type ClientPageServerProps = {
 };
 
 type ClientPageServerResponse = {
-  employee: Client[];
+  employee: User[];
   totalUsers: number;
   pageCount: number;
 };
@@ -25,7 +24,7 @@ export async function ClientPageServer({ page, pageLimit, searchValue }: ClientP
   const fallbackUsers = paginatedUsers.length > 0 ? paginatedUsers : await fakeUsers.getAll({ search: searchValue });
 
   // Ensure we have a valid list of employees (use empty array as last resort)
-  const employee: Client[] = fallbackUsers.length > 0 ? fallbackUsers : fakeUsers.records;
+  const employee: User[] = fallbackUsers.length > 0 ? fallbackUsers : fakeUsers.records;
 
   return { employee, totalUsers, pageCount };
 }

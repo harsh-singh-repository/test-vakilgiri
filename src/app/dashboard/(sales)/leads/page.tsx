@@ -102,7 +102,7 @@ export default function LeadsPage() {
         <LeadsTable
           searchKey="search"
           searchValue={searchValue}
-          pageNo={page} 
+          pageNo={page}
           columns={columns}
           totalUsers={responseData.totalUsers}
           data={mappedData} // Pass mapped data here

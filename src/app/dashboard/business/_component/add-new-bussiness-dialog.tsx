@@ -39,7 +39,6 @@ import { cn } from "@/lib/utils";
 import { useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import Image from "next/image";
 // import { toast } from "sonner";
 
 const BusinessTypeEnum = z.enum(["type1", "type2", "type3"]).optional();
@@ -127,6 +126,7 @@ const AddNewBussinessDialog = () => {
   };
 
   return (
+    <>
       <DialogContent className="pl-6 pt-5 max-w-fit">
         <DialogHeader>
           <DialogTitle>Link Your Bussiness</DialogTitle>
@@ -420,7 +420,7 @@ const AddNewBussinessDialog = () => {
                     <FormField
                       control={form.control}
                       name="file"
-                      render={({ field: {} }) => (
+                      render={() => (
                         <FormItem>
                           <FormLabel>File</FormLabel>
                           <FormControl>
@@ -437,7 +437,7 @@ const AddNewBussinessDialog = () => {
                                 className="cursor-pointer"
                               >
                                 {logo ? (
-                                  <Image
+                                  <img
                                     src={logo}
                                     alt="Business logo"
                                     className="max-h-24 mx-auto"
@@ -507,6 +507,7 @@ const AddNewBussinessDialog = () => {
           </Form>
         </DialogHeader>
       </DialogContent>
+    </>
   );
 };
 

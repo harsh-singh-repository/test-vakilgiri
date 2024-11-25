@@ -73,7 +73,7 @@ const formSchema = z.object({
     .or(z.literal("")),
     
   //optional
-  gender: z.enum(["Male", "Female", "Other"]).optional(),
+  gender: z.enum(["Male", "Female", "Other"]),
   loginStatus : z.enum(["None", "Active", "Inactive"]).optional(),
   kycStatus : z.enum(["Approved", "Pending"]).optional(),
   dscInfo : z.enum(["None","Not_Applicable", "With_Vakilgiri", "With_Client"]).optional(),
