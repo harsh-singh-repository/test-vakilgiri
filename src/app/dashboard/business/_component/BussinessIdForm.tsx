@@ -1,15 +1,7 @@
 "use client";
-
-import {
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { format } from "date-fns";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -86,7 +78,7 @@ const states = [
   "Tamil Nadu",
 ];
 
-const AddNewBussinessDialog = () => {
+const BussinessIdForm = () => {
   const [date, setDate] = React.useState<Date>();
   const [logo, setLogo] = React.useState<string | null>(null);
 
@@ -127,17 +119,7 @@ const AddNewBussinessDialog = () => {
   };
 
   return (
-      <DialogContent className="pl-6 pt-5 max-w-fit">
-        <DialogHeader>
-          <DialogTitle>Link Your Bussiness</DialogTitle>
-          <DialogDescription>
-            Please fill all the information correctly to get the most out of
-            Vakilgiri.
-          </DialogDescription>
-          <span className="inline text-[10px] bg-slate-200 text-left pt-2 pb-2 pr-1 pl-1 rounded-md">
-            Basic Details
-          </span>
-
+      <div className="mt-2">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-3">
@@ -150,7 +132,7 @@ const AddNewBussinessDialog = () => {
                           control={form.control}
                           render={({ field }) => (
                             <div className="flex items-center">
-                              <FormLabel className="w-[7rem] text-xs">
+                              <FormLabel className="w-[7rem] text-[13px]">
                                 Business Type
                               </FormLabel>
                               <FormControl>
@@ -158,7 +140,7 @@ const AddNewBussinessDialog = () => {
                                   onValueChange={field.onChange}
                                   defaultValue={field.value}
                                 >
-                                  <SelectTrigger className="w-[180px] text-xs">
+                                  <SelectTrigger className="w-[340px] text-[13px]">
                                     <SelectValue placeholder="Select business type" />
                                   </SelectTrigger>
                                   <SelectContent>
@@ -185,13 +167,13 @@ const AddNewBussinessDialog = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex gap-3 items-center">
-                              <FormLabel className="text-xs w-[6.75rem]">
+                              <FormLabel className="text-[13px] w-[6.75rem]">
                                 Business Name
                               </FormLabel>
                               <FormControl>
                                 <Input
                                   {...field}
-                                  className="w-[180px] text-xs"
+                                  className="w-[340px] text-[13px]"
                                 />
                               </FormControl>
                             </div>
@@ -199,13 +181,13 @@ const AddNewBussinessDialog = () => {
                         )}
                       />
                       <div className="flex gap-3 items-center">
-                        <Label className="text-xs w-[6.75rem]">Date</Label>
+                        <Label className="text-[13px] w-[6.75rem]">Date</Label>
                         <Popover>
                           <PopoverTrigger asChild>
                             <Button
                               variant={"outline"}
                               className={cn(
-                                "w-[180px] justify-start text-left text-xs font-normal",
+                                "w-[340px] justify-start text-left text-[13px] font-normal",
                                 !date && "text-muted-foreground"
                               )}
                             >
@@ -233,13 +215,13 @@ const AddNewBussinessDialog = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex gap-3 items-center">
-                              <FormLabel className="text-xs w-[6.75rem]">
+                              <FormLabel className="text-[13px] w-[6.75rem]">
                                 PAN Card
                               </FormLabel>
                               <FormControl>
                                 <Input
                                   {...field}
-                                  className="w-[180px] text-xs"
+                                  className="w-[340px] text-[13px]"
                                 />
                               </FormControl>
                             </div>
@@ -252,13 +234,13 @@ const AddNewBussinessDialog = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex gap-3 items-center">
-                              <FormLabel className="text-xs w-[6.75rem]">
+                              <FormLabel className="text-[13px] w-[6.75rem]">
                                 Official Email Id
                               </FormLabel>
                               <FormControl>
                                 <Input
                                   {...field}
-                                  className="w-[180px] text-xs"
+                                  className="w-[340px] text-[13px]"
                                 />
                               </FormControl>
                             </div>
@@ -271,7 +253,7 @@ const AddNewBussinessDialog = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex gap-3 items-center">
-                              <FormLabel className="text-xs w-[6.75rem]">
+                              <FormLabel className="text-[13px] w-[6.75rem]">
                                 State
                               </FormLabel>
                               <Select
@@ -279,7 +261,7 @@ const AddNewBussinessDialog = () => {
                                 defaultValue={field.value}
                               >
                                 <FormControl>
-                                  <SelectTrigger className="w-[180px] text-xs">
+                                  <SelectTrigger className="w-[340px] text-[13px]">
                                     <SelectValue placeholder="Select State" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -304,13 +286,13 @@ const AddNewBussinessDialog = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex gap-3 items-center">
-                              <FormLabel className="w-[6.75rem] text-xs">
+                              <FormLabel className="w-[6.75rem] text-[13px]">
                                 Reg. Address-2
                               </FormLabel>
                               <FormControl>
                                 <Input
                                   {...field}
-                                  className="w-[180px] text-xs"
+                                  className="w-[340px] text-[13px]"
                                 />
                               </FormControl>
                             </div>
@@ -323,13 +305,13 @@ const AddNewBussinessDialog = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex gap-3 items-center">
-                              <FormLabel className="w-[6.75rem] text-xs">
+                              <FormLabel className="w-[6.75rem] text-[13px]">
                                 CIN/ Reg. No.
                               </FormLabel>
                               <FormControl>
                                 <Input
                                   {...field}
-                                  className="w-[180px] text-xs"
+                                  className="w-[340px] text-[13px]"
                                 />
                               </FormControl>
                             </div>
@@ -342,13 +324,13 @@ const AddNewBussinessDialog = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex gap-3 items-center">
-                              <FormLabel className="w-[6.75rem] text-xs">
+                              <FormLabel className="w-[6.75rem] text-[13px]">
                                 Official Mobile
                               </FormLabel>
                               <FormControl>
                                 <Input
                                   {...field}
-                                  className="w-[180px] text-xs"
+                                  className="w-[340px] text-[13px]"
                                 />
                               </FormControl>
                             </div>
@@ -361,13 +343,13 @@ const AddNewBussinessDialog = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex gap-3 items-center">
-                              <FormLabel className="w-[6.75rem] text-xs">
+                              <FormLabel className="w-[6.75rem] text-[13px]">
                                 Reg. Address-1{" "}
                               </FormLabel>
                               <FormControl>
                                 <Input
                                   {...field}
-                                  className="w-[180px] text-xs"
+                                  className="w-[340px] text-[13px]"
                                 />
                               </FormControl>
                             </div>
@@ -380,13 +362,13 @@ const AddNewBussinessDialog = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex gap-3 items-center">
-                              <FormLabel className="w-[6.75rem] text-xs">
+                              <FormLabel className="w-[6.75rem] text-[13px]">
                                 City
                               </FormLabel>
                               <FormControl>
                                 <Input
                                   {...field}
-                                  className="w-[180px] text-xs"
+                                  className="w-[340px] text-[13px]"
                                 />
                               </FormControl>
                             </div>
@@ -399,13 +381,13 @@ const AddNewBussinessDialog = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex gap-3 items-center">
-                              <FormLabel className="w-[6.75rem] text-xs">
+                              <FormLabel className="w-[6.75rem] text-[13px]">
                                 Pin Code
                               </FormLabel>
                               <FormControl>
                                 <Input
                                   {...field}
-                                  className="w-[180px] text-xs"
+                                  className="w-[340px] text-[13px]"
                                 />
                               </FormControl>
                             </div>
@@ -420,11 +402,11 @@ const AddNewBussinessDialog = () => {
                     <FormField
                       control={form.control}
                       name="file"
-                      render={({ field: {} }) => (
+                      render={({ field:  {}}) => (
                         <FormItem>
                           <FormLabel>File</FormLabel>
                           <FormControl>
-                            <div className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer hover:border-gray-400 transition-colors">
+                            <div className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer hover:border-gray-400 transition-colors h-[100px]">
                               <input
                                 type="file"
                                 accept="image/*"
@@ -443,7 +425,7 @@ const AddNewBussinessDialog = () => {
                                     className="max-h-24 mx-auto"
                                   />
                                 ) : (
-                                  <div className="h-24 flex items-center justify-center">
+                                  <div className="h-[60px] flex items-center justify-center">
                                     Upload Logo (1*1)
                                   </div>
                                 )}
@@ -460,13 +442,13 @@ const AddNewBussinessDialog = () => {
                       render={({ field }) => (
                         <div>
                           <div className="flex gap-3 flex-col items-left">
-                            <FormLabel className="w-full text-xs">
+                            <FormLabel className="w-full text-[13px]">
                               About the Bussiness
                             </FormLabel>
                             <FormControl>
                               <Textarea
                                 {...field}
-                                className="w-[440px] h-[131px]"
+                                className="w-[800px] h-[100px]"
                               />
                             </FormControl>
                           </div>
@@ -474,40 +456,19 @@ const AddNewBussinessDialog = () => {
                       )}
                     />
                   </div>
-                  <div className="flex justify-between gap-7">
-                    <div className="flex gap-x-2 items-center">
-                      <FormField
-                        control={form.control}
-                        name="termsAgreed"
-                        render={({ field }) => (
-                          <div>
-                            <div className="flex gap-3 flex-col items-left">
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value === true}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                              <FormLabel className="w-full text-xs">
-                                By checking this you agree to our Terms &
-                                Conditions, Privacy Policy, etc.
-                              </FormLabel>
-                            </div>
-                          </div>
-                        )}
-                      />
-                      <Button className="py-1 px-2 w-32 text-xs" type="submit">
-                        Save and Procced
+                  {/* <div className="flex justify-between"> */}
+                    <div className="flex justify-end">
+                      <Button className="py-1 px-2 w-32 text-[13px] bg-[#F21300] hover:bg-[#091747] text-white" type="submit">
+                         Update
                       </Button>
                     </div>
-                  </div>
+                  {/* </div> */}
                 </div>
               </div>
             </form>
           </Form>
-        </DialogHeader>
-      </DialogContent>
+      </div>
   );
 };
 
-export default AddNewBussinessDialog;
+export default BussinessIdForm;

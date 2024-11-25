@@ -4,7 +4,8 @@ export type Client = {
   id: number;
   profileImage: string;
   cltid: string;
-  name: string;
+  firstName: string;
+  lastName:string;
   pan: string;
   bussinesses: string;
   projects: string;

@@ -10,13 +10,19 @@ import { LeadsTable } from "./_component/leads-table";
 import LeadsCard from "./_component/leads-card";
 import { useSearchParams } from "next/navigation";
 import { LeadsPageServer } from "./_component/LeadsPageServer";
-import { Leads } from "@/constants/data";
+import { Client, Leads } from "@/constants/data";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import CreateLeadForm from "./_component/create-lead-form";
 import {Oval} from "react-loader-spinner"
 
 type ResponseData = {
   employee: Leads[];
+  totalUsers: number;
+  pageCount: number;
+};
+
+type ResponseUser = {
+  employee: Client[];
   totalUsers: number;
   pageCount: number;
 };
@@ -36,11 +42,13 @@ export default function LeadsPage() {
     searchParams.get("search") || ""
   );
   const [responseData, setResponseData] = useState<ResponseData | null>(null);
+  const [userData, setUsereData] = useState<ResponseUser | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await LeadsPageServer({ page, pageLimit, searchValue });
       setResponseData(data);
+      setUsereData(data);
     };
 
     fetchData();

@@ -299,7 +299,7 @@ const ActionButton = (id: string) => {
   const router = useRouter()
 
   const handleEditClick = () => {
-    // console.log("id one",id)
+    console.log("id one",id)
     router.push(`/dashboard/client/${id}`)
   }
 

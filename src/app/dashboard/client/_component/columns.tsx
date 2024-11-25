@@ -2,10 +2,11 @@
 // import { Checkbox } from '@/components/ui/checkbox';
 import { Client } from '@/constants/data';
 // import { useGetClients } from '@/hooks/users/manage-client';
+// import { useGetClients } from '@/hooks/users/manage-client';
 import { ColumnDef } from '@tanstack/react-table';
 
-// const fetchData = ()=>{
-//   const {data,isFetching,isSuccess,error,isError} = useGetClients();
+// const usefetchData = ()=>{
+//   const {data} = useGetClients();
 //    console.log(data);
 //    console.log(typeof(data));
 //    return data;

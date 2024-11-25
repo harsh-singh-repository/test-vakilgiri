@@ -85,7 +85,7 @@ export default function ClientPage() {
           <Input
             placeholder="Search name..."
             value={searchValue}
-            onChange={(event: React.ChangeEventHandler<HTMLInputElement>) => setSearchValue(event.target.value)}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
             className="w-full md:max-w-sm ml-auto bg-white"
           />
 
