@@ -27,6 +27,20 @@ export type Business = {
   status: string;
 };
 
+export type User = {
+  id: number;
+  avatar: string; // Corresponds to Client.profileImage
+  uniqueId: string; // Corresponds to Client.cltid
+  firstName: string;
+  lastName: string;
+  pan?: string;
+  bussinesses?: string; // Matches Client.bussinesses
+  projects?: string;
+  wallet?: string;
+  manager?: string;
+  kycStatus?: string; // Corresponds to Client.kyc
+};
+
 
 export type Leads = {
   leadId: number;

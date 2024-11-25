@@ -1,7 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-// import { Breadcrumbs } from "@/components/breadcrumbs";
-// import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -10,27 +8,16 @@ import { LeadsTable } from "./_component/leads-table";
 import LeadsCard from "./_component/leads-card";
 import { useSearchParams } from "next/navigation";
 import { LeadsPageServer } from "./_component/LeadsPageServer";
-import { Client, Leads } from "@/constants/data";
+import { Leads } from "@/constants/data";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import CreateLeadForm from "./_component/create-lead-form";
-import {Oval} from "react-loader-spinner"
+import { Oval } from "react-loader-spinner";
 
 type ResponseData = {
   employee: Leads[];
   totalUsers: number;
   pageCount: number;
 };
-
-type ResponseUser = {
-  employee: Client[];
-  totalUsers: number;
-  pageCount: number;
-};
-
-// const breadcrumbItems = [
-//   { title: "Dashboard", link: "/dashboard" },
-//   { title: "Leads", link: "/dashboard/leads" },
-// ];
 
 export default function LeadsPage() {
   const searchParams = useSearchParams();
@@ -42,13 +29,11 @@ export default function LeadsPage() {
     searchParams.get("search") || ""
   );
   const [responseData, setResponseData] = useState<ResponseData | null>(null);
-  const [userData, setUsereData] = useState<ResponseUser | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await LeadsPageServer({ page, pageLimit, searchValue });
       setResponseData(data);
-      setUsereData(data);
     };
 
     fetchData();
@@ -56,8 +41,8 @@ export default function LeadsPage() {
 
   if (!responseData) {
     return (
-       <div className="flex justify-center item-center h-[100vh]">
-            <Oval
+      <div className="flex justify-center items-center h-[100vh]">
+        <Oval
           visible={true}
           height="40"
           width="40"
@@ -66,47 +51,64 @@ export default function LeadsPage() {
           wrapperStyle={{}}
           wrapperClass=""
         />
-       </div>
-    )
+      </div>
+    );
   }
+
+  // ADD THIS PART TO SOLVE ERROR
+  const mappedData = responseData.employee.map((lead) => ({
+    id: lead.leadId,
+    profileImage: "",
+    cltid: "",
+    firstName: lead.businessOrClient,
+    lastName: "",
+    pan: "",
+    bussinesses: lead.companyName || "N/A",
+    projects: "",
+    wallet: lead.value,
+    manager: lead.assigned,
+    kyc: lead.status,
+  }));
+  // ENDED!!
 
   return (
     <Dialog>
-    <div className="w-full flex-1 space-y-4 p-4 pt-6 md:p-4  overflow-hidden">
-      {/* <Breadcrumbs items={breadcrumbItems} /> */}
-      <div className="flex items-start justify-between">
-        <div className="text-2xl font-bold text-[#042559]">{`Leads (${responseData.totalUsers})`}</div>
+      <div className="w-full flex-1 space-y-4 p-4 pt-6 md:p-4 overflow-hidden">
+        <div className="flex items-start justify-between">
+          <div className="text-2xl font-bold text-[#042559]">{`Leads (${responseData.totalUsers})`}</div>
 
-        <div className="flex justify-center item-center gap-4">
-          <Input
-            placeholder="Search"
-            value={searchValue}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
-            className="w-full md:max-w-sm ml-auto bg-white"
-          />
+          <div className="flex justify-center items-center gap-4">
+            <Input
+              placeholder="Search"
+              value={searchValue}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                setSearchValue(event.target.value)
+              }
+              className="w-full md:max-w-sm ml-auto bg-white"
+            />
 
-         <DialogTrigger>
-         <div className="bg-[#f21300] text-white p-2 rounded-md">
-            <Plus className="h-6 w-6" />
+            <DialogTrigger>
+              <div className="bg-[#f21300] text-white p-2 rounded-md">
+                <Plus className="h-6 w-6" />
+              </div>
+            </DialogTrigger>
+            <CreateLeadForm />
           </div>
-         </DialogTrigger>
-         <CreateLeadForm/>
         </div>
-      </div>
-      <Separator />
+        <Separator />
 
-      <LeadsCard />
+        <LeadsCard />
 
         <LeadsTable
           searchKey="search"
           searchValue={searchValue}
-          pageNo={page}
+          pageNo={page} 
           columns={columns}
           totalUsers={responseData.totalUsers}
-          data={responseData.employee}
+          data={mappedData} // Pass mapped data here
           pageCount={responseData.pageCount}
         />
-    </div>
+      </div>
     </Dialog>
   );
 }
