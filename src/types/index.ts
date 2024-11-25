@@ -32,6 +32,8 @@ export interface FooterItem {
 export interface ApiResponse {
   success: boolean;
   message: string;
+  statusCode: number;
+  errors: string;
 }
 
 export interface CreateClientData {

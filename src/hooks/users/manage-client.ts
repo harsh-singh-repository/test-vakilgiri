@@ -4,10 +4,12 @@ import { handleMutationSuccess, handleMutationError } from '@/lib/mutation-utils
 import { useCustomToast } from '@/components/providers/toaster-provider';
 import {clientService } from '@/service/client/manage-client';
 import { 
+    ApiResponse,
     // ApiResponse, 
     // CreateClientData, 
     EditClientData 
 } from '@/types';
+import axios from 'axios';
 
 export const useGetClients = () => {
     const query =  useQuery({
@@ -37,16 +39,10 @@ export const useGetClientsById = (id:string) =>{
     return query;
 }
 
-export const useEditClient = (id:string) => {
-    const queryClient = useQueryClient();
-    const toast = useCustomToast();
-
-    return useMutation({
-        mutationFn:(clientData:EditClientData)=> clientService.edit(clientData,id),
-        onSuccess: (response)=>  handleMutationSuccess(response, toast, queryClient, ["clients"]),
-        onError: (error) => handleMutationError(error, toast),
-    })
-};
+export const edit = async (clientData: EditClientData, id: string): Promise<ApiResponse> => {
+    const response = await axios.put<ApiResponse>(`/api/clients/${id}`, clientData);
+    return response.data; // Ensure it returns `data` of type `ApiResponse`
+  };
 
 // export const useDeleteUser = () => {
 //     const queryClient = useQueryClient();

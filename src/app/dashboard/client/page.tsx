@@ -9,7 +9,7 @@ import { ClientTable } from "./_component/client-table";
 import ClientCard from "./_component/client-card";
 import { useSearchParams } from "next/navigation";
 import { ClientPageServer } from "./_component/ClientPageServer";
-import { Client } from "@/constants/data";
+// import { Client } from "@/constants/data";
 import {
   Dialog,
   // DialogTrigger
@@ -18,9 +18,10 @@ import AddClientDialog from "./_component/AddClientDialog";
 // import Spinner from '@/components/smooth-spinner';
 import { Oval } from "react-loader-spinner";
 import { useGetClients } from "@/hooks/users/manage-client";
+import { User } from "@/constants/client-table-data";
 
 type ResponseData = {
-  employee: Client[];
+  employee: User[];
   totalUsers: number;
   pageCount: number;
 };
@@ -85,7 +86,9 @@ export default function ClientPage() {
           <Input
             placeholder="Search name..."
             value={searchValue}
-            onChange={(event: React.ChangeEventHandler<HTMLInputElement>) => setSearchValue(event.target.value)}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchValue(event.target.value)
+            }
             className="w-full md:max-w-sm ml-auto bg-white"
           />
 
