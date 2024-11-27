@@ -2,7 +2,6 @@ import React from 'react'
 
 const BussinessDetailCard = () => {
   return (
-    <>
       <div className="bg-[#d5d5d5] p-4 rounded-md">
         <div className="bg-[#091747] p-2 text-xs rounded-md text-white">
            Business Details [BUZ27]
@@ -47,7 +46,6 @@ const BussinessDetailCard = () => {
             <span className="font-bold">Manager:</span>
         </div>
       </div>
-    </>
   )
 }
 

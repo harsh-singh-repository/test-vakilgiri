@@ -1,28 +1,8 @@
 import { Megaphone } from "lucide-react";
 import { FaUserAlt, FaPhoneAlt, FaHeartbeat } from "react-icons/fa";
+import { LeadsStats } from "../_types";
 
-interface LeadsStats {
-  leads: {
-    all: number;
-    converted: number;
-    contracted: number;
-  };
-  today: {
-    converted: number;
-    potential: number;
-    disqualified: number;
-  };
-  thisMonth: {
-    converted: number;
-    potential: number;
-    disqualified: number;
-  };
-  thisYear: {
-    converted: number;
-    potential: number;
-    disqualified: number;
-  };
-}
+
 
 // Adjust the type to allow optional keys
 type LabelType = { [key: string]: string | undefined };

@@ -16,25 +16,20 @@ import { ChevronLeft } from 'lucide-react';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-});
-
-interface ForgetPasswordProps {
-  handleBackToLogin: () => void;
-}
+import { ForgetPasswordProps } from "../_types";
+import { ForgetPasswordformSchema } from "../_types/zodSchema";
 
 const ForgetPassword: React.FC<ForgetPasswordProps> = ({
   handleBackToLogin
 }) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof ForgetPasswordformSchema>>({
+    resolver: zodResolver(ForgetPasswordformSchema),
     defaultValues: {
       email: "",
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  function onSubmit(data: z.infer<typeof ForgetPasswordformSchema>) {
     alert("Reset Password Successful"+data)
   }
 

@@ -20,18 +20,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-
-const formSchema = z.object({
-  address1: z.string().min(1, { message: 'This field is mandatory' }),
-  address2: z.string().min(1, { message: 'This field is mandatory' }),
-  city: z.string().min(1, { message: 'This field is mandatory' }),
-  state: z.string().min(1, { message: 'This field is mandatory' }),
-  pincode: z.string().regex(/^\d{6}$/, { message: 'Enter a valid 6-digit pincode' }),
-})
+import { AddressformSchema } from '../_types/zodSchema'
 
 export default function Component() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof AddressformSchema>>({
+    resolver: zodResolver(AddressformSchema),
     defaultValues: {
       address1: '',
       address2: '',
@@ -41,7 +34,7 @@ export default function Component() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof AddressformSchema>) {
     console.log(values)
   }
 

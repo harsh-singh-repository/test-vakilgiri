@@ -54,7 +54,6 @@ const ClientDashboard = () => {
   ];
 
   return (
-    <>
     <Dialog>
       <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 p-5 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
         {tables.map((table) => (
@@ -88,7 +87,6 @@ const ClientDashboard = () => {
         <ClientDetailDialog tables={tables}/>
       </div>
       </Dialog>
-    </>
   );
 };
 

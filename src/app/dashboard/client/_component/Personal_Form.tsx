@@ -22,26 +22,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
+import { clientIdProps } from "../_types"
+import { PersonalDataformSchema } from "../_types/zodSchema"
 
-const formSchema = z.object({
-  pan: z.string().min(10, "PAN Card must be 10 characters"),
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  // fatherName: z.string().min(1, "Father's name is required").optional(),
-  gender: z.enum(["Male", "Female", "Other"]),
-  mobileNumber: z.string().min(10, "Mobile number must be 10 digits").optional(),
-  aadhaar: z.string().min(12, "Aadhaar number must be 12 digits").optional(),
-  din: z.string().optional(),
-  dob:z.string().optional(),
-  dscInfo: z.enum(["None", "Not_Applicable", "With_Vakilgiri", "With_Client"]).optional(),
-  email: z.string().email("Invalid email address"),
-  kycStatus: z.enum(["Pending", "Completed", "Rejected"]),
-  loginStatus: z.enum(["Active", "Inactive"]),
-});
 
-type clientIdProps = {
-   clientId:string,
-}
+
+
 
 const Personal_Form = ({clientId}:clientIdProps) => {
    
@@ -57,8 +43,8 @@ const Personal_Form = ({clientId}:clientIdProps) => {
   //  return <h1>Loading....</h1>
   // }
   
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof PersonalDataformSchema>>({
+    resolver: zodResolver(PersonalDataformSchema),
     defaultValues:{
       pan: data?.pan,
       firstName: data?.firstName,
@@ -75,7 +61,7 @@ const Personal_Form = ({clientId}:clientIdProps) => {
     },
   });
   
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof PersonalDataformSchema>) {
       mutate(values,{
         onSuccess: () => {
           toast.success("Client Updated successfully!");
