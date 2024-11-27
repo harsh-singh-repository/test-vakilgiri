@@ -1,199 +1,163 @@
 "use client";
-
-import { z } from "zod";
-import React from "react";
-import Image from "next/image";
-
+ 
 import logo from "@/app/assets/logo.png";
 import { Input } from "@/components/ui/input";
-import { useForm, Controller } from "react-hook-form";
+import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import Image from "next/image";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import {
-  Select,
-  SelectItem,
-  SelectLabel,
-  SelectGroup,
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-} from "@/components/ui/select";
-
+import { Button } from "@/components/ui/button";
 import {
   Form,
-  FormItem,
+  FormControl,
+  FormField,
   FormLabel,
   FormField,
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { DatePicker } from "@/components/ui/date-picker";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { LoginProps } from "../_types";
+import { LoginformSchema } from "../_types/zodSchema";
 
 // Define schema with gender and birthdate fields
-const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-  pan: z.string().min(10, { message: "Pan number should be 10 digits" }),
-  gender: z.enum(["male", "female", "not-specified"], {
-    message: "Gender is required",
-  }),
-  birthdate: z.date({ required_error: "Birthdate is required" }),
-});
 
-interface LoginProps {
-  handleForgetPassword: () => void;
-  handleRegistration: () => void;
-}
+
 
 const Login: React.FC<LoginProps> = ({
   handleForgetPassword,
   handleRegistration,
 }) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof LoginformSchema>>({
+    resolver: zodResolver(LoginformSchema),
     defaultValues: {
       email: "",
-      pan: "",
-      birthdate: undefined,
+      password: "",
     },
   });
+  // const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const router = useRouter();
+  const [loader, setloader] = useState<boolean>(false);
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log("DATA>>>", data);
-    alert("Login Successful");
+  const { toast } = useToast();
+
+  async function onSubmit(data: z.infer<typeof LoginformSchema>) {
+    setloader(true);
+   
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+    setloader(false);
+    console.log(result);
+    if (result?.error) {
+      if (result.error === "CredentialsSignin") {
+        toast({
+          title: "Login Failed",
+          description: result.error || "Incorrect username or password",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: result.error,
+          variant: "destructive",
+        });
+      }
+    }
+
+    if (result?.url) {
+      router.replace("/dashboard");
+      toast({
+        title: "Login Success",
+        description: "Login Success",
+        variant: "default",
+      });
+    }
   }
 
   return (
-    <div className="w-[48rem]">
-      <div className="text-black flex flex-col justify-center items-center text-center p-4">
-        <Image src={logo} alt="vakilgiri_logo" height={150} width={150} />
+    <div className="text-black flex flex-col justify-center items-center text-center w-[48rem] p-4">
+      <Image src={logo} alt="vakilgiri_logo" height={150} width={150} />
+      <h1 className="text-black font-bold text-2xl">Welcome Back!</h1>
+      <span className="text-[#091747] font-[600] text-[15px]">
+        Please sign in to your account and start the adventure
+      </span>
 
-        <h1 className="text-black font-bold text-2xl">Welcome Back!</h1>
-        <span className="text-[#002537] font-medium text-base">
-          Please sign-in to your account and start the adventure
-        </span>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid w-full max-w-sm items-center gap-1.5 text-left"
+        >
+          {/* Email Field */}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <div>
+                <FormLabel className="text-[#091747] font-[600] text-[13px]">
+                  Email ID
+                </FormLabel>
+                <Input type="email" placeholder="Enter Email" {...field} />
+                <FormMessage />
+              </div>
+            )}
+          />
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col items-center justify-center gap-4 w-[16rem] sm:w-[20rem]"
+          {/* Password Field */}
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <div>
+                <FormLabel className="text-[#091747] font-[600] text-[13px]">
+                  Password
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Enter password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </div>
+            )}
+          />
+
+          {/* Submit Button */}
+          <Button type="submit" className="hover:bg-[#091747] bg-[#f21300]">
+            {
+              loader ? <Loader2 className="animate-spin" /> : "Login"
+            }
+          </Button>
+
+          {/* Forget Password */}
+          <div
+            className="text-xs w-full text-right font-medium text-[#f21300] cursor-pointer"
+            onClick={handleForgetPassword}
           >
-            {/* Email Field */}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem className="grid w-full max-w-sm items-center text-left">
-                  <FormLabel className="text-sm font-semibold mt-1 p-0 text-blue-950">
-                    Email ID
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="Enter Email"
-                      {...field}
-                      className="bg-slate-100 w-full p-2 shadow-sm shadow-slate-500/50"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            Forget password?
+          </div>
 
-            {/* PAN Field */}
-            <FormField
-              control={form.control}
-              name="pan"
-              render={({ field }) => (
-                <FormItem className="grid w-full max-w-sm items-center text-left">
-                  <FormLabel className="text-sm font-[600] mt-1 p-0 text-blue-950">
-                    Pan Number
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="Pan Number"
-                      {...field}
-                      className="bg-slate-100 w-full p-2 shadow-sm shadow-slate-500/50"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="flex flex-col md:flex-row gap-4 justify-between items-start sm:items-center w-full p-0 m-0">
-              {/* Gender Selection */}
-              <FormField
-                control={form.control}
-                name="gender"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col gap-2 justify-center items-center">
-                    <FormControl>
-                      <Select {...field}>
-                        <SelectTrigger className="bg-slate-100 w-[16rem] md:w-full">
-                          <SelectValue placeholder="Select Gender" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Select Gender</SelectLabel>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="female">Female</SelectItem>
-                            <SelectItem value="not-specified">
-                              Prefer not to say
-                            </SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Date Picker */}
-              <FormField
-                control={form.control}
-                name="birthdate"
-                render={() => (
-                  <FormItem className="flex flex-col gap-1">
-                    <FormControl>
-                      <Controller
-                        control={form.control}
-                        name="birthdate"
-                        render={({ field: controllerField }) => (
-                          <DatePicker
-                            {...controllerField}
-                            onChange={controllerField.onChange}
-                            className="bg-slate-100 w-[16rem] md:w-full"
-                          />
-                        )}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-500" />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div
-              className="text-xs w-full text-right font-medium text-[#F20101] cursor-pointer"
-              onClick={handleForgetPassword}
+          {/* Registration Link */}
+          <div className="flex gap-1 items-center justify-center text-[#091747] font-medium">
+            Not a Vakilgiri Client?{" "}
+            <span
+              className="font-medium text-[#F20101] cursor-pointer"
+              onClick={handleRegistration}
             >
-              Forget password?
-            </div>
-
-            <div className="text-center font-medium py-2">
-              Not a Vakilgiri Client?{" "}
-              <span
-                className="text-[#F20101] cursor-pointer"
-                onClick={handleRegistration}
-              >
-                Register
-              </span>
-            </div>
-          </form>
-        </Form>
-      </div>
+              Register
+            </span>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };

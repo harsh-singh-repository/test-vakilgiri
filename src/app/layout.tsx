@@ -1,24 +1,13 @@
+import Providers from "@/components/Providers";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "700"], // Specify weights you want to use
   variable: "--font-poppins", // Optional: Use CSS variable for easy styling
 });
 
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
 
 export const metadata: Metadata = {
   title: "Vakilgiri",
@@ -31,9 +20,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${poppins.className} antialiased bg-[#002537]`}>
-        {children}
+    <html lang="en"   suppressHydrationWarning={true}>
+      <body
+        className={`${poppins.className} antialiased bg-[#002537]` }
+      >
+        <Providers>
+          {children} 
+        </Providers>
       </body>
     </html>
   );
