@@ -6,9 +6,6 @@ import { useState } from "react";
 import ForgetPassword from "./ForgetPassword";
 import Login from "./Login";
 import Register from "./Register";
-import ForgetPassword from "./ForgetPassword";
-
-import vakilGiriAuth from "@/app/assets/vakilgiri_auth.png";
 
 const Form = () => {
   const [login, setLogin] = useState<boolean>(true);
