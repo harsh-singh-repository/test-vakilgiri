@@ -24,24 +24,11 @@ import { useState } from 'react'
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { OtpVerifyForm } from './OtpVerify'
+import { RegisterProps } from '../_types'
+import { RegisterformSchema } from '../_types/zodSchema'
 
-const formSchema = z.object({
-  firstName: z.string().min(1, { message: "First Name is required" }),
-  lastName: z.string().min(1, { message: "Last Name is required" }),
-  email: z.string().email({ message: "Invalid email address" }),
-  mobile: z.string().min(10, { message: "Invalid mobile number" }),
-  pan: z.string().min(10, { message: "PAN number should be 10 characters" }),
-  birthdate: z.date({ required_error: "Birthdate is required" }),
-  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
-  confirmPassword: z.string().min(8, { message: "Please confirm your password" }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-})
 
-interface RegisterProps {
-  alreadyLogin: () => void;
-}
+
 
 export default function Register({ alreadyLogin }: RegisterProps) {
   const [otpVerified, setOtpVerified] = useState<boolean>(false)
@@ -50,8 +37,8 @@ export default function Register({ alreadyLogin }: RegisterProps) {
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof RegisterformSchema>>({
+    resolver: zodResolver(RegisterformSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -62,9 +49,9 @@ export default function Register({ alreadyLogin }: RegisterProps) {
       password: "",
       confirmPassword: "",
     },
-  })
+  });
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof RegisterformSchema>) {
     setIsSubmitting(true)
     setError(null)
     try {
@@ -122,7 +109,11 @@ export default function Register({ alreadyLogin }: RegisterProps) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input type="email" placeholder="Enter Your Email" {...field} />
+                  <Input
+                    type="email"
+                    placeholder="Enter Your Email"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -135,7 +126,11 @@ export default function Register({ alreadyLogin }: RegisterProps) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input type="text" placeholder="Enter Mobile Number" {...field} />
+                  <Input
+                    type="text"
+                    placeholder="Enter Mobile Number"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -212,7 +207,11 @@ export default function Register({ alreadyLogin }: RegisterProps) {
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormControl>
-                    <Input type="password" placeholder="Confirm Password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Confirm Password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

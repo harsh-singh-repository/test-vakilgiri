@@ -46,7 +46,6 @@ function Page() {
     { name: "SUMOHIT ONLINE PRIVATE LIMITED", company: "Private Limited" },
   ];
   return (
-    <>
     <Tabs defaultValue="Dashboard">
       <div className="relative rounded-sm h-full bg-muted flex flex-col top-0">
         <TabsList className="absolute flex flex-row justify-stretch w-full overflow-x-auto">
@@ -141,7 +140,6 @@ function Page() {
         </TabsContent>
       </div>
     </Tabs>
-    </>
   );
 }
 

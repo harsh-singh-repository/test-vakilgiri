@@ -20,22 +20,18 @@ import {
     InputOTPGroup,
     InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { OtpFormSchema } from "../_types/zodSchema";
 
-const FormSchema = z.object({
-    pin: z.string().min(6, {
-        message: "Your one-time password must be 6 characters.",
-    }),
-});
 
 export function OtpVerifyForm({ setOtpVerify }: { setOtpVerify: (verified: boolean) => void }) {
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
+    const form = useForm<z.infer<typeof OtpFormSchema>>({
+        resolver: zodResolver(OtpFormSchema),
         defaultValues: {
             pin: "",
         },
     });
 
-    function onSubmit(data: z.infer<typeof FormSchema>) {
+    function onSubmit(data: z.infer<typeof OtpFormSchema>) {
         console.log("OTP submitted:", data);
         setOtpVerify(true);
     }

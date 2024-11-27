@@ -13,33 +13,26 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
-  FormControl,
-  FormField,
   FormLabel,
+  FormField,
+  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { LoginProps } from "../_types";
+import { LoginformSchema } from "../_types/zodSchema";
 
 // Define schema with gender and birthdate fields
-const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" }),
-});
 
-interface LoginProps {
-  handleForgetPassword: () => void;
-  handleRegistration: () => void;
-}
+
 
 const Login: React.FC<LoginProps> = ({
   handleForgetPassword,
   handleRegistration,
 }) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof LoginformSchema>>({
+    resolver: zodResolver(LoginformSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -51,7 +44,7 @@ const Login: React.FC<LoginProps> = ({
 
   const { toast } = useToast();
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof LoginformSchema>) {
     setloader(true);
    
     const result = await signIn("credentials", {

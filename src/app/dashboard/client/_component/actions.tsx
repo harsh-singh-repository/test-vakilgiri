@@ -56,16 +56,11 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { BussinessStackformSchema } from "../_types/zodSchema";
 // import { Badge } from "@/components/ui/badge"
 // import { useGetClients, useGetClientsById } from '@/hooks/users/manage-client'
 
-const formSchema = z.object({
-  discussion: z.string().min(1, "Discussion is required"),
-  reminderType: z.string().min(1, "Reminder type is required"),
-  reminderDate: z.date(),
-  reminderSubject: z.string().min(1, "Subject is required"),
-  reminderDescription: z.string().min(1, "Description is required"),
-});
+
 
 interface StackExchangeDialogProps {
   id: string;
@@ -77,8 +72,8 @@ type ActionButtonProps = {
 
 const StackExchangeDialog = ({ id }: StackExchangeDialogProps) => {
   // const [date, setDate] = React.useState<Date>()
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof BussinessStackformSchema>>({
+    resolver: zodResolver(BussinessStackformSchema),
     defaultValues: {
       discussion: "",
       reminderType: "",
@@ -89,7 +84,7 @@ const StackExchangeDialog = ({ id }: StackExchangeDialogProps) => {
 
   console.log("Response", id);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof BussinessStackformSchema>) {
     console.log(values);
   }
   return (

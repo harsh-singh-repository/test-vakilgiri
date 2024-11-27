@@ -1,30 +1,8 @@
 import { Building2, Megaphone } from "lucide-react"
 import { FaUserAlt } from "react-icons/fa";
+import { BusinessStats } from "../_types";
 
-interface BusinessStats {
-  businesses: {
-    all: number
-    unverified: number
-    forSale: number
-  }
-  businessTypes: {
-    pvtLtd: number
-    public: number
-    llps: number
-    section8: number
-    trust: number
-    society: number
-    micro: number
-    producer: number
-    proprietor: number
-    partnership: number
-  }
-  status: {
-    registered: number
-    pending: number
-    suspended: number
-  }
-}
+
 
 export default function BusinessCardSection() {
   const stats: BusinessStats = {

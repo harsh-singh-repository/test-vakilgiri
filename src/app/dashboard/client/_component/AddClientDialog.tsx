@@ -28,63 +28,12 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAddClient } from "@/hooks/users/manage-client";
 import { toast } from "sonner";
+import { AddClientformSchema } from "../_types/zodSchema";
 
-const panZodSchema = z
-    .string()
-    .min(1, "PAN is required")
-    .transform((value) => value.toUpperCase())
-    .refine(
-    (value) => /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value),
-    { message: "Invalid PAN format" }
-)
+
 
 // Validation schema
-const formSchema = z.object({
-  PAN: panZodSchema, // Transform to uppercase
-  First_Name: z.string().min(1, "First name is required"), // Ensures the field is not empty
-  Last_Name: z.string().min(1, "Last name is required"),
-  Mobile_Number: z
-    .string()
-    .regex(/^[6-9]\d{9}$/, "Invalid mobile number") // Validates 10-digit Indian mobile numbers starting with 6-9
-    .min(1, "Mobile number is required"),
-  email: z
-    .string()
-    .email("Invalid email address") // Validates email format
-    .min(1, "Email is required"),
-  Address_1: z.string().min(1, "Address 1 is required"),
-  City: z.string().min(1, "City is required"),
-  State: z.string().min(1, "State is required"),
-  Pincode: z
-    .string()
-    .regex(/^\d{6}$/, "Invalid pincode") // Validates 6-digit Indian postal codes
-    .min(1, "Pincode is required"),
- 
-  // Optional fields
-  Alternate_Mobile_Number: z
-    .string()
-    .regex(/^[6-9]\d{9}$/, "Invalid alternate mobile number") // Validates 10-digit Indian mobile numbers starting with 6-9
-    .optional()
-    .or(z.literal("")),
-  Address_2: z.string().optional(),
-  Aadhaar: z
-    .string()
-    .regex(/^\d{12}$/, "Invalid Aadhaar number") // Validates 12-digit Aadhaar numbers
-    .optional()
-    .or(z.literal("")),
-    
-  //optional
-  gender: z.enum(["Male", "Female", "Other"]),
-  loginStatus : z.enum(["None", "Active", "Inactive"]).optional(),
-  kycStatus : z.enum(["Approved", "Pending"]).optional(),
-  dscInfo : z.enum(["None","Not_Applicable", "With_Vakilgiri", "With_Client"]).optional(),
-  dscExpiry : z.string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format, expected YYYY-MM-DD")
-  .refine((date) => !isNaN(new Date(date).getTime()), { message: "Invalid date" })
-  .transform((date) => new Date(date)).optional(),
-  dscVault : z.string().optional(),
-  // Boolean field for sending email to client, with a default value of `false`
-  sendMailToClient: z.boolean().default(false),
-});
+
 
 // States array
 const states = [
@@ -100,8 +49,8 @@ const AddClientDialog = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutate: addUser } = useAddClient();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof AddClientformSchema>>({
+    resolver: zodResolver(AddClientformSchema),
     defaultValues: {
       First_Name: "",
       Last_Name: "",
@@ -124,7 +73,7 @@ const AddClientDialog = () => {
     control: form.control,
   });
 
-  async function onSubmit(formData: z.infer<typeof formSchema>) {
+  async function onSubmit(formData: z.infer<typeof AddClientformSchema>) {
     
     // const jsonData = JSON.stringify(formData, null, 2);
     addUser(formData, {

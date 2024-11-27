@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Input } from "@/components/ui/input";
 import Image from 'next/image';
@@ -16,25 +16,20 @@ import { ChevronLeft } from 'lucide-react';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-});
-
-interface ForgetPasswordProps {
-  handleBackToLogin: () => void;
-}
+import { ForgetPasswordProps } from "../_types";
+import { ForgetPasswordformSchema } from "../_types/zodSchema";
 
 const ForgetPassword: React.FC<ForgetPasswordProps> = ({
-  handleBackToLogin
+  handleBackToLogin,
 }) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof ForgetPasswordformSchema>>({
+    resolver: zodResolver(ForgetPasswordformSchema),
     defaultValues: {
       email: "",
     },
-  })
+  });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  function onSubmit(data: z.infer<typeof ForgetPasswordformSchema>) {
     alert("Reset Password Successful"+data)
   }
 
@@ -45,8 +40,10 @@ const ForgetPassword: React.FC<ForgetPasswordProps> = ({
       <span className="text-[#091747] font-medium text-base">We all forget !</span>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid w-full max-w-sm items-center gap-1.5 text-left">
-          
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid w-full max-w-sm items-center gap-1.5 text-left"
+        >
           <FormField
             control={form.control}
             name="email"
@@ -54,7 +51,12 @@ const ForgetPassword: React.FC<ForgetPasswordProps> = ({
               <div>
                 <FormLabel htmlFor="email" className="text-[#091747] font-[600] text-[13px]">Email ID</FormLabel>
                 <FormControl>
-                  <Input type="email" id="email" placeholder="Email" {...field} />
+                  <Input
+                    type="email"
+                    id="email"
+                    placeholder="Email"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </div>
@@ -63,14 +65,21 @@ const ForgetPassword: React.FC<ForgetPasswordProps> = ({
           
           <Button type="submit" className="hover:bg-[#091747] bg-[#f21300]">Send Password Reset Link</Button>
 
-          <div className="flex gap-1 items-center justify-center" onClick={handleBackToLogin}>
+          <Button type="submit" className="hover:bg-[#091747] bg-[#F20101]">
+            Send Password Reset Link
+          </Button>
+
+          <div
+            className="flex gap-1 items-center justify-center"
+            onClick={handleBackToLogin}
+          >
             <ChevronLeft />
             <span className="font-medium text-[#f21300] cursor-pointer" >Back to Login</span>
           </div>
         </form>
       </Form>
     </div>
-  )
-}
+  );
+};
 
 export default ForgetPassword;
