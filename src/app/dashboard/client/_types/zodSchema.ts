@@ -87,3 +87,19 @@ export  const AddClientformSchema = z.object({
     kycStatus: z.enum(["Pending", "Completed", "Rejected"]),
     loginStatus: z.enum(["Active", "Inactive"]),
   });
+
+  export const discussionSchema = z.object({
+    discussion: z.string().min(1, "Discussion is required"),
+  })
+  
+  export const reminderSchema = z.object({
+    reminderType: z.enum(["Call", "Follow_Up", "WhatsApp", "Email"]),
+    dueDate: z
+      .string()
+      .regex(
+        /^\d{4}-\d{2}-\d{2}$/,
+        "Due date must be in the format 'yyyy-MM-dd'."
+      ),
+    subject: z.string().min(1, "Subject is required."),
+    body: z.string().min(1, "Body is required."),
+  })

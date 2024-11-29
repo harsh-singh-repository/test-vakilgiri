@@ -23,6 +23,10 @@ export interface BusinessStats {
     }
 }
 
+export interface BussinessIdSettingsPageProps{
+  bussinessId:string | string[] | undefined;
+}
+
 export interface BusinessStatsId {
     businesses: {
       all: number

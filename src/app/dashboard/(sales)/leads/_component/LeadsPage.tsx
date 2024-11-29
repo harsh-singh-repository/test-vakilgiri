@@ -3,8 +3,8 @@ import { Suspense, useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { columns } from "./columns";
-import { LeadsTable } from "./leads-table";
+import { columns } from "./table/columns";
+import { LeadsTable } from "./table/leads-table";
 import LeadsCard from "./leads-card";
 import { useSearchParams } from "next/navigation";
 import { LeadsPageServer } from "./LeadsPageServer";
@@ -41,7 +41,7 @@ export default function LeadsPage() {
 
   if (!responseData) {
     return (
-      <div className="flex justify-center items-center h-[100vh]">
+      <div className="flex justify-center items-center h-full">
         <Oval
           visible={true}
           height="40"

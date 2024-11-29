@@ -1,6 +1,6 @@
 import React from 'react';
 // import  Poppins  from 'next/font/google';
-import Providers from '@/components/Providers';
+// import Providers from '@/components/Providers';
 
 export default function RootLayout({
   children,
@@ -8,10 +8,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className='bg-gray-50 h-[100vh]'>
-      <Providers>
+    <div className='bg-gray-50 h-full'>
+      {/* <Providers> */}
         {children}
-      </Providers>
+      {/* </Providers> */}
     </div>
   );
 }

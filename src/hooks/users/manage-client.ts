@@ -4,6 +4,8 @@ import { useQuery, useMutation} from '@tanstack/react-query';
 // import { useCustomToast } from '@/components/providers/toaster-provider';
 import {clientService } from '@/service/client/manage-client';
 import { 
+    clientDiscussionType,
+    ClientReminderTypes,
     // ApiResponse,
     // ApiResponse, 
     // CreateClientData, 
@@ -33,11 +35,25 @@ export const useAddClient = () => {
 
 export const useGetClientsById = (id:string) =>{
     const query =  useQuery({
-        queryKey: ['clients'],
+        queryKey: ['clients',id],
         queryFn:() => clientService.getClientById(id),
+        enabled:!!id,
     });
     return query;
 }
+
+export const useAddClientDisscussion = (id:string) => {
+    // const queryClient = useQueryClient();
+    // const toast = useCustomToast();
+
+    return useMutation({
+        mutationFn:(discussion:clientDiscussionType)=> clientService.addDiscussion(discussion,id),
+        // onSuccess: (response) =>
+        //     handleMutationSuccess(response, toast, queryClient, ["clients"]),
+        // onError: (error) => handleMutationError(error, toast),
+    });
+};
+
 
 export const useEditClient = (id:string) => {
     // const queryClient = useQueryClient();
@@ -48,6 +64,18 @@ export const useEditClient = (id:string) => {
         // onSuccess: (response)=>  handleMutationSuccess(response, toast, queryClient, ["clients"]),
         // onError: (error) => handleMutationError(error, toast),
     })
+};
+
+export const useAddClientReminder = (id:string) => {
+    // const queryClient = useQueryClient();
+    // const toast = useCustomToast();
+
+    return useMutation({
+        mutationFn:(reminders:ClientReminderTypes)=> clientService.addReminder(reminders,id),
+        // onSuccess: (response) =>
+        //     handleMutationSuccess(response, toast, queryClient, ["clients"]),
+        // onError: (error) => handleMutationError(error, toast),
+    });
 };
 
 // export const useDeleteUser = () => {

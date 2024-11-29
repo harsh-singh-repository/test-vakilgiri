@@ -7,7 +7,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className='bg-gray-50 overflow-hidden h-[100vh]'>
+    <div className='bg-gray-50 overflow-hidden h-full'>
         {children}
     </div>
   );

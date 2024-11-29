@@ -47,8 +47,8 @@ function Page() {
   ];
   return (
     <Tabs defaultValue="Dashboard">
-      <div className="relative rounded-sm h-full bg-muted flex flex-col top-0">
-        <TabsList className="absolute flex flex-row justify-stretch w-full overflow-x-auto">
+      <div className="relative rounded-sm h-full bg-muted flex flex-col top-0 mt-3">
+        <TabsList className="absolute flex flex-row justify-stretch w-full overflow-x-auto px-5">
           {tabs.map((value, index) => (
             <TabsTrigger
               className="w-full"
@@ -72,9 +72,9 @@ function Page() {
             </div>
           </div>
           <div className="flex gap-x-2 gap-y-2 flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
-            {bussinessPerson.map((bussiness) => {
+            {bussinessPerson.map((bussiness,index) => {
               return (
-                <Card className="w-[350px]">
+                <Card className="w-[350px]" key={index}>
                   <div className="flex flex-col">
                     <div className="flex gap-x-4 p-3  items-center">
                       <div className="h-10 w-10 bg-slate-400 rounded-md drop-shadow-lg"></div>
@@ -97,7 +97,7 @@ function Page() {
             })}
           </div>
         </TabsContent>
-        <TabsContent value="All Profile" className="mt-12 h-[100vh]">
+        <TabsContent value="All Profile" className="mt-12 h-[100vh] px-5">
           <div className="flex flex-col items-center gap-3 md:flex-col lg:flex-row lg:items-start">
             <Card className="p-5 w-full">
               <div className="flex flex-row items-center gap-3">

@@ -33,9 +33,9 @@ import {
   DoubleArrowRightIcon
 } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import Image from 'next/image';
-import profileImage from '../../../../../public/assets/profile-image.png';
-import ActionButton from './actions';
+// import Image from 'next/image';
+// import profileImage from '../../../../../public/assets/profile-image.png';
+// import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
 
@@ -108,42 +108,8 @@ export function BusinessTable<TData, TValue>({
   );
 
   function renderCellContent(cell: CustomCellProps<TData, TValue>['cell']) {
-    const { id: columnId } = cell.column;
+    // const { id: columnId } = cell.column;
     // const cellValue = cell.value;
-
-    if (columnId === 'status') {
-      return (
-        <div className="w-16 p-1 flex items-center justify-center rounded-full bg-green-600 text-white text-xs">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </div>
-      );
-    }
-
-    if (columnId === 'registration') {
-      return (
-        <div className="p-1 inline-block rounded-sm bg-purple-600 text-white text-xs text-left">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </div>
-      );
-    }
-
-    if (columnId === 'profile-image' || columnId === 'manager') {
-      return (
-        <div className=" w-full h-full rounded-full">
-          <Image
-            src={profileImage}
-            alt="Profile Image"
-            width={35}
-            height={35}
-            className="rounded-full"
-          />
-        </div>
-      );
-    }
-
-    if (columnId === 'action') {
-      return <ActionButton />;
-    }
 
     return flexRender(cell.column.columnDef.cell, cell.getContext());
   }

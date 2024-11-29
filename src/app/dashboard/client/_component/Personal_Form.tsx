@@ -24,60 +24,96 @@ import { toast } from "sonner"
 import * as z from "zod"
 import { clientIdProps } from "../_types"
 import { PersonalDataformSchema } from "../_types/zodSchema"
-
-
-
-
+import { useEffect, useState } from "react"
+import { Oval } from "react-loader-spinner"
 
 const Personal_Form = ({clientId}:clientIdProps) => {
    
-  const {
-    data,
-    // isLoading
-  } = useGetClientsById(clientId);
-  
-  // console.log("idDetails",data);
-  const {mutate} = useEditClient(clientId);
+  const { data } = useGetClientsById(clientId);
+  const { mutate } = useEditClient(clientId);
 
-  // if(isLoading){
-  //  return <h1>Loading....</h1>
-  // }
-  
+  // State for default values
+  const [defaultValues, setDefaultValues] = useState<z.infer<typeof PersonalDataformSchema>>({
+    pan: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    gender: "Male",
+    mobileNumber: "",
+    dob: "11/07/2024",
+    aadhaar: "112312312321",
+    din: "",
+    dscInfo: "Not_Applicable",
+    loginStatus: "Active",
+    kycStatus: "Pending",
+  });
+
+  // Update default values when data is fetched
+  useEffect(() => {
+    if (data) {
+      setDefaultValues((prevValues) => {
+        // Only update if the data has changed to prevent unnecessary re-renders
+        return prevValues !== data ? {
+          pan: data.pan ?? "",
+          firstName: data.firstName ?? "",
+          lastName: data.lastName ?? "",
+          email: data.email ?? "",
+          gender: data.gender ?? "Male",
+          mobileNumber: data.mobileNumber ?? "",
+          dob: data.dob ?? "11/07/2024",
+          aadhaar: data.aadhaar ?? "112312312321",
+          din: data.din ?? "",
+          dscInfo: data.dscInfo ?? "Not_Applicable",
+          loginStatus: data.loginStatus ?? "Active",
+          kycStatus: data.kycStatus ?? "Pending",
+        } : prevValues;
+      });
+    }
+  }, [data]);
+
   const form = useForm<z.infer<typeof PersonalDataformSchema>>({
     resolver: zodResolver(PersonalDataformSchema),
-    defaultValues:{
-      pan: data?.pan,
-      firstName: data?.firstName,
-      lastName: data?.lastName,
-      email: data?.email ?? "",
-      gender: data?.gender ?? "Male",
-      mobileNumber: data?.mobileNumber ?? "",
-      dob: data?.dob ?? "11/07/2024",
-      aadhaar: data?.aadhaar ?? "112312312321",
-      din: data?.din ?? "",
-      dscInfo: data?.dscInfo ?? "Not_Applicable",
-      loginStatus: data?.loginStatus ?? "Active",
-      kycStatus: data?.kycStatus ?? "Pending",
-    },
+    defaultValues,
   });
-  
+
+  // Reset the form whenever default values are updated
+  useEffect(() => {
+    if (defaultValues && form) {
+      form.reset(defaultValues)
+    }
+  }, [defaultValues, form])
+
+
   function onSubmit(values: z.infer<typeof PersonalDataformSchema>) {
-      mutate(values,{
-        onSuccess: () => {
-          toast.success("Client Updated successfully!");
-          // form.reset();
-        },
-        onError: (error) => {
-          toast.error(`Failed to create client: ${error.message}`);
-        },
-      })
-      
-      console.log("Values",values);
+    mutate(values, {
+      onSuccess: () => {
+        toast.success("Client Updated successfully!");
+      },
+      onError: (error) => {
+        toast.error(`Failed to create client: ${error.message}`);
+      },
+    });
+    console.log("Values", values);
   }
+
+  if(!data){
+    return(
+      <div className="flex justify-center items-center h-full">
+            <Oval
+          visible={true}
+          height="40"
+          width="40"
+          color="#f21300"
+          ariaLabel="oval-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+        </div>
+    )
+  }
+
   return (
     
-    <>
-       {data &&
             <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-w-4xl mx-auto p-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -281,8 +317,6 @@ const Personal_Form = ({clientId}:clientIdProps) => {
               </div>
             </form>
           </Form>
-          }
-    </>
   );
 };
 

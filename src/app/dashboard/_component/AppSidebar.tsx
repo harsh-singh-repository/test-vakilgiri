@@ -164,7 +164,7 @@ export function AppSidebar() {
                                   href={child.url}
                                   className={cn(
                                     "flex items-center space-x-2 text-[14px] focus:text-black text-[#00000080] p-1",
-                                    pathname === child.url && "bg-[#f21300] text-white"
+                                    pathname === child.url && "bg-[#f21300] text-white rounded-md"
                                   )}
                                 >
                                   <child.icon size={16} />
