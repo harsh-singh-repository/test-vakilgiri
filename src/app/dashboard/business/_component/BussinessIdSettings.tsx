@@ -1,9 +1,11 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import BussinessIdForm from "./BussinessIdForm";
+import { BussinessIdSettingsPageProps } from "../_types";
+import UpdateSocials from "./UpdateSocials";
 
 
-const BussinessIdSettings = () => {
+const BussinessIdSettings = ({bussinessId}:BussinessIdSettingsPageProps) => {
   return (
       <div className="bg-white w-full rounded-md">
         <div className="flex flex-col px-4 py-2 gap-y-3">
@@ -21,17 +23,20 @@ const BussinessIdSettings = () => {
               Active
             </div>
           </div>
-          <Tabs defaultValue="account" className="w-full max-h-fit">
+          <Tabs defaultValue="basicDetails" className="w-full max-h-fit">
             <TabsList>
               <TabsTrigger value="basicDetails">Basic Details</TabsTrigger>
               <TabsTrigger value="regestration">Regestration</TabsTrigger>
               <TabsTrigger value="social">Social Handles</TabsTrigger>
             </TabsList>
             <TabsContent value="basicDetails" className="w-full max-h-fit">
-                <BussinessIdForm/>
+                <BussinessIdForm bussinessId={bussinessId}/>
             </TabsContent>
             <TabsContent value="regestration">
               Change your password here.
+            </TabsContent>
+            <TabsContent value="social" className="w-full justify-center">
+              <UpdateSocials bussinessId={bussinessId}/>
             </TabsContent>
           </Tabs>
         </div>

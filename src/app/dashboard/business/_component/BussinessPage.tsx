@@ -1,27 +1,28 @@
 // BusinessPage.tsx
 'use client'
-import {useEffect, useState } from 'react';
+import {useState } from 'react';
 // import { Breadcrumbs } from '@/components/breadcrumbs';
 // import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { columns } from './columns';
-import { BusinessTable } from './business-table';
+import { columns } from './tables/columns';
+import { BusinessTable } from './tables/business-table';
 import BusinessCardSection from './business-card';
 import { useSearchParams } from 'next/navigation';
-import { Business } from '@/constants/data';
-import { fakeBusinesss } from '@/constants/business-table-data';
+// import { Business } from '@/constants/data';
+// import { fakeBusinesss } from '@/constants/business-table-data';
 // import Spinner from '@/components/smooth-spinner';
 import {Oval} from "react-loader-spinner"
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import AddNewBussinessDialog from './add-new-bussiness-dialog';
+import { useGetBussiness } from '@/hooks/business/manage-business';
 
-type ResponseData = {
-  businesses: Business[];
-  totalBusinesses: number;
-  pageCount: number;
-};
+// type ResponseData = {
+//   businesses: Business[];
+//   totalBusinesses: number;
+//   pageCount: number;
+// };
 
 // const breadcrumbItems = [
 //   { title: 'Dashboard', link: '/dashboard' },
@@ -37,42 +38,45 @@ export default function BusinessPage() {
   const [searchValue, setSearchValue] = useState(
     searchParams.get("search") || ""
   );
-  const [responseData, setResponseData] = useState<ResponseData | null>(null);
+  // const [responseData, setResponseData] = useState<ResponseData | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      // const offset = (page - 1) * pageLimit;
-      const totalBusinesses = 10; // You can replace this with actual business count
-      const pageCount = Math.ceil(totalBusinesses / pageLimit);
+  const {data} = useGetBussiness();
+  console.log("data bussiness",data);
 
-      const { businesses: paginatedBusinesses } =
-        (await fakeBusinesss.getBusinesses({
-          page,
-          limit: pageLimit,
-          search: searchValue,
-        })) || { businesses: [] };
-      const fallbackBusinesses =
-        paginatedBusinesses.length > 0
-          ? paginatedBusinesses
-          : await fakeBusinesss.getAll({ search: searchValue });
-      const businesses: Business[] =
-        fallbackBusinesses.length > 0
-          ? fallbackBusinesses
-          : fakeBusinesss.records;
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     // const offset = (page - 1) * pageLimit;
+  //     const totalBusinesses = data.length; // You can replace this with actual business count
+  //     const pageCount = Math.ceil(totalBusinesses / pageLimit);
 
-      setResponseData({
-        businesses,
-        totalBusinesses,
-        pageCount,
-      });
-    };
+  //     const { businesses: paginatedBusinesses } =
+  //       (await fakeBusinesss.getBusinesses({
+  //         page,
+  //         limit: pageLimit,
+  //         search: searchValue,
+  //       })) || { businesses: [] };
+  //     const fallbackBusinesses =
+  //       paginatedBusinesses.length > 0
+  //         ? paginatedBusinesses
+  //         : await fakeBusinesss.getAll({ search: searchValue });
+  //     const businesses: Business[] =
+  //       fallbackBusinesses.length > 0
+  //         ? fallbackBusinesses
+  //         : fakeBusinesss.records;
 
-    fetchData();
-  }, [page, pageLimit, searchValue]);
+  //     setResponseData({
+  //       businesses,
+  //       totalBusinesses,
+  //       pageCount,
+  //     });
+  //   };
 
-  if (!responseData) {
+  //   fetchData();
+  // }, [page, pageLimit, searchValue,data.length]);
+
+  if (!data) {
     return (
-      <div className="flex justify-center item-center h-[100vh]">
+      <div className="flex justify-center items-center h-full">
         <Oval
           visible={true}
           height="40"
@@ -90,7 +94,7 @@ export default function BusinessPage() {
     <div className="flex-1 space-y-4 p-4 pt-6 md:p-4">
       {/* <Breadcrumbs items={breadcrumbItems} /> */}
       <div className="flex items-start justify-between">
-        <div className="text-2xl font-bold text-[#042559]">{`Businesses (${responseData.totalBusinesses})`}</div>
+        <div className="text-2xl font-bold text-[#042559]">{`Businesses (${data.length})`}</div>
 
         <div className="flex justify-center item-center gap-4">
           <Input
@@ -114,15 +118,17 @@ export default function BusinessPage() {
 
       <BusinessCardSection />
 
+      {/* <div className="max-w-full overflow-x-auto"> */}
       <BusinessTable
         searchKey="businessSearch"
         searchValue={searchValue} // Pass the searchValue here
         pageNo={page} // Pass the 'page' value here
         columns={columns}
-        totalUsers={responseData.totalBusinesses} // Pass the total number of businesses here
-        data={responseData.businesses} // Pass the actual business data here
-        pageCount={responseData.pageCount} // Pass the page count here
+        totalUsers={data?.length} // Pass the total number of businesses here
+        data={data} // Pass the actual business data here
+        pageCount={Math.ceil(data.length / pageLimit)} // Pass the page count here
         />
+      {/* </div> */}
     </div>
   );
 }

@@ -7,17 +7,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
+
   return (
     <div className="h-full bg-white">
-    <SidebarProvider>
-      <AppSidebar />
-      <div className="flex flex-col w-full">
-      <Navbar />
-      <main className="bg-gray-50">
-        {children}
-      </main>
-      </div>
-    </SidebarProvider>
-  </div>
+      <SidebarProvider>
+        <AppSidebar />
+        <div className="flex flex-col w-full">
+          <Navbar/>
+          <main className="bg-gray-50 h-full">{children}</main>
+        </div>
+      </SidebarProvider>
+    </div>
   );
 }

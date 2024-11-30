@@ -68,6 +68,61 @@ export interface EditClientData {
   loginStatus: "Active" | "Inactive";
 }
 
+export interface CreateBussiness{
+  business_type: string;
+  business_name: string;
+  business_reg_no: string;
+  business_reg_date: string;
+  business_pan: string;
+  business_mobile: string;
+  state: string;
+  business_address_1: string;
+  business_address_2?: string;
+  city: string;
+  business_pincode: string;
+  business_email: string;
+  business_logo?: File | null;
+  about: string;
+  terms_conditions: boolean;
+}
+export interface editBussinessDetails{
+  businessType?: string | undefined;
+  businessName?: string;
+  businessRegNo?: string;
+  businessRegDate?: string;
+  businessPan?: string;
+  businessMobile?: string;
+  state?: string;
+  businessAddress1?: string;
+  businessAddress2?: string;
+  city?: string;
+  businessPincode?: string;
+  businessEmail?: string;
+  businessLogo?: File | null;
+  about?: string;
+}
+
+export interface BussinessReminderTypes{
+  reminderType: 'Call' | 'Follow_Up' | 'WhatsApp' | 'Email';
+  dueDate: string; // Format: 'dd-MM-yyyy'
+  subject: string;
+  body: string;
+}
+
+export interface ClientReminderTypes{
+  reminderType: 'Call' | 'Follow_Up' | 'WhatsApp' | 'Email';
+  dueDate: string; // Format: 'dd-MM-yyyy'
+  subject: string;
+  body: string;
+}
+export interface BussinessDiscussionType{
+  discussion : string
+}
+
+export interface clientDiscussionType{
+  discussion : string
+}
+
 
 export type MainNavItem = NavItemWithOptionalChildren;
 

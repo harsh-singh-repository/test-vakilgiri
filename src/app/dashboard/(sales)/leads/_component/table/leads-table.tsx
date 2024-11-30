@@ -18,7 +18,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import Image from 'next/image';
-import profileImage from '../../../../../../public/assets/profile-image.png';
+import profileImage from '../../../../../../../public/assets/profile-image.png';
 import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
