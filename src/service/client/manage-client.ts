@@ -11,8 +11,9 @@ import axiosInstance from '@/lib/axiosInstance';
 const CLIENT_API = {
     CREATE: '/client',
     EDIT: (id: string) => `/client/${id}`,
-    DELETE: (id: number) => `/client/delete-client/${id}`,
+    // DELETE: (id: number) => `/client/delete-client/${id}`,
     GET_ALL: '/client/',
+    GET_BUSSINESS:(id:string | string[] | undefined) => `/client/${id}/businesses`,
     GET_BY_ID: (id: string) => `/client/${id}`,
     GET_CURRENT: '/admin/current-user',
     ADD_DICUSSION: (id: string) => `/client/${id}/discussions`,
@@ -50,6 +51,11 @@ export const clientService = {
     addReminder: async (discussion:ClientReminderTypes, id: string) => {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.ADD_REMINDER(id)}`, discussion);
+    },
+
+    getBussinessOfClient:async (id:string | string[] | undefined) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_BUSSINESS(id)}`);
+        return response.data.data;
     },
 
     // delete: async (clientData: CreateClientData) => {

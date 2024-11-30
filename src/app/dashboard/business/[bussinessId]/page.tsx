@@ -6,6 +6,8 @@ import { Plus } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BussinessIdSettings from "../_component/BussinessIdSettings";
 import { useParams } from "next/navigation";
+import FinancialsPage from "../_component/FinancialsPage";
+import RegistrationLayout from "../_component/RegestrationLayout";
 
 const Page = () => {
   
@@ -25,7 +27,7 @@ const Page = () => {
         </div>
       </div>
       <BusinessIdCardSection />
-      <Tabs defaultValue="timeline" className="w-full">
+      <Tabs defaultValue="client" className="w-full">
         <TabsList className="bg-white">
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="client">Client</TabsTrigger>
@@ -39,8 +41,11 @@ const Page = () => {
         <TabsContent value="account">
           Make changes to your account here.
         </TabsContent>
-        <TabsContent value="password">
-          Change your password here.
+        <TabsContent value="financials">
+          <FinancialsPage/>
+        </TabsContent>
+        <TabsContent value="regestration">
+           <RegistrationLayout/>
         </TabsContent>
         <TabsContent value="settings">
          <BussinessIdSettings bussinessId={paramsId}/>

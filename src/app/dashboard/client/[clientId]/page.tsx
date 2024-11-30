@@ -27,10 +27,23 @@ import Component from "../_component/Address_Form";
 import { Separator } from "@/components/ui/separator";
 import { useParams } from "next/navigation";
 import { Card } from "@/components/ui/card";
+import { useGetBussinessOfClient } from "@/hooks/users/manage-client";
+import { useRouter } from "next/navigation";
+import { BusinessDetails } from "../_types";
 
 function Page() {
   const params = useParams();
   const { clientId } = params;
+
+  const router = useRouter();
+
+  const {data} = useGetBussinessOfClient(clientId);
+
+  console.log("Bussiness of Client",data);
+
+  const handleRouteClick = (id:string) => {
+        router.push(`/dashboard/business/${id}`)
+  }
 
   const tabs = [
     { name: "Dashboard" },
@@ -41,10 +54,10 @@ function Page() {
     { name: "All Profile" },
   ];
 
-  const bussinessPerson = [
-    { name: "MOHIT WELFARE FOUNDATION", company: "Section 8" },
-    { name: "SUMOHIT ONLINE PRIVATE LIMITED", company: "Private Limited" },
-  ];
+  // const bussinessPerson = [
+  //   { name: "MOHIT WELFARE FOUNDATION", company: "Section 8" },
+  //   { name: "SUMOHIT ONLINE PRIVATE LIMITED", company: "Private Limited" },
+  // ];
   return (
     <Tabs defaultValue="Dashboard">
       <div className="relative rounded-sm h-full bg-muted flex flex-col top-0 mt-3">
@@ -72,7 +85,7 @@ function Page() {
             </div>
           </div>
           <div className="flex gap-x-2 gap-y-2 flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
-            {bussinessPerson.map((bussiness,index) => {
+            {data?.map((bussiness:BusinessDetails,index:number) => {
               return (
                 <Card className="w-[350px]" key={index}>
                   <div className="flex flex-col">
@@ -80,16 +93,16 @@ function Page() {
                       <div className="h-10 w-10 bg-slate-400 rounded-md drop-shadow-lg"></div>
                       <div className="flex flex-col">
                         <span className="text-sm uppercase font-medium">
-                          {bussiness.name}
+                          {bussiness.businessName}
                         </span>
-                        <span className="text-xs">{bussiness.company}</span>
+                        <span className="text-xs">{bussiness.businessType}</span>
                       </div>
                     </div>
                     <div className="flex item-center justify-between p-4">
                       <div className="bg-slate-600 px-2 text-[10px] text-white rounded-md flex items-center">
                         <span>Active</span>
                       </div>
-                      <Eye size={"20"} className="text-[#091747]" />
+                      <Eye size={"20"} className="text-[#091747] cursor-pointer" onClick={() => handleRouteClick(bussiness.id)}/>
                     </div>
                   </div>
                 </Card>

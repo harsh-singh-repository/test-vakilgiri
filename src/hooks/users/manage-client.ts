@@ -42,6 +42,15 @@ export const useGetClientsById = (id:string) =>{
     return query;
 }
 
+export const useGetBussinessOfClient = (id:string | string[] | undefined) =>{
+    const query =  useQuery({
+        queryKey: ['clients',id],
+        queryFn:() => clientService.getBussinessOfClient(id),
+        enabled:!!id,
+    });
+    return query;
+}
+
 export const useAddClientDisscussion = (id:string) => {
     // const queryClient = useQueryClient();
     // const toast = useCustomToast();
