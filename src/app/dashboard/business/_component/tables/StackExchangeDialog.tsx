@@ -18,6 +18,7 @@ import { format } from "date-fns";
 import {
   CalendarIcon,
   Plus,
+  Trash2,
   //  X
 } from "lucide-react";
 
@@ -27,11 +28,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Form,
-  FormControl,
-  FormField,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField } from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -51,11 +48,17 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   useAddBusinessDisscussion,
   useAddBusinessReminder,
+  useDeleteBussinessDisscussion,
   useGetBussinessById,
+  useGetBussinessDisscussion,
 } from "@/hooks/business/manage-business";
 import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
 import { useState } from "react";
 import { toast } from "sonner";
+import { BusinessDiscussion } from "../../_types";
+
+import { RxAvatar } from "react-icons/rx";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -88,6 +91,8 @@ export const StackBussinessExchangeDialog = ({
   const [isSubmittingDiscussion, setIsSubmittingDiscussion] = useState(false);
   const [isSubmittingReminder, setIsSubmittingReminder] = useState(false);
 
+  const queryClient = useQueryClient();
+
   const discussionForm = useForm<z.infer<typeof discussionSchema>>({
     resolver: zodResolver(discussionSchema),
     defaultValues: {
@@ -109,9 +114,26 @@ export const StackBussinessExchangeDialog = ({
   console.log(typeof openDialogId);
   const { data } = useGetBussinessById(openDialogId);
 
+  const { data: bussinessDisscussionData } =
+    useGetBussinessDisscussion(openDialogId);
+
   const { mutate } = useAddBusinessDisscussion(openDialogId);
 
   const { mutate: addReminder } = useAddBusinessReminder(openDialogId);
+
+  const {mutate:deleteDisscussion} = useDeleteBussinessDisscussion();
+
+  const handleDeleteDisscussion = ({ id, bussinessId }: { id: string; bussinessId: string }) =>{
+     deleteDisscussion({id,bussinessId},{
+      onSuccess:()=>{
+         toast.success("Disscussion Delted Successfully");
+         queryClient.invalidateQueries({ queryKey: ["bussinessDisscussion"] });
+      },
+      onError:(error)=>{
+        toast.error(`Dissussion not Submited : ${error}`);
+      }
+     });
+  }
 
   console.log("Dialog Data", data);
 
@@ -122,6 +144,8 @@ export const StackBussinessExchangeDialog = ({
     mutate(values, {
       onSuccess: () => {
         toast.success("Dissussion Submited");
+        queryClient.invalidateQueries({ queryKey: ["bussinessDisscussion"] });
+        discussionForm.reset();
       },
       onError: (error) => {
         toast.error(`Dissussion not Submited : ${error}`);
@@ -182,26 +206,59 @@ export const StackBussinessExchangeDialog = ({
                                 <FormControl>
                                   <Textarea
                                     placeholder="Enter Description"
-                                    className={cn("min-h-[60px] border-gray-300",error &&
-                                      "border-red-500 focus:border-red-500 focus:ring-red-500")}
+                                    className={cn(
+                                      "min-h-[60px] border-gray-300",
+                                      error &&
+                                        "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                    )}
                                     {...field}
                                   />
                                 </FormControl>
                               </div>
                             )}
                           />
-                          <Button
-                            type="submit"
-                            className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-xs px-2 right-0"
-                            disabled={isSubmittingDiscussion}
-                          >
-                            {isSubmittingDiscussion ? "Saving..." : "Save"}
-                          </Button>
+                          <div className="flex justify-end">
+                            <button
+                              type="submit"
+                              className="max-w-fit text-[10px] bg-[#F21300] font-thin px-[10px] rounded-md text-white"
+                              disabled={isSubmittingDiscussion}
+                            >
+                              {isSubmittingDiscussion ? "Saving..." : "Save"}
+                            </button>
+                          </div>
                         </div>
                       </form>
                     </Form>
                   </AccordionContent>
                 </AccordionItem>
+                {bussinessDisscussionData && (
+                  <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
+                    {bussinessDisscussionData.map(
+                      (discussion: BusinessDiscussion, index: number) => (
+                        <div
+                          className="flex flex-row gap-2 items-center bg-[#E9E9E9] rounded-md px-2 py-1 "
+                          key={index}
+                        >
+                          <RxAvatar size={30} />
+                          <div className="flex flex-col w-full">
+                            <span className="font-bold">Nahar Singh</span>
+                            <span className="font-medium">
+                              {discussion.body}
+                            </span>
+                           <div className="flex flex-row justify-between w-full">
+                               <div className="font-thin text-[#F21300]">
+                                    {discussion.createdAt}
+                                </div>
+                               <div className="text-[#F21300] cursor-pointer" onClick={() => handleDeleteDisscussion({ id: discussion.id, bussinessId: discussion.businessId })}>
+                                  <Trash2 size={"15"}/>
+                               </div>
+                           </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
 
                 <AccordionItem value="reminders" className="mt-4">
                   <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-full text-[#091747] text-[15px] font-medium">
@@ -345,13 +402,15 @@ export const StackBussinessExchangeDialog = ({
                           )}
                         />
 
-                        <Button
-                          type="submit"
-                          className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-xs px-2"
-                          disabled={isSubmittingReminder}
-                        >
-                          {isSubmittingReminder ? "Saving..." : "Save"}
-                        </Button>
+                        <div className="justify-end flex">
+                          <button
+                            type="submit"
+                            className="max-w-fit text-[10px] bg-[#F21300] font-thin px-[10px] rounded-md text-white"
+                            disabled={isSubmittingReminder}
+                          >
+                            {isSubmittingReminder ? "Saving..." : "Save"}
+                          </button>
+                        </div>
                       </form>
                     </Form>
                   </AccordionContent>
@@ -368,13 +427,20 @@ export const StackBussinessExchangeDialog = ({
                     <AvatarImage src="/placeholder.svg" />
                     <AvatarFallback>PV</AvatarFallback>
                   </Avatar>
-                  <Button
-                    size="icon"
-                    variant="default"
-                    className="h-8 w-8 bg-transparent text-[#f21300] hover:bg-transparent"
-                  >
-                    <Plus className="h-5 w-5" />
-                  </Button>
+                  <Popover>
+                    <PopoverTrigger>
+                    <Button
+                      size="icon"
+                      variant="default"
+                      className="h-8 w-8 bg-transparent text-[#f21300] hover:bg-transparent"
+                    >
+                      <Plus className="h-5 w-5" />
+                    </Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        Assign manager
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
               <div className="rounded-lg px-2 py-2">

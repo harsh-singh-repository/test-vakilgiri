@@ -18,19 +18,32 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { ForgetPasswordProps } from "../_types";
 import { ForgetPasswordformSchema } from "../_types/zodSchema";
+import { useForgetPassoword } from "@/hooks/auth/manage-auth";
+import { toast } from "sonner";
 
 const ForgetPassword: React.FC<ForgetPasswordProps> = ({
-  handleBackToLogin
+  handleBackToLogin,forgetPassword,reset
 }) => {
   const form = useForm<z.infer<typeof ForgetPasswordformSchema>>({
     resolver: zodResolver(ForgetPasswordformSchema),
     defaultValues: {
       email: "",
     },
-  })
+  });
+
+  const {mutate} = useForgetPassoword();
 
   function onSubmit(data: z.infer<typeof ForgetPasswordformSchema>) {
-    alert("Reset Password Successful"+data)
+      mutate(data,{
+        onSuccess:()=>{
+           toast.success(`OTP sended to your email`);
+           reset(true);
+           forgetPassword(false);
+        },
+        onError:(error)=>{
+          toast.error(`Failed in Sending otp: ${error}`)
+        }
+      })
   }
 
   return (

@@ -41,6 +41,7 @@ import * as z from "zod";
 import { AddBussinessformSchema } from "../_types/zodSchema";
 import { useAddBusiness } from "@/hooks/business/manage-business";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 const states = [
   "Andhra_Pradesh",
@@ -70,6 +71,8 @@ const AddNewBussinessDialog = () => {
   // const [date, setDate] = React.useState<Date>();
   const [logo, setLogo] = React.useState<string | null>(null);
 
+  const queryClient = useQueryClient();
+
   const { mutate: addBussiness } = useAddBusiness();
 
   const form = useForm<z.infer<typeof AddBussinessformSchema>>({
@@ -97,6 +100,7 @@ const AddNewBussinessDialog = () => {
     addBussiness(data, {
       onSuccess: () => {
         toast.success("Bussiness Added Succesfully");
+        queryClient.invalidateQueries({queryKey:['bussiness']})
       },
       onError: (error) => {
         console.log("Error",error);

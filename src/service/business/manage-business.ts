@@ -6,7 +6,9 @@ const BUSINESS_API = {
     CREATE: '/business',
     EDIT: (id: string | string[] | undefined) => `/business/${id}/`,
     ADD_DICUSSION: (id: string) => `/business/${id}/discussions`,
+    GET_DICUSSION: (id: string) => `/business/${id}/discussions`,
     ADD_REMINDERS: (id: string) => `/business/${id}/reminders`,
+    DELETE_DISSCUSSION: (id: string,bussinessId:string) => `/business/${bussinessId}/discussions/${id}`,
     GET_ALL: '/business',
     GET_BY_ID: (id: string | string[] | undefined) => `/business/${id}/`,
     // GET_CURRENT: '/admin/current-user'
@@ -34,6 +36,11 @@ export const bussinessService = {
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.ADD_DICUSSION(id)}`, discussion);
     },
 
+    getBussinessDisscussion: async (id:string) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.GET_DICUSSION(id)}`);
+        return response.data.data;
+    },
+
     addReminder: async (reminder:BussinessReminderTypes, id: string) => {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.ADD_REMINDERS(id)}`, reminder);
@@ -44,10 +51,10 @@ export const bussinessService = {
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.EDIT(id)}`, editBussinessDetails);
     },
 
-    // delete: async (clientData: CreateClientData) => {
-    //     return await axiosInstance.delete(
-    //       `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE}`, clientData);
-    // },
+    deleteDisscussion: async (id:string,bussinessId:string) => {
+        return await axiosInstance.delete(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.DELETE_DISSCUSSION(id,bussinessId)}`);
+    },
 
 
 };

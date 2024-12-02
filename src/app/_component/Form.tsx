@@ -6,11 +6,13 @@ import { useState } from "react";
 import ForgetPassword from "./ForgetPassword";
 import Login from "./Login";
 import Register from "./Register";
+import Reset from "./Reset";
 
 const Form = () => {
   const [login, setLogin] = useState<boolean>(true);
   const [forgetPassword, setForgetPassword] = useState<boolean>(false);
   const [registration, setRegistration] = useState<boolean>(false);
+  const [reset, setReset] = useState<boolean>(false);
 
   const handleForgetPassword = () => {
     setLogin(false);
@@ -51,12 +53,16 @@ const Form = () => {
 
           {forgetPassword && 
           (
-            <ForgetPassword handleBackToLogin={handleBackToLogin}/>
+            <ForgetPassword handleBackToLogin={handleBackToLogin} reset={setReset} forgetPassword={setForgetPassword}/>
           )
         }
 
           {registration && (
             <Register alreadyLogin={alreadyLogin}/>
+          )}
+
+          {reset && (
+             <Reset/>
           )}
         </div>
       </div>

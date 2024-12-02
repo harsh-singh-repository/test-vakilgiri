@@ -29,6 +29,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useAddClient } from "@/hooks/users/manage-client";
 import { toast } from "sonner";
 import { AddClientformSchema } from "../_types/zodSchema";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 
@@ -72,13 +73,20 @@ const AddClientDialog = () => {
   const { isValid } = useFormState({
     control: form.control,
   });
+  
+  const queryClient = useQueryClient();
 
   async function onSubmit(formData: z.infer<typeof AddClientformSchema>) {
+
     
     // const jsonData = JSON.stringify(formData, null, 2);
     addUser(formData, {
       onSuccess: () => {
         toast.success("Client created successfully!");
+
+        // Invalidate queries to refetch the updated list of clients
+          queryClient.invalidateQueries({queryKey:['clients']});
+    
         form.reset();
       },
       onError: (error) => {
