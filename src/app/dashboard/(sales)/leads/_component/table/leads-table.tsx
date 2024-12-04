@@ -19,7 +19,7 @@ import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import Image from 'next/image';
 import profileImage from '../../../../../../../public/assets/profile-image.png';
-import ActionButton from './actions';
+// import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
 
@@ -164,31 +164,6 @@ export function LeadsTable<TData, TValue>({
         </div>
       );
     }
-
-    if(columnId === 'date'){
-      return(
-          <span className="">23-09-24</span>
-      )
-    }
-    if(columnId === 'service'){
-      return(
-          <span className="">ISO certification</span>
-      )
-    }
-    if(columnId === 'leadId'){
-      return(
-          <span className="">1</span>
-      )
-    }
-    if(columnId === 'businessOrClient'){
-      return(
-          <span className="">Karan Garg</span>
-      )
-    }
-  
-    if (columnId === 'action') {
-      return <ActionButton />;
-    }
   
     return cellValue;
   };
@@ -198,7 +173,7 @@ export function LeadsTable<TData, TValue>({
       <ScrollArea className="w-full max-h-fit overflow-y-auto border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
         <Table className="border rounded-2xl bg-white h-full">
           <TableHeader className="bg-[#042559] text-white text-center">
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table?.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id} className="text-white text-center">
@@ -210,7 +185,7 @@ export function LeadsTable<TData, TValue>({
           </TableHeader>
 
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel()?.rows?.length ? (
              table.getRowModel().rows.slice(0, 20).map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (

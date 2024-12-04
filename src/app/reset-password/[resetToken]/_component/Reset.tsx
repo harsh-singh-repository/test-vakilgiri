@@ -21,27 +21,47 @@ import {
 import { Loader2 } from "lucide-react";
 // import { useRouter } from "next/navigation";
 import { ResetformSchema } from "../_types/zodSchema";
+import { useResetPassoword } from "@/hooks/auth/manage-auth";
+import { toast } from "sonner";
+import { useParams, useRouter } from "next/navigation";
 
 // Define schema with gender and birthdate fields
 
 
 
 const Reset= ({}) => {
+   
+  const params = useParams();
+  const router = useRouter();
+  const token = params.resetToken;
+
   const form = useForm<z.infer<typeof ResetformSchema>>({
     resolver: zodResolver(ResetformSchema),
     defaultValues: {
       password: "",
       confirmPassword:"",
+      token:token,
     },
   });
   // const [date, setDate] = React.useState<Date | undefined>(new Date());
 //   const router = useRouter();
   const [loader] = useState<boolean>(false);
 
+  const {mutate:resetPassword} = useResetPassoword();
+
   async function onSubmit(data: z.infer<typeof ResetformSchema>) {
     console.log(data);
-
-    // const response = 
+    
+    resetPassword(data,{
+      onSuccess:()=>{
+        toast.success(`Password reset successfull`);
+        router.push("/");
+      },
+      onError:(error)=>{
+         toast.error(`Password reseting failed: ${error}`)
+      }
+    })
+    
   }
 
   return (
@@ -78,6 +98,26 @@ const Reset= ({}) => {
             name="confirmPassword"
             render={({ field }) => (
               <div>
+                <FormLabel className="text-[#091747] font-[600] text-[13px]">
+                  Confirm Password
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Confirm password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </div>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="token"
+            render={({ field }) => (
+              <div className="hidden">
                 <FormLabel className="text-[#091747] font-[600] text-[13px]">
                   Confirm Password
                 </FormLabel>

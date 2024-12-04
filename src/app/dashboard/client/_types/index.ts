@@ -34,4 +34,21 @@ export interface BusinessDetails {
     createdAt: string; // ISO Date string
     slug: string | null;
     isDisabled: boolean;
-  }
+}
+
+export interface clientDisscussionProps{
+    body: string;
+    businessId: string | null;
+    clientId: string;
+    createdAt: string; // ISO 8601 format for date-time
+    creatorId: string;
+    id: string;
+    isDisabled: boolean;
+    leadId: string | null;
+    modifiedAt: string; // ISO 8601 format for date-time
+    projectId: string | null;
+    reminderId: string | null;
+    slug: string | null;
+    type: string | null; // Assuming specific types based on `type`
+    userId: string | null;
+}

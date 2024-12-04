@@ -1,27 +1,39 @@
 'use client';
-import { Client } from '@/constants/data';
+import { Leads } from '@/constants/data';
 import { ColumnDef } from '@tanstack/react-table';
+import ActionButton from './actions';
 
-export const columns: ColumnDef<Client>[] = [
+export const columns: ColumnDef<Leads>[] = [
   {
-    accessorKey: 'leadId',
+    accessorKey: 'id',
     header: 'Lead ID'
   },
   {
-    accessorKey: 'date',
-    header: 'Date'
+    accessorKey: 'createdAt',
+    header: 'Date',
+    cell:({row})=>{
+      return(
+        <span>{row.original.createdAt.split('T')[0]}</span>
+      )
+    }
+    },
+  {
+    accessorKey:'service',
+    header: 'Service',
+    cell:({row})=>{
+      return(
+        <span>{row.original.service?.replace(/_/g, ' ')}</span>
+      )
+    }
   },
   {
-    accessorKey: 'service',
-    header: 'Service'
-  },
-  {
-    accessorKey: 'businessOrClient',
-    header: 'Business/Client'
-  },
-  {
-    accessorKey: 'companyName',
-    header: 'Company Name'
+    accessorKey: 'firstName',
+    header: 'Business/Client',
+    cell:({row})=>{
+      return(
+        <span className='text-[#F21300]'>{row.original.firstName + " " + row.original.lastName}</span>
+      )
+    }
   },
   {
     accessorKey: 'mobile',
@@ -46,5 +58,11 @@ export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: 'action',
     header: 'Action',
+    cell:({row})=>{
+      const id = row.original.id;
+       return(
+        <ActionButton id={id}/>
+       )
+    }
   }
 ];

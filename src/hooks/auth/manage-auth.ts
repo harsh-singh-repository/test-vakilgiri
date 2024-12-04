@@ -8,3 +8,10 @@ export const useForgetPassoword = ()=> {
         mutationFn:auth_services.forgetPassword,
      })
 }
+
+export const useResetPassoword = ()=> {
+     return useMutation({
+        mutationFn:auth_services.resetPassword,
+     })
+}
+

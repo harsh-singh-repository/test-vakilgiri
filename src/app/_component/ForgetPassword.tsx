@@ -22,7 +22,7 @@ import { useForgetPassoword } from "@/hooks/auth/manage-auth";
 import { toast } from "sonner";
 
 const ForgetPassword: React.FC<ForgetPasswordProps> = ({
-  handleBackToLogin,forgetPassword,reset
+  handleBackToLogin
 }) => {
   const form = useForm<z.infer<typeof ForgetPasswordformSchema>>({
     resolver: zodResolver(ForgetPasswordformSchema),
@@ -37,8 +37,6 @@ const ForgetPassword: React.FC<ForgetPasswordProps> = ({
       mutate(data,{
         onSuccess:()=>{
            toast.success(`OTP sended to your email`);
-           reset(true);
-           forgetPassword(false);
         },
         onError:(error)=>{
           toast.error(`Failed in Sending otp: ${error}`)
