@@ -88,7 +88,7 @@ export  const AddClientformSchema = z.object({
   });
 
   export const discussionSchema = z.object({
-    discussion: z.string().min(1, "Discussion is required").optional(),
+    discussion: z.string().min(1, "Discussion is required"),
   })
   
   export const reminderSchema = z.object({

@@ -17,7 +17,9 @@ const CLIENT_API = {
     GET_BY_ID: (id: string) => `/client/${id}`,
     GET_CURRENT: '/admin/current-user',
     ADD_DICUSSION: (id: string) => `/client/${id}/discussions`,
+    GET_DICUSSION: (id: string) => `/client/${id}/discussions`,
     ADD_REMINDER: (id: string) => `/client/${id}/reminders`,
+    DELETE_DISCUSSION: (id: string,clientId:string) => `/client/${clientId}/discussions/${id}`
 } as const;
 
 export const clientService = {
@@ -47,6 +49,11 @@ export const clientService = {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.ADD_DICUSSION(id)}`, discussion);
     },
+
+    getDiscussion: async (id: string) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_DICUSSION(id)}`);
+        return response.data.data;
+    },
     
     addReminder: async (discussion:ClientReminderTypes, id: string) => {
         return await axiosInstance.post(
@@ -56,6 +63,11 @@ export const clientService = {
     getBussinessOfClient:async (id:string | string[] | undefined) => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_BUSSINESS(id)}`);
         return response.data.data;
+    },
+
+    deleteDisscussion: async (id:string,clientId:string) => {
+        return await axiosInstance.delete(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE_DISCUSSION(id,clientId)}`);
     },
 
     // delete: async (clientData: CreateClientData) => {

@@ -1,4 +1,7 @@
+import { ServicesType } from "@/app/dashboard/(sales)/leads/_types/zodSchema";
+import { stateZodSchema } from "@/app/dashboard/business/_types/zodSchema";
 import { Icons } from "@/components/icons";
+import {z} from "zod";
 
 export interface NavItem {
   title: string;
@@ -11,6 +14,7 @@ export interface NavItem {
   isActive?: boolean;
   items?: NavItem[];
 }
+
 
 export interface NavItemWithChildren extends NavItem {
   items: NavItemWithChildren[];
@@ -111,16 +115,39 @@ export interface BussinessReminderTypes{
 
 export interface ClientReminderTypes{
   reminderType: 'Call' | 'Follow_Up' | 'WhatsApp' | 'Email';
-  dueDate: string; // Format: 'dd-MM-yyyy'
-  subject: string;
-  body: string;
+  dueDate?: string; // Format: 'dd-MM-yyyy'
+  subject?: string;
+  body?: string;
+}
+export interface LeadsReminderTypes{
+  reminderType: 'Call' | 'Follow_Up' | 'WhatsApp' | 'Email';
+  dueDate?: string; // Format: 'dd-MM-yyyy'
+  subject?: string;
+  body?: string;
 }
 export interface BussinessDiscussionType{
   discussion : string
 }
 
 export interface clientDiscussionType{
-  discussion : string
+  discussion : string | undefined;
+}
+
+export interface LeadsDiscussionType{
+  discussion : string;
+}
+
+export interface CreateLeadData{
+  existing: boolean;
+  state: z.infer<typeof stateZodSchema>;
+  mobile: string;
+  email: string;
+  firstName: string;  
+  lastName: string;
+  value: string;
+  businessId?: string; // Commented fields are made optional
+  client?: string;     // Optional and validated elsewhere
+  service?: z.infer<typeof ServicesType>; 
 }
 
 

@@ -50,14 +50,22 @@ export type Business = {
 
 
 export type Leads = {
-  leadId: number;
-  date: string;
-  service: string;
-  businessOrClient: string;
-  companyName: string | null;
-  mobile: string;
-  value: string;
-  assigned: string;
-  convertedOn: string | null;
-  status: string;
+    id: string;
+    businessId: string | null;
+    clientId: string | null;
+    conversionDate: string | null;
+    email: string;
+    existing: boolean;
+    firstName: string;
+    lastName: string;
+    mobile: string;
+    service: string | null;
+    state: string;
+    status: string | null;
+    value: string;
+    creatorId: string;
+    modifiedAt: string;
+    createdAt: string;
+    slug: string | null;
+    isDisabled: boolean;
 };

@@ -18,6 +18,7 @@ import { format } from "date-fns";
 import {
   CalendarIcon,
   Plus,
+  Trash2,
   //  X
 } from "lucide-react";
 
@@ -27,11 +28,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Form,
-  FormControl,
-  FormField,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField } from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -51,11 +48,16 @@ import {
   useAddClientDisscussion,
   useGetClientsById,
   useAddClientReminder,
+  useGetClientDisscussion,
+  useDeleteClientDiscussion,
 } from "@/hooks/users/manage-client";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
 import { useState } from "react";
 import { toast } from "sonner";
+import { RxAvatar } from "react-icons/rx";
+import { clientDisscussionProps } from "../../_types";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -92,17 +94,35 @@ export const StackExchangeDialog = ({
   console.log("Dialog ID: ", openDialogId);
   console.log(typeof openDialogId);
   const { data } = useGetClientsById(openDialogId);
+  const {data:clientDisscussionData} = useGetClientDisscussion(openDialogId)
 
   const { mutate: addDiscussion } = useAddClientDisscussion(openDialogId);
   const { mutate: addReminder } = useAddClientReminder(openDialogId);
+  const {mutate:deleteDiscussion} = useDeleteClientDiscussion()
 
-  console.log("Dialog Data", data);
+  const queryClient = useQueryClient();
+
+
+  const handleDeleteDisscussion = ({ id, clientId }: { id: string; clientId: string }) =>{
+    deleteDiscussion({id,clientId},{
+     onSuccess:()=>{
+        toast.success("Disscussion Deleted Successfully");
+        queryClient.invalidateQueries({ queryKey: ["clientDisscussion"] });
+     },
+     onError:(error)=>{
+       toast.error(`Dissussion not Submited : ${error}`);
+     }
+    });
+ }
+
+  console.log("Dialog Disscussion", clientDisscussionData);
 
   async function onDiscussionSubmit(values: z.infer<typeof discussionSchema>) {
     setIsSubmittingDiscussion(true);
     addDiscussion(values, {
       onSuccess: () => {
         toast.success("Dissussion Submited");
+        queryClient.invalidateQueries({ queryKey: ["clientDisscussion"] });
       },
       onError: (error) => {
         toast.error(`Dissussion not Submited : ${error}`);
@@ -139,7 +159,7 @@ export const StackExchangeDialog = ({
           <div className="text-[17px] text-[#091747] uppercase font-bold">
             {data?.firstName + " " + data?.lastName}
           </div>
-          <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-2 xl:grid-cols-[500px,250px]">
+          <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-[500px,250px] xl:grid-cols-[500px,250px]">
             <div className="w-full max-w-2xl mx-auto  p-4">
               <Accordion type="multiple" className="w-full">
                 <AccordionItem value="discussions" className="">
@@ -155,7 +175,7 @@ export const StackExchangeDialog = ({
                         className="space-y-1"
                       >
                         <div className="flex flex-col gap-y-4">
-                        <FormField
+                          <FormField
                             control={discussionForm.control}
                             name="discussion"
                             render={({ field, fieldState: { error } }) => (
@@ -163,27 +183,59 @@ export const StackExchangeDialog = ({
                                 <FormControl>
                                   <Textarea
                                     placeholder="Enter Description"
-                                    className={cn("min-h-[60px] border-gray-300",error &&
-                                      "border-red-500 focus:border-red-500 focus:ring-red-500")}
+                                    className={cn(
+                                      "min-h-[60px] border-gray-300",
+                                      error &&
+                                        "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                    )}
                                     {...field}
                                   />
                                 </FormControl>
                               </div>
                             )}
                           />
-                          <Button
+                          <div className="flex justify-end">
+                          <button
                             type="submit"
-                            className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-xs px-2 right-0"
+                            className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-[12px] px-2 right-0 rounded-md"
                             disabled={isSubmittingDiscussion}
                           >
                             {isSubmittingDiscussion ? "Saving..." : "Save"}
-                          </Button>
+                          </button>
+                          </div>
                         </div>
                       </form>
                     </Form>
                   </AccordionContent>
                 </AccordionItem>
-
+                {clientDisscussionData && (
+                  <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
+                    {clientDisscussionData.map(
+                      (discussion: clientDisscussionProps, index: number) => (
+                        <div
+                          className="flex flex-row gap-2 items-center bg-[#E9E9E9] rounded-md px-2 py-1 "
+                          key={index}
+                        >
+                          <RxAvatar size={30} />
+                          <div className="flex flex-col w-full">
+                            <span className="font-bold">Nahar Singh</span>
+                            <span className="font-medium">
+                              {discussion.body}
+                            </span>
+                           <div className="flex flex-row justify-between w-full">
+                               <div className="font-thin text-[#F21300]">
+                                    {discussion.createdAt.split('T')[0]}
+                                </div>
+                               <div className="text-[#F21300] cursor-pointer" onClick={() => handleDeleteDisscussion({ id: discussion.id, clientId: discussion.clientId })}>
+                                  <Trash2 size={"15"}/>
+                               </div>
+                           </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
                 <AccordionItem value="reminders" className="mt-4">
                   <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-full text-[#091747] text-[15px] font-medium">
                     <span>Reminders</span>
@@ -326,13 +378,15 @@ export const StackExchangeDialog = ({
                           )}
                         />
 
-                        <Button
+                       <div className="flex justify-end">
+                       <button
                           type="submit"
-                          className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-xs px-2"
+                          className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-[12px] px-2 rounded-md"
                           disabled={isSubmittingReminder}
                         >
                           {isSubmittingReminder ? "Saving..." : "Save"}
-                        </Button>
+                        </button>
+                       </div>
                       </form>
                     </Form>
                   </AccordionContent>
@@ -374,7 +428,7 @@ export const StackExchangeDialog = ({
                   </div>
                   <div className="text-[12px]">
                     <span className="font-semibold">Email:</span>{" "}
-                    {data?.creator.email}
+                    {data?.creator?.email}
                   </div>
                   <div className="text-[12px]">
                     <span className="font-semibold">Manager:</span> DEV

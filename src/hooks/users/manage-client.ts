@@ -38,6 +38,15 @@ export const useGetClientsById = (id:string) =>{
     return query;
 }
 
+export const useGetClientDisscussion = (id:string) =>{
+    const query =  useQuery({
+        queryKey: ['clientDisscussion',id],
+        queryFn:() => clientService.getDiscussion(id),
+        enabled:!!id,
+    });
+    return query;
+}
+
 export const useGetBussinessOfClient = (id:string | string[] | undefined) =>{
     const query =  useQuery({
         queryKey: ['clients',id],
@@ -59,6 +68,11 @@ export const useAddClientDisscussion = (id:string) => {
     });
 };
 
+export const useDeleteClientDiscussion = () => {
+    return useMutation({
+       mutationFn:({ id, clientId }: { id: string; clientId: string })=> clientService.deleteDisscussion(id,clientId)
+    })
+};
 
 export const useEditClient = (id:string) => {
     // const queryClient = useQueryClient();
