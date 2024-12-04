@@ -24,6 +24,14 @@ export const RegisterformSchema = z.object({
       .string()
       .min(8, { message: "Password must be at least 8 characters" }),
   });
+ export const ResetformSchema = z.object({
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters" }),
+    confirmPassword: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters" }),
+  });
 
 export const OtpFormSchema = z.object({
     pin: z.string().min(6, {

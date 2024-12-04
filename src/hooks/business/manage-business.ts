@@ -18,6 +18,21 @@ export const useGetBussiness = () => {
     return query;
 };
 
+export const useGetBussinessDisscussion = (id:string) =>{
+    const query =  useQuery({
+        queryKey: ['bussinessDisscussion',id],
+        queryFn:() => bussinessService.getBussinessDisscussion(id),
+        enabled:!!id,
+    });
+    return query;
+}
+
+export const useDeleteBussinessDisscussion = () => {
+   return useMutation({
+      mutationFn:({ id, bussinessId }: { id: string; bussinessId: string })=>bussinessService.deleteDisscussion(id,bussinessId)
+   })
+}
+
 export const useAddBusiness = () => {
     // const queryClient = useQueryClient();
     // const toast = useCustomToast();

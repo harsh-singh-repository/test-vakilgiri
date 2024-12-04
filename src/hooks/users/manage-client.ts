@@ -22,14 +22,10 @@ export const useGetClients = () => {
 };
 
 export const useAddClient = () => {
-    // const queryClient = useQueryClient();
     // const toast = useCustomToast();
 
     return useMutation({
         mutationFn: clientService.create,
-        // onSuccess: (response) =>
-        //     handleMutationSuccess(response, toast, queryClient, ["clients"]),
-        // onError: (error) => handleMutationError(error, toast),
     });
 };
 

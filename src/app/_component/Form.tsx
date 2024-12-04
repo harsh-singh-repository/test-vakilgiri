@@ -6,11 +6,13 @@ import { useState } from "react";
 import ForgetPassword from "./ForgetPassword";
 import Login from "./Login";
 import Register from "./Register";
+import Reset from "./Reset";
 
 const Form = () => {
   const [login, setLogin] = useState<boolean>(true);
   const [registration, setRegistration] = useState<boolean>(false);
   const [forgetPassword, setForgetPassword] = useState<boolean>(false);
+  const [reset, setReset] = useState<boolean>(false);
 
   const handleForgetPassword = () => {
     setLogin(false);
@@ -45,17 +47,22 @@ const Form = () => {
           </div>
 
           {login && (
-            <Login
-              handleForgetPassword={handleForgetPassword}
-              handleRegistration={handleRegistration}
-            />
+            <Login handleForgetPassword={handleForgetPassword} handleRegistration={handleRegistration}/>
+          ) }
+
+          {forgetPassword && 
+          (
+            <ForgetPassword handleBackToLogin={handleBackToLogin} reset={setReset} forgetPassword={setForgetPassword}/>
+          )
+        }
+
+          {registration && (
+            <Register alreadyLogin={alreadyLogin}/>
           )}
 
-          {forgetPassword && (
-            <ForgetPassword handleBackToLogin={handleBackToLogin} />
+          {reset && (
+             <Reset/>
           )}
-
-          {registration && <Register alreadyLogin={alreadyLogin} />}
         </div>
       </div>
   );
