@@ -2,7 +2,7 @@
  
 import logo from "@/app/assets/logo.png";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
@@ -22,6 +22,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { LoginProps } from "../_types";
 import { LoginformSchema } from "../_types/zodSchema";
+import { toast } from "sonner";
 
 // Define schema with gender and birthdate fields
 
@@ -42,7 +43,7 @@ const Login: React.FC<LoginProps> = ({
   const router = useRouter();
   const [loader, setloader] = useState<boolean>(false);
 
-  const { toast } = useToast();
+  // const { toast } = useToast();
 
   async function onSubmit(data: z.infer<typeof LoginformSchema>) {
     setloader(true);
@@ -56,27 +57,15 @@ const Login: React.FC<LoginProps> = ({
     console.log(result);
     if (result?.error) {
       if (result.error === "CredentialsSignin") {
-        toast({
-          title: "Login Failed",
-          description: result.error || "Incorrect username or password",
-          variant: "destructive",
-        });
+        toast.error("Incorrect Email or password")
       } else {
-        toast({
-          title: "Error",
-          description: result.error,
-          variant: "destructive",
-        });
+         toast.error(`Login failed : ${result.error}`)
       }
     }
 
     if (result?.url) {
       router.replace("/dashboard");
-      toast({
-        title: "Login Success",
-        description: "Login Success",
-        variant: "default",
-      });
+       toast.success("Login Successful")
     }
   }
 
@@ -128,6 +117,26 @@ const Login: React.FC<LoginProps> = ({
               </div>
             )}
           />
+
+          {/* <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <div>
+                <FormLabel className="text-[#091747] font-[600] text-[13px]">
+                  Password
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Enter password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </div>
+            )}
+          /> */}
 
           {/* Submit Button */}
           <Button type="submit" className="hover:bg-[#091747] bg-[#f21300]">

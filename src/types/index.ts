@@ -59,17 +59,17 @@ export interface CreateClientData {
 
 export interface EditClientData {
   aadhaar?: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   mobileNumber?: string;
-  pan: string;
+  pan?: string;
   dob?: string;
   din?: string;
   dscInfo?:"None"|"Not_Applicable" |  "With_Vakilgiri" | "With_Client"
-  email: string;
-  gender: "Male" | "Female" | "Other";
-  kycStatus: "Pending" | "Completed" | "Rejected";
-  loginStatus: "Active" | "Inactive";
+  email?: string;
+  gender?: "Male" | "Female" | "Other";
+  kycStatus?: "Pending" | "Completed" | "Rejected";
+  loginStatus?: "Active" | "Inactive";
 }
 
 export interface CreateBussiness{
@@ -104,6 +104,14 @@ export interface editBussinessDetails{
   businessEmail?: string;
   businessLogo?: File | null;
   about?: string;
+}
+export interface updateleadDetails{
+  firstName?:string,
+  lastName?:string,
+  mobile?:string,
+  email?:string,
+  value?:string,
+  status?: string;
 }
 
 export interface BussinessReminderTypes{

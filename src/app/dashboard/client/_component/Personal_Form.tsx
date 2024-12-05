@@ -26,10 +26,12 @@ import { clientIdProps } from "../_types"
 import { PersonalDataformSchema } from "../_types/zodSchema"
 import { useEffect, useState } from "react"
 import { Oval } from "react-loader-spinner"
+import { AxiosError } from "axios"
 
 const Personal_Form = ({clientId}:clientIdProps) => {
    
   const { data } = useGetClientsById(clientId);
+
   const { mutate } = useEditClient(clientId);
 
   // State for default values
@@ -60,7 +62,7 @@ const Personal_Form = ({clientId}:clientIdProps) => {
           email: data.email ?? "",
           gender: data.gender ?? "Male",
           mobileNumber: data.mobileNumber ?? "",
-          dob: data.dob ?? "11/07/2024",
+          dob: data.dob.split("T")[0] ?? "11/07/2024",
           aadhaar: data.aadhaar ?? "112312312321",
           din: data.din ?? "",
           dscInfo: data.dscInfo ?? "Not_Applicable",
@@ -85,15 +87,24 @@ const Personal_Form = ({clientId}:clientIdProps) => {
 
 
   function onSubmit(values: z.infer<typeof PersonalDataformSchema>) {
-    mutate(values, {
-      onSuccess: () => {
-        toast.success("Client Updated successfully!");
+    mutate(values,{
+      onSuccess:()=>{
+         toast.success("Client Updated Successfully.")
       },
-      onError: (error) => {
-        toast.error(`Failed to create client: ${error.message}`);
-      },
-    });
-    console.log("Values", values);
+      onError:(error)=>{
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage = error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+    
+          // Display error message in toast
+          toast.error(`Failed to create client: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
+      }
+    })
   }
 
   if(!data){

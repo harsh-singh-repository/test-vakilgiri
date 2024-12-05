@@ -13,7 +13,6 @@ import {
   // FormItem,
   // FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -31,6 +30,7 @@ import { useAddLeads } from "@/hooks/leads/manage-leads";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
+import { MaterialInput } from "@/components/material-input";
 
 interface onCloseProp{
    onClose:()=>void;
@@ -91,7 +91,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
     </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <FormField
               control={form.control}
               name="existing"
@@ -124,9 +124,8 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                   name="businessId"
                   render={({ field }) => (
                     <div>
-                      <label className="text-[11px] font-semibold text-[#091747]">Business Name</label>
                       <FormControl>
-                        <Input placeholder="Business Name" {...field} className="w-[290px] border-[#091747] text-[14px]"/>
+                        <MaterialInput placeholder="Business Name" {...field} className="w-[290px]"/>
                       </FormControl>
                     </div>
                   )}
@@ -159,15 +158,14 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               </>
             )}
 
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <div>
-                    <label className="text-[11px] font-semibold text-[#091747]">First Name</label>
                     <FormControl>
-                      <Input placeholder="First Name" {...field} className="w-[140px] border-[#091747]"/>
+                       <MaterialInput placeholder="First Name" {...field} className="w-[140px]"/>
                     </FormControl>
                     {/* <FormMessage /> */}
                   </div>
@@ -179,9 +177,8 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                 name="lastName"
                 render={({ field }) => (
                   <div>
-                    <label className="text-[11px] font-semibold text-[#091747]">Last Name</label>
                     <FormControl>
-                      <Input placeholder="Last Name" {...field} className="w-[140px] border-[#091747]"/>
+                       <MaterialInput placeholder="Last Name" {...field} className="w-[140px]"/>
                     </FormControl>
                     {/* <FormMessage /> */}
                   </div>
@@ -194,9 +191,8 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               name="email"
               render={({ field }) => (
                 <div>
-                  <label className="text-[11px] font-semibold text-[#091747]">Email Id</label>
                   <FormControl>
-                    <Input placeholder="Enter email Id" {...field} className="w-[290px] border-[#091747]"/>
+                    <MaterialInput placeholder="Enter email Id" {...field} className="w-[290px]"/>
                   </FormControl>
                   {/* <FormMessage /> */}
                 </div>
@@ -208,9 +204,8 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               name="mobile"
               render={({ field }) => (
                 <div>
-                  <label className="text-[11px] font-semibold text-[#091747]">Mobile Number</label>
                   <FormControl>
-                    <Input placeholder="Enter Mobile Number" {...field} className="w-[290px] border-[#091747]"/>
+                    <MaterialInput placeholder="Mobile Number" {...field} className="w-[290px] border-[#091747]"/>
                   </FormControl>
                   {/* <FormMessage /> */}
                 </div>
@@ -278,9 +273,8 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               name="value"
               render={({ field }) => (
                 <div>
-                  <label className="text-[11px] font-semibold text-[#091747]">Lead Value</label>
                   <FormControl>
-                    <Input placeholder="Enter Lead Value" {...field} className="w-[290px] border-[#091747]"/>
+                    <MaterialInput placeholder="Lead Value" {...field} className="w-[290px] border-[#091747]"/>
                   </FormControl>
                   {/* <FormMessage /> */}
                 </div>

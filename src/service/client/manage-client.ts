@@ -10,11 +10,11 @@ import axiosInstance from '@/lib/axiosInstance';
 
 const CLIENT_API = {
     CREATE: '/client',
-    EDIT: (id: string) => `/client/${id}`,
+    EDIT: (id: string | string [] | undefined) => `/client/${id}`,
     // DELETE: (id: number) => `/client/delete-client/${id}`,
     GET_ALL: '/client/',
     GET_BUSSINESS:(id:string | string[] | undefined) => `/client/${id}/businesses`,
-    GET_BY_ID: (id: string) => `/client/${id}`,
+    GET_BY_ID: (id : string | string [] | undefined) => `/client/${id}`,
     GET_CURRENT: '/admin/current-user',
     ADD_DICUSSION: (id: string) => `/client/${id}/discussions`,
     GET_DICUSSION: (id: string) => `/client/${id}/discussions`,
@@ -24,7 +24,7 @@ const CLIENT_API = {
 
 export const clientService = {
 
-    getClientById: async (id: string) => {
+    getClientById: async (id : string | string [] | undefined) => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_BY_ID(id)}`);
         console.log("Env",process.env.NEXT_PUBLIC_API_BASE_URL)
         return response.data.data;
@@ -40,7 +40,7 @@ export const clientService = {
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.CREATE}`, clientData,);
     },
 
-    edit: async (clientData: EditClientData, id: string) => {
+    edit: async (clientData: EditClientData, id: string | string [] | undefined) => {
         return await axiosInstance.put(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.EDIT(id)}`, clientData);
     },
@@ -60,7 +60,7 @@ export const clientService = {
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.ADD_REMINDER(id)}`, discussion);
     },
 
-    getBussinessOfClient:async (id:string | string[] | undefined) => {
+    getBussinessOfClient: async (id:string | string[] | undefined) => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_BUSSINESS(id)}`);
         return response.data.data;
     },

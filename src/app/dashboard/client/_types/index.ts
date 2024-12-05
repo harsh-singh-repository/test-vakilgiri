@@ -1,5 +1,13 @@
 export type clientIdProps = {
-    clientId:string,
+    clientId:string | string [] | undefined,
+}
+
+export interface ClinetBussinessDetails{
+    id: string;
+    businessName: string;
+    businessPan: string;
+    businessType: string; // Extend as needed
+    businessStatus: string | null;
 }
 
 export interface BusinessDetails {

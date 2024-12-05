@@ -45,8 +45,8 @@ export const bussinessService = {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.ADD_REMINDERS(id)}`, reminder);
     },
+    
     editBussinessDetails: async (editBussinessDetails:editBussinessDetails, id: string | string[] | undefined) => {
-        console.log("edit Bussiness")
         return await axiosInstance.put(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.EDIT(id)}`, editBussinessDetails);
     },

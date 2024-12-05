@@ -1,5 +1,5 @@
 import { leadServices } from "@/service/leads/manage-leads";
-import { LeadsDiscussionType, LeadsReminderTypes } from "@/types";
+import { LeadsDiscussionType, LeadsReminderTypes, updateleadDetails } from "@/types";
 import { useQuery,useMutation } from "@tanstack/react-query";
 
 export const useGetLeads = () => {
@@ -29,7 +29,7 @@ export const useAddLeadsReminder = (id:string) => {
 
 export const useGetLeadsById = (id:string) => {
     const query = useQuery({
-        queryKey: ['leads',id],
+        queryKey: ['leadId',id],
         queryFn:() => leadServices.getLeadsById(id),
         enabled:!!id,
     })
@@ -49,3 +49,15 @@ export const useDeleteLeads = () =>{
         mutationFn:(id:string)=> leadServices.deleteLead(id),
     })
 }
+
+export const useDeleteLeadsDisscussion = () => {
+    return useMutation({
+       mutationFn:({ leadId, id }: { leadId: string; id: string })=>leadServices.deleteDisscussion(leadId,id)
+    })
+ }
+
+export const useUpdateLeadsDetails = (id:string) => {
+     return useMutation({
+        mutationFn:(updateLeadDetails:updateleadDetails)=> leadServices.updateLead(id,updateLeadDetails)
+     })
+} 
