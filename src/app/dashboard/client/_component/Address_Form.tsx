@@ -79,8 +79,7 @@ export default function Component() {
                   )}
                 />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-rows-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
                   name="city"
@@ -88,13 +87,13 @@ export default function Component() {
                     <FormItem>
                       <label className="text-sm font-medium">City</label>
                       <FormControl>
-                        <Input placeholder="City" {...field} />
+                        <Input placeholder="Enter City" {...field} />
                       </FormControl>
                       <FormMessage className="text-xs text-red-500" />
                     </FormItem>
                   )}
                 />
-                <FormField
+               <FormField
                   control={form.control}
                   name="state"
                   render={({ field }) => (
@@ -118,6 +117,9 @@ export default function Component() {
                     </FormItem>
                   )}
                 />
+              </div>
+
+              <div className="grid grid-rows-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
                   name="pincode"
@@ -131,10 +133,10 @@ export default function Component() {
                     </FormItem>
                   )}
                 />
-              </div>
+                </div>
 
               <div className="flex justify-end">
-                <Button type="submit" className="bg-gray-500 hover:bg-gray-600 text-white">
+                <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">
                   Save Address
                 </Button>
               </div>

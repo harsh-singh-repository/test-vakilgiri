@@ -1,5 +1,5 @@
 export interface ForgetPasswordProps {
-    handleBackToLogin: () => void;
+    handleBackToLogin: () => void; // Function that accepts a boolean
 }
 
 export interface RegisterProps{

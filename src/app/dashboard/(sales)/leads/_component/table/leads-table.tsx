@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import {
   Cell,
   ColumnDef,
@@ -18,8 +18,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import Image from 'next/image';
-import profileImage from '../../../../../public/assets/profile-image.png';
-import ActionButton from './actions';
+import profileImage from '../../../../../../../public/assets/profile-image.png';
+// import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
 
@@ -34,16 +34,11 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
-interface CustomCellProps<TData, TValue>{
-  cell: Cell<TData, TValue>; // Adjust `any` for your data type
+interface CustomCellProps<TData, TValue> {
+  cell: Cell<TData, TValue>;
 }
 
-type RowData = {
-  id: string; // Ensure 'id' exists and is of the correct type
-  // Add other properties here if necessary
-};
-
-export function ClientTable<TData, TValue>({
+export function LeadsTable<TData, TValue>({
   columns,
   data,
   pageNo,
@@ -56,11 +51,11 @@ export function ClientTable<TData, TValue>({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [searchValue, setSearchValue] = React.useState<string>(searchParams?.get(searchKey) || '');
-  
+
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: pageNo - 1,
     pageSize: parseInt(searchParams?.get('limit') || '20', 10),
-    
+
   });
 
   // Handle search params and update pagination or search value
@@ -102,7 +97,7 @@ export function ClientTable<TData, TValue>({
       };
       router.push(`${pathname}?${createQueryString(newQueryParams)}`, { scroll: false });
     }
-  }, [pageIndex, pageSize, searchValue, pathname, router, createQueryString, searchKey]);
+  }, [pageIndex, pageSize, searchValue, pathname, router, createQueryString, searchKey, searchParams]);
 
   const table = useReactTable({
     data,
@@ -120,20 +115,45 @@ export function ClientTable<TData, TValue>({
   });
 
   const renderCellContent = (cell: CustomCellProps<TData, TValue>['cell']) => {
-    const { id: columnId } = cell.column;
-    // const cellValue = cell.value;
-
-    if (columnId === 'kyc') {
+    const columnId = cell.column.id;
+    const value = cell.getValue(); // Get the raw value directly
+    const cellValue = flexRender(cell.column.columnDef.cell, cell.getContext());
+  
+    if (columnId === 'status') {
+      let statusClassName = '';
+      
+      // Use the raw value for the switch statement
+      if (typeof value === 'string') {
+        switch (value.toLowerCase()) {
+          case 'new':
+            statusClassName = 'bg-gray-400';
+            break;
+          case 'converted':
+            statusClassName = 'bg-green-700';
+            break;
+          case 'contacted':
+            statusClassName = 'bg-blue-900';
+            break;
+          case 'disqualified':
+            statusClassName = 'bg-red-600';
+            break;
+          default:
+            statusClassName = 'bg-gray-400';
+        }
+      }
+  
       return (
-        <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-[#f21300] text-white text-sm">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        <div 
+          className={`flex items-center justify-center px-2 py-1 rounded-full text-white text-xs w-22 mx-auto ${statusClassName}`}
+        >
+          {value as ReactNode}
         </div>
       );
     }
-
-    if (columnId === 'profile-image' || columnId === 'manager') {
+  
+    if (columnId === 'assigned') {
       return (
-        <div className="flex items-center justify-center w-full h-full rounded-full">
+        <div className="flex items-center justify-center w-full h-full">
           <Image
             src={profileImage}
             alt="Profile Image"
@@ -144,28 +164,16 @@ export function ClientTable<TData, TValue>({
         </div>
       );
     }
-
-    if (columnId === 'action') {
-      const rowData = cell.row.original as RowData; // Cast to RowData
-      const uniqueId = rowData.id;
-    
-      if (typeof uniqueId === 'string') {
-        return <ActionButton id={uniqueId} />;
-      } else {
-        console.error('ID is not a string:', uniqueId);
-        return null; // Handle the error case appropriately
-      }
-    }
-
-    return flexRender(cell.column.columnDef.cell, cell.getContext());
+  
+    return cellValue;
   };
 
   return (
     <>
-      <ScrollArea className="w-full h-[100vh] overflow-y-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
-        <Table className="border rounded-2xl bg-white">
+      <ScrollArea className="w-full max-h-fit overflow-y-auto border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+        <Table className="border rounded-2xl bg-white h-full">
           <TableHeader className="bg-[#042559] text-white text-center">
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table?.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id} className="text-white text-center">
@@ -177,13 +185,13 @@ export function ClientTable<TData, TValue>({
           </TableHeader>
 
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+            {table.getRowModel()?.rows?.length ? (
+             table.getRowModel().rows.slice(0, 20).map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'firstName' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
+                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'businessOrClient' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
                     >
                       {renderCellContent(cell)}
                     </TableCell>

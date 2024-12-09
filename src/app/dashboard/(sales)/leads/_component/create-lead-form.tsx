@@ -1,71 +1,124 @@
-'use client'
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 // import { X } from 'lucide-react'
-import * as z from "zod"
+import * as z from "zod";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
   // FormItem,
-  FormLabel,
   // FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { DialogContent, DialogTitle } from "@/components/ui/dialog"
-import { CreateLeadformSchema } from "../_types/zodSchema"
+} from "@/components/ui/select";
 
-export default function CreateLeadForm() {
+import {
+  CreateLeadformSchema,
+  ServicesType,
+  states,
+} from "../_types/zodSchema";
+import { useAddLeads } from "@/hooks/leads/manage-leads";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { X } from "lucide-react";
+import { MaterialInput } from "@/components/material-input";
+import { useSearchBussinessQuery } from "@/hooks/business/manage-business";
+import { useState } from "react";
+import { BussinessSearchType } from "../_types";
+
+interface onCloseProp{
+   onClose:()=>void;
+}
+
+export default function CreateLeadForm({onClose}:onCloseProp) {
+  
+  const [searchQuery,setSearchQuery] = useState<string>("");
+
+  const { mutate: addLeads } = useAddLeads();
+
+  const {data:bussinessSearch} = useSearchBussinessQuery(searchQuery);
+
+  console.log("data",bussinessSearch);
+
+  const query = useQueryClient();
+
   const form = useForm<z.infer<typeof CreateLeadformSchema>>({
     resolver: zodResolver(CreateLeadformSchema),
     defaultValues: {
-      existingLead: "",
-      businessName: "",
-      contactPerson: "",
+      existing: true,
+      businessId: undefined,
+      client: undefined,
       firstName: "",
       lastName: "",
-      emailId: "",
-      mobileNumber: "",
-      state: "",
-      service: "",
-      leadValue: "",
+      email: "",
+      mobile: "",
+      state: "Andhra_Pradesh",
+      service: "CSR_1_Registration",
+      value: "",
     },
-  })
+  });
 
   function onSubmit(values: z.infer<typeof CreateLeadformSchema>) {
-    console.log(values)
+    console.log(values);
+
+    addLeads(values, {
+      onSuccess: () => {
+        toast.success("Leads created Successfully");
+        query.invalidateQueries({queryKey:['leads']})
+        onClose();
+      },
+      onError: (error) => {
+        toast.error(`Failed to create lead: ${error}`);
+      },
+    });
   }
 
+  const existingLead = form.watch("existing");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    const value = e.target.value;
+    setSearchQuery(value)
+  }
+
+  console.log(form.watch("existing")); // Watch existingLead state
+
   return (
-    <DialogContent>
-    {/* <div className="w-full max-w-md mx-auto p-2"> */}
-      <div className="bg-white rounded-lg shadow-sm">
-        <div className="flex items-center justify-center rounded-t-lg flex-col">
-            <DialogTitle className="text-xl font-semibold">Create Lead</DialogTitle>
-            <p className="text-sm">Fill all the information correctly</p>
-        </div>
+    // <DialogContent>
+    <div className="w-full"> 
+      <div className="bg-white rounded-lg shadow-sm px-2 py-1">
+      <div className="relative w-full pb-2 text-center">
+      <h2 className="text-2xl font-bold text-[#F31F0D] mt-2">Create Lead</h2>
+      <p className="text-sm text-[#091747] font-medium">
+        Fill all the information correctly
+      </p>
+      <button className="absolute right-0 top-0 text-[#F31F0D]" onClick={onClose}>
+        <X className="h-5 w-5" />
+      </button>
+    </div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <FormField
               control={form.control}
-              name="existingLead"
+              name="existing"
               render={({ field }) => (
                 <div>
-                  <FormLabel>Existing Lead</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <label className="text-[11px] font-semibold text-[#091747]">Existing Lead</label>
+                  <Select
+                    onValueChange={(value) => field.onChange(value === "yes")}
+                    defaultValue={field.value ? "yes" : "no"}
+                  >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-[290px] border-[#091747]">
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
@@ -79,52 +132,67 @@ export default function CreateLeadForm() {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="businessName"
-              render={({ field }) => (
-                <div>
-                  <FormLabel>Business</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Business Name" {...field} />
-                  </FormControl>
-                  {/* <FormMessage /> */}
-                </div>
-              )}
-            />
+            {existingLead && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="businessId"
+                  render={({ field }) => (
+                    <div>
+                      <FormControl>
+                        <MaterialInput placeholder="Business Name" {...field} className="w-[290px]" onChange={handleChange}/>
+                      </FormControl>
+                    </div>
+                  )}
+                />
 
-            <FormField
-              control={form.control}
-              name="contactPerson"
-              render={({ field }) => (
-                <div>
-                  <FormLabel>Contact Person</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Client" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="client1">Client 1</SelectItem>
-                      <SelectItem value="client2">Client 2</SelectItem>
-                      <SelectItem value="client3">Client 3</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {/* <FormMessage /> */}
+                <div className="flex flex-col gap-2">
+                {bussinessSearch?.map((bussiness:BussinessSearchType,index:number)=> (
+                    <div key={index} className="flex flex-col gap-x-2 bg-[#E7E7E7] text-[#091747] px-2 py-1 rounded-md">
+                          <span className="text-[13px] uppercase font-semibold">{bussiness.businessName}</span>
+                       <div className="flex flex-row text-[12px]">
+                          <span className="font-semibold">PAN:{""}</span>
+                          <span>{bussiness.businessPan}</span>
+                       </div>
+                    </div>
+                  ))}
                 </div>
-              )}
-            />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="client"
+                  render={({ field }) => (
+                    <div>
+                      <label className="text-[11px] font-semibold text-[#091747]">Contact Person</label>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-[290px] border-[#091747]">
+                            <SelectValue placeholder="Select Client" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="client1">Client 1</SelectItem>
+                          <SelectItem value="client2">Client 2</SelectItem>
+                          <SelectItem value="client3">Client 3</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                />
+              </>
+            )}
+
+            <div className="flex gap-2">
               <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <div>
-                    <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="First Name" {...field} />
+                       <MaterialInput placeholder="First Name" {...field} className="w-[140px]"/>
                     </FormControl>
                     {/* <FormMessage /> */}
                   </div>
@@ -136,9 +204,8 @@ export default function CreateLeadForm() {
                 name="lastName"
                 render={({ field }) => (
                   <div>
-                    <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Last Name" {...field} />
+                       <MaterialInput placeholder="Last Name" {...field} className="w-[140px]"/>
                     </FormControl>
                     {/* <FormMessage /> */}
                   </div>
@@ -148,12 +215,11 @@ export default function CreateLeadForm() {
 
             <FormField
               control={form.control}
-              name="emailId"
+              name="email"
               render={({ field }) => (
                 <div>
-                  <FormLabel>Email Id</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter email Id" {...field} />
+                    <MaterialInput placeholder="Enter email Id" {...field} className="w-[290px]"/>
                   </FormControl>
                   {/* <FormMessage /> */}
                 </div>
@@ -162,12 +228,11 @@ export default function CreateLeadForm() {
 
             <FormField
               control={form.control}
-              name="mobileNumber"
+              name="mobile"
               render={({ field }) => (
                 <div>
-                  <FormLabel>Mobile Number</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter Mobile Number" {...field} />
+                    <MaterialInput placeholder="Mobile Number" {...field} className="w-[290px] border-[#091747]"/>
                   </FormControl>
                   {/* <FormMessage /> */}
                 </div>
@@ -179,17 +244,22 @@ export default function CreateLeadForm() {
               name="state"
               render={({ field }) => (
                 <div>
-                  <FormLabel>Select State</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <label className="text-[11px] font-semibold text-[#091747]">Select State</label>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-[290px] border-[#091747]">
                         <SelectValue placeholder="Select State" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="state1">State 1</SelectItem>
-                      <SelectItem value="state2">State 2</SelectItem>
-                      <SelectItem value="state3">State 3</SelectItem>
+                      {states.map((state) => (
+                        <SelectItem key={state} value={state}>
+                          {state.replace("_", " ")}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   {/* <FormMessage /> */}
@@ -202,17 +272,22 @@ export default function CreateLeadForm() {
               name="service"
               render={({ field }) => (
                 <div>
-                  <FormLabel>Service</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <label className="text-[11px] font-semibold text-[#091747]">Service</label>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-[290px] border-[#091747]">
                         <SelectValue placeholder="Select Service" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="service1">Service 1</SelectItem>
-                      <SelectItem value="service2">Service 2</SelectItem>
-                      <SelectItem value="service3">Service 3</SelectItem>
+                      {ServicesType.options.map((service) => (
+                        <SelectItem key={service} value={service}>
+                          {service.replace(/_/g, " ")}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   {/* <FormMessage /> */}
@@ -222,25 +297,32 @@ export default function CreateLeadForm() {
 
             <FormField
               control={form.control}
-              name="leadValue"
+              name="value"
               render={({ field }) => (
                 <div>
-                  <FormLabel>Lead Value</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter Lead Value" {...field} />
+                    <MaterialInput placeholder="Lead Value" {...field} className="w-[290px] border-[#091747]"/>
                   </FormControl>
                   {/* <FormMessage /> */}
                 </div>
               )}
             />
 
-            <Button type="submit" className="w-full bg-gray-400 hover:bg-gray-500">
+            <Button
+              type="submit"
+              className={`w-full ${
+                form.formState.isValid ? "bg-[#F32311]" : "bg-gray-400"
+              } hover:${
+                form.formState.isValid ? "bg-[#F32311]" : "bg-gray-500"
+              }`}
+            >
               Submit
             </Button>
           </form>
         </Form>
       </div>
-    {/* </div> */}
-    </DialogContent>
-  )
+
+      </div>
+    // </DialogContent>
+  );
 }

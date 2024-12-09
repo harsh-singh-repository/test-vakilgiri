@@ -1,23 +1,25 @@
 "use client";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { columns } from "./columns";
-import { LeadsTable } from "./leads-table";
+import { columns } from "./table/columns";
+import { LeadsTable } from "./table/leads-table";
 import LeadsCard from "./leads-card";
 import { useSearchParams } from "next/navigation";
-import { LeadsPageServer } from "./LeadsPageServer";
-import { Leads } from "@/constants/data";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+// import { LeadsPageServer } from "./LeadsPageServer";s
+// import { Leads } from "@/constants/data";s
+import { Dialog} from "@/components/ui/dialog";
 import CreateLeadForm from "./create-lead-form";
 import { Oval } from "react-loader-spinner";
+import { useGetLeads } from "@/hooks/leads/manage-leads";
+import Modal from "@/components/model/custom-modal";
 
-type ResponseData = {
-  employee: Leads[];
-  totalUsers: number;
-  pageCount: number;
-};
+// type ResponseData = {
+//   employee: Leads[];
+//   totalUsers: number;
+//   pageCount: number;
+// };
 
 export default function LeadsPage() {
   const searchParams = useSearchParams();
@@ -28,20 +30,19 @@ export default function LeadsPage() {
   const [searchValue, setSearchValue] = useState(
     searchParams.get("search") || ""
   );
-  const [responseData, setResponseData] = useState<ResponseData | null>(null);
+   
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await LeadsPageServer({ page, pageLimit, searchValue });
-      setResponseData(data);
-    };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
-    fetchData();
-  }, [page, pageLimit, searchValue]);
+  const {data} = useGetLeads();
 
-  if (!responseData) {
+  console.log("Leads all",data)
+
+  if (!data) {
     return (
-      <div className="flex justify-center items-center h-[100vh]">
+      <div className="flex justify-center items-center h-full">
         <Oval
           visible={true}
           height="40"
@@ -55,27 +56,12 @@ export default function LeadsPage() {
     );
   }
 
-  // ADD THIS PART TO SOLVE ERROR
-  const mappedData = responseData.employee.map((lead) => ({
-    id: lead.leadId,
-    profileImage: "",
-    cltid: "",
-    firstName: lead.businessOrClient,
-    lastName: "",
-    pan: "",
-    bussinesses: lead.companyName || "N/A",
-    projects: "",
-    wallet: lead.value,
-    manager: lead.assigned,
-    kyc: lead.status,
-  }));
-  // ENDED!!
 
   return (
     <Dialog>
       <div className="w-full flex-1 space-y-4 p-4 pt-6 md:p-4 overflow-hidden">
         <div className="flex items-start justify-between">
-          <div className="text-2xl font-bold text-[#042559]">{`Leads (${responseData.totalUsers})`}</div>
+          <div className="text-2xl font-bold text-[#042559]">{`Leads (${data.length})`}</div>
 
           <div className="flex justify-center items-center gap-4">
             <Suspense>
@@ -89,12 +75,13 @@ export default function LeadsPage() {
               />
               </Suspense>
 
-            <DialogTrigger>
-              <div className="bg-[#f21300] text-white p-2 rounded-md">
+            
+              <div className="bg-[#f21300] text-white p-2 rounded-md cursor-pointer" onClick={openModal}>
                 <Plus className="h-6 w-6" />
               </div>
-            </DialogTrigger>
-            <CreateLeadForm />
+              <Modal isOpen={isModalOpen} onClose={closeModal} className="border-[#f21300] border-4"> 
+                 <CreateLeadForm onClose={closeModal}/>                 
+              </Modal>
           </div>
         </div>
         <Separator />
@@ -106,9 +93,9 @@ export default function LeadsPage() {
           searchValue={searchValue}
           pageNo={page}
           columns={columns}
-          totalUsers={responseData.totalUsers}
-          data={mappedData} // Pass mapped data here
-          pageCount={responseData.pageCount}
+          totalUsers={data.length}
+          data={data} // Pass mapped data here
+          pageCount={Math.ceil(data.length / pageLimit)}
         />
       </div>
     </Dialog>

@@ -73,17 +73,32 @@ export  const AddClientformSchema = z.object({
   })
 
   export const PersonalDataformSchema = z.object({
-    pan: z.string().min(10, "PAN Card must be 10 characters"),
-    firstName: z.string().min(1, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
-    // fatherName: z.string().min(1, "Father's name is required").optional(),
-    gender: z.enum(["Male", "Female", "Other"]),
-    mobileNumber: z.string().min(10, "Mobile number must be 10 digits").optional(),
-    aadhaar: z.string().min(12, "Aadhaar number must be 12 digits").optional(),
-    din: z.string().optional(),
-    dob:z.string().optional(),
-    dscInfo: z.enum(["None", "Not_Applicable", "With_Vakilgiri", "With_Client"]).optional(),
-    email: z.string().email("Invalid email address"),
-    kycStatus: z.enum(["Pending", "Completed", "Rejected"]),
-    loginStatus: z.enum(["Active", "Inactive"]),
+    pan: z.string().min(10, "PAN Card must be 10 characters").default("").optional(),
+    firstName: z.string().min(1, "First name is required").default("").optional(),
+    lastName: z.string().min(1, "Last name is required").default("").optional(),
+    gender: z.enum(["Male", "Female", "Other"]).default("Male").optional(),
+    mobileNumber: z.string().min(10, "Mobile number must be 10 digits").default("").optional(),
+    aadhaar: z.string().min(12, "Aadhaar number must be 12 digits").default("").optional(),
+    din: z.string().default("").optional(),
+    dob: z.string().default("").optional(),
+    dscInfo: z.enum(["None", "Not_Applicable", "With_Vakilgiri", "With_Client"]).default("Not_Applicable").optional(),
+    email: z.string().email("Invalid email address").default("").optional(),
+    kycStatus: z.enum(["Pending", "Completed", "Rejected"]).default("Pending").optional(),
+    loginStatus: z.enum(["Active", "Inactive"]).default("Active").optional(),
   });
+
+  export const discussionSchema = z.object({
+    discussion: z.string().min(1, "Discussion is required"),
+  })
+  
+  export const reminderSchema = z.object({
+    reminderType: z.enum(["Call", "Follow_Up", "WhatsApp", "Email"]),
+    dueDate: z
+      .string()
+      .regex(
+        /^\d{4}-\d{2}-\d{2}$/,
+        "Due date must be in the format 'yyyy-MM-dd'."
+      ).optional(),
+    subject: z.string().min(1, "Subject is required.").optional(),
+    body: z.string().min(1, "Body is required.").optional(),
+  })

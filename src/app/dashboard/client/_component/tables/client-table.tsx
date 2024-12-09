@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   Cell,
   ColumnDef,
@@ -34,11 +34,16 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
-interface CustomCellProps<TData, TValue> {
-  cell: Cell<TData, TValue>;
+interface CustomCellProps<TData, TValue>{
+  cell: Cell<TData, TValue>; // Adjust `any` for your data type
 }
 
-export function LeadsTable<TData, TValue>({
+type RowData = {
+  id: string; // Ensure 'id' exists and is of the correct type
+  // Add other properties here if necessary
+};
+
+export function ClientTable<TData, TValue>({
   columns,
   data,
   pageNo,
@@ -51,11 +56,11 @@ export function LeadsTable<TData, TValue>({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [searchValue, setSearchValue] = React.useState<string>(searchParams?.get(searchKey) || '');
-
+  
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: pageNo - 1,
     pageSize: parseInt(searchParams?.get('limit') || '20', 10),
-
+    
   });
 
   // Handle search params and update pagination or search value
@@ -97,7 +102,7 @@ export function LeadsTable<TData, TValue>({
       };
       router.push(`${pathname}?${createQueryString(newQueryParams)}`, { scroll: false });
     }
-  }, [pageIndex, pageSize, searchValue, pathname, router, createQueryString, searchKey, searchParams]);
+  }, [pageIndex, pageSize, searchValue, pathname, router, createQueryString, searchKey,searchParams]);
 
   const table = useReactTable({
     data,
@@ -115,45 +120,20 @@ export function LeadsTable<TData, TValue>({
   });
 
   const renderCellContent = (cell: CustomCellProps<TData, TValue>['cell']) => {
-    const columnId = cell.column.id;
-    const value = cell.getValue(); // Get the raw value directly
-    const cellValue = flexRender(cell.column.columnDef.cell, cell.getContext());
-  
-    if (columnId === 'status') {
-      let statusClassName = '';
-      
-      // Use the raw value for the switch statement
-      if (typeof value === 'string') {
-        switch (value.toLowerCase()) {
-          case 'new':
-            statusClassName = 'bg-gray-400';
-            break;
-          case 'converted':
-            statusClassName = 'bg-green-700';
-            break;
-          case 'contacted':
-            statusClassName = 'bg-blue-900';
-            break;
-          case 'disqualified':
-            statusClassName = 'bg-red-600';
-            break;
-          default:
-            statusClassName = 'bg-gray-400';
-        }
-      }
-  
+    const { id: columnId } = cell.column;
+    // const cellValue = cell.value;
+
+    if (columnId === 'kyc') {
       return (
-        <div 
-          className={`flex items-center justify-center px-2 py-1 rounded-full text-white text-xs w-22 mx-auto ${statusClassName}`}
-        >
-          {value as ReactNode}
+        <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-[#f21300] text-white text-sm">
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </div>
       );
     }
-  
-    if (columnId === 'assigned') {
+
+    if (columnId === 'profile-image' || columnId === 'manager') {
       return (
-        <div className="flex items-center justify-center w-full h-full">
+        <div className="flex items-center justify-center w-full h-full rounded-full">
           <Image
             src={profileImage}
             alt="Profile Image"
@@ -165,38 +145,25 @@ export function LeadsTable<TData, TValue>({
       );
     }
 
-    if(columnId === 'date'){
-      return(
-          <span className="">23-09-24</span>
-      )
-    }
-    if(columnId === 'service'){
-      return(
-          <span className="">ISO certification</span>
-      )
-    }
-    if(columnId === 'leadId'){
-      return(
-          <span className="">1</span>
-      )
-    }
-    if(columnId === 'businessOrClient'){
-      return(
-          <span className="">Karan Garg</span>
-      )
-    }
-  
     if (columnId === 'action') {
-      return <ActionButton />;
+      const rowData = cell.row.original as RowData; // Cast to RowData
+      const uniqueId = rowData.id;
+    
+      if (typeof uniqueId === 'string') {
+        return <ActionButton id={uniqueId} />;
+      } else {
+        console.error('ID is not a string:', uniqueId);
+        return null; // Handle the error case appropriately
+      }
     }
-  
-    return cellValue;
+
+    return flexRender(cell.column.columnDef.cell, cell.getContext());
   };
 
   return (
     <>
-      <ScrollArea className="w-full max-h-fit overflow-y-auto border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
-        <Table className="border rounded-2xl bg-white h-full">
+      <ScrollArea className="w-full h-[100vh] overflow-y-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+        <Table className="border rounded-2xl bg-white">
           <TableHeader className="bg-[#042559] text-white text-center">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -211,12 +178,12 @@ export function LeadsTable<TData, TValue>({
 
           <TableBody>
             {table.getRowModel().rows?.length ? (
-             table.getRowModel().rows.slice(0, 20).map((row) => (
+              table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'businessOrClient' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
+                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'firstName' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
                     >
                       {renderCellContent(cell)}
                     </TableCell>
