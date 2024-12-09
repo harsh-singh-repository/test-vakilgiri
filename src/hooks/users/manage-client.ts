@@ -56,6 +56,15 @@ export const useGetBussinessOfClient = (id:string | string[] | undefined) =>{
     return query;
 }
 
+export const useSearchClinetQuery = (searchQuery:string) => {
+    const query =  useQuery({
+        queryKey: ['clientSearch',searchQuery],
+        queryFn:() => clientService.searchClient(searchQuery),
+        enabled:!!searchQuery,
+    });
+    return query;
+}
+
 export const useAddClientDisscussion = (id:string) => {
     // const queryClient = useQueryClient();
     // const toast = useCustomToast();

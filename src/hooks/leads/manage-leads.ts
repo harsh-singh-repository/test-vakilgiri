@@ -1,5 +1,5 @@
 import { leadServices } from "@/service/leads/manage-leads";
-import { LeadsDiscussionType, LeadsReminderTypes, updateleadDetails } from "@/types";
+import { LeadsDiscussionType, LeadsReminderTypes, linkLeadType, updateleadDetails } from "@/types";
 import { useQuery,useMutation } from "@tanstack/react-query";
 
 export const useGetLeads = () => {
@@ -60,13 +60,19 @@ export const useDeleteLeads = () =>{
     return useMutation({
         mutationFn:(id:string)=> leadServices.deleteLead(id),
     })
-}
+};
+
+export const useLinkClient = (id:string) =>{
+    return useMutation({
+        mutationFn:(clientId:linkLeadType)=> leadServices.linkClient(id,clientId),
+    })
+};
 
 export const useDeleteLeadsDisscussion = () => {
     return useMutation({
        mutationFn:({ leadId, id }: { leadId: string; id: string })=>leadServices.deleteDisscussion(leadId,id)
     })
- }
+ };
 
 export const useUpdateLeadsDetails = (id:string) => {
      return useMutation({

@@ -63,13 +63,13 @@ export const AddBussinessformSchema = z.object({
   ]),
   business_name: z.string().min(1, "Business name is required"),
   business_reg_no: z.string().min(1, "CIN/Reg no. is required"),
-  business_reg_date: z.string(),
+  business_reg_date: z.string().min(1, "Date is Required"),
   business_pan: z.string().min(10, "PAN Card must be 10 characters").max(10),
   business_mobile: z
     .string()
     .min(10, "Official number must be 10 digits")
     .max(10),
-  state: z.string().min(1, "State is required"),
+  state: stateZodSchema,
   business_address_1: z.string().min(1, "Registered address is required"),
   business_address_2: z
     .string()

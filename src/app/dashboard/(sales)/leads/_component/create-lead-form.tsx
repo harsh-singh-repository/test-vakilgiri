@@ -111,7 +111,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               control={form.control}
               name="existing"
               render={({ field }) => (
-                <div>
+                <div className="">
                   <label className="text-[11px] font-semibold text-[#091747]">Existing Lead</label>
                   <Select
                     onValueChange={(value) => field.onChange(value === "yes")}

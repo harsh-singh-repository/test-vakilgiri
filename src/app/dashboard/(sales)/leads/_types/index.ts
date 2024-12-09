@@ -25,6 +25,10 @@ export interface leadsDisscussionProp{
   disscussion: string;
 }
 
+export interface linkClientProp{
+  clientId:string
+}
+
 export interface LeadsDiscussionType {
   id: string;
   body: string;
@@ -60,6 +64,23 @@ export interface LeadsReminderType {
   leadId: string;
   creator: Creator;
   createdAt: string;
+}
+
+export interface clientDetailsType{
+  aadhaar: string | null;
+  address1: string | null;
+  address2: string | null;
+  alternativeMobileNumber: string | null;
+  city: string | null;
+  email: string;
+  emailStatus: string; // Enum-like restriction for status
+  firstName: string;
+  id: string;
+  lastName: string;
+  mobileNumber: string;
+  pan: string;
+  pincode: string | null;
+  userRoles: string| null;
 }
 
 export interface BussinessSearchType{
