@@ -1,16 +1,9 @@
 "use client";
 
-import {
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { format } from "date-fns";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -24,15 +17,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
@@ -42,14 +28,17 @@ import { AddBussinessformSchema } from "../_types/zodSchema";
 import { useAddBusiness } from "@/hooks/business/manage-business";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { MaterialInput } from "@/components/material-input";
+import CustomSelect from "@/components/custom-select";
+import { AxiosError } from "axios";
 
 const states = [
-  "Andhra_Pradesh",
-  "Delhi",
-  "Gujarat",
-  "Karnataka",
-  "Maharashtra",
-  "Tamil Nadu",
+  { key: "Andhra_Pradesh", name: "Andhra Pradesh" },
+  { key: "Delhi", name: "Delhi" },
+  { key: "Gujarat", name: "Gujarat" },
+  { key: "Karnataka", name: "Karnataka" },
+  { key: "Maharashtra", name: "Maharashtra" },
+  { key: "Tamil_Nadu", name: "Tamil Nadu" }
 ];
 
 const bussinessType = [
@@ -67,7 +56,11 @@ const bussinessType = [
   { key: "Nidhi_Limited", name: "Nidhi Limited" },
 ];
 
-const AddNewBussinessDialog = () => {
+interface onCloseProp {
+  onClose: () => void;
+}
+
+const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
   // const [date, setDate] = React.useState<Date>();
   const [logo, setLogo] = React.useState<string | null>(null);
 
@@ -96,15 +89,25 @@ const AddNewBussinessDialog = () => {
   });
 
   const onSubmit = (data: z.infer<typeof AddBussinessformSchema>) => {
-    console.log(data);
+    console.log("formdata",data);
     addBussiness(data, {
       onSuccess: () => {
         toast.success("Bussiness Added Succesfully");
         queryClient.invalidateQueries({queryKey:['bussiness']})
       },
       onError: (error) => {
-        console.log("Error",error);
-        toast.error(`Failed to create Bussiness: ${error}`);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to Add Busssiness: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors{
+          toast.error(`An unexpected error occurred: ${error}`);
+        }
       },
     });
   };
@@ -121,46 +124,34 @@ const AddNewBussinessDialog = () => {
   };
 
   return (
-    <DialogContent className="sm:max-w-[425px] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1000px]">
-      <DialogHeader>
-        <DialogTitle className="text-[#091747]">
+    <div className="sm:max-w-[425px] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1000px]">
+      <div className="flex justify-between">
+      <div className="flex flex-col">
+        <div className="text-[#091747] text-[22px] font-semibold">
           Link Your Bussiness
-        </DialogTitle>
-        <DialogDescription className="text-[#F21300]">
+        </div>
+        <div className="text-[#F21300]">
           Please fill all the information correctly to get the most out of
           Vakilgiri.
-        </DialogDescription>
-      </DialogHeader>
+        </div>
+      </div>
+      <X className="text-[#f21300] cursor-pointer" strokeWidth={"5"} onClick={onClose}/>
+      </div>
       <span className="inline text-[10px] bg-[#091747] text-left px-2 py-1 font-semibold rounded-md max-w-fit text-white">
         Basic Details
       </span>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 mt-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-3">
             <FormField
               name="business_type"
               control={form.control}
               render={({ field }) => (
                 <div>
-                  <FormLabel className="text-xs">Business Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select business type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {bussinessType.map((business, index) => (
-                        <SelectItem key={index} value={business.key}>
-                          {business.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                     <CustomSelect placeholder="BussinessType" {...field} options={bussinessType} className="w-[469px]"/>
+                  </FormControl>
                   <FormMessage />
                 </div>
               )}
@@ -171,9 +162,9 @@ const AddNewBussinessDialog = () => {
               name="business_name"
               render={({ field }) => (
                 <div>
-                  <FormLabel className="text-xs">Business Name</FormLabel>
+                  {/* <FormLabel className="text-xs">Business Name</FormLabel> */}
                   <FormControl>
-                    <Input {...field} className="text-xs" />
+                    <MaterialInput {...field} className="text-xs" placeholder="Business Names"/>
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -257,9 +248,9 @@ const AddNewBussinessDialog = () => {
               name="business_pan"
               render={({ field }) => (
                 <div>
-                  <FormLabel className="text-xs">PAN Card</FormLabel>
+                  {/* <FormLabel className="text-xs">PAN Card</FormLabel> */}
                   <FormControl>
-                    <Input {...field} className="text-xs" />
+                    <MaterialInput {...field} className="text-xs" placeholder="PAN Card"/>
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -271,9 +262,8 @@ const AddNewBussinessDialog = () => {
               name="business_email"
               render={({ field }) => (
                 <div>
-                  <FormLabel className="text-xs">Official Email Id</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-xs" />
+                    <MaterialInput {...field} className="text-xs" placeholder="Official Email Id"/>
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -285,24 +275,11 @@ const AddNewBussinessDialog = () => {
               name="state"
               render={({ field }) => (
                 <div>
-                  <FormLabel className="text-xs">State</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select State" />
-                      </SelectTrigger>
+                      <CustomSelect {...field} className="w-[490px]" placeholder="State" options={states}/>
                     </FormControl>
-                    <SelectContent>
-                      {states.map((state) => (
-                        <SelectItem key={state} value={state}>
-                          {state}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+
                   <FormMessage />
                 </div>
               )}
@@ -313,9 +290,8 @@ const AddNewBussinessDialog = () => {
               name="business_address_2"
               render={({ field }) => (
                 <div>
-                  <FormLabel className="text-xs">Reg. Address-2</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-xs" />
+                    <MaterialInput {...field} className="text-xs" placeholder="Reg. Address-2"/>
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -327,9 +303,8 @@ const AddNewBussinessDialog = () => {
               name="business_reg_no"
               render={({ field }) => (
                 <div>
-                  <FormLabel className="text-xs">CIN/ Reg. No.</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-xs" />
+                    <MaterialInput {...field} className="text-xs" placeholder="CIN/ Reg. No."/>
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -341,9 +316,8 @@ const AddNewBussinessDialog = () => {
               name="business_mobile"
               render={({ field }) => (
                 <div>
-                  <FormLabel className="text-xs">Official Mobile</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-xs" />
+                    <MaterialInput {...field} className="text-xs" placeholder="Official Mobile"/>
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -355,9 +329,8 @@ const AddNewBussinessDialog = () => {
               name="business_address_1"
               render={({ field }) => (
                 <div>
-                  <FormLabel className="text-xs">Reg. Address-1</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-xs" />
+                    <MaterialInput {...field} className="text-xs" placeholder="Reg. Address-1"/>
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -369,9 +342,8 @@ const AddNewBussinessDialog = () => {
               name="city"
               render={({ field }) => (
                 <div>
-                  <FormLabel className="text-xs">City</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-xs" />
+                    <MaterialInput {...field} className="text-xs" placeholder="City"/>
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -383,9 +355,8 @@ const AddNewBussinessDialog = () => {
               name="business_pincode"
               render={({ field }) => (
                 <div>
-                  <FormLabel className="text-xs">Pin Code</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-xs" />
+                    <MaterialInput {...field} className="text-xs" placeholder="PIN Code"/>
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -474,7 +445,7 @@ const AddNewBussinessDialog = () => {
           </div>
         </form>
       </Form>
-    </DialogContent>
+    </div>
   );
 };
 

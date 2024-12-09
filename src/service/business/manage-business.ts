@@ -10,6 +10,7 @@ const BUSINESS_API = {
     ADD_REMINDERS: (id: string) => `/business/${id}/reminders`,
     DELETE_DISSCUSSION: (id: string,bussinessId:string) => `/business/${bussinessId}/discussions/${id}`,
     GET_ALL: '/business',
+    SEARCH_BUSSINESS:(searchQuery:string)=>`/business/search?query=${searchQuery}`,
     GET_BY_ID: (id: string | string[] | undefined) => `/business/${id}/`,
     // GET_CURRENT: '/admin/current-user'
 } as const;
@@ -55,6 +56,10 @@ export const bussinessService = {
         return await axiosInstance.delete(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.DELETE_DISSCUSSION(id,bussinessId)}`);
     },
-
+    
+    getBussinessBySearch: async(searchQuery:string)=>{
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.SEARCH_BUSSINESS(searchQuery)}`);
+        return response.data.data;
+    }
 
 };

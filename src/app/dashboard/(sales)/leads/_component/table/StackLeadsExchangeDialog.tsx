@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
 import {
   CalendarIcon,
+  Plus,
   Trash2,
   X,
   //  X
@@ -39,6 +40,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
+
+
+
 //   import { RxAvatar } from "react-icons/rx";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -47,6 +51,7 @@ import {
   useDeleteLeadsDisscussion,
   useGetLeadsById,
   useGetLeadsDisscussion,
+  useGetLeadsReminder,
 } from "@/hooks/leads/manage-leads";
 import {
   leadsDiscussionSchema,
@@ -54,9 +59,14 @@ import {
 } from "../../_types/zodSchema";
 import { MdEdit } from "react-icons/md";
 import { RxAvatar } from "react-icons/rx";
-import { LeadsDiscussionType } from "../../_types";
+import { LeadsDiscussionType, LeadsReminderType } from "../../_types";
 import { AxiosError } from "axios";
 import EditLeads from "../EditLeads";
+import AddClientDialog from "@/app/dashboard/client/_component/AddClientDialog";
+import Modal from "@/components/model/custom-modal";
+import { useState } from "react";
+import LinkClient from "../LinkClient";
+import LinkBussiness from "../LinkBussiness";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -64,12 +74,49 @@ interface StackExchangeDialogProp {
   // setOpen: (open: boolean) => void;
 }
 
+function formatDate(dateString: string): string {
+  const options: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  };
+
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', options);
+}
+
+function formatCreatedAtDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  
+  hours = hours % 12 || 12; // Convert 24-hour time to 12-hour format
+  const formattedHours = String(hours).padStart(2, '0');
+
+  return `${day}-${month}-${year}, ${formattedHours}:${minutes} ${ampm}`;
+}
+
+
 export const StackLeadsExchangeDialog = ({
   onClose,
   openDialogId,
 }: StackExchangeDialogProp) => {
   // const [date, setDate] = React.useState<Date>()
   //   const [isSubmittingReminder, setIsSubmittingReminder] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+const openModal = () => setIsModalOpen(true);
+const closeModal = () => setIsModalOpen(false);
 
   const queryClient = useQueryClient();
 
@@ -96,6 +143,8 @@ export const StackLeadsExchangeDialog = ({
   const { data } = useGetLeadsById(openDialogId);
 
   const { data: LeadDiscussion } = useGetLeadsDisscussion(openDialogId);
+
+  const { data: LeadReminder } = useGetLeadsReminder(openDialogId);
 
   const { mutate: addDisscussion } = useAddLeadsDiscussion(openDialogId);
 
@@ -167,6 +216,7 @@ export const StackLeadsExchangeDialog = ({
     addReminder(values, {
       onSuccess: () => {
         toast.success(`Added Reminder Successfully`);
+        queryClient.invalidateQueries({queryKey:['leadsReminder']})
       },
       onError: (error) => {
         toast.error(`Failed to add reminder : ${error}`);
@@ -234,7 +284,7 @@ export const StackLeadsExchangeDialog = ({
                     {LeadDiscussion.map(
                       (discussion: LeadsDiscussionType, index: number) => (
                         <div
-                          className="flex flex-row gap-2 items-center bg-[#E9E9E9] rounded-md px-2 py-1 "
+                          className="flex flex-row gap-2 bg-[#E9E9E9] rounded-md px-2 py-1 "
                           key={index}
                         >
                           <RxAvatar size={30} />
@@ -422,6 +472,45 @@ export const StackLeadsExchangeDialog = ({
                     </Form>
                   </AccordionContent>
                 </AccordionItem>
+                {LeadReminder && (
+                  <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
+                    {LeadReminder.map(
+                      (reminder: LeadsReminderType, index: number) => (
+                        <div
+                          className="flex flex-row gap-2 bg-[#E9E9E9] rounded-md px-2 py-1 "
+                          key={index}
+                        >
+                          <RxAvatar size={30} />
+                          <div className="flex flex-col w-full items-start">
+                            <div className="flex flex-col text-left w-full">
+                              <span className="font-semibold">{reminder.creator.firstName + " " + reminder.creator.lastName}</span>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Subject:</span>
+                                 <span>{reminder.subject}</span>
+                              </div>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Description:</span>
+                                 <span>{reminder.body}</span>
+                              </div>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Reminder Type:</span>
+                                 <span>{reminder.reminderType}</span>
+                              </div>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Due Date:</span>
+                                 <span>{formatDate(reminder.dueDate)}</span>
+                              </div>
+                              <div className="flex justify-between text-[#f21300] w-full">
+                                 <span>{formatCreatedAtDate(reminder.createdAt)}</span>
+                                 <Trash2 size={"15"}/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
               </Accordion>
             </div>
             <div className="bg-[#FFFFFF] max-h-fit p-2">
@@ -454,7 +543,7 @@ export const StackLeadsExchangeDialog = ({
 
                 {/* Lead Details Section */}
                 <div className="px-2">
-                  <div className="flex item-center gap-x-2">
+                  <div className="flex item-center gap-x-1">
                     <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
                       <span className="font-normal text-[13px]">
                         Lead Details
@@ -500,19 +589,32 @@ export const StackLeadsExchangeDialog = ({
                       <span className="font-semibold">Status: </span>
                       <span className="font-semibold">{data?.status}</span>
                     </div>
-                    <Button className="w-full bg-[#797979] hover:bg-[#f21300] mt-2 text-xs h-8">
+                    <Button className="w-full bg-[#797979] hover:bg-[#f21300] mt-2 text-xs h-8" onClick={openModal}>
                       Create Client
                     </Button>
+                    <Modal isOpen={isModalOpen} onClose={closeModal}>
+                      <AddClientDialog onClose={closeModal}/>
+                    </Modal>
                   </div>
                 </div>
 
                 {/* Client Details Section */}
                 <div className="px-2">
-                  <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
+                   <div className="flex items-center gap-x-1">
+                   <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
                     <span className="font-normal text-[13px]">
                       Client Details
                     </span>
                   </div>
+                  <Popover>
+                    <PopoverTrigger>
+                       <Plus className="text-white bg-[#f21300] rounded-md"/>
+                    </PopoverTrigger>
+                    <PopoverContent className="px-2 py-2">
+                        <LinkClient/>
+                    </PopoverContent>
+                  </Popover>
+                   </div>
                   <div className="py-1 text-[12px] text-[#091747]">
                     <div className="flex">
                       <span className="font-semibold">Name:</span>
@@ -547,11 +649,21 @@ export const StackLeadsExchangeDialog = ({
 
                 {/* Business Details Section */}
                 <div className="px-2">
-                  <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
+                 <div className="flex items-center gap-x-1">
+                 <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
                     <span className="font-normal text-[13px]">
                       Bussiness Details
                     </span>
                   </div>
+                  <Popover>
+                    <PopoverTrigger>
+                      <Plus className="text-white bg-[#f21300] rounded-md"/>
+                    </PopoverTrigger>
+                    <PopoverContent className="">
+                        <LinkBussiness/>
+                    </PopoverContent>
+                  </Popover>
+                 </div>
                   <div className="text-[12px]">
                     <div className="flex">
                       <span className="font-semibold">Business:</span>

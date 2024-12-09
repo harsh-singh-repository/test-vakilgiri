@@ -31,13 +31,23 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { MaterialInput } from "@/components/material-input";
+import { useSearchBussinessQuery } from "@/hooks/business/manage-business";
+import { useState } from "react";
+import { BussinessSearchType } from "../_types";
 
 interface onCloseProp{
    onClose:()=>void;
 }
 
 export default function CreateLeadForm({onClose}:onCloseProp) {
+  
+  const [searchQuery,setSearchQuery] = useState<string>("");
+
   const { mutate: addLeads } = useAddLeads();
+
+  const {data:bussinessSearch} = useSearchBussinessQuery(searchQuery);
+
+  console.log("data",bussinessSearch);
 
   const query = useQueryClient();
 
@@ -74,13 +84,18 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
 
   const existingLead = form.watch("existing");
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    const value = e.target.value;
+    setSearchQuery(value)
+  }
+
   console.log(form.watch("existing")); // Watch existingLead state
 
   return (
     // <DialogContent>
     <div className="w-full"> 
       <div className="bg-white rounded-lg shadow-sm px-2 py-1">
-      <div className="relative w-full pb-2 border-b text-center">
+      <div className="relative w-full pb-2 text-center">
       <h2 className="text-2xl font-bold text-[#F31F0D] mt-2">Create Lead</h2>
       <p className="text-sm text-[#091747] font-medium">
         Fill all the information correctly
@@ -125,11 +140,23 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                   render={({ field }) => (
                     <div>
                       <FormControl>
-                        <MaterialInput placeholder="Business Name" {...field} className="w-[290px]"/>
+                        <MaterialInput placeholder="Business Name" {...field} className="w-[290px]" onChange={handleChange}/>
                       </FormControl>
                     </div>
                   )}
                 />
+
+                <div className="flex flex-col gap-2">
+                {bussinessSearch?.map((bussiness:BussinessSearchType,index:number)=> (
+                    <div key={index} className="flex flex-col gap-x-2 bg-[#E7E7E7] text-[#091747] px-2 py-1 rounded-md">
+                          <span className="text-[13px] uppercase font-semibold">{bussiness.businessName}</span>
+                       <div className="flex flex-row text-[12px]">
+                          <span className="font-semibold">PAN:{""}</span>
+                          <span>{bussiness.businessPan}</span>
+                       </div>
+                    </div>
+                  ))}
+                </div>
 
                 <FormField
                   control={form.control}

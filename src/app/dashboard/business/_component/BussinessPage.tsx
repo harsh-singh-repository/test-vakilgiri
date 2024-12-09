@@ -14,9 +14,9 @@ import { useSearchParams } from 'next/navigation';
 // import { fakeBusinesss } from '@/constants/business-table-data';
 // import Spinner from '@/components/smooth-spinner';
 import {Oval} from "react-loader-spinner"
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import AddNewBussinessDialog from './add-new-bussiness-dialog';
 import { useGetBussiness } from '@/hooks/business/manage-business';
+import Modal from '@/components/model/custom-modal';
 
 // type ResponseData = {
 //   businesses: Business[];
@@ -39,6 +39,11 @@ export default function BusinessPage() {
     searchParams.get("search") || ""
   );
   // const [responseData, setResponseData] = useState<ResponseData | null>(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const {data} = useGetBussiness();
   console.log("data bussiness",data);
@@ -104,14 +109,12 @@ export default function BusinessPage() {
             className="w-full md:max-w-sm ml-auto bg-white"
             />
 
-      <Dialog>
-            <DialogTrigger>
-              <div className="bg-[#f21300] text-white p-2 rounded-lg">
+              <div className="bg-[#f21300] text-white p-2 rounded-lg cursor-pointer" onClick={openModal}>
                 <Plus className="h-6 w-6" />
               </div>
-            </DialogTrigger>
-              <AddNewBussinessDialog/>
-      </Dialog>
+            <Modal isOpen={isModalOpen} onClose={closeModal} className='p-4'>
+               <AddNewBussinessDialog onClose={closeModal}/>
+            </Modal>
         </div>
       </div>
       <Separator />

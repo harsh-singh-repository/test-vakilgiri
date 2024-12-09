@@ -43,7 +43,19 @@ export const useGetLeadsDisscussion = (id:string) =>{
         enabled:!!id,
     });
     return query;
-}
+};
+
+export const useGetLeadsReminder = (id:string) =>{
+    const query =  useQuery({
+        queryKey: ['leadsReminder',id],
+        queryFn:() => leadServices.getReminder(id),
+        enabled:!!id,
+    });
+    return query;
+};
+
+
+
 export const useDeleteLeads = () =>{
     return useMutation({
         mutationFn:(id:string)=> leadServices.deleteLead(id),

@@ -2,22 +2,12 @@ import React, { useState } from "react";
 import { useForm, useFormState } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {
-  DialogContent,
-  DialogHeader,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -30,11 +20,10 @@ import { useAddClient } from "@/hooks/users/manage-client";
 import { toast } from "sonner";
 import { AddClientformSchema } from "../_types/zodSchema";
 import { useQueryClient } from "@tanstack/react-query";
-
-
+import { X } from "lucide-react";
+import { MaterialInput } from "@/components/material-input";
 
 // Validation schema
-
 
 // States array
 const states = [
@@ -46,7 +35,11 @@ const states = [
   "Tamil Nadu",
 ];
 
-const AddClientDialog = () => {
+interface onCloseProp {
+  onClose: () => void;
+}
+
+const AddClientDialog = ({ onClose }: onCloseProp) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutate: addUser } = useAddClient();
 
@@ -73,20 +66,18 @@ const AddClientDialog = () => {
   const { isValid } = useFormState({
     control: form.control,
   });
-  
+
   const queryClient = useQueryClient();
 
   async function onSubmit(formData: z.infer<typeof AddClientformSchema>) {
-
-    
     // const jsonData = JSON.stringify(formData, null, 2);
     addUser(formData, {
       onSuccess: () => {
         toast.success("Client created successfully!");
 
         // Invalidate queries to refetch the updated list of clients
-          queryClient.invalidateQueries({queryKey:['clients']});
-    
+        queryClient.invalidateQueries({ queryKey: ["clients"] });
+
         form.reset();
       },
       onError: (error) => {
@@ -97,29 +88,45 @@ const AddClientDialog = () => {
   }
 
   return (
-    <DialogContent>
-      <DialogHeader className="items-center">
-        <DialogTitle>Create New Client</DialogTitle>
-        <DialogDescription className="text-[#F21300]">
-          Fill all the information correctly to avoid duplicacy
-        </DialogDescription>
-      </DialogHeader>
+    <div className="px-2 py-2">
+      <div className="items-center">
+        <div className="flex items-center justify-between px-4">
+          <div className="flex-1 text-center">
+            <h2 className="text-2xl font-bold tracking-tight text-[#091747]">
+              Create New Client
+            </h2>
+            <p className="text-[#f21300] text-sm mt-1">
+              Fill all the information correctly to avoid duplicacy.
+            </p>
+          </div>
+          <button className="text-[#f21300]" onClick={onClose}>
+            <X size={24} />
+          </button>
+        </div>
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <FormField
+            control={form.control}
+            name="PAN"
+            render={({ field }) => (
+              <div>
+                <FormControl>
+                  <MaterialInput placeholder="PAN" {...field} className="border-[#091747] text-[14px]"/>
+                </FormControl>
+                {/* <FormMessage /> */}
+              </div>
+            )}
+          />
+
           <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="First_Name"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    First Name<span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="First Name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <div>
+                  <MaterialInput {...field} placeholder="First Name" readOnly className="border-[#091747] text-[14px]"/>
+                </div>
               )}
             />
 
@@ -127,48 +134,30 @@ const AddClientDialog = () => {
               control={form.control}
               name="Last_Name"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Last Name<span className="text-red-500">*</span>
-                  </FormLabel>
+                <div>
                   <FormControl>
-                    <Input placeholder="Last Name" {...field} />
+                    <MaterialInput
+                      placeholder="Last Name"
+                      {...field}
+                      readOnly
+                    />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
+                   {/* <FormMessage /> */}
+                </div>
               )}
             />
           </div>
 
           <FormField
             control={form.control}
-            name="PAN"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  PAN<span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="10 Digit PAN" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Email ID<span className="text-red-500">*</span>
-                </FormLabel>
+              <div>
                 <FormControl>
-                  <Input placeholder="Enter your Email" {...field} />
+                  <MaterialInput placeholder="Email" {...field} className="border-[#091747] text-[14px]"/>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
+                {/* <FormMessage /> */}
+              </div>
             )}
           />
 
@@ -177,15 +166,12 @@ const AddClientDialog = () => {
               control={form.control}
               name="Mobile_Number"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Mobile Number<span className="text-red-500">*</span>
-                  </FormLabel>
+                <div>
                   <FormControl>
-                    <Input placeholder="Enter Mobile No." {...field} />
+                    <MaterialInput placeholder="Mobile Number" {...field} className="border-[#091747] text-[14px]"/>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  {/* <FormMessage /> */}
+                </div>
               )}
             />
 
@@ -193,13 +179,12 @@ const AddClientDialog = () => {
               control={form.control}
               name="Aadhaar"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Aadhaar Number</FormLabel>
+                <div>
                   <FormControl>
-                    <Input placeholder="Aadhaar Number" {...field} />
+                    <MaterialInput placeholder="Aadhaar Number" {...field} className="border-[#091747] text-[14px]"/>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  {/* <FormMessage /> */}
+                </div>
               )}
             />
           </div>
@@ -208,15 +193,12 @@ const AddClientDialog = () => {
             control={form.control}
             name="Address_1"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Address-1<span className="text-red-500">*</span>
-                </FormLabel>
+              <div>
                 <FormControl>
-                  <Input placeholder="Address-1" {...field} />
+                  <MaterialInput placeholder="Address-1" {...field} className="border-[#091747] text-[14px]"/>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
+                {/* <FormMessage /> */}
+              </div>
             )}
           />
 
@@ -224,13 +206,12 @@ const AddClientDialog = () => {
             control={form.control}
             name="Address_2"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Address-2</FormLabel>
+              <div>
                 <FormControl>
-                  <Input placeholder="Address-2" {...field} />
+                  <MaterialInput placeholder="Address-2" {...field} className="border-[#091747] text-[14px]"/>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
+                {/* <FormMessage /> */}
+              </div>
             )}
           />
 
@@ -238,10 +219,8 @@ const AddClientDialog = () => {
             control={form.control}
             name="State"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  State<span className="text-red-500">*</span>
-                </FormLabel>
+              <div>
+                 <label className="text-[11px] font-semibold text-[#091747]">State</label>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -259,8 +238,8 @@ const AddClientDialog = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                <FormMessage />
-              </FormItem>
+                {/* <FormMessage /> */}
+              </div>
             )}
           />
 
@@ -268,10 +247,8 @@ const AddClientDialog = () => {
             control={form.control}
             name="gender"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Gender<span className="text-red-500">*</span>
-                </FormLabel>
+              <div>
+                 <label className="text-[11px] font-semibold text-[#091747] text-left">Gender</label>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -287,8 +264,8 @@ const AddClientDialog = () => {
                     <SelectItem value="Other">Other</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage />
-              </FormItem>
+                {/* <FormMessage /> */}
+              </div>
             )}
           />
 
@@ -297,15 +274,12 @@ const AddClientDialog = () => {
               control={form.control}
               name="City"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    City<span className="text-red-500">*</span>
-                  </FormLabel>
+                <div>
                   <FormControl>
-                    <Input placeholder="City" {...field} />
+                    <MaterialInput placeholder="City" {...field} className="border-[#091747] text-[14px]"/>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  {/* <FormMessage /> */}
+                </div>
               )}
             />
 
@@ -313,17 +287,17 @@ const AddClientDialog = () => {
               control={form.control}
               name="Pincode"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Pincode</FormLabel>
+                <div>
                   <FormControl>
-                    <Input
+                    <MaterialInput
                       type="text"
                       placeholder="Pincode"
-                      {...field} // Use string value directly
+                      {...field}
+                      className="border-[#091747] text-[14px]" // Use string value directly
                     />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  {/* <FormMessage /> */}
+                </div>
               )}
             />
           </div>
@@ -332,7 +306,7 @@ const AddClientDialog = () => {
             control={form.control}
             name="sendMailToClient"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+              <div className="flex flex-row items-start space-x-3 space-y-0">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -340,9 +314,9 @@ const AddClientDialog = () => {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Send Login mail to Client?</FormLabel>
+                <label className="text-[14px] text-[#091747] font-medium">Send Login mail to Client?</label>
                 </div>
-              </FormItem>
+              </div>
             )}
           />
 
@@ -360,7 +334,7 @@ const AddClientDialog = () => {
           </Button>
         </form>
       </Form>
-    </DialogContent>
+    </div>
   );
 };
 

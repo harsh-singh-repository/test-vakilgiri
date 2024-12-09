@@ -10,6 +10,7 @@ const LEADS_API = {
     ADD_LEADS_DISCUSSION:(id:string)=>`/leads/${id}/discussions`,
     ADD_LEADS_REMINDER:(id:string)=>`/leads/${id}/reminders`,
     GET_DISCUSSION:(id:string)=>`/leads/${id}/discussions/`,
+    GET_REMINDER:(id:string)=>`/leads/${id}/reminders`,
     DELETE_DISCUSSION:(leadId:string,id:string) =>`/leads/${leadId}/discussions/${id}`
 }
 
@@ -59,5 +60,10 @@ export const leadServices = {
     updateLead : async(id:string,updateLeadDetails:updateleadDetails)=>{
         return await axiosInstance.patch(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.UPDATE_LEAD(id)}`, updateLeadDetails);
+    },
+
+    getReminder : async (id:string) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.GET_REMINDER(id)}`);
+        return response.data.data;
     }
 }
