@@ -113,6 +113,7 @@ export const StackBussinessExchangeDialog = ({
   console.log("Dialog ID: ", openDialogId);
   console.log(typeof openDialogId);
   const { data } = useGetBussinessById(openDialogId);
+  console.log("Bissiwnefkwnef",data);
 
   const { data: bussinessDisscussionData } =
     useGetBussinessDisscussion(openDialogId);

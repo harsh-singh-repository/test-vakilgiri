@@ -27,9 +27,10 @@ import Component from "../_component/Address_Form";
 import { Separator } from "@/components/ui/separator";
 import { useParams } from "next/navigation";
 import { Card } from "@/components/ui/card";
-import { useGetBussinessOfClient } from "@/hooks/users/manage-client";
+import { useGetClientsById } from "@/hooks/users/manage-client";
 import { useRouter } from "next/navigation";
-import { BusinessDetails } from "../_types";
+import { ClinetBussinessDetails } from "../_types";
+import { Oval } from "react-loader-spinner";
 
 function Page() {
   const params = useParams();
@@ -37,13 +38,13 @@ function Page() {
 
   const router = useRouter();
 
-  const {data} = useGetBussinessOfClient(clientId);
+  const { data: bussinessData } = useGetClientsById(clientId);
 
-  console.log("Bussiness of Client",data);
+  console.log("Bussiness of Client", bussinessData);
 
-  const handleRouteClick = (id:string) => {
-        router.push(`/dashboard/business/${id}`)
-  }
+  const handleRouteClick = (id: string) => {
+    router.push(`/dashboard/business/${id}`);
+  };
 
   const tabs = [
     { name: "Dashboard" },
@@ -58,6 +59,22 @@ function Page() {
   //   { name: "MOHIT WELFARE FOUNDATION", company: "Section 8" },
   //   { name: "SUMOHIT ONLINE PRIVATE LIMITED", company: "Private Limited" },
   // ];
+
+  if (!bussinessData) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Oval
+          visible={true}
+          height="40"
+          width="40"
+          color="#f21300"
+          ariaLabel="oval-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
+    );
+  }
   return (
     <Tabs defaultValue="Dashboard">
       <div className="relative rounded-sm h-full bg-muted flex flex-col top-0 mt-3">
@@ -85,29 +102,37 @@ function Page() {
             </div>
           </div>
           <div className="flex gap-x-2 gap-y-2 flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
-            {data?.map((bussiness:BusinessDetails,index:number) => {
-              return (
-                <Card className="w-[350px]" key={index}>
-                  <div className="flex flex-col">
-                    <div className="flex gap-x-4 p-3  items-center">
-                      <div className="h-10 w-10 bg-slate-400 rounded-md drop-shadow-lg"></div>
-                      <div className="flex flex-col">
-                        <span className="text-sm uppercase font-medium">
-                          {bussiness.businessName}
-                        </span>
-                        <span className="text-xs">{bussiness.businessType}</span>
+            {bussinessData.businessesAsCreator.map(
+              (bussiness: ClinetBussinessDetails, index: number) => {
+                return (
+                  <Card className="w-[350px]" key={index}>
+                    <div className="flex flex-col">
+                      <div className="flex gap-x-4 p-3  items-center">
+                        <div className="h-10 w-10 bg-slate-400 rounded-md drop-shadow-lg"></div>
+                        <div className="flex flex-col">
+                          <span className="text-sm uppercase font-medium">
+                            {bussiness.businessName}
+                          </span>
+                          <span className="text-xs">
+                            {bussiness.businessType}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex item-center justify-between p-4">
+                        <div className="bg-slate-600 px-2 text-[10px] text-white rounded-md flex items-center">
+                          <span>Active</span>
+                        </div>
+                        <Eye
+                          size={"20"}
+                          className="text-[#091747] cursor-pointer"
+                          onClick={() => handleRouteClick(bussiness.id)}
+                        />
                       </div>
                     </div>
-                    <div className="flex item-center justify-between p-4">
-                      <div className="bg-slate-600 px-2 text-[10px] text-white rounded-md flex items-center">
-                        <span>Active</span>
-                      </div>
-                      <Eye size={"20"} className="text-[#091747] cursor-pointer" onClick={() => handleRouteClick(bussiness.id)}/>
-                    </div>
-                  </div>
-                </Card>
-              );
-            })}
+                  </Card>
+                );
+              }
+            )}
           </div>
         </TabsContent>
         <TabsContent value="All Profile" className="mt-12 h-[100vh] px-5">
@@ -136,7 +161,7 @@ function Page() {
                   <TabsTrigger value="documents">Documents</TabsTrigger>
                 </TabsList>
                 <TabsContent value="personal">
-                  <Personal_Form clientId={clientId as string} />
+                  <Personal_Form clientId={clientId} />
                 </TabsContent>
                 <TabsContent value="address">
                   <Component />

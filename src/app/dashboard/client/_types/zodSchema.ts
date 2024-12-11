@@ -73,18 +73,18 @@ export  const AddClientformSchema = z.object({
   })
 
   export const PersonalDataformSchema = z.object({
-    pan: z.string().min(10, "PAN Card must be 10 characters").default(""),
-    firstName: z.string().min(1, "First name is required").default(""),
-    lastName: z.string().min(1, "Last name is required").default(""),
-    gender: z.enum(["Male", "Female", "Other"]).default("Male"),
-    mobileNumber: z.string().min(10, "Mobile number must be 10 digits").default(""),
-    aadhaar: z.string().min(12, "Aadhaar number must be 12 digits").default(""),
-    din: z.string().default(""),
-    dob: z.string().default(""),
-    dscInfo: z.enum(["None", "Not_Applicable", "With_Vakilgiri", "With_Client"]).default("Not_Applicable"),
-    email: z.string().email("Invalid email address").default(""),
-    kycStatus: z.enum(["Pending", "Completed", "Rejected"]).default("Pending"),
-    loginStatus: z.enum(["Active", "Inactive"]).default("Active"),
+    pan: z.string().min(10, "PAN Card must be 10 characters").default("").optional(),
+    firstName: z.string().min(1, "First name is required").default("").optional(),
+    lastName: z.string().min(1, "Last name is required").default("").optional(),
+    gender: z.enum(["Male", "Female", "Other"]).default("Male").optional(),
+    mobileNumber: z.string().min(10, "Mobile number must be 10 digits").default("").optional(),
+    aadhaar: z.string().min(12, "Aadhaar number must be 12 digits").default("").optional(),
+    din: z.string().default("").optional(),
+    dob: z.string().default("").optional(),
+    dscInfo: z.enum(["None", "Not_Applicable", "With_Vakilgiri", "With_Client"]).default("Not_Applicable").optional(),
+    email: z.string().email("Invalid email address").default("").optional(),
+    kycStatus: z.enum(["Pending", "Completed", "Rejected"]).default("Pending").optional(),
+    loginStatus: z.enum(["Active", "Inactive"]).default("Active").optional(),
   });
 
   export const discussionSchema = z.object({

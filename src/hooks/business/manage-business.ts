@@ -90,6 +90,15 @@ export const useGetBussinessById = (id:string | string[] | undefined) =>{
     return query;
 }
 
+export const useSearchBussinessQuery = (searchQuery:string) => {
+    const query =  useQuery({
+        queryKey: ['bussinessSearch',searchQuery],
+        queryFn:() => bussinessService.getBussinessBySearch(searchQuery),
+        enabled:!!searchQuery,
+    });
+    return query;
+}
+
 // export const useEditClient = (id:string) => {
 //     const queryClient = useQueryClient();
 //     const toast = useCustomToast();

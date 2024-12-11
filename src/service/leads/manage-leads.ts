@@ -1,14 +1,17 @@
 import axiosInstance from "@/lib/axiosInstance";
-import {CreateLeadData, LeadsDiscussionType, LeadsReminderTypes } from "@/types";
+import {CreateLeadData, LeadsDiscussionType, LeadsReminderTypes, updateleadDetails } from "@/types";
 
 const LEADS_API = {
     GET_ALL : `/leads`,
     CREATE: `/leads`,
     DELETE:(id:string)=> `/leads/${id}`,
+    UPDATE_LEAD:(id:string)=> `/leads/${id}`,
     GET_BY_ID:(id:string)=>`/leads/${id}`,
     ADD_LEADS_DISCUSSION:(id:string)=>`/leads/${id}/discussions`,
     ADD_LEADS_REMINDER:(id:string)=>`/leads/${id}/reminders`,
-    GET_DISCUSSION:(id:string)=>`/leads/${id}/discussions/`
+    GET_DISCUSSION:(id:string)=>`/leads/${id}/discussions/`,
+    GET_REMINDER:(id:string)=>`/leads/${id}/reminders`,
+    DELETE_DISCUSSION:(leadId:string,id:string) =>`/leads/${leadId}/discussions/${id}`
 }
 
 export const leadServices = {
@@ -44,9 +47,23 @@ export const leadServices = {
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.ADD_LEADS_REMINDER(id)}`, reminder);
     },
 
+    deleteDisscussion: async (leadId:string,id:string) => {
+        return await axiosInstance.delete(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.DELETE_DISCUSSION(leadId,id)}`);
+    },
+
     getDiscussion: async(id:string) =>{
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.GET_DISCUSSION(id)}`);
         return response.data.data;
-    }
+    },
 
+    updateLead : async(id:string,updateLeadDetails:updateleadDetails)=>{
+        return await axiosInstance.patch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.UPDATE_LEAD(id)}`, updateLeadDetails);
+    },
+
+    getReminder : async (id:string) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.GET_REMINDER(id)}`);
+        return response.data.data;
+    }
 }

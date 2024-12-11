@@ -29,7 +29,7 @@ export const useAddClient = () => {
     });
 };
 
-export const useGetClientsById = (id:string) =>{
+export const useGetClientsById = (id:string | string [] | undefined) =>{
     const query =  useQuery({
         queryKey: ['clients',id],
         queryFn:() => clientService.getClientById(id),
@@ -74,7 +74,7 @@ export const useDeleteClientDiscussion = () => {
     })
 };
 
-export const useEditClient = (id:string) => {
+export const useEditClient = (id:string | string [] | undefined) => {
     // const queryClient = useQueryClient();
     // const toast = useCustomToast();
 

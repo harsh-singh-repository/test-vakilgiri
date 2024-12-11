@@ -10,14 +10,11 @@ import ClientCard from "./client-card";
 import { useSearchParams } from "next/navigation";
 // import { ClientPageServer } from "./ClientPageServer";
 // import { Client } from "@/constants/data";
-import {
-  Dialog,
-  // DialogTrigger
-} from "@/components/ui/dialog";
 import AddClientDialog from "./AddClientDialog";
 // import Spinner from '@/components/smooth-spinner';
 import { Oval } from "react-loader-spinner";
 import { useGetClients } from "@/hooks/users/manage-client";
+import Modal from "@/components/model/custom-modal";
 // import { User } from "@/constants/client-table-data";
 
 // type ResponseData = {
@@ -34,8 +31,13 @@ import { useGetClients } from "@/hooks/users/manage-client";
 export default function ClientPageContent() {
   const {data} = useGetClients();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   console.log("ClinetData", data);
-  const [open, setOpen] = useState<boolean>(false);
+  // const [open, setOpen] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
@@ -89,14 +91,14 @@ export default function ClientPageContent() {
             />
 
           <div
-            className="bg-[#f21300] text-white p-2 rounded-md"
-            onClick={() => setOpen(true)}
+            className="bg-[#f21300] text-white p-2 rounded-md cursor-pointer"
+            onClick={openModal}
           >
             <Plus className="h-6 w-6" />
           </div>
-          <Dialog open={open} onOpenChange={setOpen}>
-            <AddClientDialog />
-          </Dialog>
+          <Modal isOpen={isModalOpen} onClose={closeModal}>
+              <AddClientDialog onClose={closeModal}/>
+          </Modal> 
         </div>
       </div>
       <Separator />

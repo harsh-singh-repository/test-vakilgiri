@@ -5,8 +5,14 @@ import ActionButton from './actions';
 
 export const columns: ColumnDef<Leads>[] = [
   {
-    accessorKey: 'id',
-    header: 'Lead ID'
+    accessorKey: 'ledId',
+    header: 'Lead ID',
+    cell:({row})=>{
+       const count = row.index + 1;
+       return(
+          <span>LED{count}</span>
+       )
+    }
   },
   {
     accessorKey: 'createdAt',

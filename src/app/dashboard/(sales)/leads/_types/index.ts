@@ -41,3 +41,31 @@ export interface LeadsDiscussionType {
   userId: string | null;
   isDisabled: boolean;
 }
+
+interface Creator {
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobileNumber: string;
+}
+
+export interface LeadsReminderType {
+  id: string;
+  body: string;
+  reminderType: string;
+  dueDate: string;
+  status: string | null;
+  subject: string;
+  reply: string | null;
+  leadId: string;
+  creator: Creator;
+  createdAt: string;
+}
+
+export interface BussinessSearchType{
+    id: string;
+    businessName: string;
+    businessPan: string;
+    businessType: string; // Extend as needed
+    businessStatus: string | null; // Nullable field
+}

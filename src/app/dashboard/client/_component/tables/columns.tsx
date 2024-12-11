@@ -17,12 +17,24 @@ export const columns: ColumnDef<Client>[] = [
     header: 'Profile'
   },
   {
-    accessorKey: 'id',
+    accessorKey: 'usrId',
     header: 'CLT ID',
+    cell:({row})=>{
+      const count = row.index + 1;
+      return(
+         <span>USR{count}</span>
+      )
+   }
   },
   {
     accessorKey: 'firstName',
-    header: 'Name'
+    header: 'Name',
+    cell:({row})=>{
+      const name = row.original.firstName + " " + row.original.lastName;
+      return(
+         <span>{name}</span>
+      )
+   }
   },
   {
     accessorKey: 'pan',
