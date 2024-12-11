@@ -11,10 +11,16 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/', request.url));
     }
 
+    // If token exists, allow access to the dashboard or any protected route
+    if (token && url.pathname === "/") {
+        console.log("Already logged in, redirecting to /dashboard");
+        return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+
     console.log("Authorized request or non-protected path");
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/dashboard/:path*'],
+    matcher: ['/dashboard/:path*','/'],
 };
