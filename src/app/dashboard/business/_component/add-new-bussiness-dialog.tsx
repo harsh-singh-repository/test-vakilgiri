@@ -33,12 +33,17 @@ import CustomSelect from "@/components/custom-select";
 import { AxiosError } from "axios";
 
 const states = [
+  { key: "Arunachal_Pradesh", name: "Arunachal Pradesh" },
   { key: "Andhra_Pradesh", name: "Andhra Pradesh" },
-  { key: "Delhi", name: "Delhi" },
-  { key: "Gujarat", name: "Gujarat" },
-  { key: "Karnataka", name: "Karnataka" },
-  { key: "Maharashtra", name: "Maharashtra" },
-  { key: "Tamil_Nadu", name: "Tamil Nadu" }
+  { key: "Chhattisgarh", name: "Chhattisgarh" },
+  { key: "Assam", name: "Assam" },
+  { key: "Bihar", name: "Bihar" },
+  { key: "Haryana", name: "Haryana" },
+  { key: "Goa", name: "Goa" },
+  { key: "Rajasthan", name: "Rajasthan" },
+  { key: "Uttar_Pradesh", name: "Uttar Pradesh" },
+  { key: "Tamil_Nadu", name: "Tamil Nadu" },
+  { key: "Others", name: "Others" }
 ];
 
 const bussinessType = [
@@ -67,6 +72,7 @@ const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
   const queryClient = useQueryClient();
 
   const { mutate: addBussiness } = useAddBusiness();
+
 
   const form = useForm<z.infer<typeof AddBussinessformSchema>>({
     resolver: zodResolver(AddBussinessformSchema),
@@ -150,7 +156,8 @@ const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
               render={({ field }) => (
                 <div>
                   <FormControl>
-                     <CustomSelect placeholder="BussinessType" {...field} options={bussinessType} className="w-[469px]"/>
+                     <CustomSelect placeholder="BussinessType" {...field} options={bussinessType} className="w-[469px]" onValueChange={field.onChange}
+                    value={field.value}/>
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -222,6 +229,7 @@ const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
                               : "Pick a date"}
                           </Button>
                         </FormControl>
+
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">
                         <Calendar
@@ -238,6 +246,7 @@ const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
                         />
                       </PopoverContent>
                     </Popover>
+                    <FormMessage/>
                   </div>
                 )}
               />
@@ -275,9 +284,8 @@ const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
               name="state"
               render={({ field }) => (
                 <div>
-
                     <FormControl>
-                      <CustomSelect {...field} className="w-[490px]" placeholder="State" options={states}/>
+                      <CustomSelect {...field} className="w-[490px]" placeholder="State" options={states} onValueChange={field.onChange} value={field.value}/>
                     </FormControl>
 
                   <FormMessage />

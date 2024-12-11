@@ -15,15 +15,16 @@ interface CustomSelectProps {
   placeholder: string
   options: { key: string; name: string }[]
   className?: string
+  onValueChange?: (value: string) => void
+  value?: string | undefined;
 }
 
-export default function CustomSelect({ placeholder, options, className }: CustomSelectProps) {
+export default function CustomSelect({ placeholder, options, className, onValueChange, value }: CustomSelectProps) {
   const [isOpen, setIsOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
 
   return (
     <div className={cn("relative w-[200px]", className)}>
-      <Select onValueChange={(newValue) => setValue(newValue)} onOpenChange={setIsOpen}>
+      <Select onValueChange={onValueChange} value={value} onOpenChange={setIsOpen}>
         <SelectTrigger 
           className="w-full bg-white border-gray-300 focus:ring-0 focus:ring-offset-0 text-xs text-black relative max-h-fit rounded-md
           focus-within:border-blue-500 transition-colors data-[placeholder]:border-gray-300"

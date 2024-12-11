@@ -144,6 +144,11 @@ export interface clientDiscussionType{
 export interface LeadsDiscussionType{
   discussion : string;
 }
+export interface linkLeadType{
+  clientId : string;
+}
+
+
 
 export interface CreateLeadData{
   existing: boolean;
