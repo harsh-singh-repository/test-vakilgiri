@@ -522,6 +522,7 @@ const closeModal = () => setIsModalOpen(false);
                     <X
                       className="w-4 h-4 text-[#F21300] cursor-pointer"
                       onClick={onClose}
+                      strokeWidth={"5"}
                     />
                   </div>
                   <div className="flex gap-2 mt-2">
@@ -575,7 +576,7 @@ const closeModal = () => setIsModalOpen(false);
                     </div>
                     <div className="flex">
                       <span className="font-semibold">Service:</span>
-                      <span>{data?.service.replace(/_/g, " ")}</span>
+                      <span>{data?.service?.replace(/_/g, " ")}</span>
                     </div>
                     <div className="flex ">
                       <span className="font-semibold">Value:</span>
@@ -611,34 +612,30 @@ const closeModal = () => setIsModalOpen(false);
                        <Plus className="text-white bg-[#f21300] rounded-md"/>
                     </PopoverTrigger>
                     <PopoverContent className="px-2 py-2">
-                        <LinkClient/>
+                        <LinkClient leadId={openDialogId}/>
                     </PopoverContent>
                   </Popover>
                    </div>
                   <div className="py-1 text-[12px] text-[#091747]">
                     <div className="flex">
                       <span className="font-semibold">Name:</span>
-                      <span>Google Baba</span>
+                      <span>{data?.client.firstName + " " + data?.client.lastName}</span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Mobile:</span>
-                      <span>9304318228</span>
+                      <span className="font-semibold">PAN:</span>
+                      <span className="uppercase">{data?.client.pan}</span>
                     </div>
                     <div className="flex">
                       <span className="font-semibold">Email:</span>
-                      <span>Harsh786@mail.com</span>
+                      <span>{data?.client.email}</span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Service:</span>
+                      <span className="font-semibold">Mobile:</span>
+                      <span>{data?.client.mobileNumber}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="font-semibold">Manager:</span>
                       <span>DSC Registration</span>
-                    </div>
-                    <div className="flex ">
-                      <span className="font-semibold">Value:</span>
-                      <span>222</span>
-                    </div>
-                    <div className="flex ">
-                      <span className="font-semibold">Existing:</span>
-                      <span>Yes</span>
                     </div>
                     <div className="flex  items-center text-white bg-[#f21300] max-w-fit rounded-md px-2 text-[10px]">
                       <span className="font-semibold">KYC status: </span>

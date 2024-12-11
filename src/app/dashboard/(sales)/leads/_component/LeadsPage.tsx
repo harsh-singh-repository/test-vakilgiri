@@ -79,7 +79,7 @@ export default function LeadsPage() {
               <div className="bg-[#f21300] text-white p-2 rounded-md cursor-pointer" onClick={openModal}>
                 <Plus className="h-6 w-6" />
               </div>
-              <Modal isOpen={isModalOpen} onClose={closeModal} className="border-[#f21300] border-4"> 
+              <Modal isOpen={isModalOpen} onClose={closeModal} className="border-[#f21300] border-2"> 
                  <CreateLeadForm onClose={closeModal}/>                 
               </Modal>
           </div>

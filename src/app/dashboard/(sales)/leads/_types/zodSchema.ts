@@ -55,6 +55,14 @@ export const states = [
   'Others',
 ];
 
+export const LinkClientformSchema = z.object({
+  clientId: z.string().min(2, {
+    message: "Required",
+  }),
+})
+
+
+
 export const CreateLeadformSchema = z.object({
     existing: z.boolean().default(true),
     businessId: z.string().min(2, {

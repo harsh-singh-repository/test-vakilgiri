@@ -96,7 +96,7 @@ export const useSearchBussinessQuery = (searchQuery:string) => {
         queryFn:() => bussinessService.getBussinessBySearch(searchQuery),
         enabled:!!searchQuery,
     });
-    return query;
+    return query;  
 }
 
 // export const useEditClient = (id:string) => {

@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axiosInstance";
-import {CreateLeadData, LeadsDiscussionType, LeadsReminderTypes, updateleadDetails } from "@/types";
+import {CreateLeadData, LeadsDiscussionType, LeadsReminderTypes, linkLeadType, updateleadDetails } from "@/types";
 
 const LEADS_API = {
     GET_ALL : `/leads`,
@@ -11,7 +11,8 @@ const LEADS_API = {
     ADD_LEADS_REMINDER:(id:string)=>`/leads/${id}/reminders`,
     GET_DISCUSSION:(id:string)=>`/leads/${id}/discussions/`,
     GET_REMINDER:(id:string)=>`/leads/${id}/reminders`,
-    DELETE_DISCUSSION:(leadId:string,id:string) =>`/leads/${leadId}/discussions/${id}`
+    DELETE_DISCUSSION:(leadId:string,id:string) =>`/leads/${leadId}/discussions/${id}`,
+    LINK_CLIENT:(leadId:string)=>`/leads/${leadId}/link-client`
 }
 
 export const leadServices = {
@@ -65,5 +66,10 @@ export const leadServices = {
     getReminder : async (id:string) => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.GET_REMINDER(id)}`);
         return response.data.data;
+    },
+
+    linkClient : async(id:string, clientId: linkLeadType ) => {
+        return await axiosInstance.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.LINK_CLIENT(id)}`,clientId);
     }
 }
