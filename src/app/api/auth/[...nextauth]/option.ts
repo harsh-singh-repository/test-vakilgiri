@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
                         email: credentials?.email,
                         password: credentials?.password
                     });
-                    console.log(user);
+                    // console.log(user);
                     console.log(user.data.data.token);
 
                     if(user.data.success === false){

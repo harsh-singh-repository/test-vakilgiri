@@ -64,8 +64,8 @@ const Login: React.FC<LoginProps> = ({
     }
 
     if (result?.url) {
-       router.push("/dashboard")
-       toast.success("Login Successful")
+      toast.success("Login Successful")
+      router.push("/dashboard");
     }
   }
 
