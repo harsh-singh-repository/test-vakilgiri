@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useEditClient, useGetClientsById } from "@/hooks/users/manage-client"
+import { useEditClient, useGetClientsById } from "../../../../hooks/users/manage-client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
