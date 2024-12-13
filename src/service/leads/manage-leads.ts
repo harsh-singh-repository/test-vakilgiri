@@ -12,7 +12,8 @@ const LEADS_API = {
     GET_DISCUSSION:(id:string)=>`/leads/${id}/discussions/`,
     GET_REMINDER:(id:string)=>`/leads/${id}/reminders`,
     DELETE_DISCUSSION:(leadId:string,id:string) =>`/leads/${leadId}/discussions/${id}`,
-    LINK_CLIENT:(leadId:string)=>`/leads/${leadId}/link-client`
+    LINK_CLIENT:(leadId:string)=>`/leads/${leadId}/link-client`,
+    ASSIGN_MANAGER:(leadId:string)=>`/leads/${leadId}/managers`
 }
 
 export const leadServices = {
@@ -71,5 +72,9 @@ export const leadServices = {
     linkClient : async(id:string, clientId: linkLeadType ) => {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.LINK_CLIENT(id)}`,clientId);
+    },
+    assignManager : async(id:string, managerId: {managerId: string[]}) => {
+        return await axiosInstance.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.ASSIGN_MANAGER(id)}`,managerId);
     }
 }

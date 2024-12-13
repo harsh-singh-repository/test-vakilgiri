@@ -43,6 +43,7 @@ import {
   useAddClientReminder,
   useGetClientDisscussion,
   useDeleteClientDiscussion,
+  useGetClientReminder,
 } from "@/hooks/users/manage-client";
 // import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
@@ -52,10 +53,42 @@ import { RxAvatar } from "react-icons/rx";
 import { clientDisscussionProps } from "../../_types";
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { ClientReminderType } from "@/app/dashboard/(sales)/leads/_types";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
   onClose: () => void;
+}
+
+function formatDate(dateString: string): string {
+  const options: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  };
+
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', options);
+}
+
+function formatCreatedAtDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  
+  hours = hours % 12 || 12; // Convert 24-hour time to 12-hour format
+  const formattedHours = String(hours).padStart(2, '0');
+
+  return `${day}-${month}-${year}, ${formattedHours}:${minutes} ${ampm}`;
 }
 
 export const StackExchangeDialog = ({
@@ -87,6 +120,7 @@ export const StackExchangeDialog = ({
   console.log(typeof openDialogId);
   const { data } = useGetClientsById(openDialogId);
   const {data:clientDisscussionData} = useGetClientDisscussion(openDialogId)
+  const {data:ClientReminder} = useGetClientReminder(openDialogId)
 
   const { mutate: addDiscussion } = useAddClientDisscussion(openDialogId);
   const { mutate: addReminder } = useAddClientReminder(openDialogId);
@@ -155,6 +189,7 @@ export const StackExchangeDialog = ({
     addReminder(values, {
       onSuccess: () => {
         toast.success("Reminders Submited");
+        queryClient.invalidateQueries({ queryKey: ["clientReminder"] });
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
@@ -413,6 +448,45 @@ export const StackExchangeDialog = ({
                     </Form>
                   </AccordionContent>
                 </AccordionItem>
+                {ClientReminder && (
+                    <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
+                    {ClientReminder.map(
+                      (reminder: ClientReminderType, index: number) => (
+                        <div
+                          className="flex flex-row gap-2 bg-[#E9E9E9] rounded-md px-2 py-1 "
+                          key={index}
+                        >
+                          <RxAvatar size={30} />
+                          <div className="flex flex-col w-full items-start">
+                            <div className="flex flex-col text-left w-full">
+                              <span className="font-semibold">{reminder.creator?.firstName + " " + reminder.creator?.lastName}</span>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Subject:</span>
+                                 <span>{reminder?.subject}</span>
+                              </div>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Description:</span>
+                                 <span>{reminder?.body}</span>
+                              </div>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Reminder Type:</span>
+                                 <span>{reminder?.reminderType}</span>
+                              </div>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Due Date:</span>
+                                 <span>{formatDate(reminder?.dueDate)}</span>
+                              </div>
+                              <div className="flex justify-between text-[#f21300] w-full">
+                                 <span>{formatCreatedAtDate(reminder?.createdAt)}</span>
+                                 <Trash2 size={"15"}/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                    </div>
+                )}
               </Accordion>
             </div>
             <div className="space-y-2 bg-[#ededed] rounded-md max-h-fit">

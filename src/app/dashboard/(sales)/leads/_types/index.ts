@@ -53,7 +53,50 @@ interface Creator {
   mobileNumber: string;
 }
 
+export interface managerDetails{
+  firstName: string;
+  lastName: string;
+  email: string;
+  userRoles: string;
+}
+
+export interface userType{
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  emailStatus: string; // Enum for email status
+  panStatus: string | null; // Null if not provided
+  userRoles: string; // You can replace this with a specific enum if roles are predefined
+  kycStatus: string; //
+}
+
 export interface LeadsReminderType {
+  id: string;
+  body: string;
+  reminderType: string;
+  dueDate: string;
+  status: string | null;
+  subject: string;
+  reply: string | null;
+  leadId: string;
+  creator: Creator;
+  createdAt: string;
+}
+export interface ClientReminderType {
+  id: string;
+  body: string;
+  reminderType: string;
+  dueDate: string;
+  status: string | null;
+  subject: string;
+  reply: string | null;
+  leadId: string;
+  creator: Creator;
+  createdAt: string;
+}
+
+export interface bussinessReminderType{
   id: string;
   body: string;
   reminderType: string;

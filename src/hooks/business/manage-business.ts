@@ -27,6 +27,15 @@ export const useGetBussinessDisscussion = (id:string) =>{
     return query;
 }
 
+export const useGetBussinessReminder = (id:string) =>{
+    const query =  useQuery({
+        queryKey: ['bussinessReminder',id],
+        queryFn:() => bussinessService.getReminder(id),
+        enabled:!!id,
+    });
+    return query;
+}
+
 export const useDeleteBussinessDisscussion = () => {
    return useMutation({
       mutationFn:({ id, bussinessId }: { id: string; bussinessId: string })=>bussinessService.deleteDisscussion(id,bussinessId)

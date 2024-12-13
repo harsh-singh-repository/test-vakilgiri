@@ -16,6 +16,12 @@ export const useAddLeads = () => {
     });
 };
 
+export const useAddManager = (id:string) => {
+    return useMutation({
+        mutationFn:(managerId:{managerId: string[]})=> leadServices.assignManager(id,managerId),
+    });
+};
+
 export const useAddLeadsDiscussion = (id:string) => {
     return useMutation({
         mutationFn:(discussion:LeadsDiscussionType)=> leadServices.addLeadDisscussion(id,discussion),

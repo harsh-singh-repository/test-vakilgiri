@@ -47,6 +47,15 @@ export const useGetClientDisscussion = (id:string) =>{
     return query;
 }
 
+export const useGetClientReminder = (id:string) =>{
+    const query =  useQuery({
+        queryKey: ['clientReminder',id],
+        queryFn:() => clientService.getReminder(id),
+        enabled:!!id,
+    });
+    return query;
+}
+
 export const useGetBussinessOfClient = (id:string | string[] | undefined) =>{
     const query =  useQuery({
         queryKey: ['clients',id],

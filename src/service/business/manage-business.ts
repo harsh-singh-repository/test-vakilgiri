@@ -8,6 +8,7 @@ const BUSINESS_API = {
     ADD_DICUSSION: (id: string) => `/business/${id}/discussions`,
     GET_DICUSSION: (id: string) => `/business/${id}/discussions`,
     ADD_REMINDERS: (id: string) => `/business/${id}/reminders`,
+    GET_REMINDERS: (id: string) => `/business/${id}/reminders`,
     DELETE_DISSCUSSION: (id: string,bussinessId:string) => `/business/${bussinessId}/discussions/${id}`,
     GET_ALL: '/business',
     SEARCH_BUSSINESS:(searchQuery:string)=>`/business/search?query=${searchQuery}`,
@@ -51,6 +52,12 @@ export const bussinessService = {
         return await axiosInstance.put(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.EDIT(id)}`, editBussinessDetails);
     },
+
+    getReminder : async (id:string) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.GET_REMINDERS(id)}`);
+        return response.data.data;
+    },
+
 
     deleteDisscussion: async (id:string,bussinessId:string) => {
         return await axiosInstance.delete(

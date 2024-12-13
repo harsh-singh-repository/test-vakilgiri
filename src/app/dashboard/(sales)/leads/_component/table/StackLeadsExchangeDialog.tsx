@@ -11,12 +11,13 @@ import { format } from "date-fns";
 import {
   CalendarIcon,
   Plus,
+  PlusCircle,
   Trash2,
   X,
   //  X
 } from "lucide-react";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -36,18 +37,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-
-
-
 
 //   import { RxAvatar } from "react-icons/rx";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useAddLeadsDiscussion,
   useAddLeadsReminder,
+  useAddManager,
   useDeleteLeadsDisscussion,
   useGetLeadsById,
   useGetLeadsDisscussion,
@@ -59,7 +58,12 @@ import {
 } from "../../_types/zodSchema";
 import { MdEdit } from "react-icons/md";
 import { RxAvatar } from "react-icons/rx";
-import { LeadsDiscussionType, LeadsReminderType } from "../../_types";
+import {
+  LeadsDiscussionType,
+  LeadsReminderType,
+  managerDetails,
+  userType,
+} from "../../_types";
 import { AxiosError } from "axios";
 import EditLeads from "../EditLeads";
 import AddClientDialog from "@/app/dashboard/client/_component/AddClientDialog";
@@ -67,6 +71,7 @@ import Modal from "@/components/model/custom-modal";
 import { useState } from "react";
 import LinkClient from "../LinkClient";
 import LinkBussiness from "../LinkBussiness";
+import { useGetUsers } from "@/hooks/user/manage-user";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -76,35 +81,34 @@ interface StackExchangeDialogProp {
 
 function formatDate(dateString: string): string {
   const options: Intl.DateTimeFormatOptions = {
-    month: 'short',
-    day: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
     hour12: true,
   };
 
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', options);
+  return date.toLocaleDateString("en-US", options);
 }
 
 function formatCreatedAtDate(dateString: string): string {
   const date = new Date(dateString);
 
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
   const year = date.getFullYear();
 
   let hours = date.getHours();
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'pm' : 'am';
-  
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const ampm = hours >= 12 ? "pm" : "am";
+
   hours = hours % 12 || 12; // Convert 24-hour time to 12-hour format
-  const formattedHours = String(hours).padStart(2, '0');
+  const formattedHours = String(hours).padStart(2, "0");
 
   return `${day}-${month}-${year}, ${formattedHours}:${minutes} ${ampm}`;
 }
-
 
 export const StackLeadsExchangeDialog = ({
   onClose,
@@ -115,8 +119,8 @@ export const StackLeadsExchangeDialog = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-const openModal = () => setIsModalOpen(true);
-const closeModal = () => setIsModalOpen(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const queryClient = useQueryClient();
 
@@ -142,10 +146,16 @@ const closeModal = () => setIsModalOpen(false);
 
   const { data } = useGetLeadsById(openDialogId);
 
+  const { data: assignedManager } = useGetUsers();
+
+  console.log("manager", assignedManager);
+
   const { data: LeadDiscussion } = useGetLeadsDisscussion(openDialogId);
 
   const { data: LeadReminder } = useGetLeadsReminder(openDialogId);
-  
+
+  const { mutate: addManager } = useAddManager(openDialogId);
+
   const { mutate: addDisscussion } = useAddLeadsDiscussion(openDialogId);
 
   const { mutate: deleteDisscussion } = useDeleteLeadsDisscussion();
@@ -216,13 +226,31 @@ const closeModal = () => setIsModalOpen(false);
     addReminder(values, {
       onSuccess: () => {
         toast.success(`Added Reminder Successfully`);
-        queryClient.invalidateQueries({queryKey:['leadsReminder']})
+        queryClient.invalidateQueries({ queryKey: ["leadsReminder"] });
       },
       onError: (error) => {
         toast.error(`Failed to add reminder : ${error}`);
       },
     });
   }
+
+  const formMethods = useForm({
+    defaultValues: {
+      managerId: [] as string[], // Array to store selected manager IDs
+    },
+  });
+
+  const handleFormSubmit = (data: { managerId: string[] }) => {
+    console.log("data", data);
+    addManager(data, {
+      onSuccess: () => {
+        toast.success("Manager Assigned");
+      },
+      onError: (error) => {
+        toast.error(`error : ${error}`);
+      },
+    });
+  };
 
   return (
     <div>
@@ -483,26 +511,36 @@ const closeModal = () => setIsModalOpen(false);
                           <RxAvatar size={30} />
                           <div className="flex flex-col w-full items-start">
                             <div className="flex flex-col text-left w-full">
-                              <span className="font-semibold">{reminder.creator.firstName + " " + reminder.creator.lastName}</span>
+                              <span className="font-semibold">
+                                {reminder.creator.firstName +
+                                  " " +
+                                  reminder.creator.lastName}
+                              </span>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Subject:</span>
-                                 <span>{reminder.subject}</span>
+                                <span className="font-semibold">Subject:</span>
+                                <span>{reminder.subject}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Description:</span>
-                                 <span>{reminder.body}</span>
+                                <span className="font-semibold">
+                                  Description:
+                                </span>
+                                <span>{reminder.body}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Reminder Type:</span>
-                                 <span>{reminder.reminderType}</span>
+                                <span className="font-semibold">
+                                  Reminder Type:
+                                </span>
+                                <span>{reminder.reminderType}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Due Date:</span>
-                                 <span>{formatDate(reminder.dueDate)}</span>
+                                <span className="font-semibold">Due Date:</span>
+                                <span>{formatDate(reminder.dueDate)}</span>
                               </div>
                               <div className="flex justify-between text-[#f21300] w-full">
-                                 <span>{formatCreatedAtDate(reminder.createdAt)}</span>
-                                 <Trash2 size={"15"}/>
+                                <span>
+                                  {formatCreatedAtDate(reminder.createdAt)}
+                                </span>
+                                <Trash2 size={"15"} />
                               </div>
                             </div>
                           </div>
@@ -526,19 +564,78 @@ const closeModal = () => setIsModalOpen(false);
                     />
                   </div>
                   <div className="flex gap-2 mt-2">
-                    <Avatar className="w-6 h-6">
-                      <AvatarImage src="/placeholder.svg" />
-                      <AvatarFallback>U1</AvatarFallback>
-                    </Avatar>
-                    <div className="relative">
-                      <Avatar className="w-6 h-6">
-                        <AvatarImage src="/placeholder.svg" />
-                        <AvatarFallback>U2</AvatarFallback>
-                      </Avatar>
-                      <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
-                        +
-                      </span>
-                    </div>
+                    {data && (
+                      <div className="flex">
+                        {data?.assigned.map(
+                          (data: managerDetails, index: number) => (
+                            <div className="" key={index}>
+                              <RxAvatar />
+                            </div>
+                          )
+                        )}
+                      </div>
+                    )}
+                    <Popover>
+                      <PopoverTrigger>
+                        <div className="text-[#f21300]">
+                          <PlusCircle />
+                        </div>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        {assignedManager && (
+                          <form
+                            onSubmit={formMethods.handleSubmit(
+                              handleFormSubmit
+                            )}
+                          >
+                            <div>
+                              {assignedManager.map(
+                                (manager: userType, index: number) => (
+                                  <div
+                                    key={index}
+                                    className="flex items-center gap-2"
+                                  >
+                                    <Controller
+                                      name="managerId"
+                                      control={formMethods.control}
+                                      render={({
+                                        field: { value, onChange },
+                                      }) => (
+                                        <input
+                                          type="checkbox"
+                                          checked={value?.includes(manager.id)}
+                                          onChange={(e) => {
+                                            if (e.target.checked) {
+                                              // Add manager ID to the array
+                                              onChange([...value, manager.id]);
+                                            } else {
+                                              // Remove manager ID from the array
+                                              onChange(
+                                                value.filter(
+                                                  (id: string) =>
+                                                    id !== manager.id
+                                                )
+                                              );
+                                            }
+                                          }}
+                                        />
+                                      )}
+                                    />
+                                    <span>{manager.firstName}</span>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                            <button
+                              type="submit"
+                              className="btn btn-primary mt-2 bg-[#f21300] px-2 py-1 rounded-md text-[10px] text-white"
+                            >
+                              Assign
+                            </button>
+                          </form>
+                        )}
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
 
@@ -557,7 +654,7 @@ const closeModal = () => setIsModalOpen(false);
                         </div>
                       </PopoverTrigger>
                       <PopoverContent className="max-w-fit">
-                          <EditLeads leadId={openDialogId}/>
+                        <EditLeads leadId={openDialogId} />
                       </PopoverContent>
                     </Popover>
                   </div>
@@ -590,36 +687,41 @@ const closeModal = () => setIsModalOpen(false);
                       <span className="font-semibold">Status: </span>
                       <span className="font-semibold">{data?.status}</span>
                     </div>
-                    <Button className="w-full bg-[#797979] hover:bg-[#f21300] mt-2 text-xs h-8" onClick={openModal}>
+                    <Button
+                      className="w-full bg-[#797979] hover:bg-[#f21300] mt-2 text-xs h-8"
+                      onClick={openModal}
+                    >
                       Create Client
                     </Button>
                     <Modal isOpen={isModalOpen} onClose={closeModal}>
-                      <AddClientDialog onClose={closeModal}/>
+                      <AddClientDialog onClose={closeModal} />
                     </Modal>
                   </div>
                 </div>
 
                 {/* Client Details Section */}
                 <div className="px-2">
-                   <div className="flex items-center gap-x-1">
-                   <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
-                    <span className="font-normal text-[13px]">
-                      Client Details
-                    </span>
+                  <div className="flex items-center gap-x-1">
+                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
+                      <span className="font-normal text-[13px]">
+                        Client Details
+                      </span>
+                    </div>
+                    <Popover>
+                      <PopoverTrigger>
+                        <Plus className="text-white bg-[#f21300] rounded-md" />
+                      </PopoverTrigger>
+                      <PopoverContent className="px-2 py-2">
+                        <LinkClient leadId={openDialogId} />
+                      </PopoverContent>
+                    </Popover>
                   </div>
-                  <Popover>
-                    <PopoverTrigger>
-                       <Plus className="text-white bg-[#f21300] rounded-md"/>
-                    </PopoverTrigger>
-                    <PopoverContent className="px-2 py-2">
-                        <LinkClient leadId={openDialogId}/>
-                    </PopoverContent>
-                  </Popover>
-                   </div>
                   <div className="py-1 text-[12px] text-[#091747]">
                     <div className="flex">
                       <span className="font-semibold">Name:</span>
-                      <span>{data?.client?.firstName + " " + data?.client?.lastName}</span>
+                      <span>
+                        {data?.client?.firstName + " " + data?.client?.lastName}
+                      </span>
                     </div>
                     <div className="flex">
                       <span className="font-semibold">PAN:</span>
@@ -646,21 +748,21 @@ const closeModal = () => setIsModalOpen(false);
 
                 {/* Business Details Section */}
                 <div className="px-2">
-                 <div className="flex items-center gap-x-1">
-                 <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
-                    <span className="font-normal text-[13px]">
-                      Bussiness Details
-                    </span>
+                  <div className="flex items-center gap-x-1">
+                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
+                      <span className="font-normal text-[13px]">
+                        Bussiness Details
+                      </span>
+                    </div>
+                    <Popover>
+                      <PopoverTrigger>
+                        <Plus className="text-white bg-[#f21300] rounded-md" />
+                      </PopoverTrigger>
+                      <PopoverContent className="">
+                        <LinkBussiness />
+                      </PopoverContent>
+                    </Popover>
                   </div>
-                  <Popover>
-                    <PopoverTrigger>
-                      <Plus className="text-white bg-[#f21300] rounded-md"/>
-                    </PopoverTrigger>
-                    <PopoverContent className="">
-                        <LinkBussiness/>
-                    </PopoverContent>
-                  </Popover>
-                 </div>
                   <div className="text-[12px]">
                     <div className="flex">
                       <span className="font-semibold">Business:</span>
