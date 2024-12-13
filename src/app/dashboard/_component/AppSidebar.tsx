@@ -114,10 +114,11 @@ export function AppSidebar() {
   // };
 
   return (
-    <Sidebar>
+    <div className=''>
+    <Sidebar className='mt-9'>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel></SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
             {items.map((item) => {
@@ -184,5 +185,6 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
+    </div>
   );
 }
