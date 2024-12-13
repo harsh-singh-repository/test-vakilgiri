@@ -13,10 +13,17 @@ export default function RootLayout({
   return (
     <div className="h-full bg-white">
       <SidebarProvider>
-        <AppSidebar />
+       
         <div className="flex flex-col w-full">
           <Navbar/>
-          <main className="bg-gray-50 h-full">{children}</main>
+          <main className="bg-gray-50 h-full flex">
+            <div className="mt-10">
+            <AppSidebar />
+            </div>
+            <div className="w-full">
+            {children}
+            </div>
+            </main>
         </div>
       </SidebarProvider>
     </div>
