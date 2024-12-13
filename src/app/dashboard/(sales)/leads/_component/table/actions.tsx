@@ -20,7 +20,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ id }) => {
   const [openDialogId, setOpenDialogId] = useState<string>(""); // State for dialog ID
   // const [open, setOpen] = useState<boolean>(false); // State for open/close dialog
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 

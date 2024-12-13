@@ -79,7 +79,7 @@ export const useAddClientDisscussion = (id:string) => {
 
 export const useDeleteClientDiscussion = () => {
     return useMutation({
-       mutationFn:({ id, clientId }: { id: string; clientId: string })=> clientService.deleteDisscussion(id,clientId)
+       mutationFn:(id:string)=> clientService.deleteDisscussion(id)
     })
 };
 

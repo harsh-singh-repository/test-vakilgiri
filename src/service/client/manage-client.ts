@@ -19,7 +19,7 @@ const CLIENT_API = {
     ADD_DICUSSION: (id: string) => `/client/${id}/discussions`,
     GET_DICUSSION: (id: string) => `/client/${id}/discussions`,
     ADD_REMINDER: (id: string) => `/client/${id}/reminders`,
-    DELETE_DISCUSSION: (id: string,clientId:string) => `/client/${clientId}/discussions/${id}`,
+    DELETE_DISCUSSION: (id: string) => `/client/discussions/${id}`,
     SEARCH: (searchQuey:string) => `/client?query=${searchQuey}`
 } as const;
 
@@ -66,9 +66,9 @@ export const clientService = {
         return response.data.data;
     },
 
-    deleteDisscussion: async (id:string,clientId:string) => {
+    deleteDisscussion: async (id:string) => {
         return await axiosInstance.delete(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE_DISCUSSION(id,clientId)}`);
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE_DISCUSSION(id)}`);
     },
 
     searchClient: async(searchQuery:string)=>{

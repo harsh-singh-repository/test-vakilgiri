@@ -145,7 +145,7 @@ const closeModal = () => setIsModalOpen(false);
   const { data: LeadDiscussion } = useGetLeadsDisscussion(openDialogId);
 
   const { data: LeadReminder } = useGetLeadsReminder(openDialogId);
-
+  
   const { mutate: addDisscussion } = useAddLeadsDiscussion(openDialogId);
 
   const { mutate: deleteDisscussion } = useDeleteLeadsDisscussion();

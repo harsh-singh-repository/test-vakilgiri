@@ -4,14 +4,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
-import {
-  Dialog,
-  DialogContent,
-  // DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
 import { Input } from "@/components/ui/input";
 
 import { format } from "date-fns";
@@ -19,6 +11,7 @@ import {
   CalendarIcon,
   Plus,
   Trash2,
+  X,
   //  X
 } from "lucide-react";
 
@@ -51,23 +44,22 @@ import {
   useGetClientDisscussion,
   useDeleteClientDiscussion,
 } from "@/hooks/users/manage-client";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+// import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
 import { useState } from "react";
 import { toast } from "sonner";
 import { RxAvatar } from "react-icons/rx";
 import { clientDisscussionProps } from "../../_types";
 import { useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  onClose: () => void;
 }
 
 export const StackExchangeDialog = ({
-  open,
-  setOpen,
+  onClose,
   openDialogId,
 }: StackExchangeDialogProp) => {
   // const [date, setDate] = React.useState<Date>()
@@ -103,14 +95,27 @@ export const StackExchangeDialog = ({
   const queryClient = useQueryClient();
 
 
-  const handleDeleteDisscussion = ({ id, clientId }: { id: string; clientId: string }) =>{
-    deleteDiscussion({id,clientId},{
+  const handleDeleteDisscussion = ( id:string ) =>{
+    console.log("discussion id",id)
+    // console.log("clientid id",clientId)
+    deleteDiscussion(id,{
      onSuccess:()=>{
         toast.success("Disscussion Deleted Successfully");
         queryClient.invalidateQueries({ queryKey: ["clientDisscussion"] });
      },
      onError:(error)=>{
-       toast.error(`Dissussion not Submited : ${error}`);
+      if (error instanceof AxiosError) {
+        // Safely access the response data
+        const errorMessage =
+          error.response?.data?.message || "An unexpected error occurred.";
+        // console.log("Axios Error Message:", errorMessage);
+
+        // Display error message in toast
+        toast.error(`Failed to delete Discussion: ${errorMessage}`);
+      } else {
+        // Handle non-Axios errors
+        toast.error("An unexpected error occurred.");
+      }
      }
     });
  }
@@ -125,7 +130,18 @@ export const StackExchangeDialog = ({
         queryClient.invalidateQueries({ queryKey: ["clientDisscussion"] });
       },
       onError: (error) => {
-        toast.error(`Dissussion not Submited : ${error}`);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to submit Discussion: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
       },
     });
     setIsSubmittingDiscussion(false);
@@ -141,29 +157,35 @@ export const StackExchangeDialog = ({
         toast.success("Reminders Submited");
       },
       onError: (error) => {
-        toast.error(`Reminder submission failed : ${error}`);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to Submit Reminder: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
       },
     });
     setIsSubmittingReminder(false);
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-[850px] max-h-fit">
-        <VisuallyHidden>
-          <DialogTitle className="text-[17px] text-[#091747] uppercase font-bold">
-            {data?.firstName + " " + data?.lastName}
-          </DialogTitle>
-        </VisuallyHidden>
+    <div>
+      <div className="p-3">
         <div className="flex flex-col gap-y-3">
           <div className="text-[17px] text-[#091747] uppercase font-bold">
             {data?.firstName + " " + data?.lastName}
           </div>
           <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-[500px,250px] xl:grid-cols-[500px,250px]">
-            <div className="w-full max-w-2xl mx-auto  p-4">
+            <div className="w-full max-w-2xl mx-auto">
               <Accordion type="multiple" className="w-full">
                 <AccordionItem value="discussions" className="">
-                  <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-full text-[#091747] text-[15px] font-medium">
+                  <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-md text-[#091747] text-[15px] font-medium">
                     <span>Discussions</span>
                   </AccordionTrigger>
                   <AccordionContent className="pt-2 bg-white">
@@ -226,7 +248,7 @@ export const StackExchangeDialog = ({
                                <div className="font-thin text-[#F21300]">
                                     {discussion.createdAt.split('T')[0]}
                                 </div>
-                               <div className="text-[#F21300] cursor-pointer" onClick={() => handleDeleteDisscussion({ id: discussion.id, clientId: discussion.clientId })}>
+                               <div className="text-[#F21300] cursor-pointer" onClick={() => handleDeleteDisscussion(discussion.id)}>
                                   <Trash2 size={"15"}/>
                                </div>
                            </div>
@@ -237,7 +259,7 @@ export const StackExchangeDialog = ({
                   </div>
                 )}
                 <AccordionItem value="reminders" className="mt-4">
-                  <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-full text-[#091747] text-[15px] font-medium">
+                  <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-md text-[#091747] text-[15px] font-medium">
                     <span>Reminders</span>
                   </AccordionTrigger>
                   <AccordionContent className="pt-2 bg-white">
@@ -395,9 +417,12 @@ export const StackExchangeDialog = ({
             </div>
             <div className="space-y-2 bg-[#ededed] rounded-md max-h-fit">
               <div className="rounded-lg px-2 py-2">
-                <h3 className="font-semibold mb-3 text-[13px] text-[#091747]">
-                  Assigned Users
-                </h3>
+                <div className="justify-between flex px-1">
+                   <h3 className="font-semibold mb-3 text-[13px] text-[#091747]">
+                      Assigned Users
+                   </h3>
+                   <X onClick={onClose} strokeWidth={"3"} className="text-[#f21300] cursor-pointer"/>
+                </div>
                 <div className="flex items-center gap-2">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="/placeholder.svg" />
@@ -466,7 +491,7 @@ export const StackExchangeDialog = ({
             </div>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
