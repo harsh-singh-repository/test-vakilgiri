@@ -619,19 +619,19 @@ const closeModal = () => setIsModalOpen(false);
                   <div className="py-1 text-[12px] text-[#091747]">
                     <div className="flex">
                       <span className="font-semibold">Name:</span>
-                      <span>{data?.client.firstName + " " + data?.client.lastName}</span>
+                      <span>{data?.client?.firstName + " " + data?.client?.lastName}</span>
                     </div>
                     <div className="flex">
                       <span className="font-semibold">PAN:</span>
-                      <span className="uppercase">{data?.client.pan}</span>
+                      <span className="uppercase">{data?.client?.pan}</span>
                     </div>
                     <div className="flex">
                       <span className="font-semibold">Email:</span>
-                      <span>{data?.client.email}</span>
+                      <span>{data?.client?.email}</span>
                     </div>
                     <div className="flex">
                       <span className="font-semibold">Mobile:</span>
-                      <span>{data?.client.mobileNumber}</span>
+                      <span>{data?.client?.mobileNumber}</span>
                     </div>
                     <div className="flex">
                       <span className="font-semibold">Manager:</span>
