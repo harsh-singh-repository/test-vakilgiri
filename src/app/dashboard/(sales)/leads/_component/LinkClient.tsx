@@ -1,6 +1,6 @@
 import { MaterialInput } from "@/components/material-input";
 import { Button } from "@/components/ui/button";
-import { useSearchClinetQuery } from "@/hooks/users/manage-client";
+import { useSearchClinetQuery } from "@/hooks/clients/manage-client";
 import React, { useEffect, useState } from "react";
 import { clientDetailsType } from "../_types";
 import { cn } from "@/lib/utils";

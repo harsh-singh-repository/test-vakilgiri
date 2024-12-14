@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useAddClient } from "@/hooks/users/manage-client";
+import { useAddClient } from "@/hooks/clients/manage-client";
 import { toast } from "sonner";
 import { AddClientformSchema } from "../_types/zodSchema";
 import { useQueryClient } from "@tanstack/react-query";

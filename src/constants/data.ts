@@ -91,3 +91,17 @@ export interface Reminder {
   userId: string | null; // Associated user ID, if any
   type: string | null; // Type of reminder context
 }
+
+export interface Ticket {
+  id: number;
+  profileImage: string;
+  ticketId: string;
+  date: string;
+  firstName: string;
+  lastName: string;
+  category: string;
+  subject: string;
+  manager: string;
+  status: string;
+}
+

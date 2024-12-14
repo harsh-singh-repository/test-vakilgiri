@@ -27,7 +27,7 @@ import Component from "../_component/Address_Form";
 import { Separator } from "@/components/ui/separator";
 import { useParams } from "next/navigation";
 import { Card } from "@/components/ui/card";
-import { useGetClientsById } from "@/hooks/users/manage-client";
+import { useGetClientsById } from "@/hooks/clients/manage-client";
 import { useRouter } from "next/navigation";
 import { ClinetBussinessDetails } from "../_types";
 import { Oval } from "react-loader-spinner";
