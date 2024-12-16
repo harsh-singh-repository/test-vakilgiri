@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -64,21 +64,18 @@ export default function LeadsPage() {
           <div className="text-2xl font-bold text-[#042559]">{`Leads (${data.length})`}</div>
 
           <div className="flex justify-center items-center gap-4">
-            <Suspense>
-            <Input
-              placeholder="Search"
-              value={searchValue}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                setSearchValue(event.target.value)
-              }
-              className="w-full md:max-w-sm ml-auto bg-white"
-              />
-              </Suspense>
+            <div className='flex gap-2 items-center'>
+          <Input
+            placeholder="Search name..."
+            value={searchValue}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
+            className="w-full md:max-w-sm ml-auto bg-white"
+            />
 
-            
-              <div className="bg-[#f21300] text-white p-2 rounded-md cursor-pointer" onClick={openModal}>
-                <Plus className="h-6 w-6" />
+              <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1" onClick={openModal}>
+                <Plus strokeWidth={"5"}/>
               </div>
+          </div>
               <Modal isOpen={isModalOpen} onClose={closeModal} className="border-[#f21300] border-2"> 
                  <CreateLeadForm onClose={closeModal}/>                 
               </Modal>
