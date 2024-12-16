@@ -40,6 +40,12 @@ export const useDeleteBussinessDisscussion = () => {
    return useMutation({
       mutationFn:({ id, bussinessId }: { id: string; bussinessId: string })=>bussinessService.deleteDisscussion(id,bussinessId)
    })
+};
+
+export const useDeleteBussinessReminder = (bussinessId:string) => {
+   return useMutation({
+      mutationFn:(id:string)=>bussinessService.deleteReminder(id,bussinessId),
+   })
 }
 
 export const useAddBusiness = () => {

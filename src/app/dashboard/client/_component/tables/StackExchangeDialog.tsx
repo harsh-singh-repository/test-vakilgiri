@@ -44,6 +44,7 @@ import {
   useGetClientDisscussion,
   useDeleteClientDiscussion,
   useGetClientReminder,
+  useDeleteClientReminder,
 } from "@/hooks/users/manage-client";
 // import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
@@ -124,7 +125,8 @@ export const StackExchangeDialog = ({
 
   const { mutate: addDiscussion } = useAddClientDisscussion(openDialogId);
   const { mutate: addReminder } = useAddClientReminder(openDialogId);
-  const {mutate:deleteDiscussion} = useDeleteClientDiscussion()
+  const {mutate:deleteDiscussion} = useDeleteClientDiscussion();
+  const {mutate:deleteReminder} = useDeleteClientReminder(openDialogId);
 
   const queryClient = useQueryClient();
 
@@ -152,6 +154,29 @@ export const StackExchangeDialog = ({
       }
      }
     });
+ };
+
+ const handleDeleteRemider = (id:string) => {
+    deleteReminder(id,{
+      onSuccess:()=>{
+        toast.success("Reminder Deleted");
+        queryClient.invalidateQueries({ queryKey: ["clientReminder"] });
+      },
+      onError:(error)=>{
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+  
+          // Display error message in toast
+          toast.error(`Failed to delete Reminder: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
+       }
+    })
  }
 
   console.log("Dialog Disscussion", clientDisscussionData);
@@ -476,9 +501,9 @@ export const StackExchangeDialog = ({
                                  <span className="font-semibold">Due Date:</span>
                                  <span>{formatDate(reminder?.dueDate)}</span>
                               </div>
-                              <div className="flex justify-between text-[#f21300] w-full">
+                              <div className="flex justify-between text-[#f21300] w-full" >
                                  <span>{formatCreatedAtDate(reminder?.createdAt)}</span>
-                                 <Trash2 size={"15"}/>
+                                 <Trash2 size={"15"} onClick={()=>handleDeleteRemider(reminder?.id)} className="cursor-pointer"/>
                               </div>
                             </div>
                           </div>

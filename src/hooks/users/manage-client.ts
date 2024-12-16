@@ -92,6 +92,12 @@ export const useDeleteClientDiscussion = () => {
     })
 };
 
+export const useDeleteClientReminder = (clienttId:string) => {
+    return useMutation({
+       mutationFn:(id:string)=> clientService.deleteReminder(id,clienttId)
+    })
+};
+
 export const useEditClient = (id:string | string [] | undefined) => {
     // const queryClient = useQueryClient();
     // const toast = useCustomToast();

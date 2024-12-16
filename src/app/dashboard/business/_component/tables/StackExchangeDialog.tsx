@@ -6,8 +6,6 @@ import {
 } from "@/components/ui/accordion";
 
 
-import { Input } from "@/components/ui/input";
-
 import { format } from "date-fns";
 import {
   CalendarIcon,
@@ -36,7 +34,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 // import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -44,6 +41,7 @@ import {
   useAddBusinessDisscussion,
   useAddBusinessReminder,
   useDeleteBussinessDisscussion,
+  useDeleteBussinessReminder,
   useGetBussinessById,
   useGetBussinessDisscussion,
   useGetBussinessReminder,
@@ -56,6 +54,7 @@ import { BusinessDiscussion } from "../../_types";
 import { RxAvatar } from "react-icons/rx";
 import { useQueryClient } from "@tanstack/react-query";
 import { bussinessReminderType } from "@/app/dashboard/(sales)/leads/_types";
+import { MaterialInput } from "@/components/material-input";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -137,13 +136,25 @@ export const StackBussinessExchangeDialog = ({
 
   const { mutate: addReminder } = useAddBusinessReminder(openDialogId);
 
-  const {mutate:deleteDisscussion} = useDeleteBussinessDisscussion();
+  const {mutate:deleteDisscussion} = useDeleteBussinessDisscussion(); 
+  const {mutate:deleteReminder} = useDeleteBussinessReminder(openDialogId); 
 
   const handleDeleteDisscussion = ({ id, bussinessId }: { id: string; bussinessId: string }) =>{
      deleteDisscussion({id,bussinessId},{
       onSuccess:()=>{
          toast.success("Disscussion Delted Successfully");
          queryClient.invalidateQueries({ queryKey: ["bussinessDisscussion"] });
+      },
+      onError:(error)=>{
+        toast.error(`Dissussion not Submited : ${error}`);
+      }
+     });
+  };
+  const handleDeleteReminder = (id:string) =>{
+     deleteReminder(id,{
+      onSuccess:()=>{
+         toast.success("Reminder deleted Successfully");
+         queryClient.invalidateQueries({ queryKey: ["bussinessReminder"] });
       },
       onError:(error)=>{
         toast.error(`Dissussion not Submited : ${error}`);
@@ -178,6 +189,7 @@ export const StackBussinessExchangeDialog = ({
     addReminder(values, {
       onSuccess: () => {
         toast.success("Reminder Submited");
+        queryClient.invalidateQueries({ queryKey: ["bussinessReminder"] });
       },
       onError: (error) => {
         toast.error(`Reminder not Submited : ${error}`);
@@ -206,7 +218,7 @@ export const StackBussinessExchangeDialog = ({
                         onSubmit={discussionForm.handleSubmit(
                           onDiscussionSubmit
                         )}
-                        className="space-y-1"
+                        className="space-y-2"
                       >
                         <div className="flex flex-col gap-y-4">
                           <FormField
@@ -215,7 +227,7 @@ export const StackBussinessExchangeDialog = ({
                             render={({ field, fieldState: { error } }) => (
                               <div>
                                 <FormControl>
-                                  <Textarea
+                                  <MaterialInput
                                     placeholder="Enter Description"
                                     className={cn(
                                       "min-h-[60px] border-gray-300",
@@ -379,7 +391,7 @@ export const StackBussinessExchangeDialog = ({
                           render={({ field, fieldState: { error } }) => (
                             <div>
                               <FormControl>
-                                <Input
+                                <MaterialInput
                                   placeholder="Subject"
                                   className={cn(
                                     "bg-white border-gray-300",
@@ -399,10 +411,10 @@ export const StackBussinessExchangeDialog = ({
                           render={({ field, fieldState: { error } }) => (
                             <div>
                               <FormControl>
-                                <Textarea
+                                <MaterialInput
                                   placeholder="Enter description"
                                   className={cn(
-                                    "min-h-[100px] bg-white border-gray-300",
+                                    "min-h-[60px] bg-white border-gray-300",
                                     error &&
                                       "border-red-500 focus:border-red-500 focus:ring-red-500"
                                   )}
@@ -456,7 +468,7 @@ export const StackBussinessExchangeDialog = ({
                               </div>
                               <div className="flex justify-between text-[#f21300] w-full">
                                  <span>{formatCreatedAtDate(reminder?.createdAt)}</span>
-                                 <Trash2 size={"15"}/>
+                                 <Trash2 size={"15"} onClick={()=>handleDeleteReminder(reminder?.id)} className="cursor-pointer"/>
                               </div>
                             </div>
                           </div>

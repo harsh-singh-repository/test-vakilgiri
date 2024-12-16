@@ -10,6 +10,7 @@ const BUSINESS_API = {
     ADD_REMINDERS: (id: string) => `/business/${id}/reminders`,
     GET_REMINDERS: (id: string) => `/business/${id}/reminders`,
     DELETE_DISSCUSSION: (id: string,bussinessId:string) => `/business/${bussinessId}/discussions/${id}`,
+    DELETE_REMINDER: (id: string,bussinessId:string) => `/business/${bussinessId}/reminders/${id}`,
     GET_ALL: '/business',
     SEARCH_BUSSINESS:(searchQuery:string)=>`/business/search?query=${searchQuery}`,
     GET_BY_ID: (id: string | string[] | undefined) => `/business/${id}/`,
@@ -62,6 +63,11 @@ export const bussinessService = {
     deleteDisscussion: async (id:string,bussinessId:string) => {
         return await axiosInstance.delete(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.DELETE_DISSCUSSION(id,bussinessId)}`);
+    },
+
+    deleteReminder: async (id:string,bussinessId:string) => {
+        return await axiosInstance.delete(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.DELETE_REMINDER(id,bussinessId)}`);
     },
     
     getBussinessBySearch: async(searchQuery:string)=>{

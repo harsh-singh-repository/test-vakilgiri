@@ -12,6 +12,7 @@ const LEADS_API = {
     GET_DISCUSSION:(id:string)=>`/leads/${id}/discussions/`,
     GET_REMINDER:(id:string)=>`/leads/${id}/reminders`,
     DELETE_DISCUSSION:(leadId:string,id:string) =>`/leads/${leadId}/discussions/${id}`,
+    DELETE_REMINDER:(leadId:string,id:string) =>`/leads/${leadId}/reminders/${id}`,
     LINK_CLIENT:(leadId:string)=>`/leads/${leadId}/link-client`,
     ASSIGN_MANAGER:(leadId:string)=>`/leads/${leadId}/managers`
 }
@@ -67,6 +68,11 @@ export const leadServices = {
     getReminder : async (id:string) => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.GET_REMINDER(id)}`);
         return response.data.data;
+    },
+
+    deleteReminder: async(leadId:string,id:string) => {
+        return await axiosInstance.delete(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.DELETE_REMINDER(leadId,id)}`);
     },
 
     linkClient : async(id:string, clientId: linkLeadType ) => {

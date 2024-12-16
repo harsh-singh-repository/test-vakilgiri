@@ -60,8 +60,6 @@ export const useGetLeadsReminder = (id:string) =>{
     return query;
 };
 
-
-
 export const useDeleteLeads = () =>{
     return useMutation({
         mutationFn:(id:string)=> leadServices.deleteLead(id),
@@ -77,6 +75,12 @@ export const useLinkClient = (id:string) =>{
 export const useDeleteLeadsDisscussion = () => {
     return useMutation({
        mutationFn:({ leadId, id }: { leadId: string; id: string })=>leadServices.deleteDisscussion(leadId,id)
+    })
+ };
+
+export const useDeleteLeadsReminder = (leadId:string) => {
+    return useMutation({
+       mutationFn:(id:string)=>leadServices.deleteReminder(leadId,id)
     })
  };
 
