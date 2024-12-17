@@ -19,7 +19,9 @@ const CLIENT_API = {
     ADD_DICUSSION: (id: string) => `/client/${id}/discussions`,
     GET_DICUSSION: (id: string) => `/client/${id}/discussions`,
     ADD_REMINDER: (id: string) => `/client/${id}/reminders`,
+    GET_REMINDER: (id: string) => `/client/${id}/reminders`,
     DELETE_DISCUSSION: (id: string) => `/client/discussions/${id}`,
+    DELETE_REMINDER: (id: string,clientId:string) => `/client/${clientId}/reminders/${id}`,
     SEARCH: (searchQuey:string) => `/client?query=${searchQuey}`
 } as const;
 
@@ -33,6 +35,11 @@ export const clientService = {
 
     get: async () => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_ALL}`);
+        return response.data.data;
+    },
+
+    getReminder: async (id:string) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_REMINDER(id)}`);
         return response.data.data;
     },
 
@@ -69,6 +76,11 @@ export const clientService = {
     deleteDisscussion: async (id:string) => {
         return await axiosInstance.delete(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE_DISCUSSION(id)}`);
+    },
+    
+    deleteReminder: async (id:string,clientId:string) => {
+        return await axiosInstance.delete(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE_REMINDER(id,clientId)}`);
     },
 
     searchClient: async(searchQuery:string)=>{

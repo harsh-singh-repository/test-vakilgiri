@@ -81,20 +81,17 @@ export default function ClientPageContent() {
         <div className="text-2xl font-bold text-[#042559]">{`Clients (7)`}</div>
 
         <div className="flex justify-center item-center gap-4">
+        <div className='flex gap-2 items-center'>
           <Input
             placeholder="Search name..."
             value={searchValue}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              setSearchValue(event.target.value)
-            }
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
             className="w-full md:max-w-sm ml-auto bg-white"
             />
 
-          <div
-            className="bg-[#f21300] text-white p-2 rounded-md cursor-pointer"
-            onClick={openModal}
-          >
-            <Plus className="h-6 w-6" />
+              <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1" onClick={openModal}>
+                <Plus strokeWidth={"5"}/>
+              </div>
           </div>
           <Modal isOpen={isModalOpen} onClose={closeModal}>
               <AddClientDialog onClose={closeModal}/>

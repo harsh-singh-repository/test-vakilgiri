@@ -16,6 +16,12 @@ export const useAddLeads = () => {
     });
 };
 
+export const useAddManager = (id:string) => {
+    return useMutation({
+        mutationFn:(managerId:{managerId: string[]})=> leadServices.assignManager(id,managerId),
+    });
+};
+
 export const useAddLeadsDiscussion = (id:string) => {
     return useMutation({
         mutationFn:(discussion:LeadsDiscussionType)=> leadServices.addLeadDisscussion(id,discussion),
@@ -54,8 +60,6 @@ export const useGetLeadsReminder = (id:string) =>{
     return query;
 };
 
-
-
 export const useDeleteLeads = () =>{
     return useMutation({
         mutationFn:(id:string)=> leadServices.deleteLead(id),
@@ -71,6 +75,12 @@ export const useLinkClient = (id:string) =>{
 export const useDeleteLeadsDisscussion = () => {
     return useMutation({
        mutationFn:({ leadId, id }: { leadId: string; id: string })=>leadServices.deleteDisscussion(leadId,id)
+    })
+ };
+
+export const useDeleteLeadsReminder = (leadId:string) => {
+    return useMutation({
+       mutationFn:(id:string)=>leadServices.deleteReminder(leadId,id)
     })
  };
 

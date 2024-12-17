@@ -5,20 +5,13 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import {
-  Dialog,
-  DialogContent,
-  // DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
-import { Input } from "@/components/ui/input";
 
 import { format } from "date-fns";
 import {
   CalendarIcon,
   Plus,
   Trash2,
+  X,
   //  X
 } from "lucide-react";
 
@@ -41,16 +34,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+// import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   useAddBusinessDisscussion,
   useAddBusinessReminder,
   useDeleteBussinessDisscussion,
+  useDeleteBussinessReminder,
   useGetBussinessById,
   useGetBussinessDisscussion,
+  useGetBussinessReminder,
 } from "@/hooks/business/manage-business";
 import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
 import { useState } from "react";
@@ -59,11 +53,12 @@ import { BusinessDiscussion } from "../../_types";
 
 import { RxAvatar } from "react-icons/rx";
 import { useQueryClient } from "@tanstack/react-query";
+import { bussinessReminderType } from "@/app/dashboard/(sales)/leads/_types";
+import { MaterialInput } from "@/components/material-input";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  onClose: () => void;
 }
 
 const formatDate = (isoString: string) => {
@@ -82,9 +77,25 @@ const formatDate = (isoString: string) => {
   return date.toLocaleString("en-US", options);
 };
 
+function formatCreatedAtDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  
+  hours = hours % 12 || 12; // Convert 24-hour time to 12-hour format
+  const formattedHours = String(hours).padStart(2, '0');
+
+  return `${day}-${month}-${year}, ${formattedHours}:${minutes} ${ampm}`;
+}
+
 export const StackBussinessExchangeDialog = ({
-  open,
-  setOpen,
+  onClose,
   openDialogId,
 }: StackExchangeDialogProp) => {
   // const [date, setDate] = React.useState<Date>()
@@ -118,17 +129,32 @@ export const StackBussinessExchangeDialog = ({
   const { data: bussinessDisscussionData } =
     useGetBussinessDisscussion(openDialogId);
 
+  const {data:businessReminderData} = useGetBussinessReminder(openDialogId);
+
+
   const { mutate } = useAddBusinessDisscussion(openDialogId);
 
   const { mutate: addReminder } = useAddBusinessReminder(openDialogId);
 
-  const {mutate:deleteDisscussion} = useDeleteBussinessDisscussion();
+  const {mutate:deleteDisscussion} = useDeleteBussinessDisscussion(); 
+  const {mutate:deleteReminder} = useDeleteBussinessReminder(openDialogId); 
 
   const handleDeleteDisscussion = ({ id, bussinessId }: { id: string; bussinessId: string }) =>{
      deleteDisscussion({id,bussinessId},{
       onSuccess:()=>{
          toast.success("Disscussion Delted Successfully");
          queryClient.invalidateQueries({ queryKey: ["bussinessDisscussion"] });
+      },
+      onError:(error)=>{
+        toast.error(`Dissussion not Submited : ${error}`);
+      }
+     });
+  };
+  const handleDeleteReminder = (id:string) =>{
+     deleteReminder(id,{
+      onSuccess:()=>{
+         toast.success("Reminder deleted Successfully");
+         queryClient.invalidateQueries({ queryKey: ["bussinessReminder"] });
       },
       onError:(error)=>{
         toast.error(`Dissussion not Submited : ${error}`);
@@ -163,6 +189,7 @@ export const StackBussinessExchangeDialog = ({
     addReminder(values, {
       onSuccess: () => {
         toast.success("Reminder Submited");
+        queryClient.invalidateQueries({ queryKey: ["bussinessReminder"] });
       },
       onError: (error) => {
         toast.error(`Reminder not Submited : ${error}`);
@@ -172,22 +199,17 @@ export const StackBussinessExchangeDialog = ({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-[850px] max-h-fit">
-        <VisuallyHidden>
-          <DialogTitle className="text-[17px] text-[#091747] uppercase font-bold">
-            {data?.firstName + " " + data?.lastName}
-          </DialogTitle>
-        </VisuallyHidden>
+    <div className="p-4">
+      <div className="">
         <div className="flex flex-col gap-y-3">
           <div className="text-[17px] text-[#091747] uppercase font-bold">
             {data?.creator.firstName + " " + data?.creator.lastName}
           </div>
           <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-2 xl:grid-cols-[500px,250px]">
-            <div className="w-full max-w-2xl mx-auto  p-4">
+            <div className="w-full max-w-2xl mx-auto">
               <Accordion type="multiple" className="w-full">
                 <AccordionItem value="discussions" className="">
-                  <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-full text-[#091747] text-[15px] font-medium">
+                  <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-md text-[#091747] text-[15px] font-medium">
                     <span>Discussions</span>
                   </AccordionTrigger>
                   <AccordionContent className="pt-2 bg-white">
@@ -196,7 +218,7 @@ export const StackBussinessExchangeDialog = ({
                         onSubmit={discussionForm.handleSubmit(
                           onDiscussionSubmit
                         )}
-                        className="space-y-1"
+                        className="space-y-2"
                       >
                         <div className="flex flex-col gap-y-4">
                           <FormField
@@ -205,7 +227,7 @@ export const StackBussinessExchangeDialog = ({
                             render={({ field, fieldState: { error } }) => (
                               <div>
                                 <FormControl>
-                                  <Textarea
+                                  <MaterialInput
                                     placeholder="Enter Description"
                                     className={cn(
                                       "min-h-[60px] border-gray-300",
@@ -262,7 +284,7 @@ export const StackBussinessExchangeDialog = ({
                 )}
 
                 <AccordionItem value="reminders" className="mt-4">
-                  <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-full text-[#091747] text-[15px] font-medium">
+                  <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-md text-[#091747] text-[15px] font-medium">
                     <span>Reminders</span>
                   </AccordionTrigger>
                   <AccordionContent className="pt-2 bg-white">
@@ -369,7 +391,7 @@ export const StackBussinessExchangeDialog = ({
                           render={({ field, fieldState: { error } }) => (
                             <div>
                               <FormControl>
-                                <Input
+                                <MaterialInput
                                   placeholder="Subject"
                                   className={cn(
                                     "bg-white border-gray-300",
@@ -389,10 +411,10 @@ export const StackBussinessExchangeDialog = ({
                           render={({ field, fieldState: { error } }) => (
                             <div>
                               <FormControl>
-                                <Textarea
+                                <MaterialInput
                                   placeholder="Enter description"
                                   className={cn(
-                                    "min-h-[100px] bg-white border-gray-300",
+                                    "min-h-[60px] bg-white border-gray-300",
                                     error &&
                                       "border-red-500 focus:border-red-500 focus:ring-red-500"
                                   )}
@@ -416,13 +438,55 @@ export const StackBussinessExchangeDialog = ({
                     </Form>
                   </AccordionContent>
                 </AccordionItem>
+                {businessReminderData && (
+                   <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
+                      {businessReminderData.map(
+                      (reminder: bussinessReminderType, index: number) => (
+                        <div
+                          className="flex flex-row gap-2 bg-[#E9E9E9] rounded-md px-2 py-1 "
+                          key={index}
+                        >
+                          <RxAvatar size={30} />
+                          <div className="flex flex-col w-full items-start">
+                            <div className="flex flex-col text-left w-full">
+                              <span className="font-semibold">{reminder.creator?.firstName + " " + reminder.creator?.lastName}</span>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Subject:</span>
+                                 <span>{reminder?.subject}</span>
+                              </div>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Description:</span>
+                                 <span>{reminder?.body}</span>
+                              </div>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Reminder Type:</span>
+                                 <span>{reminder?.reminderType}</span>
+                              </div>
+                              <div className="flex gap-x-1">
+                                 <span className="font-semibold">Due Date:</span>
+                                 <span>{formatDate(reminder?.dueDate)}</span>
+                              </div>
+                              <div className="flex justify-between text-[#f21300] w-full">
+                                 <span>{formatCreatedAtDate(reminder?.createdAt)}</span>
+                                 <Trash2 size={"15"} onClick={()=>handleDeleteReminder(reminder?.id)} className="cursor-pointer"/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                   </div>
+                )}
               </Accordion>
             </div>
             <div className="space-y-2 bg-[#ededed] rounded-md max-h-fit">
               <div className="rounded-lg px-2 py-2">
-                <h3 className="font-semibold mb-3 text-[13px] text-[#091747]">
-                  Assigned Users
-                </h3>
+              <div className="justify-between flex px-1">
+                   <h3 className="font-semibold mb-3 text-[13px] text-[#091747]">
+                      Assigned Users
+                   </h3>
+                   <X onClick={onClose} strokeWidth={"3"} className="text-[#f21300] cursor-pointer"/>
+                </div>
                 <div className="flex items-center gap-2">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="/placeholder.svg" />
@@ -439,7 +503,11 @@ export const StackBussinessExchangeDialog = ({
                     </Button>
                     </PopoverTrigger>
                     <PopoverContent>
-                        Assign manager
+                       {/* {data?.assign && (
+                          <div>
+                             {data?.assign.map(data:)}
+                          </div>
+                       )} */}
                     </PopoverContent>
                   </Popover>
                 </div>
@@ -521,7 +589,7 @@ export const StackBussinessExchangeDialog = ({
             </div>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };

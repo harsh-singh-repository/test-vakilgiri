@@ -7,13 +7,19 @@ import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { useState } from "react"
 import { StackBussinessExchangeDialog } from "./StackExchangeDialog"
+import Modal from "@/components/model/custom-modal"
 
 interface ActionButtonProps {
   id: string;
 }
 const ActionButton = ({id}:ActionButtonProps) => {
   const [openDialogId, setOpenDialogId] = useState<string>("");
-  const [open,setOpen] = useState<boolean>(false);
+  // const [open,setOpen] = useState<boolean>(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const router = useRouter()
 
@@ -25,12 +31,14 @@ const ActionButton = ({id}:ActionButtonProps) => {
     <div className="flex justify-center items-center gap-1">
          <Button
             className="bg-[#042559] text-white w-6 h-7 text-sm" onClick={()=>{
-              setOpen(true);
+              openModal();
               setOpenDialogId(id);
             }}>
             <FaStackExchange />
           </Button>
-          <StackBussinessExchangeDialog open={open} setOpen={setOpen} openDialogId={openDialogId}/>
+          <Modal isOpen={isModalOpen} onClose={closeModal}>
+             <StackBussinessExchangeDialog openDialogId={openDialogId} onClose={closeModal}/>
+          </Modal>
       <Button
         className="bg-[#042559] text-white w-6 h-7 text-sm"
         onClick={handleEditClick}
