@@ -1,6 +1,6 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Results from "../../_component/Results";
+import Results from "../../_component/DashboardCards";
 import ClientDashboard from "../_component/ClientDashboard";
 import { Button } from "@/components/ui/button";
 

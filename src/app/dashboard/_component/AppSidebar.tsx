@@ -21,6 +21,10 @@ import { HiMiniUserGroup, HiUsers } from "react-icons/hi2";
 import { BiSolidBriefcase } from "react-icons/bi";
 import { RiNodeTree } from "react-icons/ri";
 import { MdOutlineLockClock } from "react-icons/md";
+import { MdChecklist } from "react-icons/md";
+import { IoIosList } from "react-icons/io";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import { TfiClip } from "react-icons/tfi";
 
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -49,6 +53,16 @@ const items = [
     url: "/dashboard/business",
     icon: BriefcaseBusiness,
     classname: ""
+  },
+  {
+    title: "Listing",
+    icon: MdChecklist,
+    classname: "",
+    children: [
+      { title: "Listings", url: "/dashboard/listings", icon: IoIosList, classname: "" },
+      { title: "Propsals", url: "/dashboard/proposals", icon: IoDocumentTextOutline, classname: "" },
+      { title: "Requirements", url: "/dashboard/requirements", icon: TfiClip, classname: "" },
+    ]
   },
   {
     title: "Sales",
