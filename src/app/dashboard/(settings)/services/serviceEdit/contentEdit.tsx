@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
+import { Cross2Icon } from '@radix-ui/react-icons';
 
 const schema = z.object({
   priority: z.number().min(1, 'Priority is required').max(10, 'Priority must be between 1 and 10'),
@@ -120,7 +121,11 @@ const ContentEdit: React.FC<ContentEditProps> = ({ data, close,contentfetch,setC
 
   return (
     <div className="p-4">
+      <div className='flex justify-between'>
       <h1 className="font-poppins font-semibold text-xl">Edit {data.type}</h1>
+      <button className='text-red-600 font-bold text-lg' onClick={close}><Cross2Icon/></button>
+      </div>
+     
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col mt-4 gap-2">
       <div className="grid grid-cols-3 gap-4">
   {data.icon ? (

@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { MaterialInput } from "@/components/material-input";
 
 const formSchema = z.object({
   labelName: z.string().min(1, "Label name is required"),
@@ -21,9 +23,10 @@ const formSchema = z.object({
 
 export type FormValues = z.infer<typeof formSchema>;
 type LabelFormProps = {
-  onSubmit: (data: FormValues) => void; // Specify the type of the onSubmit prop
+  onSubmit: (data: FormValues) => void; 
+  close:()=>void;
 };
-export default function LabelForm({ onSubmit }: LabelFormProps) {
+export default function LabelForm({ onSubmit,close }: LabelFormProps) {
   const [dropdownFields, setDropdownFields] = useState<{ name: string; value: string }[]>([
     { name: "", value: "" }, // Initialize with one empty pair
   ]);
@@ -65,6 +68,11 @@ export default function LabelForm({ onSubmit }: LabelFormProps) {
   };
 
   return (
+    <div>
+      <div className="flex justify-between w-full mb-2">
+            <h1 className="text-lg font-bold">Custom Fee</h1>
+            <button onClick={close} className="text-red-600 font-bold bg-white"><Cross2Icon/></button>
+      </div>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         {/* Label Name */}
@@ -72,9 +80,8 @@ export default function LabelForm({ onSubmit }: LabelFormProps) {
           name="labelName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Label Name</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Enter label name" />
+                <MaterialInput {...field} placeholder="Enter label name" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -184,5 +191,6 @@ export default function LabelForm({ onSubmit }: LabelFormProps) {
         </Button>
       </form>
     </Form>
+    </div>
   );
 }

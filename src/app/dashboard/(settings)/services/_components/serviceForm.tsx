@@ -24,6 +24,7 @@ import { getSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import { MaterialInput } from "@/components/material-input";
 import { Category } from "../types";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 const fieldSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -166,11 +167,15 @@ const AddService: React.FC<addServiceProps> = ({close,fetch:refreshData,category
   
 
   return (
-    <div className="p-4">
+    <div className="p-4 overflow-auto">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 max-w-lg mx-auto">
           <div className="p-1">
+            <div className="flex justify-between">
             <h1 className="text-blue-950 font-semibold text-lg">Add Service</h1>
+            <button onClick={close} className="stroke-red-600"><Cross2Icon/></button>
+            </div>
+            
           </div>
           <div className="grid grid-cols-3 gap-4">
             {/* File Upload */}

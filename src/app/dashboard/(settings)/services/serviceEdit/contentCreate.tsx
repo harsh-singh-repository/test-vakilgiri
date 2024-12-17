@@ -10,6 +10,7 @@ import { Services } from '../types';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { useToast } from "@/hooks/use-toast"
+import { Cross2Icon } from '@radix-ui/react-icons';
 
 const schema = z.object({
   type: z.string().min(1, 'Type is required'),
@@ -115,9 +116,13 @@ const ContentCreate: React.FC<CreateContentProps> = ({ data, close,contentfetch,
   };
   return (
     <div className="p-4">
+      <div className='flex justify-between'>
       <h1 className="font-poppins font-semibold text-xl">{
         selectedType.length>0 ? `Add ${selectedType}` : 'Add'
 }</h1>
+<button className='text-red-600 font-bold text-lg' onClick={close}><Cross2Icon/></button>
+      </div>
+      
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col mt-4 gap-2">
         <div className='grid grid-cols-3'>
         <div className={`${(selectedType==="Features" || selectedType==="Advantage")?"col-span-1":"hidden"}`}>

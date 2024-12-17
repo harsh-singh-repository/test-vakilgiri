@@ -6,6 +6,7 @@ import { PlusIcon, EditIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog"; // Update path as needed
 import AddCategory from "./_components/addCategory";
 import { FormModal } from "./_components/formModal";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 export type category = {
   id:string;
@@ -64,7 +65,10 @@ export const categoryColumn:(handleFetch:()=>void)=> ColumnDef<category>[] =(han
           {isModalOpen && (
             <FormModal isOpen={isModalOpen} onClose={handleCloseModal}>
               <div className="p-4">
+                <div className="flex justify-between">
                 <h2 className="text-lg font-semibold mb-4">Create Category</h2>
+                <button onClick={handleCloseModal} className="stroke-red-600 mb-4"><Cross2Icon/></button>
+                </div>
                 <AddCategory again={handleFetch}/>
               </div>
             </FormModal>
