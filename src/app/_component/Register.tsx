@@ -18,7 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, Eye, EyeOff } from "lucide-react"
 import Image from 'next/image'
 import { useState } from 'react'
 import { useForm } from "react-hook-form"
@@ -36,6 +36,7 @@ export default function Register({ alreadyLogin }: RegisterProps) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   
   const form = useForm<z.infer<typeof RegisterformSchema>>({
     resolver: zodResolver(RegisterformSchema),
@@ -186,7 +187,24 @@ export default function Register({ alreadyLogin }: RegisterProps) {
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormControl>
-                    <Input type="password" placeholder="Password" {...field} />
+                    <div className="relative">
+                    <Input 
+                      type={showPassword? "text": "password"} 
+                      placeholder="Password" 
+                      {...field} 
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                    >
+                      {showPassword ? (
+                        <Eye className="h-5 w-5 text-gray-500" />
+                      ) : (
+                        <EyeOff className="h-5 w-5 text-gray-500" />
+                      )}
+                    </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

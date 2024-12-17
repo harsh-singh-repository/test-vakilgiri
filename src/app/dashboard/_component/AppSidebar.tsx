@@ -2,11 +2,11 @@
 // import { useState } from "react";
 import { usePathname } from 'next/navigation';
 import {
-  BriefcaseBusiness, 
+  BriefcaseBusiness,
   // ChevronRightIcon,
-  IndianRupee, 
-  Landmark, 
-  LayoutDashboard, 
+  IndianRupee,
+  Landmark,
+  LayoutDashboard,
   User,
 } from "lucide-react";
 import {
@@ -115,76 +115,87 @@ export function AppSidebar() {
 
   return (
     <div className=''>
-    <Sidebar className='mt-9'>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel></SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-            {items.map((item) => {
-                const isSubMenuOpen = item.children?.some((child) => child.url === pathname);
-                return (
-                  <Collapsible key={item.title} defaultOpen={isSubMenuOpen}>
-                    <SidebarMenuItem>
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuButton
-                          className={cn(
-                            "hover:bg-[#FFCECE] hover:text-black font-medium",
-                            pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white"
-                          )}
-                        >
-                          <div className="w-full flex justify-between items-center text-[15px]">
-                            <div className="inline-flex items-center space-x-2">
-                            <a
-                                  href={item.url}
-                                  className={cn(
-                                    "flex items-center space-x-2 text-[14px] focus:text-black text-[#00000080] p-1",
-                                    pathname === item.url && "bg-[#f21300] text-white"
-                                  )}
-                                >
-                              <item.icon size={18} />
-                              <span>{item.title}</span>
-                              </a>
-                            </div>
-                            {item.children && (
-                              isSubMenuOpen ? (
-                                <MdOutlineArrowDropUp size={24} />
-                              ) : (
-                                <MdOutlineArrowDropDown size={24} />
-                              )
+      <Sidebar className='mt-9'>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel></SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item) => {
+                  const isSubMenuOpen = item.children?.some((child) => child.url === pathname);
+                  return (
+                    <Collapsible key={item.title} defaultOpen={isSubMenuOpen}>
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <a
+                            href={item.url}
+                            className={cn(
+                              "hover:bg-[#FFCECE] hover:text-black font-medium",
+                              pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white"
                             )}
-                          </div>
-                        </SidebarMenuButton>
-                      </CollapsibleTrigger>
-                      {item.children && (
-                        <CollapsibleContent>
-                          <SidebarMenuSub>
-                            {item.children.map((child) => (
-                              <SidebarMenuSubItem key={child.title}>
+                          >
+                            <SidebarMenuButton
+                             className={cn(
+                              "hover:bg-[#FFCECE] hover:text-black font-medium",
+                              pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white"
+                            )}
+                            >
+                              <div className="w-full flex justify-between items-center text-[15px]">
+                                <div className="inline-flex items-center space-x-2">
+
+                                  <item.icon size={18} />
+                                  <span>{item.title}</span>
+                                </div>
+                                {item.children && (
+                                  isSubMenuOpen ? (
+                                    <MdOutlineArrowDropUp size={24} />
+                                  ) : (
+                                    <MdOutlineArrowDropDown size={24} />
+                                  )
+                                )}
+                              </div>
+
+                            </SidebarMenuButton>
+                          </a>
+                        </CollapsibleTrigger>
+                        {item.children && (
+                          <CollapsibleContent>
+                            <SidebarMenuSub>
+                              {item.children.map((child) => (
                                 <a
+                                  key={child.title}
                                   href={child.url}
                                   className={cn(
-                                    "flex items-center space-x-2 text-[14px] focus:text-black text-[#00000080] p-1",
-                                    pathname === child.url && "bg-[#f21300] text-white rounded-md"
+                                    "hover:bg-[#FFCECE] hover:text-black font-medium",
+                                    pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white"
                                   )}
                                 >
-                                  <child.icon size={16} />
-                                  <span>{child.title}</span>
+                                  <SidebarMenuSubItem  
+                                    className={cn(
+                                      "flex items-center space-x-2 text-[14px] focus:text-black text-[#00000080] p-1",
+                                      pathname === child.url && "bg-[#f21300] text-white rounded-md"
+                                    )}
+                                  >
+
+                                    <child.icon size={16} />
+                                    <span>{child.title}</span>
+                                  </SidebarMenuSubItem>
                                 </a>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        </CollapsibleContent>
-                      )}
-                    </SidebarMenuItem>
-                  </Collapsible>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
+                              ))}
+
+                            </SidebarMenuSub>
+
+                          </CollapsibleContent>
+                        )}
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
     </div>
   );
 }

@@ -1,31 +1,31 @@
-import React, { useState } from "react";
-import { useForm, useFormState } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
+"use client"
+
+import React from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { X } from 'lucide-react'
+import { useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
+
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
   FormField,
-} from "@/components/ui/form";
+  FormLabel,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useAddClient } from "@/hooks/clients/manage-client";
-import { toast } from "sonner";
-import { AddClientformSchema } from "../_types/zodSchema";
-import { useQueryClient } from "@tanstack/react-query";
-import { X } from "lucide-react";
-import { MaterialInput } from "@/components/material-input";
+} from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
+import { useAddClient } from "@/hooks/clients/manage-client"
 
-// Validation schema
-
-// States array
 const states = [
   "Andhra Pradesh",
   "Delhi",
@@ -33,18 +33,37 @@ const states = [
   "Karnataka",
   "Maharashtra",
   "Tamil Nadu",
-];
+]
 
-interface onCloseProp {
-  onClose: () => void;
+const AddClientFormSchema = z.object({
+  First_Name: z.string().min(1, "First name is required"),
+  Last_Name: z.string().min(1, "Last name is required"),
+  PAN: z.string().min(10, "PAN must be 10 characters").max(10),
+  email: z.string().email("Invalid email address"),
+  gender: z.enum(["Male", "Female", "Other"]),
+  Mobile_Number: z.string().min(10, "Mobile number must be 10 digits").max(10),
+  City: z.string().min(1, "City is required"),
+  State: z.string().min(1, "State is required"),
+  Pincode: z.string().min(6, "Pincode must be 6 digits").max(6),
+  Alternate_Mobile_Number: z.string().optional(),
+  Address_1: z.string().min(1, "Address is required"),
+  Address_2: z.string().optional(),
+  Aadhaar: z.string().min(12, "Aadhaar must be 12 digits").max(12),
+  sendMailToClient: z.boolean(),
+})
+
+type AddClientFormValues = z.infer<typeof AddClientFormSchema>
+
+interface AddClientDialogProps {
+  onClose: () => void
 }
 
-const AddClientDialog = ({ onClose }: onCloseProp) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { mutate: addUser } = useAddClient();
+export default function AddClientDialog({ onClose }: AddClientDialogProps) {
+  const { mutate: addUser } = useAddClient()
+  const queryClient = useQueryClient()
 
-  const form = useForm<z.infer<typeof AddClientformSchema>>({
-    resolver: zodResolver(AddClientformSchema),
+  const form = useForm<AddClientFormValues>({
+    resolver: zodResolver(AddClientFormSchema),
     defaultValues: {
       First_Name: "",
       Last_Name: "",
@@ -61,30 +80,19 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
       Aadhaar: "",
       sendMailToClient: true,
     },
-  });
+  })
 
-  const { isValid } = useFormState({
-    control: form.control,
-  });
-
-  const queryClient = useQueryClient();
-
-  async function onSubmit(formData: z.infer<typeof AddClientformSchema>) {
-    // const jsonData = JSON.stringify(formData, null, 2);
-    addUser(formData, {
+  function onSubmit(data: AddClientFormValues) {
+    addUser(data, {
       onSuccess: () => {
-        toast.success("Client created successfully!");
-
-        // Invalidate queries to refetch the updated list of clients
-        queryClient.invalidateQueries({ queryKey: ["clients"] });
-
-        form.reset();
+        toast.success("Client created successfully!")
+        queryClient.invalidateQueries({ queryKey: ["clients"] })
+        form.reset()
       },
       onError: (error) => {
-        toast.error(`Failed to create client: ${error.message}`);
+        toast.error(`Failed to create client: ${error.message}`)
       },
-      onSettled: () => setIsSubmitting(false),
-    });
+    })
   }
 
   return (
@@ -105,16 +113,16 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
         </div>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1">
           <FormField
             control={form.control}
             name="PAN"
             render={({ field }) => (
               <div>
+                <FormLabel className="text-[11px] font-semibold text-[#091747]">PAN</FormLabel>
                 <FormControl>
-                  <MaterialInput placeholder="PAN" {...field} className="border-[#091747] text-[14px]"/>
+                  <Input placeholder="PAN" {...field} className="border-[#091747] text-[13px] py-0 placeholder:text-[13px]" />
                 </FormControl>
-                {/* <FormMessage /> */}
               </div>
             )}
           />
@@ -125,7 +133,10 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
               name="First_Name"
               render={({ field }) => (
                 <div>
-                  <MaterialInput {...field} placeholder="First Name" readOnly className="border-[#091747] text-[14px]"/>
+                  <FormLabel className="text-[11px] font-semibold text-[#091747]">First Name</FormLabel>
+                  <FormControl>
+                    <Input disabled {...field} placeholder="First Name" readOnly className="border-[#091747] text-[13px] py-0 placeholder:text-[13px]" />
+                  </FormControl>
                 </div>
               )}
             />
@@ -135,14 +146,10 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
               name="Last_Name"
               render={({ field }) => (
                 <div>
+                  <FormLabel className="text-[11px] font-semibold text-[#091747]">Last Name</FormLabel>
                   <FormControl>
-                    <MaterialInput
-                      placeholder="Last Name"
-                      {...field}
-                      readOnly
-                    />
+                    <Input disabled placeholder="Last Name" {...field} readOnly className="border-[#091747] text-[13px] py-0 placeholder:text-[13px]" />
                   </FormControl>
-                   {/* <FormMessage /> */}
                 </div>
               )}
             />
@@ -153,10 +160,10 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
             name="email"
             render={({ field }) => (
               <div>
+                <FormLabel className="text-[11px] font-semibold text-[#091747]">Email</FormLabel>
                 <FormControl>
-                  <MaterialInput placeholder="Email" {...field} className="border-[#091747] text-[14px]"/>
+                  <Input placeholder="Email" {...field} className="border-[#091747] text-[13px] py-0 placeholder:text-[13px]" />
                 </FormControl>
-                {/* <FormMessage /> */}
               </div>
             )}
           />
@@ -167,10 +174,10 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
               name="Mobile_Number"
               render={({ field }) => (
                 <div>
+                  <FormLabel className="text-[11px] font-semibold text-[#091747]">Mobile Number</FormLabel>
                   <FormControl>
-                    <MaterialInput placeholder="Mobile Number" {...field} className="border-[#091747] text-[14px]"/>
+                    <Input placeholder="Mobile Number" {...field} className="border-[#091747] text-[13px] py-0 placeholder:text-[13px]" />
                   </FormControl>
-                  {/* <FormMessage /> */}
                 </div>
               )}
             />
@@ -180,10 +187,10 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
               name="Aadhaar"
               render={({ field }) => (
                 <div>
+                  <FormLabel className="text-[11px] font-semibold text-[#091747]">Aadhaar Number</FormLabel>
                   <FormControl>
-                    <MaterialInput placeholder="Aadhaar Number" {...field} className="border-[#091747] text-[14px]"/>
+                    <Input placeholder="Aadhaar Number" {...field} className="border-[#091747] text-[13px] py-0 placeholder:text-[13px]" />
                   </FormControl>
-                  {/* <FormMessage /> */}
                 </div>
               )}
             />
@@ -194,10 +201,10 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
             name="Address_1"
             render={({ field }) => (
               <div>
+                <FormLabel className="text-[11px] font-semibold text-[#091747]">Address 1</FormLabel>
                 <FormControl>
-                  <MaterialInput placeholder="Address-1" {...field} className="border-[#091747] text-[14px]"/>
+                  <Input placeholder="Address-1" {...field} className="border-[#091747] text-[13px] py-0 placeholder:text-[13px]" />
                 </FormControl>
-                {/* <FormMessage /> */}
               </div>
             )}
           />
@@ -207,10 +214,10 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
             name="Address_2"
             render={({ field }) => (
               <div>
+                <FormLabel className="text-[11px] font-semibold text-[#091747]">Address 2</FormLabel>
                 <FormControl>
-                  <MaterialInput placeholder="Address-2" {...field} className="border-[#091747] text-[14px]"/>
+                  <Input placeholder="Address-2" {...field} className="border-[#091747] text-[13px] py-0 placeholder:text-[13px]" />
                 </FormControl>
-                {/* <FormMessage /> */}
               </div>
             )}
           />
@@ -220,11 +227,8 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
             name="State"
             render={({ field }) => (
               <div>
-                 <label className="text-[11px] font-semibold text-[#091747]">State</label>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <FormLabel className="text-[11px] font-semibold text-[#091747]">State</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select State" />
@@ -238,7 +242,6 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
                     ))}
                   </SelectContent>
                 </Select>
-                {/* <FormMessage /> */}
               </div>
             )}
           />
@@ -248,11 +251,8 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
             name="gender"
             render={({ field }) => (
               <div>
-                 <label className="text-[11px] font-semibold text-[#091747] text-left">Gender</label>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <FormLabel className="text-[11px] font-semibold text-[#091747]">Gender</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select Gender" />
@@ -264,7 +264,6 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
                     <SelectItem value="Other">Other</SelectItem>
                   </SelectContent>
                 </Select>
-                {/* <FormMessage /> */}
               </div>
             )}
           />
@@ -275,10 +274,10 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
               name="City"
               render={({ field }) => (
                 <div>
+                  <FormLabel className="text-[11px] font-semibold text-[#091747]">City</FormLabel>
                   <FormControl>
-                    <MaterialInput placeholder="City" {...field} className="border-[#091747] text-[14px]"/>
+                    <Input placeholder="City" {...field} className="border-[#091747] text-[13px] py-0 placeholder:text-[13px]" />
                   </FormControl>
-                  {/* <FormMessage /> */}
                 </div>
               )}
             />
@@ -288,15 +287,15 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
               name="Pincode"
               render={({ field }) => (
                 <div>
+                  <FormLabel className="text-[11px] font-semibold text-[#091747]">Pincode</FormLabel>
                   <FormControl>
-                    <MaterialInput
+                    <Input
                       type="text"
                       placeholder="Pincode"
                       {...field}
-                      className="border-[#091747] text-[14px]" // Use string value directly
+                      className="border-[#091747] text-[13px] py-0 placeholder:text-[13px]"
                     />
                   </FormControl>
-                  {/* <FormMessage /> */}
                 </div>
               )}
             />
@@ -314,7 +313,9 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                <label className="text-[14px] text-[#091747] font-medium">Send Login mail to Client?</label>
+                  <FormLabel className="text-[11px] py-0 placeholder:text-[13px] text-[#091747] font-medium">
+                    Send Login mail to Client?
+                  </FormLabel>
                 </div>
               </div>
             )}
@@ -322,20 +323,13 @@ const AddClientDialog = ({ onClose }: onCloseProp) => {
 
           <Button
             type="submit"
-            className={`w-full ${
-              isValid
-                ? "bg-[#F21300] hover:bg-[#d11100]"
-                : "bg-gray-400 hover:bg-gray-500"
-            }`}
-            disabled={isSubmitting}
-            // onClick={onSave}
+            className="w-full bg-[#F21300] hover:bg-[#d11100] text-white"
           >
-            {isSubmitting ? "Creating..." : "Create Client"}
+            Create Client
           </Button>
         </form>
       </Form>
     </div>
-  );
-};
+  )
+}
 
-export default AddClientDialog;

@@ -1,14 +1,17 @@
+'use client'
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import Image from "next/image";
 import { CiCirclePlus, CiMenuBurger } from "react-icons/ci";
 import { RxAvatar } from "react-icons/rx";
 import logo from "../../assets/logo.png";
-import { DialogDemo } from "./Dialog";
+import { DialogDemo } from "./WalletBalanceDialog";
+import { useState } from "react";
 
 const Navbar = () => {
+  const [open, setOpen] = useState<boolean>(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <div className="w-full  sticky top-0 bg-white shadow-lg p-2 border-black flex items-center justify-between h-16 z-50">
         <div className="flex justify-center gap-2 items-center">
             <SidebarTrigger>
@@ -26,7 +29,7 @@ const Navbar = () => {
             <DialogTrigger>
               <CiCirclePlus size={"20"} className="text-[#F20101]"/>
             </DialogTrigger>
-            <DialogDemo/>
+            <DialogDemo onClose={() => setOpen(false)}/>
           </div>
           <div className="">
             <RxAvatar size={"40"}/>
