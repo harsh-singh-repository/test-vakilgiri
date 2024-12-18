@@ -163,7 +163,7 @@ export function ClientTable<TData, TValue>({
     <>
       <ScrollArea className="w-full h-[100vh] overflow-y-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
         <Table className="border rounded-2xl bg-white">
-          <TableHeader className="bg-[#042559] text-white text-center">
+          <TableHeader className="bg-[#042559] text-white text-center hover:bg-[#042559]">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
