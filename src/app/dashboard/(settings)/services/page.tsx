@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import { ServiceTable } from "./service-table";
 import { category, categoryColumn } from "./categoryColumns";
 import { columns } from "./columns";
-import { PlusIcon } from "lucide-react";
-import AddServices from "./_components/addServices";
+import { Plus} from "lucide-react";
+// import AddServices from "./_components/addServices";
 import { getSession } from "next-auth/react"; 
 import { Category, CategoryResponse, ServiceResponse, Services } from "./types";
 import AddService from "./_components/serviceForm";
@@ -53,7 +53,7 @@ async function getCategories(): Promise<Category[]> {
   }
   console.log("AccessToken:", session.user.accessToken);
 
-  const response = await fetch(`https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/service-category`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/service-category`, {
     headers: {
       Authorization: `Bearer ${session.user.accessToken}`,
     },
@@ -127,19 +127,19 @@ export default function DemoPage() {
     <div className="p-3 h-full">
       <div className="flex items-center gap-2 ml-4 mt-2 mb-2">
         <h1 className="text-2xl text-blue-950 font-bold font-poppins">Services</h1>
-        <button
-          className="w-8 h-8 bg-red-600 text-white rounded flex items-center justify-center"
-          title="Add"
+        <div
+          className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1"
+          // title="Add"
           onClick={() => setShowAddServices(true)}
         >
-          <PlusIcon size={26} />
-        </button>
+            <Plus strokeWidth={"5"}/>
+        </div>
       </div>
 
       {showAddServices && (
       <FormModal isOpen={showAddServices} onClose={()=>setShowAddServices(false)}>
             <AddService close={handleClose} fetch={handleFetch} category={categoryData}/>
-            </FormModal>
+      </FormModal>
       )}
 
       <div className="grid grid-cols-7 gap-2 h-[100%]">

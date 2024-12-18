@@ -8,3 +8,11 @@ export const useGetReminder = () => {
     });
     return query;
 };
+
+export const useGetReminderById = (id:string) => {
+    const query =  useQuery({
+        queryKey: ['reminderId'],
+        queryFn:()=> reminderServices.getById(id),
+    });
+    return query;
+};

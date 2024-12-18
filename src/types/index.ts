@@ -136,6 +136,12 @@ export interface LeadsReminderTypes{
 export interface BussinessDiscussionType{
   discussion : string
 }
+export interface AddFileType{
+  businessId:string | string[] | undefined,
+  File_Name:string,
+  file:File,
+  Visibility?: boolean,
+}
 
 export interface clientDiscussionType{
   discussion : string | undefined;

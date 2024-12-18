@@ -2,12 +2,12 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { CogIcon, EyeIcon, Icon } from "lucide-react";
+import { CogIcon, EyeIcon} from "lucide-react";
 import React from "react";
 import { Modal } from "./_components/modal";
 import EditServices from "./_components/editServices";
 import { Services } from "./types";
-import { getSession } from "next-auth/react";
+// import { getSession } from "next-auth/react";
 
 
 export const columns: (onToggle: (id: string, newActive: boolean) => void, setFetchagain: React.Dispatch<React.SetStateAction<boolean>>) => ColumnDef<Services>[] = (onToggle,setFetchagain) =>  [

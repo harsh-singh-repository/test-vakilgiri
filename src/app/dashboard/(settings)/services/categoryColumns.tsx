@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { PlusIcon, EditIcon } from "lucide-react";
-import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog"; // Update path as needed
+import { EditIcon, Plus } from "lucide-react";
+// import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog"; // Update path as needed
 import AddCategory from "./_components/addCategory";
 import { FormModal } from "./_components/formModal";
 
@@ -53,13 +53,13 @@ export const categoryColumn:(handleFetch:()=>void)=> ColumnDef<category>[] =(han
   
       return (
         <div className="flex justify-end mr-4">
-          <button
+          <div
             onClick={handleOpenModal}
-            className="w-6 h-6 bg-red-600 text-white rounded flex items-center justify-center"
+            className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer"
             title="Add"
           >
-            <PlusIcon size={16} />
-          </button>
+             <Plus strokeWidth={"3"}/>
+          </div>
   
           {isModalOpen && (
             <FormModal isOpen={isModalOpen} onClose={handleCloseModal}>

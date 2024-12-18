@@ -31,7 +31,7 @@ export const useAddClient = () => {
 
 export const useGetClientsById = (id:string | string [] | undefined) =>{
     const query =  useQuery({
-        queryKey: ['clients',id],
+        queryKey: ['clientsId',id],
         queryFn:() => clientService.getClientById(id),
         enabled:!!id,
     });
@@ -65,6 +65,13 @@ export const useGetBussinessOfClient = (id:string | string[] | undefined) =>{
     return query;
 }
 
+export const useAddManager = (id:string) => {
+    return useMutation({
+        mutationFn:(managersId:{managersId: string[]})=> clientService.assignManger(id,managersId),
+    });
+};
+
+
 export const useSearchClinetQuery = (searchQuery:string) => {
     const query =  useQuery({
         queryKey: ['clientSearch',searchQuery],
@@ -92,9 +99,9 @@ export const useDeleteClientDiscussion = () => {
     })
 };
 
-export const useDeleteClientReminder = (clienttId:string) => {
+export const useDeleteClientReminder = () => {
     return useMutation({
-       mutationFn:(id:string)=> clientService.deleteReminder(id,clienttId)
+       mutationFn:(id:string)=> clientService.deleteReminder(id)
     })
 };
 

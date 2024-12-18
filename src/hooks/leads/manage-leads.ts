@@ -51,6 +51,12 @@ export const useGetLeadsDisscussion = (id:string) =>{
     return query;
 };
 
+export const useRemoveLeadManager = (id: string) => {
+    return useMutation({
+        mutationFn: (managerId: { managerId: string }) => leadServices.removeManager(id, managerId.managerId),
+    });
+};
+
 export const useGetLeadsReminder = (id:string) =>{
     const query =  useQuery({
         queryKey: ['leadsReminder',id],
@@ -68,7 +74,7 @@ export const useDeleteLeads = () =>{
 
 export const useLinkClient = (id:string) =>{
     return useMutation({
-        mutationFn:(clientId:linkLeadType)=> leadServices.linkClient(id,clientId),
+        mutationFn:(clientId:linkLeadType)=> leadServices.linkClient(id,clientId),  
     })
 };
 

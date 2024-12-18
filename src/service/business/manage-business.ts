@@ -1,5 +1,5 @@
 // THIS IS EXMAPLE
-import { BussinessDiscussionType, BussinessReminderTypes, CreateBussiness, editBussinessDetails } from '../../types';
+import { AddFileType, BussinessDiscussionType, BussinessReminderTypes, CreateBussiness, editBussinessDetails } from '../../types';
 import axiosInstance from '@/lib/axiosInstance';
 
 const BUSINESS_API = {
@@ -14,7 +14,11 @@ const BUSINESS_API = {
     GET_ALL: '/business',
     SEARCH_BUSSINESS:(searchQuery:string)=>`/business/search?query=${searchQuery}`,
     GET_BY_ID: (id: string | string[] | undefined) => `/business/${id}/`,
-    // GET_CURRENT: '/admin/current-user'
+    ASSIGN_MANAGER:  (id:string) => `/business/${id}/managers`,
+    ADD_FILE:`/files/upload/business`,
+    ASSIGN_CONTACT_PERSON:(id:string  | string [] | undefined)=>`/business/${id}/contact-person`,
+    REMOVE_MANAGER:(id:string) => `/business/${id}/managers`,
+    CLIENT_TO_BUSSINESS:(id:string|string[]|undefined)=>`/business/${id}/clients`
 } as const;
 
 export const bussinessService = {
@@ -34,9 +38,19 @@ export const bussinessService = {
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.CREATE}`, businessData);
     },
 
+    assignContactPerson: async (contactPersonId:{contactPersonId:string},businessId:string  | string [] | undefined) => {
+        return await axiosInstance.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.ASSIGN_CONTACT_PERSON(businessId)}`,contactPersonId);
+    },
+
     addDiscussion: async (discussion:BussinessDiscussionType, id: string) => {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.ADD_DICUSSION(id)}`, discussion);
+    },
+
+    AddFile: async (addFile:AddFileType) => {
+        return await axiosInstance.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.ADD_FILE}`, addFile);
     },
 
     getBussinessDisscussion: async (id:string) => {
@@ -69,10 +83,26 @@ export const bussinessService = {
         return await axiosInstance.delete(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.DELETE_REMINDER(id,bussinessId)}`);
     },
+
+    assignManger:async(id:string,managersId: {managersId: string[]})=>{
+        return await axiosInstance.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.ASSIGN_MANAGER(id)}`,managersId);
+    },
     
     getBussinessBySearch: async(searchQuery:string)=>{
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.SEARCH_BUSSINESS(searchQuery)}`);
         return response.data.data;
+    },
+
+    removeManager : async (id:string,managerId:string)=>{
+        return await axiosInstance.delete(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.REMOVE_MANAGER(id)}`, {
+                data: { managerId },
+              });
+    },
+    clientToBussiness: async(id:string|string[]|undefined,clientIds:{clientIds:string[]})=>{
+        return await axiosInstance.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.CLIENT_TO_BUSSINESS(id)}`,clientIds);
     }
 
 };
