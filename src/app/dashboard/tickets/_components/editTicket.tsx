@@ -14,9 +14,10 @@ interface EditTicketProps {
   data: Ticket;
   close: () => void;
   categories:TicketCategory[];
+  handleFetchagain:()=>void;
 }
 
-const EditTicket: React.FC<EditTicketProps> = ({ data, close,categories }) => {
+const EditTicket: React.FC<EditTicketProps> = ({ data, close,categories,handleFetchagain }) => {
   const [subject, setSubject] = useState(data.subject || "");
   const [body, setBody] = useState(data.body || "");
   const [categoryId, setCategoryId] = useState(data.categoryId || "");
@@ -70,6 +71,7 @@ const EditTicket: React.FC<EditTicketProps> = ({ data, close,categories }) => {
         description: 'Please try again later.',
       });
     }finally{
+      handleFetchagain()
         setLoading(false)
     }
   };

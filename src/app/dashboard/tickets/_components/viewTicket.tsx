@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
 import { getSession } from "next-auth/react";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -8,8 +8,8 @@ import { TicketCategory } from "../page";
 import axios from "axios";
 import { IoIosSave, IoMdEye } from "react-icons/io";
 import { Button } from "@/components/ui/button";
-import { MdEdit } from "react-icons/md";
 import TicketReplyCreate from "./ticketReplyCreate";
+import { toast } from "sonner";
 interface TicketCreator {
   firstName: string;
   lastName: string;
@@ -109,8 +109,16 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
         }
       );
       console.log("Ticket updated successfully", response.data);
+      if(response.status>=200 && response.status<400){
+        toast.success('Ticket status updated successfully!', {
+          description: 'Your Ticket status has been updated successfully.',
+        });
+      }
     } catch (error) {
       console.error("Error updating ticket", error);
+      toast.error('Failed to update', {
+        description: 'Please try again later.',
+      });
     } finally {
       handleFetchagain();
     }
@@ -134,7 +142,7 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-
+      
       const replyData = await response.json();
       console.log("Ticket Replies:", replyData);
       return replyData.data
@@ -152,9 +160,11 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
     setReplyfetchagain(false)
   }, [data.id,replyfetchagain]);
 
-  const sameCreatorTickets = tickets.filter(
-    (tkt) => tkt.creatorId === data.creatorId
+  const sameCreatorTickets = useMemo(
+    () => tickets.filter((tkt) => tkt.creatorId === data.creatorId),
+    [tickets, data.creatorId]
   );
+  
   const formatDate = (isoDate: string): string => {
     const date = new Date(isoDate);
   
@@ -180,8 +190,8 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
     return `${day}${daySuffix(day)} ${month}, ${year}, ${hours}:${minutes} ${amPm}`;
   };
   return (
-    <div className="p-2">
-      <div className="flex justify-between">
+    <div className="p-3">
+      <div className="flex justify-between mb-1">
         <div className="flex gap-2">
           <div className="text-xl font-bold">
             {`Tickets | #${data.sn} | ${new Date(data.modifiedAt)
@@ -296,7 +306,7 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
             </div>
 
             {/* Name Section */}
-            <div className="col-span-4 flex flex-col justify-center leading-none">
+            <div className="col-span-4 flex flex-col justify-center leading-none text-sm">
               <div>
                 <strong>Name:</strong>
                 {` ${data.creator.firstName}`}

@@ -5,7 +5,6 @@ import { ServiceTable } from "./service-table";
 import { category, categoryColumn } from "./categoryColumns";
 import { columns } from "./columns";
 import { PlusIcon } from "lucide-react";
-import AddServices from "./_components/addServices";
 import { getSession } from "next-auth/react"; 
 import { Category, CategoryResponse, ServiceResponse, Services } from "./types";
 import AddService from "./_components/serviceForm";

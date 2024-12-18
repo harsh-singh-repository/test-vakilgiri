@@ -1,4 +1,3 @@
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { PlusIcon } from "lucide-react";
 import { role, roleColumn } from "./columns";
 import { RoleTable } from "./data-table";

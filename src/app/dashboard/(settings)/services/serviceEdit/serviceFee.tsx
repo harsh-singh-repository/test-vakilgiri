@@ -21,7 +21,7 @@ interface QuotationProps {
 const ServiceFee: React.FC<QuotationProps> = ({ data }) => {
     const [stateWiseFees, setStateWiseFees] = useState<StateWiseFee | null>(null);
     const [activeInput, setActiveInput] = useState<string | null>(null);
-    const [inputValues, setInputValues] = useState<{ [key: string]: string }>({});
+    // const [inputValues, setInputValues] = useState<{ [key: string]: string }>({});
     const [fetchagain,setFetchagain]=useState(false);
     useEffect(() => {
       const fetchStateWiseFees = async () => {
@@ -42,7 +42,7 @@ const ServiceFee: React.FC<QuotationProps> = ({ data }) => {
       fetchStateWiseFees();
     }, [data.id, fetchagain]);
     const handleInputChange = async (id: string, value: string) => {
-      setInputValues((prev) => ({ ...prev, [id]: value }));
+      // setInputValues((prev) => ({ ...prev, [id]: value }));
   
       // Debounced PUT request
       const session = await getSession();

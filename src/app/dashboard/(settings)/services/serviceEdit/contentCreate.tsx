@@ -92,16 +92,9 @@ const ContentCreate: React.FC<CreateContentProps> = ({ data, close,contentfetch,
         description: "Content added Successfully",
       })
       close();
-    } catch (error: any) {
+    } catch (error) {
       setLoading(false)
       console.error('Error submitting form:', error);
-      if (error.response) {
-        console.error('Error details:', error.response.data);
-        alert(`Validation Error: ${JSON.stringify(error.response.data.errors, null, 2)}`);
-      } else {
-        console.error('No response from server');
-        alert('No response from server');
-      }
     }
   };
   const types=[ "Features", "Advantage", "FAQs", "Procedure", "Document_Required", "Long_Description", "Short_Description","Tasks",]

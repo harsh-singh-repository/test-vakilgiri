@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
@@ -11,7 +9,6 @@ import CreateTicketDialog from './_components/addTicket';
 import TicketCard from './_components/ticketCard';
 import { TicketTable } from './_tableComp/ticketTable';
 import { TicketColumns } from './_tableComp/ticketColumn';
-import Modal from '@/components/model/custom-modal';
 import { TicketCategoryColumns } from './_tableComp/categoryColumn';
 
 interface TicketCreator{
