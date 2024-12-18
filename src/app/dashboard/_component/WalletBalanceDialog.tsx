@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -11,8 +12,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CalendarIcon, Upload } from "lucide-react";
-import React, { useState } from "react";
+import { CalendarIcon, Upload } from 'lucide-react';
+import { FaCheck } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
 
 import {
   Popover,
@@ -46,30 +48,15 @@ const PaymentDetails = [
   },
 ];
 
-export function DialogDemo() {
-  const [Debit, setDebit] = useState<boolean>(true);
-  const [payDirect, setPayDirect] = useState<boolean>(false);
-  const [alreadyPaid, setAlreadyPaid] = useState<boolean>(false);
+export function DialogDemo({ onClose }: { onClose: () => void }) {
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>("default");
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [file, setFile] = React.useState<File | null>(null);
+  const [createPayment, setCreatePayment] = useState<boolean>(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const onDebit = () => {
-    setDebit(true);
-    setPayDirect(false);
-    setAlreadyPaid(false);
-  };
-
-  const onPayDirect = () => {
-    setDebit(false);
-    setPayDirect(true);
-    setAlreadyPaid(false);
-  };
-
-  const onAlreadyPaid = () => {
-    setDebit(false);
-    setPayDirect(false);
-    setAlreadyPaid(true);
+  const handlePaymentMethodChange = (value: string) => {
+    setSelectedPaymentMethod(value);
   };
 
   const handleClick = () => {
@@ -83,10 +70,15 @@ export function DialogDemo() {
     }
   };
 
+  const handlePaymentDetails = () => {
+    setSelectedPaymentMethod("compact");
+  };
+
   return (
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader className="flex flex-col justify-center items-center">
-        <DialogTitle>Add Wallet Balance</DialogTitle>
+        <DialogTitle className="flex justify-center items-center w-full relative">Add Wallet Balance <span><ImCross className="absolute h-4 w-4 text-[#f32100] right-3 top-0 cursor-pointer" onClick={onClose}/></span></DialogTitle>
+
         <DialogDescription className="text-[#F20101]">
           Topup your Wallet Balance
         </DialogDescription>
@@ -95,20 +87,20 @@ export function DialogDemo() {
         <span className="text-[#091747] text-xs font-semibold">
           Select payment Method
         </span>
-        <RadioGroup defaultValue="default" className="flex flex-col">
+        <RadioGroup value={selectedPaymentMethod} onValueChange={handlePaymentMethodChange} className="flex flex-col">
           <div className="flex items-center  space-x-2">
-            <RadioGroupItem value="default" id="r1" onClick={onDebit}/>
+            <RadioGroupItem value="default" id="r1" />
             <Label htmlFor="r1">Debit/Credit Card, Netbanking and more</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="comfortable" id="r2" onClick={onPayDirect}/>
+            <RadioGroupItem value="comfortable" id="r2" />
             <Label htmlFor="r2">Pay Directly</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="compact" id="r3" onClick={onAlreadyPaid}/>
+            <RadioGroupItem value="compact" id="r3" />
             <Label htmlFor="r3">Already Paid? Create a transaction.</Label>
           </div>
-          {Debit && (
+          {selectedPaymentMethod === "default" && (
             <div className="flex flex-col gap-1">
               <div className="flex flex-col">
                 <Label className="text-xs font-semibold text-[#091747]">
@@ -126,7 +118,7 @@ export function DialogDemo() {
             </div>
           )}
 
-          {payDirect && (
+          {selectedPaymentMethod === "comfortable" && (
             <div className="flex flex-col gap-2 mt-2 mx-auto">
               {PaymentDetails.map((details) => (
                 <div
@@ -156,14 +148,22 @@ export function DialogDemo() {
                 </div>
               ))}
 
-              <div className="flex gap-x-4 sm:flex-col flex-col md:flex-row lg:flex-row gap-y-3">
-                <Button>Enter Payment Details</Button>
-                <Button>Cancel Transaction</Button>
+              <div className="flex gap-x-4 sm:flex-col flex-col md:flex-row lg:flex-row gap-y-3 mt-1">
+                <Button
+                  className="bg-[#00A12E] hover:bg-[#f23100]"
+                  onClick={handlePaymentDetails}
+                >Enter Payment Details</Button>
+                <Button
+                  className="bg-[#f23100] hover:bg-[#f23100]/90"
+                  onClick={onClose}
+                >
+                  Cancel Transaction
+                </Button>
               </div>
             </div>
           )}
 
-          {alreadyPaid && (
+          {selectedPaymentMethod === "compact" && !createPayment && (
             <div className="w-full space-y-4 flex flex-col justify-center">
               <div className="space-y-2">
                 <Label htmlFor="amount" className="text-xs font-semibold">
@@ -266,13 +266,42 @@ export function DialogDemo() {
                 )}
               </div>
 
-              <Button className="w-full bg-red-500 hover:bg-red-600 text-white">
+              <Button
+                className="w-full bg-[#f32100] hover:bg-[#f32100]/90 text-white"
+                onClick={() => setCreatePayment(true)}
+              >
                 Create Payment Request
               </Button>
             </div>
           )}
+          {
+                createPayment && (
+                  <div className="flex flex-col items-center text-center gap-4">
+                    <div className="rounded-full bg-[#F32100] p-4 w-fit">
+                      <FaCheck className="h-8 w-8 text-white" />
+                    </div>
+                    <div className="space-y-2">
+                      <h2 className="text-[#F32100] text-xl font-semibold">
+                        Topup Wallet transaction has been created successfully
+                      </h2>
+                      <DialogDescription className="text-sm text-gray-600">
+                        Vakilgiri Team is currently reviewing your transaction.
+                        <br />
+                        Amount will be added in your Wallet once approved.
+                      </DialogDescription>
+                    </div>
+                    <Button
+                      onClick={() => onClose()}
+                      className="bg-[#F32100] hover:bg-[#F32100]/90 text-white min-w-[120px]"
+                    >
+                      Close
+                    </Button>
+                  </div>
+                )
+              }
         </RadioGroup>
       </div>
     </DialogContent>
   );
 }
+

@@ -1,6 +1,6 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Results from "../../_component/Results";
+import Results from "../../_component/DashboardCards";
 import ClientDashboard from "../_component/ClientDashboard";
 import { Button } from "@/components/ui/button";
 
@@ -27,7 +27,7 @@ import Component from "../_component/Address_Form";
 import { Separator } from "@/components/ui/separator";
 import { useParams } from "next/navigation";
 import { Card } from "@/components/ui/card";
-import { useGetClientsById } from "@/hooks/users/manage-client";
+import { useGetClientsById } from "@/hooks/clients/manage-client";
 import { useRouter } from "next/navigation";
 import { ClinetBussinessDetails } from "../_types";
 import { Oval } from "react-loader-spinner";

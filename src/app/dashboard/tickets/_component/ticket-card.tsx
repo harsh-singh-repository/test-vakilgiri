@@ -1,37 +1,37 @@
-import { MdPerson2, MdPeople } from "react-icons/md";
-import { MdAddReaction } from "react-icons/md";
+import { MdHeadsetMic, MdHourglassTop, MdError } from "react-icons/md";
+import { TbHeadsetOff } from "react-icons/tb";
 
-const ClientCard = () => {
+const TicketCard = () => {
 
-    const clientCardData = [
+    const ticketCardData = [
         {
-            logo: <MdPerson2 size={"45"} />,
-            title: "All Users",
-            value: "19",
+            logo: <MdHeadsetMic size={"45"} />,
+            title: "All",
+            value: "4",
             iconBgColor: "bg-[#0917c84d]",
             bgColor: "bg-[#ccd7ff]",
             textColor: "text-[#091747]"
         },
         {
-            logo: <MdPeople size={"45"} />,
-            title: "Today",
-            value: "0",
+            logo: <TbHeadsetOff size={"45"} />,
+            title: "Closed",
+            value: "2",
             iconBgColor: "bg-[#007b234d]",
             bgColor: "bg-[#def9b9]",
             textColor: "text-[#007b23]"
         },
         {
-            logo: <MdAddReaction size={"45"} />,
-            title: "Active",
-            value: "4",
-            iconBgColor: "bg-[#b9100033]",
-            bgColor: "bg-[#f9e2c6]",
-            textColor: "text-[#b91000]"
+            logo: <MdHourglassTop size={"45"} />,
+            title: "New",
+            value: "1",
+            iconBgColor: "bg-[#00000055]",
+            bgColor: "bg-[#BDBDBD]",
+            textColor: "text-[#000000]"
         },
         {
-          logo: <MdPerson2 size={"45"} />,
-          title: "Inactive",
-          value: "16",
+          logo: <MdError size={"45"} />,
+          title: "Open",
+          value: "1",
           iconBgColor: "bg-[#f2130033]",
           bgColor: "bg-[#ffe6e6]",
           textColor: "text-[#f21300]"
@@ -40,7 +40,7 @@ const ClientCard = () => {
 
   return (
       <div className="w-full grid grid-cols-2 lg:grid-cols-4 justify-between items-start rounded-lg gap-4">
-        {clientCardData.map((data,index) => {
+        {ticketCardData.map((data,index) => {
           return (
               <div className={`w-full flex justify-start items-start border border-gray-300 rounded-xl p-2 shadow-md shadow-gray-300 ${data.bgColor}`} key={data.title+index}>
                 <div className="flex gap-x-2 items-center">
@@ -58,6 +58,6 @@ const ClientCard = () => {
 
       </div>
   )
-};
+}
 
-export default ClientCard
+export default TicketCard

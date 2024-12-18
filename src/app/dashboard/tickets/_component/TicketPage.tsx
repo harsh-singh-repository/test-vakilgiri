@@ -6,27 +6,12 @@ import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./tables/columns";
 import { ClientTable } from "./tables/client-table";
-import ClientCard from "./client-card";
 import { useSearchParams } from "next/navigation";
-// import { ClientPageServer } from "./ClientPageServer";
-// import { Client } from "@/constants/data";
-import AddClientDialog from "./AddClientDialog";
-// import Spinner from '@/components/smooth-spinner';
+import AddTicektDialog from "./AddTicketDialog";
 import { Oval } from "react-loader-spinner";
 import { useGetClients } from "@/hooks/clients/manage-client";
 import Modal from "@/components/model/custom-modal";
-// import { User } from "@/constants/client-table-data";
-
-// type ResponseData = {
-//   employee: User[];
-//   totalUsers: number;
-//   pageCount: number;
-// };
-
-// const breadcrumbItems = [
-//   { title: 'Dashboard', link: '/dashboard' },
-//   { title: 'Client', link: '/dashboard/client' }
-// ];
+import TicketCard from "./ticket-card";
 
 export default function ClientPageContent() {
   const {data} = useGetClients();
@@ -37,7 +22,6 @@ export default function ClientPageContent() {
   const closeModal = () => setIsModalOpen(false);
 
   console.log("ClinetData", data);
-  // const [open, setOpen] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
@@ -76,31 +60,33 @@ export default function ClientPageContent() {
 
   return (
     <div className="w-full flex-1 space-y-4 p-4 pt-6 md:p-4 overflow-hidden">
-      {/* <Breadcrumbs items={breadcrumbItems} /> */}
       <div className="flex items-start justify-between">
-        <div className="text-2xl font-bold text-[#042559]">{`Clients (7)`}</div>
+        <div className="text-2xl font-bold text-[#042559]">{`Tickets`}</div>
 
         <div className="flex justify-center item-center gap-4">
-        <div className='flex gap-2 items-center'>
           <Input
-            placeholder="Search name..."
+            placeholder="Type Here..."
             value={searchValue}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchValue(event.target.value)
+            }
             className="w-full md:max-w-sm ml-auto bg-white"
             />
 
-              <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1" onClick={openModal}>
-                <Plus strokeWidth={"5"}/>
-              </div>
+          <div
+            className="bg-[#f21300] text-white p-2 rounded-md cursor-pointer"
+            onClick={openModal}
+          >
+            <Plus className="h-6 w-6" />
           </div>
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
-              <AddClientDialog onClose={closeModal}/>
+          <Modal isOpen={isModalOpen} onClose={closeModal} className="w-full max-w-md p-0">
+              <AddTicektDialog onClose={closeModal}/>
           </Modal> 
         </div>
       </div>
       <Separator />
 
-      <ClientCard />
+      <TicketCard />
 
       {/* <div className='p-0 m-0 overflow-x-auto flex flex-col'> */}
 

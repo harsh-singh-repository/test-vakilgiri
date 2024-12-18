@@ -9,13 +9,13 @@ import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
 import {
   CalendarIcon,
-  PlusCircle,
+  Plus,
   Trash2,
   X,
   //  X
 } from "lucide-react";
 
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -35,7 +35,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   useAddClientDisscussion,
@@ -53,8 +53,7 @@ import { RxAvatar } from "react-icons/rx";
 import { clientDisscussionProps } from "../../_types";
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { ClientReminderType,  userType } from "@/app/dashboard/(sales)/leads/_types";
-import { useGetUsers } from "@/hooks/user/manage-user";
+import { ClientReminderType } from "@/app/dashboard/(sales)/leads/_types";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -63,31 +62,31 @@ interface StackExchangeDialogProp {
 
 function formatDate(dateString: string): string {
   const options: Intl.DateTimeFormatOptions = {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
     hour12: true,
   };
 
   const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", options);
+  return date.toLocaleDateString('en-US', options);
 }
 
 function formatCreatedAtDate(dateString: string): string {
   const date = new Date(dateString);
 
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
   const year = date.getFullYear();
 
   let hours = date.getHours();
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  const ampm = hours >= 12 ? "pm" : "am";
-
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  
   hours = hours % 12 || 12; // Convert 24-hour time to 12-hour format
-  const formattedHours = String(hours).padStart(2, "0");
+  const formattedHours = String(hours).padStart(2, '0');
 
   return `${day}-${month}-${year}, ${formattedHours}:${minutes} ${ampm}`;
 }
@@ -107,12 +106,6 @@ export const StackExchangeDialog = ({
     },
   });
 
-  const formMethods = useForm({
-    defaultValues: {
-      managersId: [] as string[], // Array to store selected manager IDs
-    },
-  });
-
   const reminderForm = useForm<z.infer<typeof reminderSchema>>({
     resolver: zodResolver(reminderSchema),
     defaultValues: {
@@ -126,78 +119,40 @@ export const StackExchangeDialog = ({
   console.log("Dialog ID: ", openDialogId);
   console.log(typeof openDialogId);
   const { data } = useGetClientsById(openDialogId);
-  const { data: clientDisscussionData } = useGetClientDisscussion(openDialogId);
-  const { data: ClientReminder } = useGetClientReminder(openDialogId);
+  const {data:clientDisscussionData} = useGetClientDisscussion(openDialogId)
+  const {data:ClientReminder} = useGetClientReminder(openDialogId)
 
   const { mutate: addDiscussion } = useAddClientDisscussion(openDialogId);
   const { mutate: addReminder } = useAddClientReminder(openDialogId);
-  const { mutate: deleteDiscussion } = useDeleteClientDiscussion();
-  const { data: assignedManager } = useGetUsers();
-  const { mutate: deleteReminder } = useDeleteClientReminder();
-  const { mutate: addManager } = useAddManager(openDialogId);
+  const {mutate:deleteDiscussion} = useDeleteClientDiscussion()
 
   const queryClient = useQueryClient();
-  console.log("clientid id",data)
 
-  const handleDeleteDisscussion = (id: string) => {
-    console.log("discussion id", id);
-    deleteDiscussion(id, {
-      onSuccess: () => {
+
+  const handleDeleteDisscussion = ( id:string ) =>{
+    console.log("discussion id",id)
+    // console.log("clientid id",clientId)
+    deleteDiscussion(id,{
+     onSuccess:()=>{
         toast.success("Disscussion Deleted Successfully");
         queryClient.invalidateQueries({ queryKey: ["clientDisscussion"] });
-      },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
-          // Safely access the response data
-          const errorMessage =
-            error.response?.data?.message || "An unexpected error occurred.";
-          // console.log("Axios Error Message:", errorMessage);
+     },
+     onError:(error)=>{
+      if (error instanceof AxiosError) {
+        // Safely access the response data
+        const errorMessage =
+          error.response?.data?.message || "An unexpected error occurred.";
+        // console.log("Axios Error Message:", errorMessage);
 
-          // Display error message in toast
-          toast.error(`Failed to delete Discussion: ${errorMessage}`);
-        } else {
-          // Handle non-Axios errors
-          toast.error("An unexpected error occurred.");
-        }
-      },
+        // Display error message in toast
+        toast.error(`Failed to delete Discussion: ${errorMessage}`);
+      } else {
+        // Handle non-Axios errors
+        toast.error("An unexpected error occurred.");
+      }
+     }
     });
-  };
-
-  const handleDeleteRemider = (id: string) => {
-    deleteReminder(id, {
-      onSuccess: () => {
-        toast.success("Reminder Deleted");
-        queryClient.invalidateQueries({ queryKey: ["clientReminder"] });
-      },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
-          // Safely access the response data
-          const errorMessage =
-            error.response?.data?.message || "An unexpected error occurred.";
-          // console.log("Axios Error Message:", errorMessage);
-
-          // Display error message in toast
-          toast.error(`Failed to delete Reminder: ${errorMessage}`);
-        } else {
-          // Handle non-Axios errors
-          toast.error("An unexpected error occurred.");
-        }
-      },
-    });
-  };
-
-  const handleFormSubmit = (data: { managersId: string[] }) => {
-    console.log("data", data);
-    addManager(data, {
-      onSuccess: () => {
-        toast.success("Manager Assigned");
-        queryClient.invalidateQueries({ queryKey: ["clientsId"] });
-      },
-      onError: (error) => {
-        toast.error(`error : ${error}`);
-      },
-    });
-  };
+ }
 
   console.log("Dialog Disscussion", clientDisscussionData);
 
@@ -297,13 +252,13 @@ export const StackExchangeDialog = ({
                             )}
                           />
                           <div className="flex justify-end">
-                            <button
-                              type="submit"
-                              className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-[12px] px-2 right-0 rounded-md"
-                              disabled={isSubmittingDiscussion}
-                            >
-                              {isSubmittingDiscussion ? "Saving..." : "Save"}
-                            </button>
+                          <button
+                            type="submit"
+                            className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-[12px] px-2 right-0 rounded-md"
+                            disabled={isSubmittingDiscussion}
+                          >
+                            {isSubmittingDiscussion ? "Saving..." : "Save"}
+                          </button>
                           </div>
                         </div>
                       </form>
@@ -324,19 +279,14 @@ export const StackExchangeDialog = ({
                             <span className="font-medium">
                               {discussion.body}
                             </span>
-                            <div className="flex flex-row justify-between w-full">
-                              <div className="font-thin text-[#F21300]">
-                                {discussion.createdAt.split("T")[0]}
-                              </div>
-                              <div
-                                className="text-[#F21300] cursor-pointer"
-                                onClick={() =>
-                                  handleDeleteDisscussion(discussion.id)
-                                }
-                              >
-                                <Trash2 size={"15"} />
-                              </div>
-                            </div>
+                           <div className="flex flex-row justify-between w-full">
+                               <div className="font-thin text-[#F21300]">
+                                    {discussion.createdAt.split('T')[0]}
+                                </div>
+                               <div className="text-[#F21300] cursor-pointer" onClick={() => handleDeleteDisscussion(discussion.id)}>
+                                  <Trash2 size={"15"}/>
+                               </div>
+                           </div>
                           </div>
                         </div>
                       )
@@ -485,21 +435,21 @@ export const StackExchangeDialog = ({
                           )}
                         />
 
-                        <div className="flex justify-end">
-                          <button
-                            type="submit"
-                            className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-[12px] px-2 rounded-md"
-                            disabled={isSubmittingReminder}
-                          >
-                            {isSubmittingReminder ? "Saving..." : "Save"}
-                          </button>
-                        </div>
+                       <div className="flex justify-end">
+                       <button
+                          type="submit"
+                          className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-[12px] px-2 rounded-md"
+                          disabled={isSubmittingReminder}
+                        >
+                          {isSubmittingReminder ? "Saving..." : "Save"}
+                        </button>
+                       </div>
                       </form>
                     </Form>
                   </AccordionContent>
                 </AccordionItem>
                 {ClientReminder && (
-                  <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
+                    <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
                     {ClientReminder.map(
                       (reminder: ClientReminderType, index: number) => (
                         <div
@@ -509,140 +459,56 @@ export const StackExchangeDialog = ({
                           <RxAvatar size={30} />
                           <div className="flex flex-col w-full items-start">
                             <div className="flex flex-col text-left w-full">
-                              <span className="font-semibold">
-                                {reminder.creator?.firstName +
-                                  " " +
-                                  reminder.creator?.lastName}
-                              </span>
+                              <span className="font-semibold">{reminder.creator?.firstName + " " + reminder.creator?.lastName}</span>
                               <div className="flex gap-x-1">
-                                <span className="font-semibold">Subject:</span>
-                                <span>{reminder?.subject}</span>
+                                 <span className="font-semibold">Subject:</span>
+                                 <span>{reminder?.subject}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                <span className="font-semibold">
-                                  Description:
-                                </span>
-                                <span>{reminder?.body}</span>
+                                 <span className="font-semibold">Description:</span>
+                                 <span>{reminder?.body}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                <span className="font-semibold">
-                                  Reminder Type:
-                                </span>
-                                <span>{reminder?.reminderType}</span>
+                                 <span className="font-semibold">Reminder Type:</span>
+                                 <span>{reminder?.reminderType}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                <span className="font-semibold">Due Date:</span>
-                                <span>{formatDate(reminder?.dueDate)}</span>
+                                 <span className="font-semibold">Due Date:</span>
+                                 <span>{formatDate(reminder?.dueDate)}</span>
                               </div>
                               <div className="flex justify-between text-[#f21300] w-full">
-                                <span>
-                                  {formatCreatedAtDate(reminder?.createdAt)}
-                                </span>
-                                <Trash2
-                                  size={"15"}
-                                  onClick={() =>
-                                    handleDeleteRemider(reminder?.id)
-                                  }
-                                  className="cursor-pointer"
-                                />
+                                 <span>{formatCreatedAtDate(reminder?.createdAt)}</span>
+                                 <Trash2 size={"15"}/>
                               </div>
                             </div>
                           </div>
                         </div>
                       )
                     )}
-                  </div>
+                    </div>
                 )}
               </Accordion>
             </div>
             <div className="space-y-2 bg-[#ededed] rounded-md max-h-fit">
               <div className="rounded-lg px-2 py-2">
                 <div className="justify-between flex px-1">
-                  <h3 className="font-semibold mb-3 text-[13px] text-[#091747]">
-                    Assigned Manager
-                  </h3>
-                  <X
-                    onClick={onClose}
-                    strokeWidth={"3"}
-                    className="text-[#f21300] cursor-pointer"
-                  />
+                   <h3 className="font-semibold mb-3 text-[13px] text-[#091747]">
+                      Assigned Users
+                   </h3>
+                   <X onClick={onClose} strokeWidth={"3"} className="text-[#f21300] cursor-pointer"/>
                 </div>
                 <div className="flex items-center gap-2">
-                {/* {data && (
-                      <div className="flex">
-                        {data?.manager.map(
-                          (data: managerDetails, index: number) => (
-                            <div className="" key={index}>
-                              <RxAvatar size={"30"} />
-                            </div>
-                          )
-                        )}
-                      </div>
-                    )} */}
-                  <Popover>
-                    <PopoverTrigger>
-                      <div className="text-[#f21300]">
-                        <PlusCircle />
-                      </div>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                    {assignedManager && (
-                          <form
-                            onSubmit={formMethods.handleSubmit(
-                              handleFormSubmit
-                            )}
-                          >
-                            <div>
-                              {assignedManager
-                                .filter(
-                                  (manager: userType) =>
-                                    manager.userRoles === "Staff_Manager"
-                                ) // Filter the managers
-                                .map((manager: userType, index: number) => (
-                                  <div
-                                    key={index}
-                                    className="flex items-center gap-2"
-                                  >
-                                    <Controller
-                                      name="managersId"
-                                      control={formMethods.control}
-                                      render={({
-                                        field: { value, onChange },
-                                      }) => (
-                                        <input
-                                          type="checkbox"
-                                          checked={value?.includes(manager.id)}
-                                          onChange={(e) => {
-                                            if (e.target.checked) {
-                                              // Add manager ID to the array
-                                              onChange([...value, manager.id]);
-                                            } else {
-                                              // Remove manager ID from the array
-                                              onChange(
-                                                value.filter(
-                                                  (id: string) =>
-                                                    id !== manager.id
-                                                )
-                                              );
-                                            }
-                                          }}
-                                        />
-                                      )}
-                                    />
-                                    <span className="text-[12px] text-[#091747] font-semibold">{manager.firstName}</span>
-                                  </div>
-                                ))}
-                            </div>
-                            <button
-                              type="submit"
-                              className="btn btn-primary mt-2 bg-[#f21300] px-2 py-1 rounded-md text-[10px] text-white"
-                            >
-                              Assign
-                            </button>
-                          </form>
-                        )}
-                    </PopoverContent>
-                  </Popover>
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src="/placeholder.svg" />
+                    <AvatarFallback>PV</AvatarFallback>
+                  </Avatar>
+                  <Button
+                    size="icon"
+                    variant="default"
+                    className="h-8 w-8 bg-transparent text-[#f21300] hover:bg-transparent"
+                  >
+                    <Plus className="h-5 w-5" />
+                  </Button>
                 </div>
               </div>
               <div className="rounded-lg px-2 py-2">
