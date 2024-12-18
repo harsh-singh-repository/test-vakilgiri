@@ -4,12 +4,12 @@ import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import { FaPlus } from "react-icons/fa";
-import { FormModal } from '../(settings)/services/_components/formModal';
 import CreateTicketDialog from './_components/addTicket';
 import TicketCard from './_components/ticketCard';
 import { TicketTable } from './_tableComp/ticketTable';
 import { TicketColumns } from './_tableComp/ticketColumn';
 import { TicketCategoryColumns } from './_tableComp/categoryColumn';
+import { FormModal } from './_components/ticketFormModal';
 
 interface TicketCreator{
   firstName:string;
