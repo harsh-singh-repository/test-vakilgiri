@@ -3,11 +3,11 @@
 import {
   ColumnDef,
   flexRender,
-  getCoreRowModel,
   getPaginationRowModel,
+  getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-
+import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -17,14 +17,13 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Button } from "@/components/ui/button"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function RoleTable<TData, TValue>({
+export function TicketTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -36,9 +35,9 @@ export function RoleTable<TData, TValue>({
   })
 
   return (
-    // <ScrollArea className="ml-2 mr-3 w-full max-h-fit overflow-y-auto border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
-    <div className="rounded-2xl shadow-md h-fit border bg-white">
-      <Table className="mr-2">
+    <ScrollArea className="ml-3 mr-2 w-full max-h-fit overflow-y-auto border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+    <div className="rounded-md border bg-white mb-1">
+      <Table>
         <TableHeader className="bg-blue-950 text-white">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -80,7 +79,8 @@ export function RoleTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-end space-x-2 mt-2 bg-gray-50 rounded-lg">
+    </div>
+    <div className="flex items-center justify-end space-x-2 py-1">
         <Button
           variant="outline"
           size="sm"
@@ -98,7 +98,6 @@ export function RoleTable<TData, TValue>({
           Next
         </Button>
       </div>
-    </div>
-    // </ScrollArea>
+    </ScrollArea>
   )
 }

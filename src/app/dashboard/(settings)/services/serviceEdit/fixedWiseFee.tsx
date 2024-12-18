@@ -105,7 +105,7 @@ const FixedWiseFee: React.FC<FixedWiseProps> = ({ data }) => {
 
       <div className="mt-4">
         {fixedwise.length === 0 ? (
-          <table className="table-fixed w-full mt-2">
+          <table className="table-fixed w-full mt-2 ">
             <tbody>
               <tr>
                 <td>
@@ -118,7 +118,7 @@ const FixedWiseFee: React.FC<FixedWiseProps> = ({ data }) => {
             </tbody>
           </table>
         ) : (
-          <table className="table-auto w-96 mt-4 rounded-xl">
+          <table className="table-auto w-96 mt-4 rounded-xl border shadow-md">
             <thead>
               <tr className=" rounded-xl bg-blue-950">
                 <th className="px-4 py-2 text-left text-white">Particular</th>

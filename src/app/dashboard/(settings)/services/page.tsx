@@ -80,7 +80,6 @@ export default function DemoPage() {
   const [categoryData, setCategoryData] = useState<category[]>([]);
   const [showAddServices, setShowAddServices] = useState(false);
   const [fetchagain,setFetchagain]=useState(false);
-
   const handleClose=()=>{
     setShowAddServices(false);
   }
@@ -122,10 +121,20 @@ export default function DemoPage() {
     }
     fetchData();
   }, [fetchagain]);
-
+ 
+  useEffect(() => {
+    if (showAddServices) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [showAddServices]);
   return (
     <div className="p-3 h-full">
-      <div className="flex items-center gap-2 ml-4 mt-2 mb-2">
+      <div className="flex flex-wrap items-center gap-2 ml-4 mt-2 mb-2">
         <h1 className="text-2xl text-blue-950 font-bold font-poppins">Services</h1>
         <div
           className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1"
@@ -142,7 +151,7 @@ export default function DemoPage() {
       </FormModal>
       )}
 
-      <div className="grid grid-cols-7 gap-2 h-[100%]">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 h-[100%]">
         <div className="col-span-5">
         <ServiceTable columns={columns(handleToggle, setFetchagain)} data={data} />
         </div>
