@@ -25,7 +25,7 @@ interface CategoryFormProps{
     close:()=>void
     fetchagain:()=>void
 }
-const CategoryForm: React.FC<CategoryFormProps> = ({close,fetchagain}) => {
+const CategoryForm: React.FC<CategoryFormProps> = ({fetchagain}) => {
     const [loading,setLoading]=useState(false)
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),

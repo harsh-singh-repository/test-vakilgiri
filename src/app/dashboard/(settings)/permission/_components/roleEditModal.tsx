@@ -7,7 +7,7 @@ interface ModalProps {
   children: ReactNode;
 }
 
-export const RoleModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+export const RoleModal: React.FC<ModalProps> = ({ isOpen, children }) => {
   if (!isOpen) return null;
 
   return createPortal(

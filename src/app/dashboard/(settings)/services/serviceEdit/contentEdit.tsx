@@ -47,7 +47,7 @@ interface ContentEditProps {
   setContentfetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ContentEdit: React.FC<ContentEditProps> = ({ data, close,contentfetch,setContentfetch }) => {
+const ContentEdit: React.FC<ContentEditProps> = ({ data, close,setContentfetch }) => {
   const [loading, setLoading] = useState(false);
   const [fileName, setFileName] = useState<string>(data.icon ? data.icon.split('/').pop() || "" : "");
 
@@ -99,16 +99,9 @@ const ContentEdit: React.FC<ContentEditProps> = ({ data, close,contentfetch,setC
       setContentfetch(true)
       setLoading(false);
       close();
-    } catch (error: any) {
+    } catch (error) {
       setLoading(false);
       console.error('Error updating content:', error);
-      if (error.response) {
-        console.error('Error details:', error.response.data);
-        alert(`Validation Error: ${JSON.stringify(error.response.data.errors, null, 2)}`);
-      } else {
-        console.error('No response from server');
-        alert('No response from server');
-      }
     }
   };
 

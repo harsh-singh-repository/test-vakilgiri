@@ -1,11 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Settings, Trash2 } from "lucide-react"; 
 import React from "react";
-import { RoleModal } from "./_components/roleEditModal";
-import { Cross2Icon } from "@radix-ui/react-icons";
-import RoleEditForm from "./_components/roleEditForm";
+import ActionCell from "./_components/action";
 
 export type role = {
   Sno: number;
@@ -45,7 +42,7 @@ export const roleColumn: ColumnDef<role>[] = [
   {
     accessorKey: "Assigned",
     header: () => <div className="text-center">Assigned</div>,
-    cell: ({ row }) => (
+    cell: () => (
       <div className="flex justify-center ml-1">
       <img src="/globe.svg" alt="Globe Icon" className="h-4 w-4"/>
     </div>
@@ -54,34 +51,6 @@ export const roleColumn: ColumnDef<role>[] = [
   {
     id: "action", // Updated id
     header: () => <div className="text-right mr-4">Action</div>, // Updated header
-    cell: () => {
-      const [isModalOpen, setIsModalOpen] = React.useState(false);
-  
-      const handleOpenModal = () => setIsModalOpen(true);
-      const handleCloseModal = () => setIsModalOpen(false);
-      return (
-      <div className="flex gap-1 justify-end mr-2">
-        <button
-          className="w-8 h-8 bg-blue-950 text-white rounded-md flex items-center justify-center hover:bg-red-600 hover:text-white"
-          title="Settings"
-          onClick={handleOpenModal}
-        >
-          <Settings size={16} />
-        </button>
-        <button
-          className="w-8 h-8 bg-red-600 text-white rounded-md flex items-center justify-center hover:bg-blue-950 hover:text-white"
-          title="Delete"
-        >
-          <Trash2 size={16} />
-        </button>
-        {isModalOpen && (
-            <RoleModal isOpen={isModalOpen} onClose={handleCloseModal}>
-              <div className="p-4">
-                <RoleEditForm close={handleCloseModal}/>
-              </div>
-            </RoleModal>
-          )}
-      </div>
-    )},
+    cell: ({ row }) => <ActionCell rowId={row.id} />
   },
 ];

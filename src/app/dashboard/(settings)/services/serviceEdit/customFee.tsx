@@ -2,12 +2,7 @@ import React from "react";
 import LabelForm, { FormValues } from "./labelForm";
 import { FormModal } from "../_components/formModal";
 
-// Props interface for FormModal (assuming this exists in your codebase)
-interface FormModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-}
+// Props interface for FormModal (assuming this exists in your codebase
 
 // CustomFee component
 function CustomFee() {

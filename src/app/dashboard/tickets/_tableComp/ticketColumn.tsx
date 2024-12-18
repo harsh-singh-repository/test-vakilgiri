@@ -1,17 +1,10 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { MdEdit } from "react-icons/md"
-import { IoMdEye } from "react-icons/io";
-import { ImBin } from "react-icons/im";
-import { Button } from "@/components/ui/button";
 import { TicketCategory } from "../page";
 import React from "react";
-import { Modal } from "../../(settings)/services/_components/modal";
-import EditTicket from "../_components/editTicket";
-import ViewTicket from "../_components/viewTicket";
-import { SmallModal } from "../_components/smallModal";
-import ShowCreator from "../_components/showCreator";
+import TicketAction from "./action/ticketAction";
+import TicketCreator from "./action/ticketCreatorAction";
 
 interface TicketCreator{
   firstName:string;
@@ -75,24 +68,9 @@ export const TicketColumns:(categories:TicketCategory[],tickets:Ticket[], handle
   {
     accessorKey: "creator",
     header: "Creator",
-    cell:({row})=>{
-      const [isModalOpen, setIsModalOpen] = React.useState(false);
-  
-      const handleOpenModal = () => setIsModalOpen(true);
-      const handleCloseModal = () => setIsModalOpen(false);
-        return (
-          <div>
-          <div className="text-[#f21300] text-sm font-medium cursor-pointer" onClick={handleOpenModal}>
-              {`${row.original.creator.firstName.toUpperCase()} ${row.original.creator.lastName.toUpperCase()}`}
-          </div>
-          {isModalOpen && (
-            <SmallModal isOpen={isModalOpen} onClose={handleCloseModal}>
-              <ShowCreator data={row.original.creator}/>
-            </SmallModal>
-          )}
-          </div>
-        )
-    }
+    cell: ({ row }) => {
+      return <TicketCreator creator={row.original.creator} />;
+    },
   },
   {
     accessorKey: "category",
@@ -100,7 +78,7 @@ export const TicketColumns:(categories:TicketCategory[],tickets:Ticket[], handle
     cell:({row})=>{
       const matchedCategory = categories.find((cat) => cat.id === row.original.categoryId);
       console.log(matchedCategory,2)
-    const id = matchedCategory?.id;
+    // const id = matchedCategory?.id;
         return (
           <div className="text-[#091747] text-sm font-medium">
             {matchedCategory?.name}
@@ -144,61 +122,17 @@ export const TicketColumns:(categories:TicketCategory[],tickets:Ticket[], handle
   },
   {
     accessorKey: "action",
-    header: ()=>{
+    header: () => <div className="text-right mr-2">Action</div>,
+    cell: ({ row }) => {
       return (
-        <div className="text-right mr-2">Action</div>
-      )
+        <TicketAction
+          ticket={row.original}
+          categories={categories}
+          tickets={tickets}
+          handleFetchagain={handleFetchagain}
+        />
+      );
     },
-    cell:({row})=>{
-      const [isModalOpen, setIsModalOpen] = React.useState(false);
-    
-      const handleEdit = () => {
-        setIsModalOpen(true);
-      };
-  
-      const closeModal = () => {
-        setIsModalOpen(false);
-      };
-
-      const [isViewModalOpen, setIsViewModalOpen] = React.useState(false);
-    
-      const handleView = () => {
-        setIsViewModalOpen(true);
-      };
-  
-      const closeViewModal = () => {
-        setIsViewModalOpen(false);
-      };
-      return (
-        <div className="flex gap-1 justify-end items-center">
-            <Button
-        className="bg-[#042559] text-white p-1 h-6 text-md"
-        onClick={handleView}
-      >
-        <IoMdEye  />
-      </Button>
-      {isViewModalOpen && (
-              <Modal isOpen={isViewModalOpen} onClose={closeViewModal}>
-                <ViewTicket ticket={row.original} close={closeViewModal} tickets={tickets} handleFetchagain={handleFetchagain}/>
-              </Modal>
-            )}
-      <Button
-            className="bg-[#042559] text-white p-1 h-6 text-md"
-            onClick={handleEdit}>
-            <MdEdit />
-          </Button>
-          {isModalOpen && (
-              <Modal isOpen={isModalOpen} onClose={closeModal}>
-                <EditTicket data={row.original} close={closeModal} categories={categories}/>
-              </Modal>
-            )}
-          <Button
-        className="bg-[#f21300] text-white p-1 h-6 text-sm"
-      >
-        <ImBin />
-      </Button>
-        </div>
-      )
-    }
   },
+  
 ]
