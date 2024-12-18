@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { ImCross } from "react-icons/im";
 
 interface ModalProps {
   isOpen: boolean;
@@ -18,7 +17,6 @@ export const FormModal: React.FC<ModalProps> = ({ isOpen,onClose, children }) =>
           onClick={onClose}
           className="absolute top-5 right-5 text-[#f32100] hover:red-700"
         >
-          <ImCross/>
         </button>
         {children}
       </div>
