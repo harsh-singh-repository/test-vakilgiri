@@ -1,7 +1,12 @@
 import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+import { CogIcon, EyeIcon} from "lucide-react";
+import React from "react";
+import { Modal } from "./_components/modal";
+import EditServices from "./_components/editServices";
 import { Services } from "./types";
-import { ServiceStatus } from "./action/serviceStatus";
-import { ServiceAction } from "./action/serviceAction";
+// import { getSession } from "next-auth/react";
+
 
 export const columns: (
   onToggle: (id: string, newActive: boolean) => void,

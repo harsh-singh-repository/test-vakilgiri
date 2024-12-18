@@ -14,7 +14,8 @@ const LEADS_API = {
     DELETE_DISCUSSION:(leadId:string,id:string) =>`/leads/${leadId}/discussions/${id}`,
     DELETE_REMINDER:(leadId:string,id:string) =>`/leads/${leadId}/reminders/${id}`,
     LINK_CLIENT:(leadId:string)=>`/leads/${leadId}/link-client`,
-    ASSIGN_MANAGER:(leadId:string)=>`/leads/${leadId}/managers`
+    ASSIGN_MANAGER:(leadId:string)=>`/leads/${leadId}/managers`,
+    REMOVE_MANAGER:(id:string)=>`/leads/${id}/managers`,
 }
 
 export const leadServices = {
@@ -82,5 +83,11 @@ export const leadServices = {
     assignManager : async(id:string, managerId: {managerId: string[]}) => {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.ASSIGN_MANAGER(id)}`,managerId);
+    },
+    removeManager : async (id:string,managerId:string)=>{
+        return await axiosInstance.delete(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.REMOVE_MANAGER(id)}`, {
+                data: { managerId },
+              });
     }
 }

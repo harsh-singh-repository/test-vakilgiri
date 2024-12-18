@@ -21,8 +21,9 @@ const CLIENT_API = {
     ADD_REMINDER: (id: string) => `/client/${id}/reminders`,
     GET_REMINDER: (id: string) => `/client/${id}/reminders`,
     DELETE_DISCUSSION: (id: string) => `/client/discussions/${id}`,
-    DELETE_REMINDER: (id: string,clientId:string) => `/client/${clientId}/reminders/${id}`,
-    SEARCH: (searchQuey:string) => `/client?query=${searchQuey}`
+    DELETE_REMINDER: (id: string) => `/reminders/${id}`,
+    SEARCH: (searchQuey:string) => `/client?query=${searchQuey}`,
+    ASSIGN_MANAGER:(id:string) => `/client/${id}/manager`
 } as const;
 
 export const clientService = {
@@ -78,9 +79,14 @@ export const clientService = {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE_DISCUSSION(id)}`);
     },
     
-    deleteReminder: async (id:string,clientId:string) => {
+    deleteReminder: async (id:string) => {
         return await axiosInstance.delete(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE_REMINDER(id,clientId)}`);
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE_REMINDER(id)}`);
+    },
+
+    assignManger:async(id:string,managersId: {managersId: string[]})=>{
+        return await axiosInstance.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.ASSIGN_MANAGER(id)}`,managersId);
     },
 
     searchClient: async(searchQuery:string)=>{

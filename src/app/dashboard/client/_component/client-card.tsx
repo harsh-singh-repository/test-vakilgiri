@@ -58,6 +58,6 @@ const ClientCard = () => {
 
       </div>
   )
-}
+};
 
 export default ClientCard

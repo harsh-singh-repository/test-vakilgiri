@@ -1,6 +1,5 @@
 'use client';
-import { Suspense, useState} from 'react';
-import { Button } from '@/components/ui/button';
+import { useState} from 'react';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
 import { useGetReminder } from '@/hooks/reminder/manage-reminder';
@@ -87,17 +86,18 @@ export default function ReminderPage() {
         <div className="text-[20px] font-bold text-[#042559]">{`Reminders (${data.length})`}</div>
 
         <div className="flex justify-center item-center gap-4">
-          <Suspense>
+        <div className='flex gap-2 items-center'>
           <Input
-            placeholder="Search"
+            placeholder="Search name..."
             value={searchValue}
-            onChange={(event) => setSearchValue(event.target.value)}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
             className="w-full md:max-w-sm ml-auto bg-white"
             />
-            </Suspense>
-          <Button className="bg-[#f21300] text-white">
-            <Plus className="h-2 w-2" />
-          </Button>
+
+              <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1">
+                <Plus strokeWidth={"5"}/>
+              </div>
+          </div>
         </div>
       </div>
       <Separator />

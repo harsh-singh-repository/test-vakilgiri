@@ -1,5 +1,5 @@
 "use client";
- 
+
 import logo from "@/app/assets/logo.png";
 import { Input } from "@/components/ui/input";
 // import { useToast } from "@/hooks/use-toast";
@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { LoginProps } from "../_types";
 import { LoginformSchema } from "../_types/zodSchema";
@@ -42,12 +42,13 @@ const Login: React.FC<LoginProps> = ({
   // const [date, setDate] = React.useState<Date | undefined>(new Date());
   const router = useRouter();
   const [loader, setloader] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   // const { toast } = useToast();
 
   async function onSubmit(data: z.infer<typeof LoginformSchema>) {
     setloader(true);
-   
+
     const result = await signIn("credentials", {
       redirect: false,
       email: data.email,
@@ -59,7 +60,7 @@ const Login: React.FC<LoginProps> = ({
       if (result.error === "CredentialsSignin") {
         toast.error("Incorrect Email or password")
       } else {
-         toast.error(`Login failed : ${result.error}`)
+        toast.error(`Login failed : ${result.error}`)
       }
     }
 
@@ -107,11 +108,24 @@ const Login: React.FC<LoginProps> = ({
                   Password
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter password"
-                    {...field}
-                  />
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                    >
+                      {showPassword ? (
+                        <Eye className="h-5 w-5 text-gray-500" />
+                      ) : (
+                        <EyeOff className="h-5 w-5 text-gray-500" />
+                      )}
+                    </button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </div>

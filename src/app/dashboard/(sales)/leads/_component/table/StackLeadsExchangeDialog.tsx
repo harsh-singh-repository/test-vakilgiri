@@ -5,7 +5,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-
 import { format } from "date-fns";
 import {
   CalendarIcon,
@@ -50,6 +49,7 @@ import {
   useGetLeadsById,
   useGetLeadsDisscussion,
   useGetLeadsReminder,
+  useRemoveLeadManager,
 } from "@/hooks/leads/manage-leads";
 import {
   leadsDiscussionSchema,
@@ -162,7 +162,9 @@ export const StackLeadsExchangeDialog = ({
 
   const { mutate: addReminder } = useAddLeadsReminder(openDialogId);
 
-  const {mutate:deleteReminder} = useDeleteLeadsReminder(openDialogId);
+  const { mutate: deleteReminder } = useDeleteLeadsReminder(openDialogId);
+
+  const {mutate:removeManger} = useRemoveLeadManager(openDialogId);
 
   console.log("Data of leads", data);
 
@@ -198,30 +200,28 @@ export const StackLeadsExchangeDialog = ({
     );
   };
 
-  const handleDeleteReminder = (id:string) => {
-    deleteReminder(id,
-      {
-        onSuccess: () => {
-          toast.success("Reminder Deleted Successfully");
-          queryClient.invalidateQueries({ queryKey: ["leadsReminder"] });
-        },
-        onError: (error) => {
-          if (error instanceof AxiosError) {
-            // Safely access the response data
-            const errorMessage =
-              error.response?.data?.message || "An unexpected error occurred.";
-            // console.log("Axios Error Message:", errorMessage);
+  const handleDeleteReminder = (id: string) => {
+    deleteReminder(id, {
+      onSuccess: () => {
+        toast.success("Reminder Deleted Successfully");
+        queryClient.invalidateQueries({ queryKey: ["leadsReminder"] });
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
 
-            // Display error message in toast
-            toast.error(`Failed to delete Reminder: ${errorMessage}`);
-          } else {
-            // Handle non-Axios errors
-            toast.error("An unexpected error occurred.");
-          }
-        },
-      }
-    )
-  }
+          // Display error message in toast
+          toast.error(`Failed to delete Reminder: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
+      },
+    });
+  };
 
   async function onDiscussionSubmit(
     values: z.infer<typeof leadsDiscussionSchema>
@@ -272,12 +272,25 @@ export const StackLeadsExchangeDialog = ({
     addManager(data, {
       onSuccess: () => {
         toast.success("Manager Assigned");
+        queryClient.invalidateQueries({ queryKey: ["leadId"] });
       },
       onError: (error) => {
         toast.error(`error : ${error}`);
       },
     });
   };
+
+  const handleRemoveManager = (id:{ managerId: string;}) => {
+    removeManger(id,{
+     onSuccess: () => {
+       toast.success("Manager Removed");
+       queryClient.invalidateQueries({ queryKey: ["leadId"] });
+     },
+     onError: (error) => {
+       toast.error(`error : ${error}`);
+     },
+    })
+ }
 
   return (
     <div>
@@ -567,7 +580,13 @@ export const StackLeadsExchangeDialog = ({
                                 <span>
                                   {formatCreatedAtDate(reminder.createdAt)}
                                 </span>
-                                <Trash2 size={"15"} onClick={()=>handleDeleteReminder(reminder?.id)} className="cursor-pointer"/>
+                                <Trash2
+                                  size={"15"}
+                                  onClick={() =>
+                                    handleDeleteReminder(reminder?.id)
+                                  }
+                                  className="cursor-pointer"
+                                />
                               </div>
                             </div>
                           </div>
@@ -591,12 +610,15 @@ export const StackLeadsExchangeDialog = ({
                     />
                   </div>
                   <div className="flex gap-2 mt-2 items-center">
-                    {data && (
+                  {data && (
                       <div className="flex">
-                        {data?.assigned.map(
+                        {data?.assigned?.map(
                           (data: managerDetails, index: number) => (
                             <div className="" key={index}>
                               <RxAvatar size={"30"}/>
+                              <div className="absolute">
+                               <X className="text-[#f21300] -translate-y-8 translate-x-4 h-3 w-3 cursor-pointer" strokeWidth={"6"} onClick={()=>handleRemoveManager({managerId : data?.id})}/>
+                              </div>
                             </div>
                           )
                         )}
@@ -616,8 +638,12 @@ export const StackLeadsExchangeDialog = ({
                             )}
                           >
                             <div>
-                              {assignedManager.map(
-                                (manager: userType, index: number) => (
+                              {assignedManager
+                                .filter(
+                                  (manager: userType) =>
+                                    manager.userRoles === "Staff_Manager"
+                                ) // Filter the managers
+                                .map((manager: userType, index: number) => (
                                   <div
                                     key={index}
                                     className="flex items-center gap-2"
@@ -648,10 +674,9 @@ export const StackLeadsExchangeDialog = ({
                                         />
                                       )}
                                     />
-                                    <span>{manager.firstName}</span>
+                                    <span className="text-[12px] text-[#091747] font-semibold">{manager.firstName}</span>
                                   </div>
-                                )
-                              )}
+                                ))}
                             </div>
                             <button
                               type="submit"

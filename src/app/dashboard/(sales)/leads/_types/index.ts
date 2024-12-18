@@ -58,6 +58,7 @@ export interface managerDetails{
   lastName: string;
   email: string;
   userRoles: string;
+  id:string;
 }
 
 export interface userType{

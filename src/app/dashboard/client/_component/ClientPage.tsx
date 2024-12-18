@@ -13,7 +13,7 @@ import { useSearchParams } from "next/navigation";
 import AddClientDialog from "./AddClientDialog";
 // import Spinner from '@/components/smooth-spinner';
 import { Oval } from "react-loader-spinner";
-import { useGetClients } from "@/hooks/users/manage-client";
+import { useGetClients } from "@/hooks/clients/manage-client";
 import Modal from "@/components/model/custom-modal";
 // import { User } from "@/constants/client-table-data";
 
