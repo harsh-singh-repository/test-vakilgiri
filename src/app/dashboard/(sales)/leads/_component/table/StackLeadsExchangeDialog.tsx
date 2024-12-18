@@ -256,7 +256,18 @@ export const StackLeadsExchangeDialog = ({
         queryClient.invalidateQueries({ queryKey: ["leadsReminder"] });
       },
       onError: (error) => {
-        toast.error(`Failed to add reminder : ${error}`);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to add reminder: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
       },
     });
   }
@@ -275,7 +286,18 @@ export const StackLeadsExchangeDialog = ({
         queryClient.invalidateQueries({ queryKey: ["leadId"] });
       },
       onError: (error) => {
-        toast.error(`error : ${error}`);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to Assign manager: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
       },
     });
   };
@@ -287,7 +309,18 @@ export const StackLeadsExchangeDialog = ({
        queryClient.invalidateQueries({ queryKey: ["leadId"] });
      },
      onError: (error) => {
-       toast.error(`error : ${error}`);
+      if (error instanceof AxiosError) {
+        // Safely access the response data
+        const errorMessage =
+          error.response?.data?.message || "An unexpected error occurred.";
+        // console.log("Axios Error Message:", errorMessage);
+
+        // Display error message in toast
+        toast.error(`Failed to Remove manager: ${errorMessage}`);
+      } else {
+        // Handle non-Axios errors
+        toast.error("An unexpected error occurred.");
+      }
      },
     })
  }
