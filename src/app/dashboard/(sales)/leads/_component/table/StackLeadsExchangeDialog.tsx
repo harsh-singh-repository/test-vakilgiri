@@ -844,20 +844,25 @@ export const StackLeadsExchangeDialog = ({
                         <Plus className="text-white bg-[#f21300] rounded-md" />
                       </PopoverTrigger>
                       <PopoverContent className="">
-                        <LinkBussiness />
+                        <LinkBussiness clientId={data?.clientId} leadId={openDialogId}/>
                       </PopoverContent>
                     </Popover>
                   </div>
                   <div className="text-[12px]">
-                    <div className="flex">
-                      <span className="font-semibold">Business:</span>
+                    <div className="flex gap-x-1">
+                      <span className="font-semibold">Business:</span><span className="uppercase">{data?.business?.businessName}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-semibold">Manager:</span>
                     </div>
-                    <div className="flex  items-center text-white bg-[#f21300] max-w-fit rounded-md px-2 text-[10px]">
-                      <span className="font-semibold">Bussiness status: </span>
-                      <span className="font-semibold">Incomplete</span>
+                    <div className="flex flex-col gap-y-1">
+                    <div className="flex  items-center text-white bg-[#A301D5] max-w-fit rounded-md px-2 text-[10px]">
+                      <span className="font-medium">{data?.business?.businessType}</span>
+                    </div>
+                    <div className="flex gap-x-2 items-center text-white bg-[#f21300] max-w-fit rounded-md px-2 text-[10px]">
+                      <span className="font-semibold">Bussiness status:</span>
+                      <span className="font-medium">{data?.business?.businessStatus}</span>
+                    </div>
                     </div>
                   </div>
                 </div>
