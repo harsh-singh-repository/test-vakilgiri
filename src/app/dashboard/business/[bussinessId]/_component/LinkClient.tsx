@@ -3,13 +3,13 @@
 import * as React from 'react'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { useSearchClinetQuery } from '@/hooks/users/manage-client';
 import { clientDetailsType } from '@/app/dashboard/(sales)/leads/_types';
 import { cn } from '@/lib/utils';
 import { useAddClientToBussiness } from '@/hooks/business/manage-business';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useSearchClinetQuery } from '@/hooks/clients/manage-client';
 // import { cn } from '@/lib/utils'
 
 interface onCloseProp {
