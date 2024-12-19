@@ -18,13 +18,13 @@ import { Button } from "@/components/ui/button";
 const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
 
-  const openPopup = () => {
-    return (
-      <Popover>
+  // const openPopup = () => {
+  //   return (
+  //     <Popover>
 
-      </Popover>
-    )
-  };
+  //     </Popover>
+  //   )
+  // };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <div className="w-full  sticky top-0 bg-white shadow-lg p-2 border-black flex items-center justify-between h-16 z-50">
