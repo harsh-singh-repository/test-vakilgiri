@@ -188,12 +188,12 @@ export const StackBussinessExchangeDialog = ({
 
   return (
     <div className="p-4">
-      <div className="">
+      <div className="flex justify-center items-start gap-x-3">
         <div className="flex flex-col gap-y-3">
           <div className="text-[17px] text-[#091747] uppercase font-bold">
             {data?.creator.firstName + " " + data?.creator.lastName}
           </div>
-          <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-2 xl:grid-cols-[500px,250px]">
+          <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-[500px] xl:grid-cols-[500px]">
             <div className="w-full max-w-2xl mx-auto">
               <Accordion type="multiple" className="w-full">
                 <AccordionItem value="discussions" className="">
@@ -467,10 +467,13 @@ export const StackBussinessExchangeDialog = ({
                 )}
               </Accordion>
             </div>
-            <div className="space-y-2 bg-[#ededed] rounded-md max-h-fit">
-              <div className="rounded-lg px-2 py-2">
+            
+          </div>
+        </div>
+        <div className="space-y-2 bg-[#ededed] rounded-md max-h-fit">
+              <div className="rounded-lg px-2 py-1">
               <div className="justify-between flex px-1">
-                   <h3 className="font-semibold mb-3 text-[13px] text-[#091747]">
+                   <h3 className="font-semibold mb-1 text-[13px] text-[#091747]">
                       Assigned Users
                    </h3>
                    <X onClick={onClose} strokeWidth={"3"} className="text-[#f21300] cursor-pointer"/>
@@ -575,8 +578,6 @@ export const StackBussinessExchangeDialog = ({
                 </div>
               </div>
             </div>
-          </div>
-        </div>
       </div>
     </div>
   );
