@@ -19,7 +19,7 @@ interface EditServicesProps {
 const EditServices: React.FC<EditServicesProps> = ({ data, close, onToggle }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   
-      const handleOpenModal = () => setIsModalOpen(true);
+      // const handleOpenModal = () => setIsModalOpen(true);
       const handleCloseModal = () => setIsModalOpen(false);
   const [activeButton, setActiveButton] = useState("Content");
   const buttons=[

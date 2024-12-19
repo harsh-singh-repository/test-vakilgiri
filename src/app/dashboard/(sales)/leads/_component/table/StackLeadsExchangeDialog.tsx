@@ -5,8 +5,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { Input } from "@/components/ui/input";
-
 import { format } from "date-fns";
 import {
   CalendarIcon,
@@ -36,7 +34,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -48,9 +45,11 @@ import {
   useAddLeadsReminder,
   useAddManager,
   useDeleteLeadsDisscussion,
+  useDeleteLeadsReminder,
   useGetLeadsById,
   useGetLeadsDisscussion,
   useGetLeadsReminder,
+  useRemoveLeadManager,
 } from "@/hooks/leads/manage-leads";
 import {
   leadsDiscussionSchema,
@@ -72,6 +71,7 @@ import { useState } from "react";
 import LinkClient from "../LinkClient";
 import LinkBussiness from "../LinkBussiness";
 import { useGetUsers } from "@/hooks/user/manage-user";
+import { MaterialInput } from "@/components/material-input";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -162,6 +162,10 @@ export const StackLeadsExchangeDialog = ({
 
   const { mutate: addReminder } = useAddLeadsReminder(openDialogId);
 
+  const { mutate: deleteReminder } = useDeleteLeadsReminder(openDialogId);
+
+  const {mutate:removeManger} = useRemoveLeadManager(openDialogId);
+
   console.log("Data of leads", data);
 
   const handleDeleteDisscussion = ({
@@ -194,6 +198,29 @@ export const StackLeadsExchangeDialog = ({
         },
       }
     );
+  };
+
+  const handleDeleteReminder = (id: string) => {
+    deleteReminder(id, {
+      onSuccess: () => {
+        toast.success("Reminder Deleted Successfully");
+        queryClient.invalidateQueries({ queryKey: ["leadsReminder"] });
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to delete Reminder: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
+      },
+    });
   };
 
   async function onDiscussionSubmit(
@@ -229,7 +256,18 @@ export const StackLeadsExchangeDialog = ({
         queryClient.invalidateQueries({ queryKey: ["leadsReminder"] });
       },
       onError: (error) => {
-        toast.error(`Failed to add reminder : ${error}`);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to add reminder: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
       },
     });
   }
@@ -245,12 +283,47 @@ export const StackLeadsExchangeDialog = ({
     addManager(data, {
       onSuccess: () => {
         toast.success("Manager Assigned");
+        queryClient.invalidateQueries({ queryKey: ["leadId"] });
       },
       onError: (error) => {
-        toast.error(`error : ${error}`);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to Assign manager: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
       },
     });
   };
+
+  const handleRemoveManager = (id:{ managerId: string;}) => {
+    removeManger(id,{
+     onSuccess: () => {
+       toast.success("Manager Removed");
+       queryClient.invalidateQueries({ queryKey: ["leadId"] });
+     },
+     onError: (error) => {
+      if (error instanceof AxiosError) {
+        // Safely access the response data
+        const errorMessage =
+          error.response?.data?.message || "An unexpected error occurred.";
+        // console.log("Axios Error Message:", errorMessage);
+
+        // Display error message in toast
+        toast.error(`Failed to Remove manager: ${errorMessage}`);
+      } else {
+        // Handle non-Axios errors
+        toast.error("An unexpected error occurred.");
+      }
+     },
+    })
+ }
 
   return (
     <div>
@@ -281,8 +354,8 @@ export const StackLeadsExchangeDialog = ({
                             render={({ field, fieldState: { error } }) => (
                               <div>
                                 <FormControl>
-                                  <Textarea
-                                    placeholder="Enter Description"
+                                  <MaterialInput
+                                    placeholder="Enter Discussion"
                                     className={cn(
                                       "min-h-[60px] border-gray-300 focus:border-blue-500",
                                       error &&
@@ -354,7 +427,7 @@ export const StackLeadsExchangeDialog = ({
                     <Form {...reminderForm}>
                       <form
                         onSubmit={reminderForm.handleSubmit(onReminderSubmit)}
-                        className="space-y-1"
+                        className="space-y-2"
                       >
                         <div className="flex space-x-4">
                           <FormField
@@ -454,10 +527,10 @@ export const StackLeadsExchangeDialog = ({
                           render={({ field, fieldState: { error } }) => (
                             <div>
                               <FormControl>
-                                <Input
+                                <MaterialInput
                                   placeholder="Subject"
                                   className={cn(
-                                    "bg-white border-gray-300",
+                                    "bg-white border-gray-300 focus:border-blue-500",
                                     error &&
                                       "border-red-500 focus:border-red-500 focus:ring-red-500"
                                   )}
@@ -474,10 +547,10 @@ export const StackLeadsExchangeDialog = ({
                           render={({ field, fieldState: { error } }) => (
                             <div>
                               <FormControl>
-                                <Textarea
+                                <MaterialInput
                                   placeholder="Enter description"
                                   className={cn(
-                                    "min-h-[100px] bg-white border-gray-300",
+                                    "min-h-[60px] bg-white border-gray-300 focus:border-blue-500",
                                     error &&
                                       "border-red-500 focus:border-red-500 focus:ring-red-500"
                                   )}
@@ -540,7 +613,13 @@ export const StackLeadsExchangeDialog = ({
                                 <span>
                                   {formatCreatedAtDate(reminder.createdAt)}
                                 </span>
-                                <Trash2 size={"15"} />
+                                <Trash2
+                                  size={"15"}
+                                  onClick={() =>
+                                    handleDeleteReminder(reminder?.id)
+                                  }
+                                  className="cursor-pointer"
+                                />
                               </div>
                             </div>
                           </div>
@@ -556,20 +635,23 @@ export const StackLeadsExchangeDialog = ({
                 {/* Assigned Users Section */}
                 <div className="p-3 border-b">
                   <div className="flex items-center justify-between">
-                    <h2 className="font-semibold">Assigned Users</h2>
+                    <h2 className="font-semibold">Assigned Manager</h2>
                     <X
                       className="w-4 h-4 text-[#F21300] cursor-pointer"
                       onClick={onClose}
                       strokeWidth={"5"}
                     />
                   </div>
-                  <div className="flex gap-2 mt-2">
-                    {data && (
+                  <div className="flex gap-2 mt-2 items-center">
+                  {data && (
                       <div className="flex">
-                        {data?.assigned.map(
+                        {data?.assigned?.map(
                           (data: managerDetails, index: number) => (
                             <div className="" key={index}>
-                              <RxAvatar />
+                              <RxAvatar size={"30"}/>
+                              <div className="absolute">
+                               <X className="text-[#f21300] -translate-y-8 translate-x-4 h-3 w-3 cursor-pointer" strokeWidth={"6"} onClick={()=>handleRemoveManager({managerId : data?.id})}/>
+                              </div>
                             </div>
                           )
                         )}
@@ -589,8 +671,12 @@ export const StackLeadsExchangeDialog = ({
                             )}
                           >
                             <div>
-                              {assignedManager.map(
-                                (manager: userType, index: number) => (
+                              {assignedManager
+                                .filter(
+                                  (manager: userType) =>
+                                    manager.userRoles === "Staff_Manager"
+                                ) // Filter the managers
+                                .map((manager: userType, index: number) => (
                                   <div
                                     key={index}
                                     className="flex items-center gap-2"
@@ -621,10 +707,9 @@ export const StackLeadsExchangeDialog = ({
                                         />
                                       )}
                                     />
-                                    <span>{manager.firstName}</span>
+                                    <span className="text-[12px] text-[#091747] font-semibold">{manager.firstName}</span>
                                   </div>
-                                )
-                              )}
+                                ))}
                             </div>
                             <button
                               type="submit"
@@ -759,20 +844,25 @@ export const StackLeadsExchangeDialog = ({
                         <Plus className="text-white bg-[#f21300] rounded-md" />
                       </PopoverTrigger>
                       <PopoverContent className="">
-                        <LinkBussiness />
+                        <LinkBussiness clientId={data?.clientId} leadId={openDialogId}/>
                       </PopoverContent>
                     </Popover>
                   </div>
                   <div className="text-[12px]">
-                    <div className="flex">
-                      <span className="font-semibold">Business:</span>
+                    <div className="flex gap-x-1">
+                      <span className="font-semibold">Business:</span><span className="uppercase">{data?.business?.businessName}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-semibold">Manager:</span>
                     </div>
-                    <div className="flex  items-center text-white bg-[#f21300] max-w-fit rounded-md px-2 text-[10px]">
-                      <span className="font-semibold">Bussiness status: </span>
-                      <span className="font-semibold">Incomplete</span>
+                    <div className="flex flex-col gap-y-1">
+                    <div className="flex  items-center text-white bg-[#A301D5] max-w-fit rounded-md px-2 text-[10px]">
+                      <span className="font-medium">{data?.business?.businessType}</span>
+                    </div>
+                    <div className="flex gap-x-2 items-center text-white bg-[#f21300] max-w-fit rounded-md px-2 text-[10px]">
+                      <span className="font-semibold">Bussiness status:</span>
+                      <span className="font-medium">{data?.business?.businessStatus}</span>
+                    </div>
                     </div>
                   </div>
                 </div>

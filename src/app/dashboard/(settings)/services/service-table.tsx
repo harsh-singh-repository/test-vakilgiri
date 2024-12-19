@@ -3,10 +3,11 @@
 import {
   ColumnDef,
   flexRender,
+  getPaginationRowModel,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-
+import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -30,11 +31,12 @@ export function ServiceTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   })
 
   return (
     <ScrollArea className="ml-3 mr-2 w-full max-h-fit overflow-y-auto border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
-    <div className="rounded-md border bg-white">
+    <div className="rounded-md border bg-white mb-1">
       <Table>
         <TableHeader className="bg-blue-950 text-white">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -78,6 +80,24 @@ export function ServiceTable<TData, TValue>({
         </TableBody>
       </Table>
     </div>
+    <div className="flex items-center justify-end space-x-2 py-1">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div>
     </ScrollArea>
   )
 }

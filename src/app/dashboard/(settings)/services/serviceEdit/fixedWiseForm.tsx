@@ -17,7 +17,6 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
@@ -76,9 +75,9 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData }) => {
         );
         if (response.data && response.data.data) {
           setServices(
-            response.data.data.map((service: any) => ({
+            response.data.data.map((service: Services) => ({
               id: service.id,
-              name: service.name,
+              name: service.ServiceName,
             }))
           );
         }

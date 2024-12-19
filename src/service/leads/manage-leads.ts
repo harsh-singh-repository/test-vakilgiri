@@ -12,8 +12,11 @@ const LEADS_API = {
     GET_DISCUSSION:(id:string)=>`/leads/${id}/discussions/`,
     GET_REMINDER:(id:string)=>`/leads/${id}/reminders`,
     DELETE_DISCUSSION:(leadId:string,id:string) =>`/leads/${leadId}/discussions/${id}`,
+    DELETE_REMINDER:(leadId:string,id:string) =>`/leads/${leadId}/reminders/${id}`,
     LINK_CLIENT:(leadId:string)=>`/leads/${leadId}/link-client`,
-    ASSIGN_MANAGER:(leadId:string)=>`/leads/${leadId}/managers`
+    ASSIGN_MANAGER:(leadId:string)=>`/leads/${leadId}/managers`,
+    REMOVE_MANAGER:(id:string)=>`/leads/${id}/managers`,
+    LINK_BUSSINESS:(id:string)=>`/leads/${id}/link-business`,
 }
 
 export const leadServices = {
@@ -69,12 +72,28 @@ export const leadServices = {
         return response.data.data;
     },
 
+    deleteReminder: async(leadId:string,id:string) => {
+        return await axiosInstance.delete(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.DELETE_REMINDER(leadId,id)}`);
+    },
+
     linkClient : async(id:string, clientId: linkLeadType ) => {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.LINK_CLIENT(id)}`,clientId);
     },
+
+    linkBussiness : async(id:string, businessId:{businessId:string} ) => {
+        return await axiosInstance.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.LINK_BUSSINESS(id)}`,businessId);
+    },
     assignManager : async(id:string, managerId: {managerId: string[]}) => {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.ASSIGN_MANAGER(id)}`,managerId);
+    },
+    removeManager : async (id:string,managerId:string)=>{
+        return await axiosInstance.delete(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.REMOVE_MANAGER(id)}`, {
+                data: { managerId },
+              });
     }
 }

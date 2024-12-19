@@ -156,7 +156,7 @@ const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
               render={({ field }) => (
                 <div>
                   <FormControl>
-                     <CustomSelect placeholder="BussinessType" {...field} options={bussinessType} className="w-[469px]" onValueChange={field.onChange}
+                     <CustomSelect placeholder="BussinessType" {...field} options={bussinessType} className="w-full" onValueChange={field.onChange}
                     value={field.value}/>
                   </FormControl>
                   <FormMessage />
@@ -207,7 +207,6 @@ const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
                 name="business_reg_date"
                 render={({ field, fieldState: { error } }) => (
                   <div>
-                    <FormLabel className="text-xs">Date</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -285,7 +284,7 @@ const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
               render={({ field }) => (
                 <div>
                     <FormControl>
-                      <CustomSelect {...field} className="w-[490px]" placeholder="State" options={states} onValueChange={field.onChange} value={field.value}/>
+                      <CustomSelect {...field} className="w-full" placeholder="State" options={states} onValueChange={field.onChange} value={field.value}/>
                     </FormControl>
 
                   <FormMessage />

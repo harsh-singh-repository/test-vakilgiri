@@ -56,10 +56,10 @@ export const columns: ColumnDef<Reminder>[] = [
   {
     accessorKey: 'action',
     header: 'Action',
-    cell:({})=>{
-      // const id = row.original.id;
+    cell:({row})=>{
+      const id = row.original.id;
         return(
-          <ActionButton/>
+          <ActionButton id={id}/>
         )
     }
   }

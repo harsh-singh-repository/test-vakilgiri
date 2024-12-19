@@ -8,7 +8,7 @@ import {  useMutation, useQuery} from '@tanstack/react-query';
 //     EditClientData 
 // } from '@/types';
 import { bussinessService } from '@/service/business/manage-business';
-import { BussinessDiscussionType, BussinessReminderTypes, editBussinessDetails } from '@/types';
+import { AddFileType, BussinessDiscussionType, BussinessReminderTypes, editBussinessDetails } from '@/types';
 
 export const useGetBussiness = () => {
     const query =  useQuery({
@@ -39,6 +39,12 @@ export const useGetBussinessReminder = (id:string) =>{
 export const useDeleteBussinessDisscussion = () => {
    return useMutation({
       mutationFn:({ id, bussinessId }: { id: string; bussinessId: string })=>bussinessService.deleteDisscussion(id,bussinessId)
+   })
+};
+
+export const useDeleteBussinessReminder = (bussinessId:string) => {
+   return useMutation({
+      mutationFn:(id:string)=>bussinessService.deleteReminder(id,bussinessId),
    })
 }
 
@@ -92,12 +98,42 @@ export const useAddBusinessReminder = (id:string) => {
 
 export const useGetBussinessById = (id:string | string[] | undefined) =>{
     const query =  useQuery({
-        queryKey: ['bussiness',id],
+        queryKey: ['bussinessId',id],
         queryFn:() => bussinessService.getBussinessById(id),
         enabled:!!id,
     });
     return query;
 }
+
+export const useAddManager = (id:string) => {
+    return useMutation({
+        mutationFn:(managersId:{managersId: string[]})=> bussinessService.assignManger(id,managersId),
+    });
+};
+
+export const useAddClientToBussiness = (id:string|string[]|undefined) => {
+    return useMutation({
+        mutationFn:(clientIds:{clientIds:string[]})=>bussinessService.clientToBussiness(id,clientIds)
+    })
+}
+
+export const useRemoveManager = (id: string) => {
+    return useMutation({
+        mutationFn: (managerId: { managerId: string }) => bussinessService.removeManager(id, managerId.managerId),
+    });
+};
+
+export const useAssignContactPerson = (id:string  | string [] | undefined) => {
+    return useMutation({
+        mutationFn:(contactPersonId:{contactPersonId: string})=> bussinessService.assignContactPerson(contactPersonId,id),
+    });
+};
+
+export const useAddFile = () => {
+    return useMutation({
+        mutationFn:(file:AddFileType)=> bussinessService.AddFile(file),
+    });
+};
 
 export const useSearchBussinessQuery = (searchQuery:string) => {
     const query =  useQuery({

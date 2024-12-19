@@ -6,18 +6,16 @@ import {
 } from "@/components/ui/accordion";
 
 
-import { Input } from "@/components/ui/input";
-
 import { format } from "date-fns";
 import {
   CalendarIcon,
-  Plus,
+  PlusCircle,
   Trash2,
   X,
   //  X
 } from "lucide-react";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -36,17 +34,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 // import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   useAddBusinessDisscussion,
   useAddBusinessReminder,
+  useAddManager,
   useDeleteBussinessDisscussion,
+  useDeleteBussinessReminder,
   useGetBussinessById,
   useGetBussinessDisscussion,
   useGetBussinessReminder,
+  useRemoveManager,
 } from "@/hooks/business/manage-business";
 import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
 import { useState } from "react";
@@ -55,7 +55,9 @@ import { BusinessDiscussion } from "../../_types";
 
 import { RxAvatar } from "react-icons/rx";
 import { useQueryClient } from "@tanstack/react-query";
-import { bussinessReminderType } from "@/app/dashboard/(sales)/leads/_types";
+import { bussinessReminderType, managerDetails, userType } from "@/app/dashboard/(sales)/leads/_types";
+import { MaterialInput } from "@/components/material-input";
+import { useGetUsers } from "@/hooks/user/manage-user";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -112,6 +114,12 @@ export const StackBussinessExchangeDialog = ({
     },
   });
 
+  const formMethods = useForm({
+    defaultValues: {
+      managersId: [] as string[], // Array to store selected manager IDs
+    },
+  });
+
   const reminderForm = useForm<z.infer<typeof reminderSchema>>({
     resolver: zodResolver(reminderSchema),
     defaultValues: {
@@ -136,14 +144,28 @@ export const StackBussinessExchangeDialog = ({
   const { mutate } = useAddBusinessDisscussion(openDialogId);
 
   const { mutate: addReminder } = useAddBusinessReminder(openDialogId);
-
-  const {mutate:deleteDisscussion} = useDeleteBussinessDisscussion();
+  const {mutate:removeManger} = useRemoveManager(openDialogId);
+  const {mutate:deleteDisscussion} = useDeleteBussinessDisscussion(); 
+  const { data: assignedManager } = useGetUsers();
+  const {mutate:deleteReminder} = useDeleteBussinessReminder(openDialogId); 
+  const {mutate:addManager} = useAddManager(openDialogId);
 
   const handleDeleteDisscussion = ({ id, bussinessId }: { id: string; bussinessId: string }) =>{
      deleteDisscussion({id,bussinessId},{
       onSuccess:()=>{
          toast.success("Disscussion Delted Successfully");
          queryClient.invalidateQueries({ queryKey: ["bussinessDisscussion"] });
+      },
+      onError:(error)=>{
+        toast.error(`Dissussion not Submited : ${error}`);
+      }
+     });
+  };
+  const handleDeleteReminder = (id:string) =>{
+     deleteReminder(id,{
+      onSuccess:()=>{
+         toast.success("Reminder deleted Successfully");
+         queryClient.invalidateQueries({ queryKey: ["bussinessReminder"] });
       },
       onError:(error)=>{
         toast.error(`Dissussion not Submited : ${error}`);
@@ -178,12 +200,38 @@ export const StackBussinessExchangeDialog = ({
     addReminder(values, {
       onSuccess: () => {
         toast.success("Reminder Submited");
+        queryClient.invalidateQueries({ queryKey: ["bussinessReminder"] });
       },
       onError: (error) => {
         toast.error(`Reminder not Submited : ${error}`);
       },
     });
     setIsSubmittingReminder(false);
+  };
+
+  const handleFormSubmit = (data: { managersId: string[] }) => {
+    console.log("data", data);
+    addManager(data, {
+      onSuccess: () => {
+        toast.success("Manager Assigned");
+        queryClient.invalidateQueries({ queryKey: ["bussinessId"] });
+      },
+      onError: (error) => {
+        toast.error(`error : ${error}`);
+      },
+    });
+  };
+
+  const handleRemoveManager = (id:{ managerId: string;}) => {
+     removeManger(id,{
+      onSuccess: () => {
+        toast.success("Manager Removed");
+        queryClient.invalidateQueries({ queryKey: ["bussinessId"] });
+      },
+      onError: (error) => {
+        toast.error(`error : ${error}`);
+      },
+     })
   }
 
   return (
@@ -206,7 +254,7 @@ export const StackBussinessExchangeDialog = ({
                         onSubmit={discussionForm.handleSubmit(
                           onDiscussionSubmit
                         )}
-                        className="space-y-1"
+                        className="space-y-2"
                       >
                         <div className="flex flex-col gap-y-4">
                           <FormField
@@ -215,7 +263,7 @@ export const StackBussinessExchangeDialog = ({
                             render={({ field, fieldState: { error } }) => (
                               <div>
                                 <FormControl>
-                                  <Textarea
+                                  <MaterialInput
                                     placeholder="Enter Description"
                                     className={cn(
                                       "min-h-[60px] border-gray-300",
@@ -379,7 +427,7 @@ export const StackBussinessExchangeDialog = ({
                           render={({ field, fieldState: { error } }) => (
                             <div>
                               <FormControl>
-                                <Input
+                                <MaterialInput
                                   placeholder="Subject"
                                   className={cn(
                                     "bg-white border-gray-300",
@@ -399,10 +447,10 @@ export const StackBussinessExchangeDialog = ({
                           render={({ field, fieldState: { error } }) => (
                             <div>
                               <FormControl>
-                                <Textarea
+                                <MaterialInput
                                   placeholder="Enter description"
                                   className={cn(
-                                    "min-h-[100px] bg-white border-gray-300",
+                                    "min-h-[60px] bg-white border-gray-300",
                                     error &&
                                       "border-red-500 focus:border-red-500 focus:ring-red-500"
                                   )}
@@ -456,7 +504,7 @@ export const StackBussinessExchangeDialog = ({
                               </div>
                               <div className="flex justify-between text-[#f21300] w-full">
                                  <span>{formatCreatedAtDate(reminder?.createdAt)}</span>
-                                 <Trash2 size={"15"}/>
+                                 <Trash2 size={"15"} onClick={()=>handleDeleteReminder(reminder?.id)} className="cursor-pointer"/>
                               </div>
                             </div>
                           </div>
@@ -479,26 +527,82 @@ export const StackBussinessExchangeDialog = ({
                    <X onClick={onClose} strokeWidth={"3"} className="text-[#f21300] cursor-pointer"/>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="/placeholder.svg" />
-                    <AvatarFallback>PV</AvatarFallback>
-                  </Avatar>
+                {data && (
+                      <div className="flex">
+                        {data?.managers?.map(
+                          (data: managerDetails, index: number) => (
+                            <div className="" key={index}>
+                              <RxAvatar size={"30"}/>
+                              <div className="absolute">
+                               <X className="text-[#f21300] -translate-y-8 translate-x-4 h-3 w-3 cursor-pointer" strokeWidth={"6"} onClick={()=>handleRemoveManager({managerId : data?.id})}/>
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    )}
                   <Popover>
                     <PopoverTrigger>
-                    <Button
-                      size="icon"
-                      variant="default"
-                      className="h-8 w-8 bg-transparent text-[#f21300] hover:bg-transparent"
-                    >
-                      <Plus className="h-5 w-5" />
-                    </Button>
+                    <div className="text-[#f21300]">
+                          <PlusCircle />
+                        </div>
                     </PopoverTrigger>
                     <PopoverContent>
-                       {/* {data?.assign && (
-                          <div>
-                             {data?.assign.map(data:)}
-                          </div>
-                       )} */}
+                    {assignedManager && (
+                          <form
+                            onSubmit={formMethods.handleSubmit(
+                              handleFormSubmit
+                            )}
+                          >
+                            <div>
+                              {assignedManager
+                                .filter(
+                                  (manager: userType) =>
+                                    manager.userRoles === "Staff_Manager"
+                                ) // Filter the managers
+                                .map((manager: userType, index: number) => (
+                                  <div
+                                    key={index}
+                                    className="flex items-center gap-2"
+                                  >
+                                    <Controller
+                                      name="managersId"
+                                      control={formMethods.control}
+                                      render={({
+                                        field: { value, onChange },
+                                      }) => (
+                                        <input
+                                          type="checkbox"
+                                          checked={value?.includes(manager.id)}
+                                          onChange={(e) => {
+                                            if (e.target.checked) {
+                                              // Add manager ID to the array
+                                              onChange([...value, manager.id]);
+                                            } else {
+                                              // Remove manager ID from the array
+                                              onChange(
+                                                value.filter(
+                                                  (id: string) =>
+                                                    id !== manager.id
+                                                )
+                                              );
+                                            }
+                                          }}
+                                        />
+                                      )}
+                                    />
+                                    <span className="text-[12px] text-[#091747] font-semibold">{manager.firstName}</span>
+                                  </div>
+                                ))}
+                            </div>
+                            <button
+                              type="submit"
+                              className="btn btn-primary mt-2 bg-[#f21300] px-2 py-1 rounded-md text-[10px] text-white"
+                            >
+                              Assign
+                            </button>
+                          </form>
+                        )}
                     </PopoverContent>
                   </Popover>
                 </div>

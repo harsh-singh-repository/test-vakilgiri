@@ -10,6 +10,7 @@ import { Services } from '../types';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { useToast } from "@/hooks/use-toast"
+import { Cross2Icon } from '@radix-ui/react-icons';
 
 const schema = z.object({
   type: z.string().min(1, 'Type is required'),
@@ -91,16 +92,9 @@ const ContentCreate: React.FC<CreateContentProps> = ({ data, close,contentfetch,
         description: "Content added Successfully",
       })
       close();
-    } catch (error: any) {
+    } catch (error) {
       setLoading(false)
       console.error('Error submitting form:', error);
-      if (error.response) {
-        console.error('Error details:', error.response.data);
-        alert(`Validation Error: ${JSON.stringify(error.response.data.errors, null, 2)}`);
-      } else {
-        console.error('No response from server');
-        alert('No response from server');
-      }
     }
   };
   const types=[ "Features", "Advantage", "FAQs", "Procedure", "Document_Required", "Long_Description", "Short_Description","Tasks",]
@@ -115,9 +109,13 @@ const ContentCreate: React.FC<CreateContentProps> = ({ data, close,contentfetch,
   };
   return (
     <div className="p-4">
+      <div className='flex justify-between'>
       <h1 className="font-poppins font-semibold text-xl">{
         selectedType.length>0 ? `Add ${selectedType}` : 'Add'
 }</h1>
+<button className='text-red-600 font-bold text-lg' onClick={close}><Cross2Icon/></button>
+      </div>
+      
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col mt-4 gap-2">
         <div className='grid grid-cols-3'>
         <div className={`${(selectedType==="Features" || selectedType==="Advantage")?"col-span-1":"hidden"}`}>

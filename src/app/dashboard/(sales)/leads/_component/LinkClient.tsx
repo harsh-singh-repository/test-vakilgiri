@@ -25,6 +25,7 @@ const LinkClient = ({ leadId }: { leadId: string }) => {
 
   const { mutate } = useLinkClient(leadId);
 
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
+import { Cross2Icon } from '@radix-ui/react-icons';
 
 const schema = z.object({
   priority: z.number().min(1, 'Priority is required').max(10, 'Priority must be between 1 and 10'),
@@ -46,7 +47,7 @@ interface ContentEditProps {
   setContentfetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ContentEdit: React.FC<ContentEditProps> = ({ data, close,contentfetch,setContentfetch }) => {
+const ContentEdit: React.FC<ContentEditProps> = ({ data, close,setContentfetch }) => {
   const [loading, setLoading] = useState(false);
   const [fileName, setFileName] = useState<string>(data.icon ? data.icon.split('/').pop() || "" : "");
 
@@ -98,16 +99,9 @@ const ContentEdit: React.FC<ContentEditProps> = ({ data, close,contentfetch,setC
       setContentfetch(true)
       setLoading(false);
       close();
-    } catch (error: any) {
+    } catch (error) {
       setLoading(false);
       console.error('Error updating content:', error);
-      if (error.response) {
-        console.error('Error details:', error.response.data);
-        alert(`Validation Error: ${JSON.stringify(error.response.data.errors, null, 2)}`);
-      } else {
-        console.error('No response from server');
-        alert('No response from server');
-      }
     }
   };
 
@@ -120,7 +114,11 @@ const ContentEdit: React.FC<ContentEditProps> = ({ data, close,contentfetch,setC
 
   return (
     <div className="p-4">
+      <div className='flex justify-between'>
       <h1 className="font-poppins font-semibold text-xl">Edit {data.type}</h1>
+      <button className='text-red-600 font-bold text-lg' onClick={close}><Cross2Icon/></button>
+      </div>
+     
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col mt-4 gap-2">
       <div className="grid grid-cols-3 gap-4">
   {data.icon ? (

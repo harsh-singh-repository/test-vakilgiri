@@ -23,7 +23,7 @@ interface PromoterWiseFee {
 const PromoterFee: React.FC<QuotationProps> = ({ data }) => {
   const [promoterWiseFees, setPromoterWiseFees] = useState<PromoterWiseFee | null>(null);
   const [activeInput, setActiveInput] = useState<string | null>(null);
-  const [inputValues, setInputValues] = useState<{ [key: string]: string }>({});
+  // const [inputValues, setInputValues] = useState<{ [key: string]: string }>({});
   const [fetchagain, setFetchagain] = useState(false);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const PromoterFee: React.FC<QuotationProps> = ({ data }) => {
   }, [data.id, fetchagain]);
 
   const handleInputChange = async (id: string, value: string) => {
-    setInputValues((prev) => ({ ...prev, [id]: value }));
+    // setInputValues((prev) => ({ ...prev, [id]: value }));
 
     // Debounced PUT request
     const session = await getSession();

@@ -58,7 +58,7 @@ export const useGetClientReminder = (id:string) =>{
 
 export const useGetBussinessOfClient = (id:string | string[] | undefined) =>{
     const query =  useQuery({
-        queryKey: ['clients',id],
+        queryKey: ['clientsBussiness',id],
         queryFn:() => clientService.getBussinessOfClient(id),
         enabled:!!id,
     });

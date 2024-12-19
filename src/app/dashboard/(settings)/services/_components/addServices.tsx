@@ -1,6 +1,5 @@
 import React from 'react'
 import ServiceInfo from './serviceInfo'
-import AddService from './serviceForm'
 
 function AddServices() {
   return (

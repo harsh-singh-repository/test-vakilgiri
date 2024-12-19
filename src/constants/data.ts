@@ -14,6 +14,14 @@ export type Client = {
   kyc: string;
 };
 
+export type businessUsers = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobileNumber: string;
+};
+
 export type Business = {
   id: string;
   about: string;

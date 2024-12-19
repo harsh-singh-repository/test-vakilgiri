@@ -21,7 +21,7 @@ interface QuotationProps {
 const ServiceFee: React.FC<QuotationProps> = ({ data }) => {
     const [stateWiseFees, setStateWiseFees] = useState<StateWiseFee | null>(null);
     const [activeInput, setActiveInput] = useState<string | null>(null);
-    const [inputValues, setInputValues] = useState<{ [key: string]: string }>({});
+    // const [inputValues, setInputValues] = useState<{ [key: string]: string }>({});
     const [fetchagain,setFetchagain]=useState(false);
     useEffect(() => {
       const fetchStateWiseFees = async () => {
@@ -42,7 +42,7 @@ const ServiceFee: React.FC<QuotationProps> = ({ data }) => {
       fetchStateWiseFees();
     }, [data.id, fetchagain]);
     const handleInputChange = async (id: string, value: string) => {
-      setInputValues((prev) => ({ ...prev, [id]: value }));
+      // setInputValues((prev) => ({ ...prev, [id]: value }));
   
       // Debounced PUT request
       const session = await getSession();
@@ -109,40 +109,45 @@ const ServiceFee: React.FC<QuotationProps> = ({ data }) => {
         </div>
         {
           Object.entries(stateWiseFees || {}).length>0 ? (
-            <div className="flex gap-2 mt-2 overflow-x-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl-grid-cols-2 2xl:grid-cols-4 gap-2 mt-2">
             {Object.entries(stateWiseFees || {}).map(([capital, states]) => (
-              <div
-                key={capital}
-                className="border rounded-xl shadow-md bg-white w-80 overflow-hidden"
-              >
-                <table className="w-full text-sm">
-                  <thead className="bg-blue-950 text-white">
-                    <tr>
-                      <th className="px-3 py-2 text-left font-semibold">Upto {Number(capital) / 100000} Lakh</th>
-                      <th className="px-3 py-2 text-left font-semibold">Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {states.map((state) => (
-                      <tr key={state.id} className="border-t">
-                        <td className="px-3 py-2 whitespace-nowrap text-gray-800">
-                          {state.state.replace("_", " ")}
-                        </td>
-                        <td className="px-3 py-2 w-56">
-                          <input
-                            type="number"
-                            placeholder={activeInput === state.id ? "0.00" : "Amount"}
-                            onFocus={() => setActiveInput(state.id)}
-                            onBlur={() => setActiveInput(null)} 
-                            onChange={(e) => handleInputChange(state.id, e.target.value)}
-                            className="w-full px-2 py-1 border rounded text-gray-700"
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+             <div
+             key={capital}
+             className="border rounded-xl shadow-md bg-white w-full max-w-md overflow-hidden"
+           >
+             <div className="">
+               <table className="w-full text-sm">
+                 <thead className="bg-blue-950 text-white">
+                   <tr>
+                     <th className="px-3 py-2 text-left font-semibold">
+                       Upto {Number(capital) / 100000} Lakh
+                     </th>
+                     <th className="px-3 py-2 text-left font-semibold">Amount</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   {states.map((state) => (
+                     <tr key={state.id} className="border-t">
+                       <td className="px-3 py-2 whitespace-nowrap text-gray-800">
+                         {state.state.replace("_", " ")}
+                       </td>
+                       <td className="px-3 py-2">
+                         <input
+                           type="number"
+                           placeholder={activeInput === state.id ? "0.00" : "Amount"}
+                           onFocus={() => setActiveInput(state.id)}
+                           onBlur={() => setActiveInput(null)}
+                           onChange={(e) => handleInputChange(state.id, e.target.value)}
+                           className="w-full px-2 py-1 border rounded text-gray-700 min-w-[100px]"
+                         />
+                       </td>
+                     </tr>
+                   ))}
+                 </tbody>
+               </table>
+             </div>
+           </div>
+           
             ))}
           </div>
           ):(

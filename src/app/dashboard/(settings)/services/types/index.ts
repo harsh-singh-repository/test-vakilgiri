@@ -34,7 +34,6 @@ interface ServiceCategory {
     data: Service[];
     message: string;
     success: boolean;
-    errors: any[];
   }
   
   // Service type to use on the frontend (with icon URL constructed)
@@ -78,5 +77,4 @@ interface ServiceCategory {
     }[];
     message: string;
     success: boolean;
-    errors: any[];
   };

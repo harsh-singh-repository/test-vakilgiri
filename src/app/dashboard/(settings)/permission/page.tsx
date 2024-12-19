@@ -1,4 +1,3 @@
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { PlusIcon } from "lucide-react";
 import { role, roleColumn } from "./columns";
 import { RoleTable } from "./data-table";
@@ -46,12 +45,12 @@ export async function getData(): Promise<role[]>{
   export default async function DemoPage() {
     const data = await getData();
     return (
-      <div className="flex flex-col p-4">
+      <div className="flex flex-col p-4 bg-gray-100 overflow-hidden h-screen">
         <div className="ml-3 mb-3 mt-1 flex justify-between">
           <div> <h1 className="text-black font-semibold text-xl">Roles & Permissions</h1></div>
           <div className="text-white bg-red-500 mr-3 hover:bg-blue-900 hover:cursor-pointer"><PlusIcon size={30}/></div>
         </div>
-        <div>
+        <div className="flex-1 overflow-auto rounded-2xl">
         <RoleTable data={data} columns={roleColumn}/>
         </div>
       </div>

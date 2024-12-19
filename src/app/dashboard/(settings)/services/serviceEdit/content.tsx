@@ -1,5 +1,4 @@
-import { Button } from '@/components/ui/button';
-import {  Edit2Icon, EditIcon, PencilIcon } from 'lucide-react';
+import {  Edit2Icon } from 'lucide-react';
 import { getSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -113,9 +112,9 @@ const Content: React.FC<ContentProps> = ({ contentfetch,setContentfetch, service
     Short_Description: 'bg-white',
   };
 
-  const handleDelete = (id: string) => {
-    console.log(`Delete item with ID: ${id}`);
-  };
+  // const handleDelete = (id: string) => {
+  //   console.log(`Delete item with ID: ${id}`);
+  // };
 
   const renderColumnItems = (data: Record<string, ContentData[]>) => {
     return Object.keys(data).map((item) => {
