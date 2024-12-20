@@ -133,7 +133,7 @@ export default function DemoPage() {
     };
   }, [showAddServices]);
   return (
-    <div className="p-3 h-full">
+    <div className="p-3 h-fit">
       <div className="flex flex-wrap items-center gap-2 ml-4 mt-2 mb-2">
         <h1 className="text-2xl text-blue-950 font-bold font-poppins">Services</h1>
         <div

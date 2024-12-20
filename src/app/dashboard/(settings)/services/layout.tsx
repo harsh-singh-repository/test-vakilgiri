@@ -6,8 +6,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className='bg-gray-100 h-[calc(100vh-100px)] m-0 p-0'>
+    <div className='bg-white max-h-fit'>
+    <div className='bg-gray-100 h-fit m-0 p-0'>
         {children}
+    </div>
     </div>
   );
 }
