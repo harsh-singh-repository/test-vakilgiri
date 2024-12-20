@@ -8,7 +8,7 @@ import {  useMutation, useQuery} from '@tanstack/react-query';
 //     EditClientData 
 // } from '@/types';
 import { bussinessService } from '@/service/business/manage-business';
-import { AddFileType, BussinessDiscussionType, BussinessReminderTypes, editBussinessDetails } from '@/types';
+import {AddFileType, BussinessDiscussionType, BussinessReminderTypes, editBussinessDetails } from '@/types';
 
 export const useGetBussiness = () => {
     const query =  useQuery({

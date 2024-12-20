@@ -72,6 +72,24 @@ export interface EditClientData {
   loginStatus?: "Active" | "Inactive";
 }
 
+export interface StaffDataTypes{
+  firstName: string; // Required, at least 1 character
+  lastName: string; // Required, at least 1 character
+  email: string; // Must be a valid email
+  mobileNumber: string; // Must be exactly 10 digits
+  pan: string; // Must match PAN format: 5 uppercase letters, 4 digits, 1 uppercase letter
+  dob: string; // Matches the type of dateZodSchema
+  aadhaar: string; // Must be exactly 12 digits
+  gender: "Male" | "Female" | "Other"; // Enum for gender
+  state: string; // Matches the type of stateZodSchema
+  address1: string; // Required, at least 1 character
+  address2?: string; // Optional
+  city: string; // Required, at least 1 character
+  pincode: string; // Must be exactly 6 digits
+  userRoles: "Client" | "Staff_Manager" | "Admin"; // Enum for user roles
+  loginStatus: "None" | "Active" | "Inactive"; // Enum for login status
+}
+
 export interface CreateBussiness{
   business_type: string;
   business_name: string;

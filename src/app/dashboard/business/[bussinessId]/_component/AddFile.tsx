@@ -38,6 +38,7 @@ interface OnCloseProp {
 }
 
 export default function AddFile({ onClose, openDialogId }: OnCloseProp) {
+
   const { mutate: AddFiles } = useAddFile()
 
   const form = useForm<FileUploadForm>({
@@ -55,8 +56,10 @@ export default function AddFile({ onClose, openDialogId }: OnCloseProp) {
 
   const onSubmit = (data: FileUploadForm) => {
     console.log("Submitted Data:", data);
+    console.log("Submitted File:", data.file);
+    console.log("Submitted File type:", typeof(data.file));
   
-    AddFiles(data, {
+    AddFiles(data,{
       onSuccess: () => {
         toast.success("File Uploaded Successfully")
         onClose()

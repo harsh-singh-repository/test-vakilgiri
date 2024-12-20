@@ -171,7 +171,7 @@ const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
                 <div>
                   {/* <FormLabel className="text-xs">Business Name</FormLabel> */}
                   <FormControl>
-                    <MaterialInput {...field} className="text-xs" placeholder="Business Names"/>
+                    <MaterialInput {...field} className="text-xs w-[300px]" placeholder="Business Names"/>
                   </FormControl>
                   <FormMessage />
                 </div>
