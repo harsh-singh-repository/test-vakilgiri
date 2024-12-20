@@ -13,21 +13,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button";
-
+import Link from "next/link";
 
 const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
 
-  // const openPopup = () => {
-  //   return (
-  //     <Popover>
-
-  //     </Popover>
-  //   )
-  // };
+  const handleDashboardClick = () => {
+    setPopoverOpen(false);
+  };
+  
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div className="w-full  sticky top-0 bg-white shadow-lg p-2 border-black flex items-center justify-between h-16 z-50">
+      <div className="w-full sticky top-0 bg-white shadow-lg p-2 border-black flex items-center justify-between h-16 z-50">
         <div className="flex justify-center gap-2 items-center">
           <SidebarTrigger>
             <CiMenuBurger />
@@ -46,38 +44,41 @@ const Navbar = () => {
             </DialogTrigger>
             <DialogDemo onClose={() => setOpen(false)} />
           </div>
-          <div >
-          <Popover>
-      <PopoverTrigger>
-        <RxAvatar size={40} />
-      </PopoverTrigger>
-      <PopoverContent className="w-96">
-        <div className="flex flex-col gap-6 items-start justify-center">
-          <div className="w-full flex gap-4 items-start justify-start">
-            <RxAvatar size={80} className="mt-1" />
-            <div className="flex flex-col gap-2">
-              <p className="text-2xl font-semibold text-[#F20101]">Nahar Singh</p>
-              <div className="flex items-center gap-2">
-                <span className="text-[#F20101] font-medium">[E]:</span>
-                <p className="text-sm break-all">naharsingh151299@gmail.com</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[#F20101] font-medium">[P]:</span>
-                <p className="text-sm">775533664411</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full grid grid-cols-2 gap-4">
-            <Button className="w-full bg-[#F20101] hover:bg-[#F20101]/70 text-white font-medium ">
-              Dashboard
-            </Button>
-            <Button className="w-full bg-[#091747] hover:bg-[#F20101] text-white font-medium">
-              Logout
-            </Button>
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
+          <div>
+            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+              <PopoverTrigger>
+                <RxAvatar size={40} />
+              </PopoverTrigger>
+              <PopoverContent className="w-84 p-4">
+                <div className="flex flex-col gap-2 items-start justify-center">
+                  <div className="w-full flex gap-1 items-start justify-start">
+                    <RxAvatar size={60} className="mt-2" />
+                    <div className="flex flex-col gap-1">
+                      <p className="text-2xl font-semibold text-[#F20101]">Nahar Singh</p>
+                      <div className="flex items-center gap-2 m-0">
+                        <span className="text-[#F20101] font-medium">[E]:</span>
+                        <p className="text-sm break-all">naharsingh151299@gmail.com</p>
+                      </div>
+                      <div className="flex items-center gap-2 m-0">
+                        <span className="text-[#F20101] font-medium">[P]:</span>
+                        <p className="text-sm">775533664411</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full grid grid-cols-2 gap-2 justify-around items-center">
+                    <Button 
+                      className="w-[130px] bg-[#F20101] hover:bg-[#F20101]/70 text-white font-medium"
+                      onClick={handleDashboardClick}
+                    >
+                      <Link href="/dashboard">Dashboard</Link>
+                    </Button>
+                    <Button className="w-[130px] bg-[#091747] hover:bg-[#F20101] text-white font-medium">
+                      Logout
+                    </Button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>
@@ -86,3 +87,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
