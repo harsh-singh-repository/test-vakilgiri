@@ -15,13 +15,15 @@ export const ServiceStatus: React.FC<ServiceStatusProps> = ({ isActive }) => {
 
   return (
     <div className="flex justify-end items-center">
+    <div className="flex justify-center items-center">
       <span
-        className={`px-2 py-1 rounded-full text-white text-xs ${
-          status === "Active" ? "bg-green-700 mr-1" : "bg-red-600"
+        className={`px-2 py-1 rounded-full text-white text-[13px] ${
+          status === "Active" ? "bg-[#007321] mr-1" : "bg-[#f21300]"
         }`}
       >
         {status}
       </span>
+    </div>
     </div>
   );
 };

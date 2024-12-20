@@ -198,7 +198,7 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
     try {
       for (const managerId of selectedUsers) {
         console.log(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/${data.id}/manager`)
-        const response = await axios.post(
+        const response = await axios.patch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/${data.id}/manager`,
           { managerId },
           {

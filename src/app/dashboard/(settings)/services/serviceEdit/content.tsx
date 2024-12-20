@@ -1,12 +1,11 @@
-import {  Edit2Icon } from 'lucide-react';
 import { getSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { Services } from '../types';
 import { FormModal } from '../_components/formModal';
 import ContentDelete from './contentDelete';
 import ContentEdit from './contentEdit';
-
+import { FaPencilAlt } from 'react-icons/fa';
+import { FaTrashAlt } from 'react-icons/fa';
 interface ContentData {
   id: string;
   description: string;
@@ -122,7 +121,7 @@ const Content: React.FC<ContentProps> = ({ contentfetch,setContentfetch, service
 
       return (
         <div key={item}>
-          <div className="bg-blue-950 text-white py-2 px-4 rounded-lg shadow-md mb-2 text-left">
+          <div className="bg-blue-950 text-white py-1 px-4 rounded-lg shadow-md mb-2 text-left">
             {item}
           </div>
           <div>
@@ -141,23 +140,23 @@ const Content: React.FC<ContentProps> = ({ contentfetch,setContentfetch, service
                 </div>
                 }
                
-                <div className="p-2 relative w-full">
+                <div className="ml-2 relative w-full">
                   <div className='flex flex-col'>
-                  <h3 className="font-semibold text-xs">
+                  <h3 className="font-semibold text-[13px]">
                     {index + 1}. {contentItem.title}
                   </h3>
-                  <p className="text-xs">{contentItem.description}</p>
+                  <p className="text-[12px]">{contentItem.description}</p>
                   <div className="flex gap-1">
-                    <p className="text-xs font-bold">Priority :</p>
-                    <p className="text-xs">{contentItem.priority}</p>
+                    <p className="text-[12px] font-bold">Priority :</p>
+                    <p className="text-[12px]">{contentItem.priority}</p>
                   </div>
                   <div className="absolute bottom-1 right-1 p-0 m-0 flex justify-center space-x-2">
   <button className="text-blue-950 w-4 h-4 flex items-center justify-center" onClick={()=>handleOpenModal1(contentItem.id)}>
-    <Edit2Icon className="w-full h-full" />
+    <FaPencilAlt className="w-full h-full" />
   </button>
   
   <button className="text-red-500 w-4 h-4 flex items-center justify-center" onClick={()=>handleOpenModal(contentItem.id)}>
-    <RiDeleteBin6Line className="w-full h-full" />
+    <FaTrashAlt className="w-full h-full" />
   </button>
 </div>
 

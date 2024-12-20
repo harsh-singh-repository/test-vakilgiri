@@ -79,9 +79,9 @@ const items = [
     icon: Landmark,
     classname: "",
     children: [
-      { title: "Invoices", url: "/dashboard/invoices", icon: MdEditDocument, classname: "" },
+      { title: "Estimates", url: "/dashboard/estimates", icon: MdEditDocument, classname: "" },
       { title: "Payments", url: "/dashboard/payments", icon: IndianRupee, classname: "" },
-      { title: "Refund", url: "/dashboard/refund", icon: GiSmartphone, classname: "" },
+      { title: "Refunds", url: "/dashboard/refunds", icon: GiSmartphone, classname: "" },
       { title: "Subscriptions", url: "/dashboard/subscriptions", icon: GrPowerReset, classname: "" },
     ]
   },
