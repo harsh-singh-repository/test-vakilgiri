@@ -52,8 +52,8 @@ const ContentDelete:React.FC<contentDeleteProps>=({data,close})=> {
         }
       };
   return (
-    <div className='flex flex-col justify-center items-center'>
-      <div>
+    <div className='flex flex-col justify-center items-center w-xl p-4'>
+      <div className='w-xl'>
   <img src="/bin.gif" alt="Bin" />
 </div>
 <h1 className='text-lg font-bold'>Are you sure?</h1>

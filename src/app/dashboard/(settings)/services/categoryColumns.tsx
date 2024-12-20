@@ -31,12 +31,12 @@ export const categoryColumn:(handleFetch:()=>void)=> ColumnDef<category>[] =(han
     header: () => <div className="text-left ml-4">Category</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-left flex flex-col gap-1 ml-4 mr-2">
-          <div className="text-sm font-bold text-red-500 leading-none">
+        <div className="text-left flex flex-col gap-0.5 ml-4 mr-2">
+          <div className="text-[10px] font-bold text-[#f21300] leading-none">
             {row.original.code}
           </div>
-          <div className="text-md leading-none">{row.original.name}</div>
-          <div className="text-sm leading-none">{row.original.description}</div>
+          <div className="text-[14px] text-[#091747] font-medium leading-none">{row.original.name}</div>
+          <div className="text-[10px] text-[#091747] leading-none">{row.original.description}</div>
         </div>
       );
     },

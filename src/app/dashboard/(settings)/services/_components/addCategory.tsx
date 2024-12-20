@@ -105,7 +105,7 @@ const AddCategory: React.FC<AddCategoryProps> = ({ again }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 max-w-lg mx-auto">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 max-w-xs mx-auto">
         <div className="grid grid-cols-3 gap-4">
           {/* File Upload */}
           <div className="col-span-1 flex flex-col justify-center items-center border border-dashed border-gray-400 rounded-md h-full bg-gray-100 p-4">
@@ -185,7 +185,7 @@ const AddCategory: React.FC<AddCategoryProps> = ({ again }) => {
           )}
         />
 
-        <Button type="submit" className="bg-red-500 hover:bg-red-600 text-white w-full" disabled={loading}>
+        <Button type="submit" className="bg-[#f21300] hover:bg-red-600 text-white w-full" disabled={loading}>
           {
             loading? "loading...":"save"
           }

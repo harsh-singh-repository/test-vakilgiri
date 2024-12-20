@@ -40,7 +40,7 @@ const EditServices: React.FC<EditServicesProps> = ({ data, close, onToggle }) =>
                 </div>
                 <div className="flex items-center space-x-2 mr-4">
                   {
-                    activeButton==="Content" && <button className="text-white bg-red-600 p-1 rounded-md"
+                    activeButton==="Content" && <button className="text-white bg-[#f21300] p-1 rounded-md"
                     onClick={()=>setIsModalOpen(true)}
                     >create</button>
                   }
@@ -50,12 +50,21 @@ const EditServices: React.FC<EditServicesProps> = ({ data, close, onToggle }) =>
   setContentfetch={setContentfetch} />
                       </div>
                       </FormModal>
-                    <button className=" bg-red-600 rounded-md h-8 w-8 flex items-center justify-center hover:bg-white"
-                    onClick={close}
-                    ><Cross1Icon 
-                    className="stroke-white hover:stroke-red-600 h-8" 
-                    style={{ strokeWidth: '2px' }} 
-                  /></button>
+                      <div
+  className="bg-[#f21300] rounded-md h-8 w-8 flex items-center justify-center group cursor-pointer"
+  onClick={close}
+>
+  <div
+    className="bg-[#f21300] h-8 w-8 flex items-center justify-center rounded-md group-hover:bg-white transition-colors"
+  >
+    {/* Cross Icon */}
+    <Cross1Icon
+      className="stroke-white group-hover:stroke-[#f21300] h-5 w-5 transition-all"
+      style={{ strokeWidth: '2px' }}
+    />
+  </div>
+</div>
+
                 </div>
             </div>
             <div className="flex flex-wrap mt-4 space-x-2">
