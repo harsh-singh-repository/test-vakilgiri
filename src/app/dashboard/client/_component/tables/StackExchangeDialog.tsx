@@ -44,6 +44,7 @@ import {
   useGetClientDisscussion,
   useDeleteClientDiscussion,
   useGetClientReminder,
+  useAddClientManager,
 } from "@/hooks/clients/manage-client";
 // import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
@@ -53,10 +54,9 @@ import { RxAvatar } from "react-icons/rx";
 import { clientDisscussionProps } from "../../_types";
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { ClientReminderType,  userType } from "@/app/dashboard/(sales)/leads/_types";
+import { ClientReminderType, userType } from "@/app/dashboard/(sales)/leads/_types";
 import { useGetUsers } from "@/hooks/user/manage-user";
 import { useDeleteClientReminder } from "@/hooks/tickets/manage-ticket";
-import { useAddManager } from "@/hooks/business/manage-business";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -136,7 +136,7 @@ export const StackExchangeDialog = ({
   const { mutate: deleteDiscussion } = useDeleteClientDiscussion();
   const { data: assignedManager } = useGetUsers();
   const { mutate: deleteReminder } = useDeleteClientReminder();
-  const { mutate: addManager } = useAddManager(openDialogId);
+  const { mutate: addManager } = useAddClientManager(openDialogId);
 
   const queryClient = useQueryClient();
   console.log("clientid id",data)
@@ -572,7 +572,7 @@ export const StackExchangeDialog = ({
                 <div className="flex items-center gap-2">
                 {/* {data && (
                       <div className="flex">
-                        {data?.manager.map(
+                        {data?.manager?.map(
                           (data: managerDetails, index: number) => (
                             <div className="" key={index}>
                               <RxAvatar size={"30"} />
