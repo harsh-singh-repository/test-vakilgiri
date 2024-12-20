@@ -26,7 +26,7 @@ export const columns: (
     accessorKey: "ServiceId",
     header: () => <div className="text-left">Service id</div>,
     cell: ({ row }) => (
-      <div className="text-left text-blue-950 font-medium">
+      <div className="text-left text-[#091747] text-[14px] font-medium ml-1">
         {row.getValue("ServiceId")}
       </div>
     ),
@@ -35,11 +35,11 @@ export const columns: (
     accessorKey: "ServiceName",
     header: () => <div className="text-left">Service Name</div>,
     cell: ({ row }) => (
-      <div className="text-left">
-        <div className="text-sm leading-none text-blue-950 font-medium">
+      <div className="text-left flex flex-col gap-0.5">
+        <div className="text-[14px] leading-none text-[#091747] font-medium">
           {row.getValue("ServiceName")}
         </div>
-        <div className="text-xs font-medium text-red-500 leading-none">
+        <div className="text-[10px] font-medium text-[#f21300] leading-none">
           {row.original.description}
         </div>
       </div>
@@ -49,7 +49,7 @@ export const columns: (
     accessorKey: "projects",
     header: () => <div className="flex justify-center items-center">Projects</div>,
     cell: ({ row }) => (
-      <div className="flex justify-center items-center text-blue-950 font-medium">
+      <div className="flex justify-center items-center text-[#091474] font-medium text-[14px]">
         {row.getValue("projects")}
       </div>
     ),
@@ -81,7 +81,7 @@ export const columns: (
   },  
   {
     accessorKey: "status",
-    header: () => <div className="flex justify-end items-center">Status</div>,
+    header: () => <div className="flex justify-end items-center mr-1">Status</div>,
     cell: ({ row }) => (
       <ServiceStatus isActive={row.getValue("active")} />
     ),

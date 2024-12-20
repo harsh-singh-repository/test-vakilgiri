@@ -22,7 +22,8 @@ import { getSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import { MaterialInput } from "@/components/material-input";
 import { Category } from "../types";
-import { Cross2Icon } from "@radix-ui/react-icons";
+// import { Cross2Icon } from "@radix-ui/react-icons";
+import { ImCross } from "react-icons/im";
 
 const fieldSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -167,11 +168,11 @@ const AddService: React.FC<addServiceProps> = ({close,fetch:refreshData,category
   return (
     <div className="p-4 overflow-auto">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 max-w-lg mx-auto">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 max-w-xs mx-auto">
           <div className="p-1">
             <div className="flex justify-between">
             <h1 className="text-blue-950 font-semibold text-lg">Add Service</h1>
-            <button onClick={close} className="stroke-red-600"><Cross2Icon/></button>
+            <button onClick={close} className="stroke-red-600 text-red-600"><ImCross/></button>
             </div>
             
           </div>
@@ -263,7 +264,7 @@ const AddService: React.FC<addServiceProps> = ({close,fetch:refreshData,category
             )}
           />
 
-          <Button type="submit" className="bg-red-500 hover:bg-red-600 text-white w-full" disabled={loading}>
+          <Button type="submit" className="bg-[#f21300] hover:bg-red-600 text-white w-full" disabled={loading}>
             {
               loading? "loading..." : "save"
             }
