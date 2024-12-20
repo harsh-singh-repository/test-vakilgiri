@@ -67,7 +67,7 @@ export default function BusinessCardSection() {
   };
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-between items-center gap-4">
+    <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:flex justify-between items-center gap-4">
       {/* Businesses Section */}
       <div className="w-full xl:order-1 flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#eabfff4d]">
         <div className="w-full flex flex-col justify-center items-center">
@@ -84,7 +84,7 @@ export default function BusinessCardSection() {
       </div>
 
       {/* Business Types Section */}
-      <div className="w-full flex md:col-span-2 md:order-2 xl:order-2 justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#c0f0ff4d]">
+      <div className="w-full max-w-[600px] flex-shrink-0 md:col-span-2 md:order-2 xl:order-2 justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#c0f0ff4d]">
         <div className="w-full flex flex-col justify-center items-center">
           <div className="w-full flex justify-center gap-x-2 items-center p-2">
             <div className="w-14 h-12 rounded-2xl flex justify-center items-center bg-[#093a494d]">

@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import {
   CalendarIcon,
   PlusCircle,
+  // PlusCircle,
   Trash2,
   X,
   //  X
@@ -55,8 +56,11 @@ import { clientDisscussionProps } from "../../_types";
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { ClientReminderType, userType } from "@/app/dashboard/(sales)/leads/_types";
-import { useGetUsers } from "@/hooks/user/manage-user";
+// import { useGetUsers } from "@/hooks/user/manage-user";
 import { useDeleteClientReminder } from "@/hooks/tickets/manage-ticket";
+// import { useAddManager } from "@/hooks/business/manage-business";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useGetUsers } from "@/hooks/user/manage-user";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -139,7 +143,7 @@ export const StackExchangeDialog = ({
   const { mutate: addManager } = useAddClientManager(openDialogId);
 
   const queryClient = useQueryClient();
-  console.log("clientid id",data)
+  console.log("clientid id", data);
 
   const handleDeleteDisscussion = (id: string) => {
     console.log("discussion id", id);
@@ -258,12 +262,12 @@ export const StackExchangeDialog = ({
 
   return (
     <div>
-      <div className="p-3">
+      <div className="p-3 flex justify-center items-start gap-x-4">
         <div className="flex flex-col gap-y-3">
           <div className="text-[17px] text-[#091747] uppercase font-bold">
             {data?.firstName + " " + data?.lastName}
           </div>
-          <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-[500px,250px] xl:grid-cols-[500px,250px]">
+          <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-[500px] xl:grid-cols-[500px]">
             <div className="w-full max-w-2xl mx-auto">
               <Accordion type="multiple" className="w-full">
                 <AccordionItem value="discussions" className="">
@@ -557,20 +561,22 @@ export const StackExchangeDialog = ({
                 )}
               </Accordion>
             </div>
-            <div className="space-y-2 bg-[#ededed] rounded-md max-h-fit">
-              <div className="rounded-lg px-2 py-2">
-                <div className="justify-between flex px-1">
-                  <h3 className="font-semibold mb-3 text-[13px] text-[#091747]">
-                    Assigned Manager
-                  </h3>
-                  <X
-                    onClick={onClose}
-                    strokeWidth={"3"}
-                    className="text-[#f21300] cursor-pointer"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                {/* {data && (
+          </div>
+        </div>
+        <div className="space-y-2 bg-[#ededed] rounded-md max-h-fit">
+          <div className="rounded-lg px-2 py-1">
+            <div className="justify-between flex px-1">
+              <h3 className="font-semibold mb-3 text-[13px] text-[#091747]">
+                Assigned Manager
+              </h3>
+              <X
+                onClick={onClose}
+                strokeWidth={"3"}
+                className="text-[#f21300] cursor-pointer"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              {/* {data && (
                       <div className="flex">
                         {data?.manager?.map(
                           (data: managerDetails, index: number) => (
@@ -581,121 +587,114 @@ export const StackExchangeDialog = ({
                         )}
                       </div>
                     )} */}
-                  <Popover>
-                    <PopoverTrigger>
-                      <div className="text-[#f21300]">
-                        <PlusCircle />
-                      </div>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                    {assignedManager && (
-                          <form
-                            onSubmit={formMethods.handleSubmit(
-                              handleFormSubmit
-                            )}
-                          >
-                            <div>
-                              {assignedManager
-                                .filter(
-                                  (manager: userType) =>
-                                    manager.userRoles === "Staff_Manager"
-                                ) // Filter the managers
-                                .map((manager: userType, index: number) => (
-                                  <div
-                                    key={index}
-                                    className="flex items-center gap-2"
-                                  >
-                                    <Controller
-                                      name="managersId"
-                                      control={formMethods.control}
-                                      render={({
-                                        field: { value, onChange },
-                                      }) => (
-                                        <input
-                                          type="checkbox"
-                                          checked={value?.includes(manager.id)}
-                                          onChange={(e) => {
-                                            if (e.target.checked) {
-                                              // Add manager ID to the array
-                                              onChange([...value, manager.id]);
-                                            } else {
-                                              // Remove manager ID from the array
-                                              onChange(
-                                                value.filter(
-                                                  (id: string) =>
-                                                    id !== manager.id
-                                                )
-                                              );
-                                            }
-                                          }}
-                                        />
-                                      )}
-                                    />
-                                    <span className="text-[12px] text-[#091747] font-semibold">{manager.firstName}</span>
-                                  </div>
-                                ))}
-                            </div>
-                            <button
-                              type="submit"
-                              className="btn btn-primary mt-2 bg-[#f21300] px-2 py-1 rounded-md text-[10px] text-white"
+              <Popover>
+                <PopoverTrigger>
+                  <div className="text-[#f21300]">
+                    <PlusCircle/>
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent>
+                  {assignedManager && (
+                    <form onSubmit={formMethods.handleSubmit(handleFormSubmit)}>
+                      <div>
+                        {assignedManager
+                          .filter(
+                            (manager: userType) =>
+                              manager.userRoles === "Staff_Manager"
+                          ) // Filter the managers
+                          .map((manager: userType, index: number) => (
+                            <div
+                              key={index}
+                              className="flex items-center gap-2"
                             >
-                              Assign
-                            </button>
-                          </form>
-                        )}
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                              <Controller
+                                name="managersId"
+                                control={formMethods.control}
+                                render={({ field: { value, onChange } }) => (
+                                  <input
+                                    type="checkbox"
+                                    checked={value?.includes(manager.id)}
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        // Add manager ID to the array
+                                        onChange([...value, manager.id]);
+                                      } else {
+                                        // Remove manager ID from the array
+                                        onChange(
+                                          value.filter(
+                                            (id: string) => id !== manager.id
+                                          )
+                                        );
+                                      }
+                                    }}
+                                  />
+                                )}
+                              />
+                              <span className="text-[12px] text-[#091747] font-semibold">
+                                {manager.firstName}
+                              </span>
+                            </div>
+                          ))}
+                      </div>
+                      <button
+                        type="submit"
+                        className="btn btn-primary mt-2 bg-[#f21300] px-2 py-1 rounded-md text-[10px] text-white"
+                      >
+                        Assign
+                      </button>
+                    </form>
+                  )}
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+          <div className="rounded-lg px-2 py-2">
+            <div className="bg-[#091747] rounded-md">
+              <h3 className="font-normal text-[12px] mb-3 bg-navy-900 text-white px-[10px] py-[5px] rounded">
+                Client Details
+              </h3>
+            </div>
+            <div className="">
+              <div className="text-[12px]">
+                <span className="font-semibold">Client:</span>{" "}
+                {data?.firstName + " " + data?.lastName}
               </div>
-              <div className="rounded-lg px-2 py-2">
-                <div className="bg-[#091747] rounded-md">
-                  <h3 className="font-normal text-[12px] mb-3 bg-navy-900 text-white px-[10px] py-[5px] rounded">
-                    Client Details
-                  </h3>
-                </div>
-                <div className="">
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Client:</span>{" "}
-                    {data?.firstName + " " + data?.lastName}
-                  </div>
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Mobile:</span> 9662391342
-                  </div>
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Email:</span>{" "}
-                    {data?.creator?.email}
-                  </div>
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Manager:</span> DEV
-                  </div>
-                  <div className="text-[10px] bg-[#f21300] max-w-fit text-white px-2 py-1 rounded-md">
-                    <span className="font-semibold">KYC Status:</span>{" "}
-                    <span>Pending</span>
-                  </div>
-                </div>
+              <div className="text-[12px]">
+                <span className="font-semibold">Mobile:</span> 9662391342
               </div>
-              <div className="rounded-lg border px-2 py-2">
-                <div className="bg-[#091747] rounded-md">
-                  <h3 className="font-normal text-[12px] mb-3 bg-navy-900 text-white px-[10px] py-[5px] rounded">
-                    Bussiness List
-                  </h3>
+              <div className="text-[12px]">
+                <span className="font-semibold">Email:</span>{" "}
+                {data?.creator?.email}
+              </div>
+              <div className="text-[12px]">
+                <span className="font-semibold">Manager:</span> DEV
+              </div>
+              <div className="text-[10px] bg-[#f21300] max-w-fit text-white px-2 py-1 rounded-md">
+                <span className="font-semibold">KYC Status:</span>{" "}
+                <span>Pending</span>
+              </div>
+            </div>
+          </div>
+          <div className="rounded-lg border px-2 py-2">
+            <div className="bg-[#091747] rounded-md">
+              <h3 className="font-normal text-[12px] mb-3 bg-navy-900 text-white px-[10px] py-[5px] rounded">
+                Bussiness List
+              </h3>
+            </div>
+            <div>
+              <div className="font-semibold text-[12px]">
+                1. KARAN (OPC) PRIVATE LIMITED
+              </div>
+              <div className="ml-3 mt-1 text-[12px]">
+                <div>
+                  <span className="font-semibold">PAN:</span> {data?.pan}
                 </div>
                 <div>
-                  <div className="font-semibold text-[12px]">
-                    1. KARAN (OPC) PRIVATE LIMITED
-                  </div>
-                  <div className="ml-3 mt-1 text-[12px]">
-                    <div>
-                      <span className="font-semibold">PAN:</span> {data?.pan}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Manager:</span> KARAN
-                    </div>
-                    <div className="text-[10px] bg-[#008827] max-w-fit text-white px-2 py-1 rounded-md">
-                      <span className="font-semibold">Status:</span>{" "}
-                      <span>Active</span>
-                    </div>
-                  </div>
+                  <span className="font-semibold">Manager:</span> KARAN
+                </div>
+                <div className="text-[10px] bg-[#008827] max-w-fit text-white px-2 py-1 rounded-md">
+                  <span className="font-semibold">Status:</span>{" "}
+                  <span>Active</span>
                 </div>
               </div>
             </div>
