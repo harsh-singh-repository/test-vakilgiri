@@ -86,16 +86,16 @@ const ClientShowcase = () => {
       {tables.map((table) => (
         <div
           key={table.tableId}
-          className="border px-2 py-4 rounded-md shadow bg-slate-200 h-[350px] overflow-y-auto"
+          className="border px-2 py-1 rounded-md shadow bg-slate-200 h-[350px] overflow-y-auto"
         >
-          <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
+          <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-2 text-left rounded-sm">
             {table.tableName}
           </span>
           <div className="flex flex-col gap-2 mt-2">
             {table.clients.map((client, clientIndex) => (
               <div
                 key={clientIndex}
-                className="mb-1 bg-white flex flex-row rounded-md p-2 gap-x-3 items-center"
+                className="mb-1 bg-white flex flex-row rounded-md p-1 gap-x-3 items-center"
               >
                 <RxAvatar size={30} />
 
