@@ -11,7 +11,7 @@ export default function RootLayout({
 
 
   return (
-    <div className="h-full bg-white">
+    <div className="h-full bg-white object-contain">
       <SidebarProvider>
        
         <div className="flex flex-col w-full">

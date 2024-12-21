@@ -75,10 +75,10 @@ export default function ClientPageContent() {
   }
 
   return (
-    <div className="w-full flex-1 space-y-4 p-4 pt-6 md:p-4 overflow-hidden">
+    <div className="flex-1 space-y-4 p-4 pt-6 md:p-4">
       {/* <Breadcrumbs items={breadcrumbItems} /> */}
       <div className="flex items-start justify-between">
-        <div className="text-2xl font-bold text-[#042559]">{`Clients (7)`}</div>
+        <div className="text-2xl font-bold text-[#042559]">{`Clients`}</div>
 
         <div className="flex justify-center item-center gap-4">
         <div className='flex gap-2 items-center'>

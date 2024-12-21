@@ -184,15 +184,15 @@ const DashboardCard = () => {
           <div key={index} className={`w-full h-fit xl:order-1 flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 ${card.BgColor}`}>
             <div className="w-full h-fit flex flex-col justify-center items-center">
               <div className="w-full h-fit flex justify-center gap-x-2 items-center p-1 px-2">
-                <div className={`w-14 h-10 rounded-xl flex justify-center items-center ${card.iconBgColor}`}>
+                <div className={`w-14 h-12 rounded-2xl flex justify-center items-center ${card.iconBgColor}`}>
                   <span className={`text-xl ${card.iconColor}`}>{card.icon}</span>
                 </div>
                 <div className="w-full flex justify-between items-center">
                   {card.data.map((data, dataIndex) => {
                     return (
                       <div className="flex flex-col justify-center items-center gap-x-2" key={data.label + dataIndex}>
-                        <span className={`text-[15px] ${card.textColor}`}>{data.value}</span>
-                        <span className={`text-[12px] font-[600px] ${card.textColor}`}>{data.label}</span>
+                        <span className={`text-[18px] font-medium ${card.textColor}`}>{data.value}</span>
+                        <span className={`text-[12px] font-medium ${card.textColor}`}>{data.label}</span>
                       </div>
                     );
                   })}
