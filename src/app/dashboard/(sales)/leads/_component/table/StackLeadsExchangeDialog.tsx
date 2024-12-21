@@ -735,7 +735,7 @@ export const StackLeadsExchangeDialog = ({
                     <Popover>
                       <PopoverTrigger>
                         <div className="flex justify-center items-center text-white">
-                          <MdEdit className="bg-[#f21300] rounded-sm" />
+                          <MdEdit size={20} className="bg-[#f21300] rounded-sm p-1" />
                         </div>
                       </PopoverTrigger>
                       <PopoverContent className="max-w-fit">

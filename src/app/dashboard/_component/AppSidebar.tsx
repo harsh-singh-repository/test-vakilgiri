@@ -180,7 +180,7 @@ export function AppSidebar() {
                                   key={child.title}
                                   href={child.url}
                                   className={cn(
-                                    "hover:bg-[#FFCECE] hover:text-black font-medium",
+                                    "hover:bg-[#FFCECE] hover:text-black font-medium rounded-lg hover:rounded-lg",
                                     pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white hover:text-white"
                                   )}
                                 >
