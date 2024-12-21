@@ -20,17 +20,15 @@ export default function EditStaff({ onClose }: onCloseProp) {
 
   return (
     <div className="w-[800px] mx-auto p-1 pb-20">
-      <div className="flex flex-row justify-center items-center">
-        <div>
-          <span className="text-xl font-semibold mb-6 text-center text-[#091747]">
+      <div className="flex flex-row justify-between items-center">
+          <div className="text-xl font-semibold text-[#091747]">
             Edit:
-          </span>
-        </div>
+          </div>
         <div
-          className="bg-[#091747] text-white cursor-pointer p-1 rounded-md absolute translate-x-[24rem]"
+          className="text-[#f21300] cursor-pointer p-1 rounded-md"
           onClick={onClose}
         >
-          <X className="w-4 h-4" strokeWidth={"4"} />
+          <X className="w-6 h-6" strokeWidth={"6"} />
         </div>
       </div>
       <Accordion type="multiple" className="w-full mt-5">
