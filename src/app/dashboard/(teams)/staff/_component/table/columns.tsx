@@ -101,21 +101,21 @@ export const columns: ColumnDef<UserTypes>[] = [
       const status = row.original.loginStatus;
        if(status === "Active"){
         return (
-          <div className='bg-[#008626] text-white rounded-full'>
+          <div className='bg-[#008626] text-white rounded-full w-fit px-2'>
             <span className='text-[10px]'>{status}</span>
           </div>
         )
        }
        if(status === "None"){
         return (
-          <div className='bg-gray-400 text-white rounded-full'>
+          <div className='bg-gray-400 text-white rounded-full w-fit px-2'>
             <span className='text-[10px]'>{status}</span>
           </div>
         )
        }
        if(status === "Inactive"){
         return (
-          <div className='bg-[#002537] text-white rounded-full'>
+          <div className='bg-[#002537] text-white rounded-full w-fit px-2'>
             <span className='text-[10px]'>{status}</span>
           </div>
         )

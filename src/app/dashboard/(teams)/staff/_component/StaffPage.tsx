@@ -99,7 +99,7 @@ export default function StaffPage() {
               </Modal>
 
           </div>
-        </div>
+        </div> 
         <Separator />
 
         <ClientCard />

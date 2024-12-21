@@ -159,7 +159,7 @@ export function StaffTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'name' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
+                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'name' ? 'text-[#f21300] hover:text-[#042559]' : ''} ${cell.column.id === 'loginStatus' ? "flex justify-center items-center mt-2":""}`}
                     >
                       {renderCellContent(cell)}
                     </TableCell>
