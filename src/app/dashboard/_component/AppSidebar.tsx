@@ -129,12 +129,12 @@ export function AppSidebar() {
 
   return (
     <div className=''>
-      <Sidebar className='mt-9'>
-        <SidebarContent>
+      <Sidebar className=''>
+        <SidebarContent className='mt-5'>
           <SidebarGroup>
             <SidebarGroupLabel></SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className='mt-5'>
                 {items.map((item) => {
                   const isSubMenuOpen = item.children?.some((child) => child.url === pathname);
                   return (
@@ -145,13 +145,13 @@ export function AppSidebar() {
                             href={item.url}
                             className={cn(
                               "hover:bg-[#FFCECE] hover:text-black font-medium",
-                              pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white"
+                              pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white hover:text-white"
                             )}
                           >
                             <SidebarMenuButton
                              className={cn(
                               "hover:bg-[#FFCECE] hover:text-black font-medium",
-                              pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white"
+                              pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white hover:text-white"
                             )}
                             >
                               <div className="w-full flex justify-between items-center text-[15px]">
@@ -180,14 +180,14 @@ export function AppSidebar() {
                                   key={child.title}
                                   href={child.url}
                                   className={cn(
-                                    "hover:bg-[#FFCECE] hover:text-black font-medium",
-                                    pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white"
+                                    "hover:bg-[#FFCECE] hover:text-black font-medium rounded-lg hover:rounded-lg",
+                                    pathname === item.url && "bg-[#f21300] hover:bg-[#f21300] text-white hover:text-white"
                                   )}
                                 >
                                   <SidebarMenuSubItem  
                                     className={cn(
                                       "flex items-center space-x-2 text-[14px] focus:text-black text-[#00000080] p-1",
-                                      pathname === child.url && "bg-[#f21300] text-white rounded-md"
+                                      pathname === child.url && "bg-[#f21300] text-white rounded-md hover:text-white"
                                     )}
                                   >
 

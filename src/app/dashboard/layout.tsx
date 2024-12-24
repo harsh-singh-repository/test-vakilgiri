@@ -11,14 +11,14 @@ export default function RootLayout({
 
 
   return (
-    <div className="h-full bg-white">
+    <div className="h-full bg-white object-contain">
       <SidebarProvider>
        
         <div className="flex flex-col w-full">
           <Navbar/>
           <main className="bg-[#EEEEEE] h-full flex">
             <div className="mt-10">
-            <AppSidebar />
+               <AppSidebar />
             </div>
             <div className="w-full">
             {children}

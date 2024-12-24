@@ -93,9 +93,9 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
 
   return (
     // <DialogContent>
-    <div className="w-full"> 
-      <div className="bg-white rounded-lg shadow-sm px-2 py-1">
-      <div className="relative w-full pb-2 text-center">
+    <div className="max-w-[400px] w-full flex flex-col justify-center items-center"> 
+      <div className="w-full bg-white rounded-lg shadow-sm px-2 py-1">
+      <div className="relative pb-2 text-center">
       <h2 className="text-2xl font-bold text-[#F31F0D] mt-2">Create Lead</h2>
       <p className="text-sm text-[#091747] font-medium">
         Fill all the information correctly
@@ -118,7 +118,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                     defaultValue={field.value ? "yes" : "no"}
                   >
                     <FormControl>
-                      <SelectTrigger className="w-[290px] border-[#091747]">
+                      <SelectTrigger className="w-full border-[#091747]">
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                     </FormControl>
@@ -140,7 +140,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                   render={({ field }) => (
                     <div>
                       <FormControl>
-                        <MaterialInput placeholder="Business Name" {...field} className="w-[290px]" onChange={handleChange}/>
+                        <MaterialInput placeholder="Business Name" {...field} className="w-full" onChange={handleChange}/>
                       </FormControl>
                     </div>
                   )}
@@ -169,7 +169,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="w-[290px] border-[#091747]">
+                          <SelectTrigger className="w-full border-[#091747]">
                             <SelectValue placeholder="Select Client" />
                           </SelectTrigger>
                         </FormControl>
@@ -192,7 +192,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                 render={({ field }) => (
                   <div>
                     <FormControl>
-                       <MaterialInput placeholder="First Name" {...field} className="w-[140px]"/>
+                       <MaterialInput placeholder="First Name" {...field} className="w-full"/>
                     </FormControl>
                     {/* <FormMessage /> */}
                   </div>
@@ -205,7 +205,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                 render={({ field }) => (
                   <div>
                     <FormControl>
-                       <MaterialInput placeholder="Last Name" {...field} className="w-[140px]"/>
+                       <MaterialInput placeholder="Last Name" {...field} className="w-full"/>
                     </FormControl>
                     {/* <FormMessage /> */}
                   </div>
@@ -219,7 +219,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               render={({ field }) => (
                 <div>
                   <FormControl>
-                    <MaterialInput placeholder="Enter email Id" {...field} className="w-[290px]"/>
+                    <MaterialInput placeholder="Enter email Id" {...field} className="w-full"/>
                   </FormControl>
                   {/* <FormMessage /> */}
                 </div>
@@ -232,7 +232,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               render={({ field }) => (
                 <div>
                   <FormControl>
-                    <MaterialInput placeholder="Mobile Number" {...field} className="w-[290px] border-[#091747]"/>
+                    <MaterialInput placeholder="Mobile Number" {...field} className="w-full border-[#091747]"/>
                   </FormControl>
                   {/* <FormMessage /> */}
                 </div>
@@ -250,7 +250,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger className="w-[290px] border-[#091747]">
+                      <SelectTrigger className="w-full border-[#091747]">
                         <SelectValue placeholder="Select State" />
                       </SelectTrigger>
                     </FormControl>
@@ -278,7 +278,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger className="w-[290px] border-[#091747]">
+                      <SelectTrigger className="w-full border-[#091747]">
                         <SelectValue placeholder="Select Service" />
                       </SelectTrigger>
                     </FormControl>
@@ -301,7 +301,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               render={({ field }) => (
                 <div>
                   <FormControl>
-                    <MaterialInput placeholder="Lead Value" {...field} className="w-[290px] border-[#091747]"/>
+                    <MaterialInput placeholder="Lead Value" {...field} className="w-full border-[#091747]"/>
                   </FormControl>
                   {/* <FormMessage /> */}
                 </div>

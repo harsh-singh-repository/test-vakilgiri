@@ -77,7 +77,7 @@ function Page() {
   }
   return (
     <Tabs defaultValue="Dashboard">
-      <div className="relative rounded-sm h-full bg-muted flex flex-col top-0 mt-3">
+      <div className="relative rounded-sm h-full bg-muted flex flex-col top-0 mt-1">
         <TabsList className="absolute flex flex-row justify-stretch w-full overflow-x-auto px-5">
           {tabs.map((value, index) => (
             <TabsTrigger
