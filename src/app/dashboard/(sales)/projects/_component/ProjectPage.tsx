@@ -10,8 +10,9 @@ import ClientCard from "./client-card";
 import { useSearchParams } from "next/navigation";
 import { ClientPageServer } from "./ClientPageServer";
 import { Client } from "@/constants/data";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {Oval} from "react-loader-spinner"
+import { FormModal } from "@/app/dashboard/tickets/_components/ticketFormModal";
+import ProjectCreate from "./projectCreate";
 
 type ResponseData = {
   employee: Client[];
@@ -34,7 +35,10 @@ export default function ProjectPage() {
     searchParams.get("search") || ""
   );
   const [responseData, setResponseData] = useState<ResponseData | null>(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
   useEffect(() => {
     const fetchData = async () => {
       const data = await ClientPageServer({ page, pageLimit, searchValue });
@@ -46,7 +50,7 @@ export default function ProjectPage() {
 
   if (!responseData) {
     return (
-      <div className="flex justify-center item-center h-[100vh]">
+      <div className="flex justify-center items-center h-[100vh]">
         <Oval
           visible={true}
           height="40"
@@ -61,7 +65,6 @@ export default function ProjectPage() {
   }
 
   return (
-    <Dialog>
       <div className="flex-1 space-y-1 p-4 pt-6 md:p-4">
         {/* <Breadcrumbs items={breadcrumbItems} /> */}
         <div className="flex items-start justify-between">
@@ -76,13 +79,15 @@ export default function ProjectPage() {
               className="w-full md:max-w-sm ml-auto bg-white"
               />
               </Suspense>
-
-            <DialogTrigger>
-              <div className="bg-[#f21300] text-white p-2 rounded-md">
+              <div className="bg-[#f21300] text-white p-2 rounded-md cursor-pointer" onClick={handleOpenModal}>
                 <Plus className="h-6 w-6" />
               </div>
-            </DialogTrigger>
           </div>
+          {isModalOpen && (
+            <FormModal isOpen={isModalOpen} onClose={handleCloseModal}>
+              <ProjectCreate close={handleCloseModal}/>
+            </FormModal>
+          )}
         </div>
         <Separator />
 
@@ -100,6 +105,5 @@ export default function ProjectPage() {
           pageCount={responseData.pageCount}
         />
       </div>
-    </Dialog>
   );
 }
