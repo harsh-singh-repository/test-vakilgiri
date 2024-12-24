@@ -8,6 +8,7 @@ import {
 import { format } from "date-fns";
 import {
   CalendarIcon,
+  Pencil,
   Plus,
   PlusCircle,
   Trash2,
@@ -55,7 +56,7 @@ import {
   leadsDiscussionSchema,
   leadsReminderSchema,
 } from "../../_types/zodSchema";
-import { MdEdit } from "react-icons/md";
+// import { MdEdit } from "react-icons/md";
 import { RxAvatar } from "react-icons/rx";
 import {
   LeadsDiscussionType,
@@ -302,13 +303,15 @@ export const StackLeadsExchangeDialog = ({
     });
   };
 
-  const handleRemoveManager = (id:{ managerId: string;}) => {
+  const handleRemoveManager = (id: string) => {
+    console.log("ID",id)
     removeManger(id,{
      onSuccess: () => {
        toast.success("Manager Removed");
        queryClient.invalidateQueries({ queryKey: ["leadId"] });
      },
      onError: (error) => {
+      console.log("ID",id)
       if (error instanceof AxiosError) {
         // Safely access the response data
         const errorMessage =
@@ -642,15 +645,15 @@ export const StackLeadsExchangeDialog = ({
                       strokeWidth={"5"}
                     />
                   </div>
-                  <div className="flex gap-2 mt-2 items-center">
+                  <div className="flex gap-2 mt-2 items-start">
                   {data && (
-                      <div className="flex">
+                      <div className="flex flex-wrap w-full">
                         {data?.assigned?.map(
-                          (data: managerDetails, index: number) => (
+                          (assign: managerDetails, index: number) => (
                             <div className="" key={index}>
                               <RxAvatar size={"30"}/>
                               <div className="absolute">
-                               <X className="text-[#f21300] -translate-y-8 translate-x-4 h-3 w-3 cursor-pointer" strokeWidth={"6"} onClick={()=>handleRemoveManager({managerId : data?.id})}/>
+                               <X className="text-[#f21300] -translate-y-8 translate-x-4 h-3 w-3 cursor-pointer" strokeWidth={"6"} onClick={()=>handleRemoveManager(assign?.id)}/>
                               </div>
                             </div>
                           )
@@ -734,9 +737,7 @@ export const StackLeadsExchangeDialog = ({
                     </div>
                     <Popover>
                       <PopoverTrigger>
-                        <div className="flex justify-center items-center text-white">
-                          <MdEdit className="bg-[#f21300] rounded-sm" />
-                        </div>
+                        <Pencil className="text-white bg-[#f21300] rounded-md" />
                       </PopoverTrigger>
                       <PopoverContent className="max-w-fit">
                         <EditLeads leadId={openDialogId} />

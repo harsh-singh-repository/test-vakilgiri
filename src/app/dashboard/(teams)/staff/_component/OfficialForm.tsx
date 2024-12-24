@@ -3,7 +3,7 @@ import {
     Form,
     FormControl,
     FormField,
-    FormItem,
+    FormLabel,
     FormMessage,
   } from "@/components/ui/form";
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -39,7 +39,7 @@ const OfficialForm = () => {
           joiningDate: "2024-02-05",
           officeEmail: "DEV@VAKILGIRI.COM",
           officeMobile: "6395247801",
-          resignationDate: "",
+          resignationDate: "2022-09-18",
           salaryPm: "12000",
           department: "Sales",
           role: "Jr-Sales",
@@ -63,16 +63,18 @@ const OfficialForm = () => {
                         control={officialForm.control}
                         name="joiningDate"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                type="date"
-                                placeholder="Joining Date"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
+                          <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Joining Date
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"type='date'
+
+                        />
+                      </FormControl>
+                  </div>
                         )}
                       />
 
@@ -80,16 +82,17 @@ const OfficialForm = () => {
                         control={officialForm.control}
                         name="officeEmail"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                placeholder="Office Email"
-                                type="email"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
+                          <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Email
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"
+                        />
+                      </FormControl>
+                  </div>
                         )}
                       />
 
@@ -97,16 +100,17 @@ const OfficialForm = () => {
                         control={officialForm.control}
                         name="officeMobile"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                placeholder="Office Mobile"
-                                type="tel"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
+                          <div className="flex items-center ">
+                          <FormLabel className="text-[13px] w-[9rem]">
+                            Official Mobile
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              className="w-full text-[13px]"
+                            />
+                          </FormControl>
+                      </div>
                         )}
                       />
 
@@ -114,16 +118,17 @@ const OfficialForm = () => {
                         control={officialForm.control}
                         name="resignationDate"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                type="date"
-                                placeholder="Resignation Date"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
+                          <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                      Resig. Date
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"type='date'
+                        />
+                      </FormControl>
+                  </div>
                         )}
                       />
 
@@ -131,16 +136,17 @@ const OfficialForm = () => {
                         control={officialForm.control}
                         name="salaryPm"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                placeholder="Salary p.m."
-                                type="number"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
+                          <div className="flex items-center gap-4">
+                          <FormLabel className="text-[13px] w-[6.75rem]">
+                            Salary P.M.
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              className="w-full text-[13px]"
+                            />
+                          </FormControl>
+                      </div>
                         )}
                       />
 
@@ -148,7 +154,10 @@ const OfficialForm = () => {
                         control={officialForm.control}
                         name="department"
                         render={({ field }) => (
-                          <FormItem>
+                          <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Department
+                      </FormLabel>
                             <Select
                               onValueChange={field.onChange}
                               defaultValue={field.value}
@@ -168,7 +177,7 @@ const OfficialForm = () => {
                               </SelectContent>
                             </Select>
                             <FormMessage />
-                          </FormItem>
+                          </div>
                         )}
                       />
 
@@ -176,7 +185,10 @@ const OfficialForm = () => {
                         control={officialForm.control}
                         name="role"
                         render={({ field }) => (
-                          <FormItem>
+                          <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Role
+                      </FormLabel>
                             <Select
                               onValueChange={field.onChange}
                               defaultValue={field.value}
@@ -199,7 +211,7 @@ const OfficialForm = () => {
                               </SelectContent>
                             </Select>
                             <FormMessage />
-                          </FormItem>
+                          </div>
                         )}
                       />
 

@@ -1,8 +1,8 @@
 // ClientPage.tsx
 "use client";
-import React, {Suspense, useState } from "react";
+import React, {useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { Plus } from "lucide-react";
+import { ChevronsLeft, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./table/columns";
 import { StaffTable } from "./table/client-table";
@@ -11,9 +11,11 @@ import { useSearchParams } from "next/navigation";
 // import { ClientPageServer } from "./table/ClientPageServer";
 import { UserTypes } from "../_types/types";
 import {Oval} from "react-loader-spinner"
-import Modal from "@/components/model/custom-modal";
-import CreateStaff from "./CreateStaff";
+// import Modal from "@/components/model/custom-modal";
+// import CreateStaff from "./CreateStaff";
 import { useGetUsers } from "@/hooks/user/manage-user";
+// import CreateStaff from "./CreateStaff";
+import EditStaff from "./EditStaff";
 
 // type ResponseData = {
 //   employee: Client[];
@@ -29,6 +31,7 @@ import { useGetUsers } from "@/hooks/user/manage-user";
 export default function StaffPage() {
   
   const {data} = useGetUsers();
+  const [staffEdit,setStaffEdit] = useState<boolean>(false);
 
 
   const staffUsers: UserTypes[] = (data || []).filter((user: UserTypes) => user.userRoles === "Staff_Manager");
@@ -45,10 +48,10 @@ export default function StaffPage() {
   );
   // const [responseData, setResponseData] = useState<ResponseData | null>(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  // const openModal = () => setIsModalOpen(true);
+  // const closeModal = () => setIsModalOpen(false);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -76,27 +79,25 @@ export default function StaffPage() {
   }
 
   return (
-      <div className="flex-1 space-y-4 p-4 pt-6 md:p-4">
+     (!staffEdit ? <div className="flex-1 space-y-4 p-4 pt-6 md:p-4">
         {/* <Breadcrumbs items={breadcrumbItems} /> */}
         <div className="flex items-start justify-between">
           <div className="text-[20px] font-bold text-[#042559]">{`Staff (${staffUsers.length})`}</div>
 
           <div className="flex justify-center item-center gap-4">
-            <Suspense>
             <Input
               placeholder="Search name..."
               value={searchValue}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
               className="w-full md:max-w-sm ml-auto bg-white"
               />
-              </Suspense>
 
-              <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1" onClick={openModal}>
+              <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1" onClick={()=>setStaffEdit(true)}>
                 <Plus strokeWidth={"5"}/>
               </div>
-              <Modal isOpen={isModalOpen} onClose={closeModal} className="p-4"> 
+              {/* <Modal isOpen={isModalOpen} onClose={closeModal} className="p-4"> 
                  <CreateStaff onClose={closeModal}/>                 
-              </Modal>
+              </Modal> */}
 
           </div>
         </div> 
@@ -113,6 +114,20 @@ export default function StaffPage() {
           data={staffUsers}
           pageCount={Math.ceil(staffUsers.length / pageLimit)}
         />
-      </div>
+      </div> : 
+      <div className="p-3">
+          <div className="p-3 bg-white rounded-md shadow-md border-gray-100 flex flex-col gap-y-2">
+              <div className="flex felx-col gap-3 items-center">
+              <div className="bg-[#042559] text-white cursor-pointer max-w-fit px-1 py-1 rounded-md" onClick={()=>setStaffEdit(false)}>
+                  <ChevronsLeft className="h-4 w-4"/>
+              </div>
+              <div>
+                <h1 className="text-[22px] font-medium">Edit staff for client</h1>
+              </div>
+              </div>
+              <EditStaff/>
+          </div>
+      </div>  
+    )
   );
 }

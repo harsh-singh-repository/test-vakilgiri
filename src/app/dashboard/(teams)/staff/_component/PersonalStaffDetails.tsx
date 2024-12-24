@@ -4,7 +4,7 @@ import {
   Form,
   FormControl,
   FormField,
-  FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -72,17 +72,22 @@ export const PersonalStaffDetails = () => {
                   form.handleSubmit(onSubmit)(event); // Call the Zod resolver and form submission handler
                 }}
               >
-                <div className="grid grid-cols-2 gap-6 p-4">
+                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 p-4">
                   <FormField
                     control={form.control}
                     name="pan"
                     render={({ field }) => (
-                      <FormItem>
+                      <div className="flex items-center gap-4">
+                        <FormLabel className="text-[13px] w-[6.75rem]">
+                          PAN
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="PAN" {...field} />
+                          <Input
+                            {...field}
+                            className="w-full text-[13px]"
+                          />
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                    </div>
                     )}
                   />
 
@@ -90,12 +95,17 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="firstName"
                     render={({ field }) => (
-                      <FormItem>
+                      <div className="flex items-center gap-4">
+                        <FormLabel className="text-[13px] w-[6.75rem]">
+                          First Name
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="First Name" {...field} />
+                          <Input
+                            {...field}
+                            className="w-full text-[13px]"
+                          />
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                    </div>
                     )}
                   />
 
@@ -103,12 +113,17 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="lastName"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input placeholder="Last Name" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Last Name
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"
+                        />
+                      </FormControl>
+                  </div>
                     )}
                   />
 
@@ -116,16 +131,17 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="email"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            placeholder="Email Id"
-                            type="email"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Email
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"
+                        />
+                      </FormControl>
+                    </div>
                     )}
                   />
 
@@ -133,7 +149,10 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="gender"
                     render={({ field }) => (
-                      <FormItem>
+                      <div className="flex items-center gap-4">
+                         <FormLabel className="text-[13px] w-[6.75rem]">
+                          Gender
+                      </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -150,7 +169,7 @@ export const PersonalStaffDetails = () => {
                           </SelectContent>
                         </Select>
                         <FormMessage />
-                      </FormItem>
+                      </div>
                     )}
                   />
 
@@ -158,16 +177,17 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="mobile"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            placeholder="Mobile No."
-                            type="tel"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Mobile No.
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"
+                        />
+                      </FormControl>
+                  </div>
                     )}
                   />
 
@@ -175,16 +195,18 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="dateOfBirth"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            placeholder="Date of Birth"
-                            type="date"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Date of Birth
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"
+                          type='date'
+                        />
+                      </FormControl>
+                  </div>
                     )}
                   />
 
@@ -192,7 +214,10 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="role"
                     render={({ field }) => (
-                      <FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Staff
+                      </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -209,7 +234,7 @@ export const PersonalStaffDetails = () => {
                           </SelectContent>
                         </Select>
                         <FormMessage />
-                      </FormItem>
+                      </div>
                     )}
                   />
 
@@ -217,12 +242,17 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="aadhaar"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input placeholder="Aadhaar" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Aadhaar
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"
+                        />
+                      </FormControl>
+                  </div>
                     )}
                   />
 
@@ -230,12 +260,17 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="address1"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input placeholder="Address-1" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Address 1.
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"
+                        />
+                      </FormControl>
+                  </div>
                     )}
                   />
 
@@ -243,12 +278,17 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="address2"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input placeholder="Address-2" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Address 2.
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"
+                        />
+                      </FormControl>
+                  </div>
                     )}
                   />
 
@@ -256,12 +296,17 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="city"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input placeholder="City" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        City
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"
+                        />
+                      </FormControl>
+                  </div>
                     )}
                   />
 
@@ -269,7 +314,10 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="state"
                     render={({ field }) => (
-                      <FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        State
+                      </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -291,7 +339,7 @@ export const PersonalStaffDetails = () => {
                           </SelectContent>
                         </Select>
                         <FormMessage />
-                      </FormItem>
+                      </div>
                     )}
                   />
 
@@ -299,12 +347,17 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="pincode"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input placeholder="Pincode" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Pincode
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="w-full text-[13px]"
+                        />
+                      </FormControl>
+                  </div>
                     )}
                   />
 
@@ -312,7 +365,10 @@ export const PersonalStaffDetails = () => {
                     control={form.control}
                     name="loginStatus"
                     render={({ field }) => (
-                      <FormItem>
+                      <div className="flex items-center gap-4">
+                      <FormLabel className="text-[13px] w-[6.75rem]">
+                        Login Status
+                      </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -328,7 +384,7 @@ export const PersonalStaffDetails = () => {
                           </SelectContent>
                         </Select>
                         <FormMessage />
-                      </FormItem>
+                      </div>
                     )}
                   />
                   <div className="mt-6 flex justify-end">

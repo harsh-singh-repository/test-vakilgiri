@@ -565,13 +565,13 @@ export const StackExchangeDialog = ({
         </div>
         <div className="space-y-2 bg-[#ededed] rounded-md max-h-fit">
           <div className="rounded-lg px-2 py-1">
-            <div className="justify-between flex px-1">
+            <div className="justify-between flex px-1 py-1">
               <h3 className="font-semibold mb-3 text-[13px] text-[#091747]">
                 Assigned Manager
               </h3>
               <X
                 onClick={onClose}
-                strokeWidth={"3"}
+                strokeWidth={"5"}
                 className="text-[#f21300] cursor-pointer"
               />
             </div>
