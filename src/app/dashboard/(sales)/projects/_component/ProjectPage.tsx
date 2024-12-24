@@ -50,7 +50,7 @@ export default function ProjectPage() {
 
   if (!responseData) {
     return (
-      <div className="flex justify-center item-center h-[100vh]">
+      <div className="flex justify-center items-center h-[100vh]">
         <Oval
           visible={true}
           height="40"
