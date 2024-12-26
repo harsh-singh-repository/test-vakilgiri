@@ -44,6 +44,7 @@ import {
 import { MaterialInput } from "@/components/material-input";
 import { ReminderDiscussionSchema, reminderReminderSchema } from "./types/zodSchema";
 import { useGetReminderById } from "@/hooks/reminder/manage-reminder";
+import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
   
   interface StackExchangeDialogProp {
     openDialogId: string;
@@ -247,7 +248,7 @@ import { useGetReminderById } from "@/hooks/reminder/manage-reminder";
                               name="dueDate"
                               render={({ field, fieldState: { error } }) => (
                                 <div className="flex flex-col w-1/2">
-                                  <Popover>
+                                  {/* <Popover>
                                     <PopoverTrigger asChild>
                                       <FormControl>
                                         <Button
@@ -292,7 +293,8 @@ import { useGetReminderById } from "@/hooks/reminder/manage-reminder";
                                         initialFocus
                                       />
                                     </PopoverContent>
-                                  </Popover>
+                                  </Popover> */}
+                                  <CustomDatePicker />
                                 </div>
                               )}
                             />

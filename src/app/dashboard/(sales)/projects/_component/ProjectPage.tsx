@@ -78,8 +78,8 @@ export default function ProjectPage() {
               </Suspense>
 
             <DialogTrigger>
-              <div className="bg-[#f21300] text-white p-2 rounded-md">
-                <Plus className="h-6 w-6" />
+              <div className="bg-[#f21300] text-white p-0.5 rounded-md">
+                <Plus strokeWidth={"5"} />
               </div>
             </DialogTrigger>
           </div>

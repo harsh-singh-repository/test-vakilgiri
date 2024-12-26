@@ -30,6 +30,8 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { MaterialInput } from "@/components/material-input";
+import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
 
 const PaymentDetails = [
   {
@@ -77,7 +79,7 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
   return (
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader className="flex flex-col justify-center items-center">
-        <DialogTitle className="flex justify-center items-center w-full relative">Add Wallet Balance <span><ImCross className="absolute h-4 w-4 text-[#f32100] right-3 top-0 cursor-pointer" onClick={onClose}/></span></DialogTitle>
+        <DialogTitle className="flex justify-center items-center w-full relative">Add Wallet Balance <span><ImCross className="absolute h-4 w-4 text-[#f32100] right-3 top-0 cursor-pointer" onClick={onClose} /></span></DialogTitle>
 
         <DialogDescription className="text-[#F20101]">
           Topup your Wallet Balance
@@ -103,10 +105,7 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
           {selectedPaymentMethod === "default" && (
             <div className="flex flex-col gap-1">
               <div className="flex flex-col">
-                <Label className="text-xs font-semibold text-[#091747]">
-                  Enter Amount*
-                </Label>
-                <Input type="text" placeholder="Enter Amount" />
+                <MaterialInput type="text" placeholder="Enter Amount" />
               </div>
               <Button
                 variant={"none"}
@@ -164,20 +163,17 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
           )}
 
           {selectedPaymentMethod === "compact" && !createPayment && (
-            <div className="w-full space-y-4 flex flex-col justify-center">
+            <div className="w-full space-y-2 flex flex-col justify-center">
               <div className="space-y-2">
-                <Label htmlFor="amount" className="text-xs font-semibold">
-                  Enter Amount
-                </Label>
-                <Input id="amount" placeholder="Enter Amount" />
+                <MaterialInput id="amount" placeholder="Enter Amount" />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <Label htmlFor="payment-date" className="text-xs">
                     Payment Date
                   </Label>
-                  <Popover>
+                  {/* <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         id="payment-date"
@@ -196,10 +192,12 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
                         initialFocus
                       />
                     </PopoverContent>
-                  </Popover>
+                  </Popover> */}
+                  <CustomDatePicker />
+
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <Label htmlFor="payment-mode" className="text-xs">
                     Payment Mode*
                   </Label>
@@ -220,14 +218,11 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="reference-id" className="text-xs">
-                  Reference ID
-                </Label>
-                <Input id="reference-id" placeholder="Reference ID" />
+              <div className="space-y-1">
+                <MaterialInput id="reference-id" placeholder="Reference ID" />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="account" className="text-xs">
                   Choose Account in which you have transferred
                 </Label>
@@ -275,30 +270,30 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
             </div>
           )}
           {
-                createPayment && (
-                  <div className="flex flex-col items-center text-center gap-4">
-                    <div className="rounded-full bg-[#F32100] p-4 w-fit">
-                      <FaCheck className="h-8 w-8 text-white" />
-                    </div>
-                    <div className="space-y-2">
-                      <h2 className="text-[#F32100] text-xl font-semibold">
-                        Topup Wallet transaction has been created successfully
-                      </h2>
-                      <DialogDescription className="text-sm text-gray-600">
-                        Vakilgiri Team is currently reviewing your transaction.
-                        <br />
-                        Amount will be added in your Wallet once approved.
-                      </DialogDescription>
-                    </div>
-                    <Button
-                      onClick={() => onClose()}
-                      className="bg-[#F32100] hover:bg-[#F32100]/90 text-white min-w-[120px]"
-                    >
-                      Close
-                    </Button>
-                  </div>
-                )
-              }
+            createPayment && (
+              <div className="flex flex-col items-center text-center gap-4">
+                <div className="rounded-full bg-[#F32100] p-4 w-fit">
+                  <FaCheck className="h-8 w-8 text-white" />
+                </div>
+                <div className="space-y-2">
+                  <h2 className="text-[#F32100] text-xl font-semibold">
+                    Topup Wallet transaction has been created successfully
+                  </h2>
+                  <DialogDescription className="text-sm text-gray-600">
+                    Vakilgiri Team is currently reviewing your transaction.
+                    <br />
+                    Amount will be added in your Wallet once approved.
+                  </DialogDescription>
+                </div>
+                <Button
+                  onClick={() => onClose()}
+                  className="bg-[#F32100] hover:bg-[#F32100]/90 text-white min-w-[120px]"
+                >
+                  Close
+                </Button>
+              </div>
+            )
+          }
         </RadioGroup>
       </div>
     </DialogContent>

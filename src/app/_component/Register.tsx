@@ -26,6 +26,7 @@ import { z } from "zod"
 import { OtpVerifyForm } from './OtpVerify'
 import { RegisterProps } from '../_types'
 import { RegisterformSchema } from '../_types/zodSchema'
+import CustomDatePicker from '@/components/date-picker/CustomDatePicker'
 
 
 
@@ -148,7 +149,7 @@ export default function Register({ alreadyLogin }: RegisterProps) {
             name="birthdate"
             render={({ field }) => (
               <FormItem>
-                <Popover>
+                {/* <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -174,7 +175,8 @@ export default function Register({ alreadyLogin }: RegisterProps) {
                       initialFocus
                     />
                   </PopoverContent>
-                </Popover>
+                </Popover> */}
+                <CustomDatePicker />
                 <FormMessage />
               </FormItem>
             )}

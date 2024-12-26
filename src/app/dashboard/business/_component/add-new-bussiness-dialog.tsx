@@ -31,6 +31,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { MaterialInput } from "@/components/material-input";
 import CustomSelect from "@/components/custom-select";
 import { AxiosError } from "axios";
+import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
 
 const states = [
   { key: "Arunachal_Pradesh", name: "Arunachal Pradesh" },
@@ -207,7 +208,7 @@ const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
                 name="business_reg_date"
                 render={({ field, fieldState: { error } }) => (
                   <div>
-                    <Popover>
+                    {/* <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
@@ -244,7 +245,8 @@ const AddNewBussinessDialog = ({onClose}:onCloseProp) => {
                           initialFocus
                         />
                       </PopoverContent>
-                    </Popover>
+                    </Popover> */}
+                    <CustomDatePicker />
                     <FormMessage/>
                   </div>
                 )}

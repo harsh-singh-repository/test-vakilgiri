@@ -113,7 +113,7 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
         </div>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1 mt-1">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 mt-1">
           <FormField
             control={form.control}
             name="PAN"
