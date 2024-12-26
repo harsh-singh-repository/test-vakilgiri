@@ -1,46 +1,46 @@
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-  } from "@/components/ui/accordion";
-  
-  
-  import { format } from "date-fns";
-  import {
-    CalendarIcon,
-    PlusCircle,
-    X,
-    //  X
-  } from "lucide-react";
-  
-  import { useForm } from "react-hook-form";
-  import * as z from "zod";
-  import { zodResolver } from "@hookform/resolvers/zod";
-  
-  import { cn } from "@/lib/utils";
-  import { Calendar } from "@/components/ui/calendar";
-  import { Form, FormControl, FormField } from "@/components/ui/form";
-  import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select";
-  import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-  } from "@/components/ui/popover";
-  import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-  import { Button } from "@/components/ui/button";
-  // import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+
+import { format } from "date-fns";
+import {
+  CalendarIcon,
+  PlusCircle,
+  X,
+  //  X
+} from "lucide-react";
+
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { Form, FormControl, FormField } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+// import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 //   import { useState } from "react";
 //   import { toast } from "sonner";
 //   import { BusinessDiscussion } from "../../_types";
-  
+
 import { MaterialInput } from "@/components/material-input";
 import { ReminderDiscussionSchema, reminderReminderSchema } from "./types/zodSchema";
 import { useGetReminderById } from "@/hooks/reminder/manage-reminder";
@@ -53,7 +53,7 @@ import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
   
 //   const formatDate = (isoString: string) => {
 //     const date = new Date(isoString);
-  
+
 //     // Options for formatting
 //     const options: Intl.DateTimeFormatOptions = {
 //       month: "short", // 'Nov'
@@ -63,63 +63,63 @@ import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
 //       minute: "2-digit", // '43'
 //       hour12: true, // 'AM/PM' format
 //     };
-  
+
 //     return date.toLocaleString("en-US", options);
 //   };
-  
+
 //   function formatCreatedAtDate(dateString: string): string {
 //     const date = new Date(dateString);
-  
+
 //     const day = String(date.getDate()).padStart(2, '0');
 //     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
 //     const year = date.getFullYear();
-  
+
 //     let hours = date.getHours();
 //     const minutes = String(date.getMinutes()).padStart(2, '0');
 //     const ampm = hours >= 12 ? 'pm' : 'am';
-    
+  
 //     hours = hours % 12 || 12; // Convert 24-hour time to 12-hour format
 //     const formattedHours = String(hours).padStart(2, '0');
-  
+
 //     return `${day}-${month}-${year}, ${formattedHours}:${minutes} ${ampm}`;
 //   }
-  
-  export const StackReminderDialog = ({
-    onClose,
-    openDialogId,
-  }: StackExchangeDialogProp) => {
-    // const [date, setDate] = React.useState<Date>()
-  
-    // const queryClient = useQueryClient();
-  
-    const discussionForm = useForm<z.infer<typeof ReminderDiscussionSchema>>({
-      resolver: zodResolver(ReminderDiscussionSchema),
-      defaultValues: {
-        discussion: "",
-      },
-    });
 
-    const {data} = useGetReminderById(openDialogId);
-    console.log("Remidner data",data);
-  
-    // const formMethods = useForm({
-    //   defaultValues: {
-    //     managersId: [] as string[], // Array to store selected manager IDs
-    //   },
-    // });
-  
-    const reminderForm = useForm<z.infer<typeof reminderReminderSchema>>({
-      resolver: zodResolver(reminderReminderSchema),
-      defaultValues: {
-        reminderType: "Call",
-        dueDate: "",
-        subject: "",
-        body: "",
-      },
-    });
+export const StackReminderDialog = ({
+  onClose,
+  openDialogId,
+}: StackExchangeDialogProp) => {
+  // const [date, setDate] = React.useState<Date>()
 
-  
-    async function onDiscussionSubmit(values: z.infer<typeof ReminderDiscussionSchema>) {
+  // const queryClient = useQueryClient();
+
+  const discussionForm = useForm<z.infer<typeof ReminderDiscussionSchema>>({
+    resolver: zodResolver(ReminderDiscussionSchema),
+    defaultValues: {
+      discussion: "",
+    },
+  });
+
+  const {data} = useGetReminderById(openDialogId);
+  console.log("Remidner data",data);
+
+  // const formMethods = useForm({
+  //   defaultValues: {
+  //     managersId: [] as string[], // Array to store selected manager IDs
+  //   },
+  // });
+
+  const reminderForm = useForm<z.infer<typeof reminderReminderSchema>>({
+    resolver: zodResolver(reminderReminderSchema),
+    defaultValues: {
+      reminderType: "Call",
+      dueDate: "",
+      subject: "",
+      body: "",
+    },
+  });
+
+
+  async function onDiscussionSubmit(values: z.infer<typeof ReminderDiscussionSchema>) {
 
       console.log(values);
     }

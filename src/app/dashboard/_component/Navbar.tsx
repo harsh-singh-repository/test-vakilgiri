@@ -1,13 +1,12 @@
 'use client'
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+// import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import Image from "next/image";
 import { CiCirclePlus, CiMenuBurger } from "react-icons/ci";
-import { FaCirclePlus } from "react-icons/fa6";
-import { TbUserSquare } from "react-icons/tb";
-import { FaRegCircleUser } from "react-icons/fa6";
+// import { RxAvatar } from "react-icons/rx";
 import logo from "../../assets/logo.png";
 import { DialogDemo } from "./WalletBalanceDialog";
+import { FaRegCircleUser } from "react-icons/fa6";
 import { useState } from "react";
 import {
   Popover,
@@ -16,18 +15,26 @@ import {
 } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Modal from "@/components/model/custom-modal";
+import { TbUserSquare } from "react-icons/tb";
 
 const Navbar = () => {
-  const [open, setOpen] = useState<boolean>(false);
+  // const [open, setOpen] = useState<boolean>(false);
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
 
   const handleDashboardClick = () => {
     setPopoverOpen(false);
   };
+
+     
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <div className="w-full p-3 sticky top-0 bg-white shadow-lg border-black flex items-center justify-between h-12 z-50">
+    // <Dialog open={open} onOpenChange={setOpen}>
+      <div className="w-full sticky top-0 bg-white shadow-lg p-2 border-black flex items-center justify-between h-16 z-50">
         <div className="flex justify-center gap-2 items-center">
           <SidebarTrigger>
             <CiMenuBurger />
@@ -41,10 +48,12 @@ const Navbar = () => {
               <span className="text-[9px] text-[#F20101] font-medium">Wallet Balance</span>
               <span className="text-[14px] font-medium">&#8377; 0.00</span>
             </div>
-            <DialogTrigger>
-              <FaCirclePlus size={"20"} className="text-[#F20101] text-bold" />
-            </DialogTrigger>
-            <DialogDemo onClose={() => setOpen(false)} />
+            {/* <DialogTrigger> */}
+              <CiCirclePlus size={"20"} className="text-[#F20101] cursor-pointer" onClick={openModal}/>
+            {/* </DialogTrigger> */}
+            <Modal isOpen={isModalOpen} onClose={closeModal} className="w-[440px]"> 
+               <DialogDemo onClose={closeModal}/>
+            </Modal>
           </div>
           <div>
             <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
@@ -84,9 +93,8 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </Dialog>
+    // </Dialog>
   );
 };
 
 export default Navbar;
-

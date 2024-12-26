@@ -9,7 +9,6 @@ import { Category, CategoryResponse, ServiceResponse, Services } from "./types";
 import AddService from "./_components/serviceForm";
 import { FormModal } from './_components/formModal';
 import { Plus } from "lucide-react";
-
 async function getData(): Promise<Services[]> {
   const session = await getSession();
   if (!session?.user?.accessToken) {
@@ -133,15 +132,15 @@ export default function DemoPage() {
     };
   }, [showAddServices]);
   return (
-    <div className="p-3 h-full">
-      <div className="flex flex-wrap items-center gap-2 ml-4 mt-2 mb-2">
-        <h1 className="text-2xl text-blue-950 font-bold font-poppins">Services</h1>
+    <div className="h-fit p-2">
+      <div className="flex flex-wrap items-center gap-2 mt-2 mb-1">
+        <div className="flex justify-center items-center"><h1 className="text-xl text-blue-950 font-bold font-poppins ml-2">Services</h1></div>
         <div
-          className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1"
+          className="bg-[#f21300] text-white max-h-fit max-w-fit px-0 py-1 rounded-md cursor-pointer"
           // title="Add"
           onClick={() => setShowAddServices(true)}
         >
-            <Plus strokeWidth={"5"}/>
+            <Plus strokeWidth={"5"} height={16}/>
         </div>
       </div>
 
@@ -151,11 +150,11 @@ export default function DemoPage() {
         </FormModal>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 h-[100%]">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-2 h-[100%]">
         <div className="col-span-5">
           <ServiceTable columns={columns(handleToggle, setFetchagain)} data={data} />
         </div>
-        <div className="col-span-2 mr-2">
+        <div className="col-span-2">
           <ServiceTable columns={categoryColumn(handleFetch)} data={categoryData} />
         </div>
       </div>

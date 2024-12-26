@@ -108,7 +108,7 @@ const ContentCreate: React.FC<CreateContentProps> = ({ data, close,contentfetch,
     }
   };
   return (
-    <div className="p-4">
+    <div className="p-4 w-80">
       <div className='flex justify-between'>
       <h1 className="font-poppins font-semibold text-xl">{
         selectedType.length>0 ? `Add ${selectedType}` : 'Add'

@@ -3,12 +3,6 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -77,14 +71,14 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <DialogContent className="sm:max-w-[425px]">
-      <DialogHeader className="flex flex-col justify-center items-center">
-        <DialogTitle className="flex justify-center items-center w-full relative">Add Wallet Balance <span><ImCross className="absolute h-4 w-4 text-[#f32100] right-3 top-0 cursor-pointer" onClick={onClose} /></span></DialogTitle>
+    <div className="p-3 w-full">
+      <div className="flex flex-col justify-center items-center">
+        <div className="flex justify-center items-center w-full relative">Add Wallet Balance <span><ImCross className="absolute h-4 w-4 text-[#f32100] right-3 top-0 cursor-pointer" onClick={onClose}/></span></div>
 
-        <DialogDescription className="text-[#F20101]">
+        <div className="text-[#F20101]">
           Topup your Wallet Balance
-        </DialogDescription>
-      </DialogHeader>
+        </div>
+      </div>
       <div className="flex flex-col gap-1">
         <span className="text-[#091747] text-xs font-semibold">
           Select payment Method
@@ -270,33 +264,33 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
             </div>
           )}
           {
-            createPayment && (
-              <div className="flex flex-col items-center text-center gap-4">
-                <div className="rounded-full bg-[#F32100] p-4 w-fit">
-                  <FaCheck className="h-8 w-8 text-white" />
-                </div>
-                <div className="space-y-2">
-                  <h2 className="text-[#F32100] text-xl font-semibold">
-                    Topup Wallet transaction has been created successfully
-                  </h2>
-                  <DialogDescription className="text-sm text-gray-600">
-                    Vakilgiri Team is currently reviewing your transaction.
-                    <br />
-                    Amount will be added in your Wallet once approved.
-                  </DialogDescription>
-                </div>
-                <Button
-                  onClick={() => onClose()}
-                  className="bg-[#F32100] hover:bg-[#F32100]/90 text-white min-w-[120px]"
-                >
-                  Close
-                </Button>
-              </div>
-            )
-          }
+                createPayment && (
+                  <div className="flex flex-col items-center text-center gap-4">
+                    <div className="rounded-full bg-[#F32100] p-4 w-fit">
+                      <FaCheck className="h-8 w-8 text-white" />
+                    </div>
+                    <div className="space-y-2">
+                      <h2 className="text-[#F32100] text-xl font-semibold">
+                        Topup Wallet transaction has been created successfully
+                      </h2>
+                      <div className="text-sm text-gray-600">
+                        Vakilgiri Team is currently reviewing your transaction.
+                        <br />
+                        Amount will be added in your Wallet once approved.
+                      </div>
+                    </div>
+                    <Button
+                      onClick={() => onClose()}
+                      className="bg-[#F32100] hover:bg-[#F32100]/90 text-white min-w-[120px]"
+                    >
+                      Close
+                    </Button>
+                  </div>
+                )
+              }
         </RadioGroup>
       </div>
-    </DialogContent>
+    </div>
   );
 }
 

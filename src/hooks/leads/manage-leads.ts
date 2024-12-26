@@ -53,7 +53,7 @@ export const useGetLeadsDisscussion = (id:string) =>{
 
 export const useRemoveLeadManager = (id: string) => {
     return useMutation({
-        mutationFn: (managerId: { managerId: string }) => leadServices.removeManager(id, managerId.managerId),
+        mutationFn: (managerId: string) => leadServices.removeManager(id, managerId),
     });
 };
 

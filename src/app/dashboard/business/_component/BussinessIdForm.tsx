@@ -218,7 +218,7 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
                     control={form.control}
                     name="businessName"
                     render={({ field }) => (
-                      <FormItem>
+                      <div>
                         <div className="flex gap-3 items-center">
                           <FormLabel className="text-[13px] w-[6.75rem]">
                             Business Name
@@ -230,7 +230,7 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
                             />
                           </FormControl>
                         </div>
-                      </FormItem>
+                      </div>
                     )}
                   />
                   {/* <div className="flex gap-3 items-center"> */}

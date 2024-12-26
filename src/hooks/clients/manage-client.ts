@@ -92,6 +92,13 @@ export const useDeleteClientDiscussion = () => {
     })
 };
 
+
+export const useAddClientManager = (id:string) => {
+    return useMutation({
+        mutationFn:(managersId:{managersId: string[]})=> clientService.assignManger(id,managersId),
+    });
+};
+
 export const useEditClient = (id:string | string [] | undefined) => {
     // const queryClient = useQueryClient();
     // const toast = useCustomToast();

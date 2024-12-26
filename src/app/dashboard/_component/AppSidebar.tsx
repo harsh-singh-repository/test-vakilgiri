@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import {
   BriefcaseBusiness,
+  CreditCard,
   // ChevronRightIcon,
   IndianRupee,
   Landmark,
@@ -79,10 +80,11 @@ const items = [
     icon: Landmark,
     classname: "",
     children: [
-      { title: "Invoices", url: "/dashboard/invoices", icon: MdEditDocument, classname: "" },
+      { title: "Estimates", url: "/dashboard/estimates", icon: MdEditDocument, classname: "" },
       { title: "Payments", url: "/dashboard/payments", icon: IndianRupee, classname: "" },
-      { title: "Refund", url: "/dashboard/refund", icon: GiSmartphone, classname: "" },
+      { title: "Refunds", url: "/dashboard/refunds", icon: GiSmartphone, classname: "" },
       { title: "Subscriptions", url: "/dashboard/subscriptions", icon: GrPowerReset, classname: "" },
+      { title: "Transaction", url: "/dashboard/transaction", icon: CreditCard, classname: "" },
     ]
   },
   {
@@ -128,13 +130,13 @@ export function AppSidebar() {
   // };
 
   return (
-    <div className='p-0'>
-      <Sidebar className='mt-5'>
-        <SidebarContent className=''>
+    <div className=''>
+      <Sidebar className=''>
+        <SidebarContent className='mt-5'>
           <SidebarGroup>
             <SidebarGroupLabel></SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className='mt-5'>
                 {items.map((item) => {
                   const isSubMenuOpen = item.children?.some((child) => child.url === pathname);
                   return (

@@ -9,8 +9,8 @@ import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
 import {
   CalendarIcon,
-  Plus,
   PlusCircle,
+  // PlusCircle,
   Trash2,
   X,
   //  X
@@ -45,6 +45,7 @@ import {
   useGetClientDisscussion,
   useDeleteClientDiscussion,
   useGetClientReminder,
+  useAddClientManager,
 } from "@/hooks/clients/manage-client";
 // import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
@@ -54,11 +55,12 @@ import { RxAvatar } from "react-icons/rx";
 import { clientDisscussionProps } from "../../_types";
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { ClientReminderType,  userType } from "@/app/dashboard/(sales)/leads/_types";
-import { useGetUsers } from "@/hooks/user/manage-user";
+import { ClientReminderType, userType } from "@/app/dashboard/(sales)/leads/_types";
+// import { useGetUsers } from "@/hooks/user/manage-user";
 import { useDeleteClientReminder } from "@/hooks/tickets/manage-ticket";
-import { useAddManager } from "@/hooks/business/manage-business";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { useAddManager } from "@/hooks/business/manage-business";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useGetUsers } from "@/hooks/user/manage-user";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -138,10 +140,10 @@ export const StackExchangeDialog = ({
   const { mutate: deleteDiscussion } = useDeleteClientDiscussion();
   const { data: assignedManager } = useGetUsers();
   const { mutate: deleteReminder } = useDeleteClientReminder();
-  const { mutate: addManager } = useAddManager(openDialogId);
+  const { mutate: addManager } = useAddClientManager(openDialogId);
 
   const queryClient = useQueryClient();
-  console.log("clientid id",data)
+  console.log("clientid id", data);
 
   const handleDeleteDisscussion = (id: string) => {
     console.log("discussion id", id);
@@ -292,7 +294,7 @@ export const StackExchangeDialog = ({
                                     className={cn(
                                       "min-h-[60px] border-gray-300",
                                       error &&
-                                      "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                        "border-red-500 focus:border-red-500 focus:ring-red-500"
                                     )}
                                     {...field}
                                   />
@@ -372,7 +374,7 @@ export const StackExchangeDialog = ({
                                       className={cn(
                                         "bg-white border-gray-300",
                                         error &&
-                                        "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                          "border-red-500 focus:border-red-500 focus:ring-red-500"
                                       )}
                                     >
                                       <SelectValue placeholder="Select reminder type" />
@@ -406,9 +408,9 @@ export const StackExchangeDialog = ({
                                         className={cn(
                                           "w-full justify-start text-left font-normal bg-white border-gray-300",
                                           !field.value &&
-                                          "text-muted-foreground",
+                                            "text-muted-foreground",
                                           error &&
-                                          "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                            "border-red-500 focus:border-red-500 focus:ring-red-500"
                                         )}
                                       >
                                         <CalendarIcon
@@ -417,9 +419,9 @@ export const StackExchangeDialog = ({
                                         />
                                         {field.value
                                           ? format(
-                                            new Date(field.value),
-                                            "dd-MM-yyyy"
-                                          )
+                                              new Date(field.value),
+                                              "dd-MM-yyyy"
+                                            )
                                           : "Select date"}
                                       </Button>
                                     </FormControl>
@@ -460,7 +462,7 @@ export const StackExchangeDialog = ({
                                   className={cn(
                                     "bg-white border-gray-300",
                                     error &&
-                                    "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                      "border-red-500 focus:border-red-500 focus:ring-red-500"
                                   )}
                                   {...field}
                                 />
@@ -480,7 +482,7 @@ export const StackExchangeDialog = ({
                                   className={cn(
                                     "min-h-[100px] bg-white border-gray-300",
                                     error &&
-                                    "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                      "border-red-500 focus:border-red-500 focus:ring-red-500"
                                   )}
                                   {...field}
                                 />
@@ -563,24 +565,87 @@ export const StackExchangeDialog = ({
         </div>
         <div className="space-y-2 bg-[#ededed] rounded-md max-h-fit">
           <div className="rounded-lg px-2 py-1">
-            <div className="justify-between flex px-1">
-              <h3 className="font-semibold mb-1 text-[13px] text-[#091747]">
-                Assigned Users
+            <div className="justify-between flex px-1 py-1">
+              <h3 className="font-semibold mb-3 text-[13px] text-[#091747]">
+                Assigned Manager
               </h3>
-              <X onClick={onClose} strokeWidth={"3"} className="text-[#f21300] cursor-pointer" />
+              <X
+                onClick={onClose}
+                strokeWidth={"5"}
+                className="text-[#f21300] cursor-pointer"
+              />
             </div>
             <div className="flex items-center gap-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="/placeholder.svg" />
-                <AvatarFallback>PV</AvatarFallback>
-              </Avatar>
-              <Button
-                size="icon"
-                variant="default"
-                className="h-8 w-8 bg-transparent text-[#f21300] hover:bg-transparent"
-              >
-                <Plus className="h-5 w-5" />
-              </Button>
+              {/* {data && (
+                      <div className="flex">
+                        {data?.manager?.map(
+                          (data: managerDetails, index: number) => (
+                            <div className="" key={index}>
+                              <RxAvatar size={"30"} />
+                            </div>
+                          )
+                        )}
+                      </div>
+                    )} */}
+              <Popover>
+                <PopoverTrigger>
+                  <div className="text-[#f21300]">
+                    <PlusCircle/>
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent>
+                  {assignedManager && (
+                    <form onSubmit={formMethods.handleSubmit(handleFormSubmit)}>
+                      <div>
+                        {assignedManager
+                          .filter(
+                            (manager: userType) =>
+                              manager.userRoles === "Staff_Manager"
+                          ) // Filter the managers
+                          .map((manager: userType, index: number) => (
+                            <div
+                              key={index}
+                              className="flex items-center gap-2"
+                            >
+                              <Controller
+                                name="managersId"
+                                control={formMethods.control}
+                                render={({ field: { value, onChange } }) => (
+                                  <input
+                                    type="checkbox"
+                                    checked={value?.includes(manager.id)}
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        // Add manager ID to the array
+                                        onChange([...value, manager.id]);
+                                      } else {
+                                        // Remove manager ID from the array
+                                        onChange(
+                                          value.filter(
+                                            (id: string) => id !== manager.id
+                                          )
+                                        );
+                                      }
+                                    }}
+                                  />
+                                )}
+                              />
+                              <span className="text-[12px] text-[#091747] font-semibold">
+                                {manager.firstName}
+                              </span>
+                            </div>
+                          ))}
+                      </div>
+                      <button
+                        type="submit"
+                        className="btn btn-primary mt-2 bg-[#f21300] px-2 py-1 rounded-md text-[10px] text-white"
+                      >
+                        Assign
+                      </button>
+                    </form>
+                  )}
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
           <div className="rounded-lg px-2 py-2">

@@ -1,6 +1,8 @@
 // THIS IS EXMAPLE
-import { AddFileType, BussinessDiscussionType, BussinessReminderTypes, CreateBussiness, editBussinessDetails } from '../../types';
+import axios from 'axios';
+import {AddFileType, BussinessDiscussionType, BussinessReminderTypes, CreateBussiness, editBussinessDetails } from '../../types';
 import axiosInstance from '@/lib/axiosInstance';
+import { getSession } from 'next-auth/react';
 
 const BUSINESS_API = {
     CREATE: '/business',
@@ -49,8 +51,18 @@ export const bussinessService = {
     },
 
     AddFile: async (addFile:AddFileType) => {
-        return await axiosInstance.post(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.ADD_FILE}`, addFile);
+        const session = await getSession();
+        const token = session?.user.accessToken;
+        return await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.ADD_FILE}`,
+            addFile,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Authorization":`Bearer ${token}`,
+                },
+            }
+        );
     },
 
     getBussinessDisscussion: async (id:string) => {

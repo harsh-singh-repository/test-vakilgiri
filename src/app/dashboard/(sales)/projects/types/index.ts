@@ -1,0 +1,71 @@
+export type Project = {
+    id: string;
+    businessId: string;
+    cancellationReason: string | null;
+    cancelledById: string | null;
+    cancelledOn: string | null;
+    holdReason: string | null;
+    holdedById: string | null;
+    holdedOn: string | null;
+    parentProjectId: string | null;
+    professionalFees: number;
+    projectBaseQuotation: number;
+    projectContactPersonId: string;
+    projectDateDue: string | null;
+    projectDateStart: string | null;
+    projectDescription: string;
+    projectDiscount: number;
+    projectEndDate: string | null;
+    projectGovtFees: number | null;
+    projectModuleDescription: string;
+    projectModuleFee: number;
+    projectState: string;
+    projectStatus: string;
+    projectTaxAmount: number;
+    projectType: string;
+    startedById: string | null;
+    creatorId: string;
+    modifiedAt: string;
+    createdAt: string;
+    slug: string | null;
+    isDisabled: boolean;
+    projectServiceId: string;
+    projectService: {
+        id: string;
+        name: string;
+        category_id: string;
+        icon_url: string;
+        description: string;
+        working_days: string;
+        status: string;
+        createdAt: string;
+        modifiedAt: string;
+        creatorId: string;
+    };
+    projectContactPerson: {
+        id: string;
+        fullName: string | null;
+        firstName: string;
+        lastName: string;
+        email: string;
+        mobileNumber: string;
+    };
+    code:string;
+};
+
+export type CreateProjectData = {
+    business_id: string;
+    contact_person_id: string;
+    state: string;
+    service_id: string;
+    project_description: string;
+    project_module_description: string;
+    state_wise_fee: number;
+    promoter_fees: number;
+    professional_fee_discount: number;
+    service_addons?: string[];
+    relatedModule?: Array<{
+        module_id: string;
+        module_discount: number;
+    }>;
+};

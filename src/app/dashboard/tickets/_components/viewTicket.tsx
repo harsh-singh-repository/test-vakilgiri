@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { getSession } from "next-auth/react";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -75,6 +75,16 @@ interface TicketReply {
   };
   replyFile: TicketReplyFile[];
 }
+type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  emailStatus: string;
+  panStatus: string | null;
+  userRoles: string;
+  kycStatus: string;
+};
 
 const ViewTicket: React.FC<ViewTicketProps> = ({
   ticket,
@@ -86,10 +96,35 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
   const [data,setData]=useState<Ticket>(ticket);
   const [replies, setReplies] = useState<TicketReply[]>([]);
   const[replyfetchagain,setReplyfetchagain]=useState(false)
+  const [allUsers, setAllUsers] = useState<User[]>([]);
 
   const handleReplyFetchagain=()=>{
     setReplyfetchagain(true)
   }
+  const fetchAllUsers = async (): Promise<User[]> => {
+    const session = await getSession();
+    const token = session?.user.accessToken;
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.ok) {
+        const userData = await response.json();
+        console.log(userData.data)
+        return userData.data; // Return the fetched user data
+      } else {
+        console.error("Failed to fetch users");
+        return []; // Return an empty array on failure
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      return []; // Return an empty array on error
+    }
+  };
   const handleSave = async () => {
     console.log("Selected Status:", status);
     const formData = new FormData();
@@ -150,21 +185,92 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
       console.error("Failed to fetch ticket replies:", error);
     }
   };
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+
+  const toggleDropdown = () => {
+    setIsDropdownVisible((prev) => !prev);
+  };
+  const assignManagers = async () => {
+    const session = await getSession();
+    const token = session?.user.accessToken;
+
+    try {
+      for (const managerId of selectedUsers) {
+        console.log(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/${data.id}/manager`)
+        const response = await axios.patch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/${data.id}/manager`,
+          { managerId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(`Assigned manager ${managerId}:`, response.data);
+      }
+      toast.success("Managers assigned successfully!");
+    } catch (error) {
+      console.error("Failed to assign managers:", error);
+      toast.error("Failed to assign some or all managers. Please try again.");
+    } finally {
+      setSelectedUsers([])
+      setIsDropdownVisible(false); // Close the dropdown
+    }
+  };
+
+  const handleCheckboxChange = (userId: string) => {
+    setSelectedUsers((prevSelected) =>
+      prevSelected.includes(userId)
+        ? prevSelected.filter((id) => id !== userId) // Remove if already selected
+        : [...prevSelected, userId] // Add if not selected
+    );
+    // assignManagers();
+  };
 
   useEffect(() => {
+    console.log("fetching replies")
     const getReplies = async () => {
       const data = await fetchTicketReplies();
       setReplies(data);
     };
     getReplies();
     setReplyfetchagain(false)
+    console.log("fetching users")
+    const getAllUsers = async () => {
+      const data = await fetchAllUsers();
+      setAllUsers(data.filter((user) => user.userRoles === "Staff_Manager")); 
+    };
+    getAllUsers();
   }, [data.id,replyfetchagain]);
 
+  useEffect(() => {
+    console.log("Updated allUsers:", allUsers);
+    console.log(123)
+  }, [allUsers]);
   const sameCreatorTickets = useMemo(
     () => tickets.filter((tkt) => tkt.creatorId === data.creatorId),
     [tickets, data.creatorId]
   );
-  
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsDropdownVisible(false); // Close the dropdown when clicking outside
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const formatDate = (isoDate: string): string => {
     const date = new Date(isoDate);
   
@@ -285,9 +391,50 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
                 </div>
               </div>
               <div>
-                <div className="flex items-center justify-center w-6 h-6 rounded-full border border-dashed border-black text-[#f21300] font-bold cursor-pointer hover:bg-gray-200">
-                  +
+              <div className="relative">
+        {/* Trigger Button */}
+        <div
+          className="flex items-center justify-center w-6 h-6 rounded-full border border-dashed border-black text-[#f21300] font-bold cursor-pointer hover:bg-gray-200"
+          onClick={toggleDropdown}
+        >
+          +
+        </div>
+
+        {/* Dropdown Div */}
+        {isDropdownVisible && (
+          <div
+            ref={dropdownRef}
+            className="absolute top-8 left-3 w-64 bg-white border border-gray-300 shadow-lg rounded-md p-4"
+          >
+            <div className="max-h-48 overflow-y-auto">
+              {allUsers.map((user) => (
+                <div
+                  key={user.id}
+                  className="flex items-center gap-2 py-1 px-2 hover:bg-gray-100 rounded-md"
+                >
+                  <input
+                    type="checkbox"
+                    id={user.id}
+                    checked={selectedUsers.includes(user.id)}
+                    onChange={() => handleCheckboxChange(user.id)}
+                  />
+                  <label htmlFor={user.id} className="text-sm  cursor-pointer">
+                    {user.firstName} {user.lastName}
+                  </label>
                 </div>
+              ))}
+            </div>
+
+            {/* Confirmation Button */}
+            <button
+              className="mt-4 w-full bg-[#f23100] text-white py-1 rounded-md hover:bg-red-700"
+              onClick={assignManagers}
+            >
+              OK
+            </button>
+          </div>
+        )}
+      </div>
               </div>
             </div>
           </div>
