@@ -1,7 +1,7 @@
 import { MdPerson2, MdPeople } from "react-icons/md";
 import { FaExclamationCircle } from 'react-icons/fa';
 import { FaClock } from 'react-icons/fa';
-const ClientCard = () => {
+const ProjectCard = () => {
 
     const clientCardData = [
         {
@@ -60,4 +60,4 @@ const ClientCard = () => {
   )
 }
 
-export default ClientCard
+export default ProjectCard

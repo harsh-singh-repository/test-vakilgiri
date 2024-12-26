@@ -154,10 +154,10 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
       const value = parseFloat(e.target.value) || 0;
       setDiscount(value > baseQuotation ? baseQuotation : value);
     };
-    const [isSmallModalOpen, setIsSmallModalOpen] = useState(false);
+    // const [isSmallModalOpen, setIsSmallModalOpen] = useState(false);
 
-    const handleOpenSmallModal = () => setIsSmallModalOpen(true);
-    const handleCloseSmallModal = () => setIsSmallModalOpen(false);
+    // const handleOpenSmallModal = () => setIsSmallModalOpen(true);
+    // const handleCloseSmallModal = () => setIsSmallModalOpen(false);
   const firstStep=()=>{
     return (
       <div>
@@ -527,7 +527,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
   <p className="text-[#f21300] font-poppins text-sm">
     You are going to create a project. Amount will be deducted from your Wallet.
   </p>
-  <div className="text-blue-950 font-semibold text-lg">"Section-8 Registration"</div>
+  <div className="text-blue-950 font-semibold text-lg">Section-8 Registration</div>
   <div className="space-y-2">
     <button className="w-full bg-red-600 text-white py-2 rounded-md font-medium hover:bg-red-700"
     onClick={()=>setCurrentStep(4)}
