@@ -6,7 +6,8 @@ import { UserTypes } from '../../_types/types';
 import ActionButton from './actions';
 // import { CellAction } from './cell-action';
 
-export const columns: ColumnDef<UserTypes>[] = [
+
+export const columns = (setStaffEdit: React.Dispatch<React.SetStateAction<boolean>>) : ColumnDef<UserTypes>[] => [
   // {
     // id: 'select',
     // header: ({ table }) => (
@@ -127,7 +128,7 @@ export const columns: ColumnDef<UserTypes>[] = [
     header: 'Action',
     cell:()=>{
       return(
-         <ActionButton/>
+         <ActionButton setStaffEdit={setStaffEdit} />
       )
     }
   }

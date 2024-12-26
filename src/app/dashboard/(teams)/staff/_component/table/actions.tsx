@@ -1,27 +1,19 @@
 import { Button } from '@/components/ui/button';
-import React, {useState} from 'react'
+import React, {} from 'react'
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaPencilAlt } from 'react-icons/fa';
-import Modal from '@/components/model/custom-modal';
-import EditStaff from '../EditStaff';
 
+interface ActionProp {
+  setStaffEdit: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const ActionButton: React.FC = () => { 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-
+const ActionButton = ({setStaffEdit}: ActionProp) => { 
   return (
     <div className="flex justify-center items-center gap-1">
       <Button
-        className="bg-[#042559] text-white w-6 h-7 text-sm" onClick={openModal}>
+        className="bg-[#042559] text-white w-6 h-7 text-sm" onClick={()=>setStaffEdit(true)}>
         <FaPencilAlt/>
       </Button>
-      <Modal isOpen={isModalOpen} onClose={closeModal} className="p-4"> 
-           <EditStaff onClose={closeModal}/>                 
-      </Modal>
       <Button className="bg-[#f21300] text-white w-6 h-7 text-sm">
         <RiDeleteBin6Line />
       </Button>

@@ -16,6 +16,8 @@ import {Oval} from "react-loader-spinner"
 import { useGetUsers } from "@/hooks/user/manage-user";
 // import CreateStaff from "./CreateStaff";
 import EditStaff from "./EditStaff";
+import Modal from "@/components/model/custom-modal";
+import CreateStaff from "./CreateStaff";
 
 // type ResponseData = {
 //   employee: Client[];
@@ -48,10 +50,10 @@ export default function StaffPage() {
   );
   // const [responseData, setResponseData] = useState<ResponseData | null>(null);
 
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // const openModal = () => setIsModalOpen(true);
-  // const closeModal = () => setIsModalOpen(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -92,12 +94,12 @@ export default function StaffPage() {
               className="w-full md:max-w-sm ml-auto bg-white"
               />
 
-              <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1" onClick={()=>setStaffEdit(true)}>
+              <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1" onClick={openModal}>
                 <Plus strokeWidth={"5"}/>
               </div>
-              {/* <Modal isOpen={isModalOpen} onClose={closeModal} className="p-4"> 
+              <Modal isOpen={isModalOpen} onClose={closeModal} className="p-4"> 
                  <CreateStaff onClose={closeModal}/>                 
-              </Modal> */}
+              </Modal>
 
           </div>
         </div> 
@@ -109,7 +111,7 @@ export default function StaffPage() {
           searchKey="search"
           searchValue={searchValue}
           pageNo={page}
-          columns={columns}
+          columns={columns(setStaffEdit)}
           totalUsers={staffUsers.length}
           data={staffUsers}
           pageCount={Math.ceil(staffUsers.length / pageLimit)}

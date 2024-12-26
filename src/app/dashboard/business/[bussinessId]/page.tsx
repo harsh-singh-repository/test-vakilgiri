@@ -60,7 +60,7 @@ const Page = () => {
                   Add File
                 </div>
                 <Modal isOpen={isAddFileModalOpen} onClose={closeAddFileModal}>
-                  <AddFile onClose={closeAddFileModal} openDialogId={paramsId}/>
+                   <AddFile onClose={closeAddFileModal} openDialogId={paramsId}/>
                 </Modal>
 
                 <div

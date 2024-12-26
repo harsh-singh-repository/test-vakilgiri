@@ -1,6 +1,6 @@
 "use client"
-// import { useGetBussiness } from "@/hooks/business/manage-business";
-// import { useGetClients } from "@/hooks/clients/manage-client";
+import { useGetBussiness } from "@/hooks/business/manage-business";
+import { useGetClients } from "@/hooks/clients/manage-client";
 import { useGetLeads } from "@/hooks/leads/manage-leads";
 import { RxAvatar } from "react-icons/rx";
 import { LeadGetType } from "../_types/options";
@@ -92,9 +92,9 @@ const ClientShowcase = () => {
   //   },
   // ];
 
-  // const {data} = useGetClients();
+  const {data} = useGetClients();
   const {data:leadData} = useGetLeads();
-  // const {data:bussinessData} = useGetBussiness();
+  const {data:bussinessData} = useGetBussiness();
 
   const unassignedLeads = leadData?.filter((lead:LeadGetType) => 
     lead.assigned.length === 0
@@ -102,7 +102,8 @@ const ClientShowcase = () => {
   // const unassignedBussiness = leadData?.filter((lead:LeadGetType) => lead.assigned === null) || [];
 
   console.log(leadData);
-  console.log(unassignedLeads);
+  console.log(data);
+  console.log(bussinessData);
 
 
   return (
@@ -114,7 +115,7 @@ const ClientShowcase = () => {
           <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
           Pending Reminder
           </span>
-          <div className="flex flex-col gap-2 mt-2 overflow-y-auto h-[350px]">
+          <div className="flex flex-col gap-2 mt-2 overflow-y-auto h-[350px] custom-scrollbar">
             {leadData?.map((leads:LeadGetType, index:number) => (
               <div
                 key={index}

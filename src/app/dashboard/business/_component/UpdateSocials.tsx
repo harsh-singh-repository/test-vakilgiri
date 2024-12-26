@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Facebook, Globe, Instagram, Twitter } from 'lucide-react'
-import { BussinessIdSettingsPageProps } from "../_types"
+// import { BussinessIdSettingsPageProps } from "../_types"
 
 const formSchema = z.object({
   website: z.string().url({ message: "Please enter a valid URL" }).optional(),
@@ -22,9 +22,9 @@ const formSchema = z.object({
   instagram: z.string().url({ message: "Please enter a valid Instagram URL" }).optional(),
 })
 
-export default function UpdateSocials({bussinessId}:BussinessIdSettingsPageProps) {
+export default function UpdateSocials() {
   
-    console.log(bussinessId);
+    // console.log(bussinessId);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,7 +42,7 @@ export default function UpdateSocials({bussinessId}:BussinessIdSettingsPageProps
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full max-w-4xl">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full max-w-4xl mt-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -51,7 +51,7 @@ export default function UpdateSocials({bussinessId}:BussinessIdSettingsPageProps
               <FormItem>
                 <FormControl>
                   <div className="flex items-center">
-                    <Globe className="mr-2 h-5 w-5 text-red-500 flex-shrink-0" />
+                    <Globe className="mr-2 h-5 w-5 text-[#f21300] flex-shrink-0" />
                     <Input 
                       placeholder="www.abc.com" 
                       {...field} 
@@ -70,7 +70,7 @@ export default function UpdateSocials({bussinessId}:BussinessIdSettingsPageProps
               <FormItem>
                 <FormControl>
                   <div className="flex items-center">
-                    <Facebook className="mr-2 h-5 w-5 text-red-500 flex-shrink-0" />
+                    <Facebook className="mr-2 h-5 w-5 text-[#f21300] flex-shrink-0" />
                     <Input 
                       placeholder="Facebook Link" 
                       {...field} 
@@ -89,7 +89,7 @@ export default function UpdateSocials({bussinessId}:BussinessIdSettingsPageProps
               <FormItem>
                 <FormControl>
                   <div className="flex items-center">
-                    <Twitter className="mr-2 h-5 w-5 text-red-500 flex-shrink-0" />
+                    <Twitter className="mr-2 h-5 w-5 text-[#f21300] flex-shrink-0" />
                     <Input 
                       placeholder="www.twitter...." 
                       {...field} 
@@ -108,7 +108,7 @@ export default function UpdateSocials({bussinessId}:BussinessIdSettingsPageProps
               <FormItem>
                 <FormControl>
                   <div className="flex items-center">
-                    <Instagram className="mr-2 h-5 w-5 text-red-500 flex-shrink-0" />
+                    <Instagram className="mr-2 h-5 w-5 text-[#f21300] flex-shrink-0" />
                     <Input 
                       placeholder="Instagram Link" 
                       {...field} 
@@ -122,7 +122,7 @@ export default function UpdateSocials({bussinessId}:BussinessIdSettingsPageProps
           />
         </div>
         <div className="flex justify-end">
-          <Button type="submit" className="bg-red-500 hover:bg-red-600 text-white">
+          <Button type="submit" className="bg-[#f21300] hover:bg-red-600 text-white">
             Update
           </Button>
         </div>

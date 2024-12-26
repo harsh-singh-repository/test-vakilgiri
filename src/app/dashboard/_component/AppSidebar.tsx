@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import {
   BriefcaseBusiness,
+  CreditCard,
   // ChevronRightIcon,
   IndianRupee,
   Landmark,
@@ -83,6 +84,7 @@ const items = [
       { title: "Payments", url: "/dashboard/payments", icon: IndianRupee, classname: "" },
       { title: "Refunds", url: "/dashboard/refunds", icon: GiSmartphone, classname: "" },
       { title: "Subscriptions", url: "/dashboard/subscriptions", icon: GrPowerReset, classname: "" },
+      { title: "Transaction", url: "/dashboard/transaction", icon: CreditCard, classname: "" },
     ]
   },
   {

@@ -14,7 +14,6 @@
 //   ChartTooltip,
 //   ChartTooltipContent,
 // } from "@/components/ui/chart"
-import { Briefcase, CircleDollarSign, Globe, CopyrightIcon as Trademark, Heart, Calculator, Code } from 'lucide-react'
 import { ServiceCard } from "./ServiceCard"
 import { Card } from '@/components/ui/card';
 
@@ -50,43 +49,48 @@ const ServiceSection = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-2">
         <ServiceCard
           title="Start Business"
-          icon={Briefcase}
           href="/services/start-business"
+          imageUrl='https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2F59d8ae81b6141a70c4898737e58d02c0.cdn.bubble.io%2Ff1732364184745x751805092253727400%2FStart-Business.png?w=48&h=48&auto=compress&dpr=1&fit=max'
         />
         <ServiceCard
           title="GST"
-          icon={CircleDollarSign}
-          href="/services/gst"
+          href="/services/start-business"
+          imageUrl='https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2F59d8ae81b6141a70c4898737e58d02c0.cdn.bubble.io%2Ff1732360343784x152571220951462000%2FGST.png?w=48&h=48&auto=compress&dpr=1&fit=max'
         />
         <ServiceCard
           title="ISO"
-          icon={Globe}
+          // icon={Globe}
           href="/services/iso"
+          imageUrl='https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2F59d8ae81b6141a70c4898737e58d02c0.cdn.bubble.io%2Ff1732360371207x167733889479616100%2FISO.png?w=48&h=48&auto=compress&dpr=1&fit=max'
         />
         <ServiceCard
           title="Trademark"
-          icon={Trademark}
+          // icon={Trademark}
           href="/services/trademark"
+          imageUrl='https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2F59d8ae81b6141a70c4898737e58d02c0.cdn.bubble.io%2Ff1732360464188x499657664978959040%2FTM.png?w=48&h=48&auto=compress&dpr=1&fit=max'
         />
         <ServiceCard
           title="FSSAI"
-          imageUrl="/images/fssai-logo.svg"
+          imageUrl="https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2F59d8ae81b6141a70c4898737e58d02c0.cdn.bubble.io%2Ff1732360485038x424319542194012900%2FFSSAI.png?w=48&h=48&auto=compress&dpr=1&fit=max"
           href="/services/fssai"
         />
         <ServiceCard
           title="NGO"
-          icon={Heart}
+          // icon={Heart}
           href="/services/ngo"
+          imageUrl='https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2F59d8ae81b6141a70c4898737e58d02c0.cdn.bubble.io%2Ff1732360590671x709035852987086800%2Fcooperative-socitey-1.png?w=48&h=48&auto=compress&dpr=1&fit=max'
         />
         <ServiceCard
           title="ITR & Returns"
-          icon={Calculator}
+          // icon={Calculator}
           href="/services/itr-returns"
+          imageUrl='https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2F59d8ae81b6141a70c4898737e58d02c0.cdn.bubble.io%2Ff1732364121031x306655555755355200%2FITR.png?w=48&h=48&auto=compress&dpr=1&fit=max'
         />
         <ServiceCard
           title="Web Development"
-          icon={Code}
+          // icon={Code}
           href="/services/web-development"
+          imageUrl='https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2F59d8ae81b6141a70c4898737e58d02c0.cdn.bubble.io%2Ff1732617439209x617629542788183600%2FFab%2520Icon.png?w=48&h=48&auto=compress&dpr=1&fit=max'
         />
       </div>
     </div>
