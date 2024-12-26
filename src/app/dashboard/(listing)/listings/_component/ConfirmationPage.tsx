@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import PartyPopper from "../../../../../../public/assets/wired-outline-1103-confetti-in-reveal.json"
 import Lottie from "lottie-react"
