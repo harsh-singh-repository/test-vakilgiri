@@ -1,7 +1,10 @@
 "use client"
+
 import { Button } from "@/components/ui/button";
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import PartyPopper from "@/assets/wired-outline-1103-confetti-in-reveal.json";
-import Lottie from "lottie-react"
 
 interface ConfirmationPageProp {
     setAddListing : React.Dispatch<React.SetStateAction<boolean>>
