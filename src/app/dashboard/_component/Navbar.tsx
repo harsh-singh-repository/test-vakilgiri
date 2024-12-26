@@ -3,11 +3,12 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import Image from "next/image";
 import { CiCirclePlus, CiMenuBurger } from "react-icons/ci";
+import { signOut } from "next-auth/react";
 // import { RxAvatar } from "react-icons/rx";
 import logo from "../../assets/logo.png";
 import { DialogDemo } from "./WalletBalanceDialog";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -17,13 +18,30 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Modal from "@/components/model/custom-modal";
 import { TbUserSquare } from "react-icons/tb";
+import { getSession } from 'next-auth/react';
+
+type SessionType = {
+  user: {
+    accessToken?: string;
+    lastName?: string;
+    firstname?:string,
+    email?: string;
+  };
+};
 
 const Navbar = () => {
   // const [open, setOpen] = useState<boolean>(false);
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
+  const [session, setSession] = useState<SessionType | null>(null);
 
   const handleDashboardClick = () => {
     setPopoverOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await signOut({
+      callbackUrl: "/", // Redirect to the desired page after logout
+    });
   };
 
      
@@ -32,6 +50,26 @@ const Navbar = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   
+  useEffect(() => {
+    // Fetch session details on component mount
+    const fetchSession = async () => {
+      const sessionData = await getSession();
+      if (sessionData?.user?.accessToken) {
+        setSession({
+          user: {
+            accessToken: sessionData.user.accessToken,
+            firstname:sessionData.user.firstName,
+            lastName: sessionData.user.lastName,
+            email: sessionData.user.email,
+          },
+        });
+      }
+      // console.log(sessionData);
+    };
+   
+    fetchSession();
+  }, []);
+ 
   return (
     // <Dialog open={open} onOpenChange={setOpen}>
       <div className="w-full sticky top-0 bg-white shadow-lg p-2 border-black flex items-center justify-between h-16 z-50">
@@ -65,10 +103,10 @@ const Navbar = () => {
                   <div className="w-full flex gap-1 items-start justify-start">
                     <TbUserSquare size={60} className="mt-2 text-slate-700 shadow-sm shadoe-slate-300" />
                     <div className="flex flex-col">
-                      <p className="text-[16px] font-bold text-[#F20101]">Nahar Singh</p>
+                      <p className="text-[16px] font-bold text-[#F20101]">{session?.user.firstname + " " + session?.user.lastName}</p>
                       <div className="flex items-center gap-1 m-0">
                         <span className="text-[#F20101] text-[13px] font-bold">[E]:</span>
-                        <p className="text-[13px] break-all font-medium">naharsingh151299@gmail.com</p>
+                        <p className="text-[13px] break-all font-medium">{session?.user.email}</p>
                       </div>
                       <div className="flex items-center gap-1 m-0">
                         <span className="text-[#F20101] text-[13px] font-bold">[P]:</span>
@@ -83,7 +121,7 @@ const Navbar = () => {
                     >
                       <Link href="/dashboard">Dashboard</Link>
                     </Button>
-                    <Button className="w-[150px] text-[15px] font-[600] bg-[#091747] hover:bg-[#F20101] text-white">
+                    <Button className="w-[150px] text-[15px] font-[600] bg-[#091747] hover:bg-[#F20101] text-white" onClick={handleLogout}>
                       Logout
                     </Button>
                   </div>
