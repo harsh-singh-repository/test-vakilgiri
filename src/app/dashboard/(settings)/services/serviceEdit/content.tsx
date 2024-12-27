@@ -6,7 +6,7 @@ import ContentDelete from './contentDelete';
 import ContentEdit from './contentEdit';
 import { FaPencilAlt } from 'react-icons/fa';
 import { FaTrashAlt } from 'react-icons/fa';
-interface ContentData {
+export interface ContentData {
   id: string;
   description: string;
   icon: string;
@@ -121,7 +121,7 @@ const Content: React.FC<ContentProps> = ({ contentfetch,setContentfetch, service
 
       return (
         <div key={item}>
-          <div className="bg-blue-950 text-white py-1 px-4 rounded-lg shadow-md mb-2 text-left">
+          <div className="bg-[#091747] text-white py-1 px-4 rounded-lg shadow-md mb-2 text-left">
             {item}
           </div>
           <div>
@@ -151,11 +151,11 @@ const Content: React.FC<ContentProps> = ({ contentfetch,setContentfetch, service
                     <p className="text-[12px]">{contentItem.priority}</p>
                   </div>
                   <div className="absolute bottom-1 right-1 p-0 m-0 flex justify-center space-x-2">
-  <button className="text-blue-950 w-4 h-4 flex items-center justify-center" onClick={()=>handleOpenModal1(contentItem.id)}>
+  <button className="text-[#091747] w-3 h-4 flex items-center justify-center" onClick={()=>handleOpenModal1(contentItem.id)}>
     <FaPencilAlt className="w-full h-full" />
   </button>
   
-  <button className="text-red-500 w-4 h-4 flex items-center justify-center" onClick={()=>handleOpenModal(contentItem.id)}>
+  <button className="text-[#f21300] w-3 h-4 flex items-center justify-center" onClick={()=>handleOpenModal(contentItem.id)}>
     <FaTrashAlt className="w-full h-full" />
   </button>
 </div>

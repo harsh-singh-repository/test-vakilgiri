@@ -43,7 +43,7 @@ export function ProjectTable<TData, TValue>({
   })
 
   return (
-    <ScrollArea className="p-2 w-full max-h-fit overflow-y-auto rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+    <ScrollArea className="mt-1 w-full max-h-fit overflow-y-auto rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
       <div className="rounded-md border bg-white mb-1">
         <Table>
           <TableHeader className="bg-blue-950 hover:bg-blue-950 text-white">

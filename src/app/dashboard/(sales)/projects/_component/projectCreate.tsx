@@ -23,13 +23,15 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProgressBar } from "./progressBar";
-import { FormModal } from "@/app/dashboard/tickets/_components/ticketFormModal";
 import CreateBusiness from "./createBusiness";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { debounce } from "lodash";
 import { AiOutlineBank, AiOutlineCheckCircle } from "react-icons/ai";
 import { SmallModal } from "@/app/dashboard/tickets/_components/smallModal";
+import { Services } from "@/app/dashboard/(settings)/services/types";
+import { getServices } from "@/app/dashboard/(settings)/services/page";
+import Modal from "@/components/model/custom-modal";
 
 interface Business {
   id: string;
@@ -86,6 +88,14 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
         setBusinessStorage(business)
         form.setValue("businessName", business.businessName);
   }
+  const [services, setServices] = useState<Services[]>([]);
+  useEffect(() => {
+    async function fetchData() {
+      const serviceData = await getServices();
+      setServices(serviceData)
+    }
+    fetchData();
+  }, []);
   useEffect(() => {
     const fetchBusinessData = debounce(async () => {
       if (!businessNameValue) {
@@ -149,11 +159,51 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
     const baseQuotation = governmentFee + modulesFee + professionalFees;
     const gstAmount = (baseQuotation - discount) * gstRate;
     const finalQuotation = baseQuotation - discount + gstAmount;
+    const states = [
+      "Andhra Pradesh",
+      "Arunachal Pradesh",
+      "Assam",
+      "Bihar",
+      "Chhattisgarh",
+      "Goa",
+      "Gujarat",
+      "Haryana",
+      "Himachal Pradesh",
+      "Jammu and Kashmir",
+      "Jharkhand",
+      "Karnataka",
+      "Kerala",
+      "Madhya Pradesh",
+      "Maharashtra",
+      "Manipur",
+      "Meghalaya",
+      "Mizoram",
+      "Nagaland",
+      "Odisha",
+      "Punjab",
+      "Rajasthan",
+      "Sikkim",
+      "Tamil Nadu",
+      "Telangana",
+      "Tripura",
+      "Uttarakhand",
+      "Uttar Pradesh",
+      "West Bengal",
+      "Andaman and Nicobar Islands",
+      "Chandigarh",
+      "Dadra and Nagar Haveli",
+      "Daman and Diu",
+      "Delhi",
+      "Lakshadweep",
+      "Puducherry"
+  ]
   
     const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = parseFloat(e.target.value) || 0;
       setDiscount(value > baseQuotation ? baseQuotation : value);
     };
+    const [selectedServiceId,setSelectedServiceId]=useState<string>("")
+    
     // const [isSmallModalOpen, setIsSmallModalOpen] = useState(false);
 
     // const handleOpenSmallModal = () => setIsSmallModalOpen(true);
@@ -227,9 +277,11 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
                         <SelectValue placeholder="Select State" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="state1">State 1</SelectItem>
-                        <SelectItem value="state2">State 2</SelectItem>
-                        <SelectItem value="state3">State 3</SelectItem>
+                        {
+                          states.map((state,index)=>{
+                            return <SelectItem value={state} key={index}>{state}</SelectItem>
+                          })
+                        }
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -274,14 +326,26 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
                     Select Service
                   </FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select 
+                      onValueChange={(value) => {
+                        field.onChange(value); // Update the form field value
+                        console.log("service id", value); // Log the selected service ID
+                        setSelectedServiceId(value)
+                      }} 
+                      value={field.value}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Service" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="service1">Service 1</SelectItem>
-                        <SelectItem value="service2">Service 2</SelectItem>
-                        <SelectItem value="service3">Service 3</SelectItem>
+                        {services.map((service, index) => (
+                          <SelectItem 
+                            key={index} 
+                            value={service.id}
+                          >
+                            {service.ServiceName}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -291,15 +355,15 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
             />
 
             {/* Submit Button */}
-            <Button type="submit" className="mt-4 w-full">
+            <Button type="submit" className="mt-4 w-full bg-[#f21300] hover:bg-red-600">
               Save & Continue
             </Button>
           </form>
         </Form>
         {isModalOpen && (
-          <FormModal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
             <CreateBusiness close={handleCloseModal} />
-          </FormModal>
+          </Modal>
         )}
       </div>
     )
@@ -413,7 +477,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
   }
   const thirdStep=()=>{
     return (
-      <div className="max-w-sm mx-auto bg-white rounded-lg text-xs">
+      <div className="max-w-fit mx-auto bg-white rounded-lg text-xs">
         <table className="w-full border-separate border-spacing-y-1 rounded-xl">
           <thead>
             <tr className="text-left text-white bg-blue-950 rounded-xl">
@@ -661,11 +725,11 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
     )
   }
   return (
-    <div className="grid grid-cols-3 rounded-md">
-      <div className="col-span-2 bg-gray-200 p-6 min-h-full w-full">
-        <ServiceInfo />
+    <div className="grid grid-cols-3 rounded-md w-full">
+      <div className="col-span-2 bg-gray-200 p-6 min-h-full">
+        <ServiceInfo id={selectedServiceId} name={(services.find((service) => service.id === selectedServiceId))?.ServiceName || ''}/>
       </div>
-      <div className="col-span-1 bg-white p-6">
+      <div className="col-span-1 bg-white p-6 min-h-[800px] w-full">
         <div className="relative flex items-center justify-center">
           {/* Centered Header */}
           <div className="text-center">

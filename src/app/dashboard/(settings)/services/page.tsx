@@ -9,7 +9,7 @@ import { Category, CategoryResponse, ServiceResponse, Services } from "./types";
 import AddService from "./_components/serviceForm";
 import { FormModal } from './_components/formModal';
 import { Plus } from "lucide-react";
-async function getData(): Promise<Services[]> {
+export async function getServices(): Promise<Services[]> {
   const session = await getSession();
   if (!session?.user?.accessToken) {
     throw new Error("No access token found in session");
@@ -112,7 +112,7 @@ export default function DemoPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const services = await getData();
+      const services = await getServices();
       const categories = await getCategories();
       setData(services);
       setCategoryData(categories);
