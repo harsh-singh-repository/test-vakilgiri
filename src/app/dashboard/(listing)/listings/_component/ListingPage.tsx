@@ -91,10 +91,10 @@ export default function ListingPage() {
           </Suspense>
 
           <div
-            className="bg-[#f21300] text-white p-2 rounded-md cursor-pointer"
+            className="bg-[#f21300] text-white p-1 rounded-md cursor-pointer"
             onClick={() => setAddListing(true)}
           >
-            <Plus className="h-6 w-6" />
+            <Plus strokeWidth={5} className="h-6 w-6" />
           </div>
         </div>
       </div>

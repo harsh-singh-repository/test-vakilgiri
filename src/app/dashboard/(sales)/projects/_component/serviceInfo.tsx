@@ -69,7 +69,7 @@ function ServiceInfo() {
             key={button}
             className={`px-4 py-2 text-sm font-medium rounded-md ${
               activeButton === button
-                ? "bg-red-500 text-white"
+                ? "bg-[#f32100] text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
             onClick={() => setActiveButton(button)}
