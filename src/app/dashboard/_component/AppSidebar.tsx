@@ -72,6 +72,7 @@ const items = [
     children: [
       { title: "Leads", url: "/dashboard/leads", icon: MdOutlinePhoneCallback, classname: "" },
       { title: "Projects", url: "/dashboard/projects", icon: FaFolder, classname: "" },
+      { title: "Upgrades", url: "/dashboard/upgrades", icon: IndianRupee, classname: "" },
       { title: "Reminders", url: "/dashboard/reminders", icon: FaClock, classname: "" },
     ]
   },

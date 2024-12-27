@@ -14,6 +14,7 @@ const BUSINESS_API = {
     DELETE_DISSCUSSION: (id: string,bussinessId:string) => `/business/${bussinessId}/discussions/${id}`,
     DELETE_REMINDER: (id: string,bussinessId:string) => `/business/${bussinessId}/reminders/${id}`,
     GET_ALL: '/business',
+    GET_COUNT:`/business/types`,
     SEARCH_BUSSINESS:(searchQuery:string)=>`/business/search?query=${searchQuery}`,
     GET_BY_ID: (id: string | string[] | undefined) => `/business/${id}/`,
     ASSIGN_MANAGER:  (id:string) => `/business/${id}/managers`,
@@ -32,6 +33,11 @@ export const bussinessService = {
 
     get: async () => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.GET_ALL}`);
+        return response.data.data;
+    },
+
+    getCount: async () => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.GET_COUNT}`);
         return response.data.data;
     },
 

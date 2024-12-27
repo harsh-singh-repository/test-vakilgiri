@@ -1,35 +1,102 @@
+"use client";
 import { Building2, Megaphone } from "lucide-react"
 import { FaUserAlt } from "react-icons/fa";
 import { BusinessStats } from "../_types";
+import { useGetBussinessCount } from "@/hooks/business/manage-business";
+import { useEffect, useState } from "react";
 
 
 
 export default function BusinessCardSection() {
-  const stats: BusinessStats = {
-    businesses: {
-      all: 25,
-      unverified: 22,
-      forSale: 1
-    },
-    businessTypes: {
-      pvtLtd: 13,
-      public: 0,
-      llps: 1,
-      section8: 5,
-      trust: 1,
-      society: 0,
-      micro: 1,
-      producer: 1,
-      proprietor: 1,
-      partnership: 0
-    },
-    status: {
-      registered: 22,
-      pending: 0,
-      suspended: 1
-    }
-  }
 
+   const {data} = useGetBussinessCount();
+
+   console.log("Data Count",data);
+
+  // const stats: BusinessStats = {
+  //   businesses: {
+  //     all: 25,
+  //     unverified: 22,
+  //     forSale: 1
+  //   },
+  //   businessTypes: {
+  //     pvtLtd: 1,
+  //     public: 0,
+  //     llps: 1,
+  //     section8: 5,
+  //     trust: 1,
+  //     society: 0,
+  //     micro: 1,
+  //     producer: 1,
+  //     proprietor: 1,
+  //     partnership: 0
+  //   },
+  //   status: {
+  //     registered: 22,
+  //     pending: 0,
+  //     suspended: 1
+  //   }
+  // }
+
+    // Initial stats
+    const [stats, setStats] = useState<BusinessStats>({
+      businesses: {
+        all: 25,
+        unverified: 22,
+        forSale: 1,
+      },
+      businessTypes: {
+        pvtLtd: 0,
+        public: 0,
+        llps: 0,
+        section8: 0,
+        trust: 0,
+        society: 0,
+        micro: 0,
+        producer: 0,
+        proprietor: 0,
+        partnership: 0,
+      },
+      status: {
+        registered: 22,
+        pending: 0,
+        suspended: 1,
+      },
+    });
+  
+    // Mapping API business types to stats keys
+    const businessTypeMapping: Record<string, keyof typeof stats.businessTypes> = {
+      Private_Limited: "pvtLtd",
+      Trust: "trust",
+      Public_Limited: "public",
+      LLP: "llps",
+      Section_8: "section8",
+      Society: "society",
+      Micro: "micro",
+      Producer: "producer",
+      Proprietor: "proprietor",
+      Partnership: "partnership",
+    };
+  
+    // Update stats dynamically based on API data
+    useEffect(() => {
+      if (data && Array.isArray(data)) {
+        const updatedBusinessTypes = { ...stats.businessTypes };
+  
+        data.forEach((item) => {
+          const key = businessTypeMapping[item.businessType];
+          if (key) {
+            updatedBusinessTypes[key] = item._count.businessType;
+          }
+        });
+  
+        setStats((prev) => ({
+          ...prev,
+          businessTypes: updatedBusinessTypes,
+        }));
+      }
+    }, [data]);
+  
   // Helper function to render key-value pairs
   const renderStatItems = (statObj: { [key: string]: number }, label: { [key: string]: string }) => {
     return Object.entries(statObj).map(([key, value]) => (

@@ -73,6 +73,7 @@ import LinkClient from "../LinkClient";
 import LinkBussiness from "../LinkBussiness";
 import { useGetUsers } from "@/hooks/user/manage-user";
 import { MaterialInput } from "@/components/material-input";
+import { RotatingLines } from "react-loader-spinner";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -285,6 +286,7 @@ export const StackLeadsExchangeDialog = ({
       onSuccess: () => {
         toast.success("Manager Assigned");
         queryClient.invalidateQueries({ queryKey: ["leadId"] });
+        queryClient.invalidateQueries({ queryKey: ["leads"] });
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
@@ -309,6 +311,7 @@ export const StackLeadsExchangeDialog = ({
      onSuccess: () => {
        toast.success("Manager Removed");
        queryClient.invalidateQueries({ queryKey: ["leadId"] });
+       queryClient.invalidateQueries({ queryKey: ["leads"] });
      },
      onError: (error) => {
       console.log("ID",id)
@@ -327,6 +330,22 @@ export const StackLeadsExchangeDialog = ({
      },
     })
  }
+
+ if (!data) {
+  return (
+    <div className="flex justify-center item center p-2 h-full">
+      <RotatingLines
+        visible={true}
+        height="50"
+        width="50"
+        strokeColor="#f21300"
+        strokeWidth="2"
+        animationDuration="0.75"
+        ariaLabel="rotating-lines-loading"
+      />
+    </div>
+  );
+}
 
   return (
     <div>
@@ -647,7 +666,7 @@ export const StackLeadsExchangeDialog = ({
                   </div>
                   <div className="flex gap-2 mt-2 items-start">
                   {data && (
-                      <div className="flex flex-wrap w-full">
+                      <div className="flex  w-full">
                         {data?.assigned?.map(
                           (assign: managerDetails, index: number) => (
                             <div className="" key={index}>
