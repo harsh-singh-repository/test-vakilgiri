@@ -16,7 +16,7 @@ export default function RootLayout({
        
         <div className="flex flex-col w-full">
           <Navbar/>
-          <main className="bg-[#EEEEEE] h-full flex">
+          <main className="bg-[#f6f6f6] h-full flex">
             <div className="mt-10">
                <AppSidebar />
             </div>

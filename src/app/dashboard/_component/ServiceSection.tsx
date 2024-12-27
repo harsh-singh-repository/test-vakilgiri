@@ -41,12 +41,12 @@ export const description = "A multiple bar chart"
 
 const ServiceSection = () => {
   return (
-    <Card className="w-full bg-white rounded-md py-3 max-h-fit"> 
+    <Card className="w-full bg-white rounded-md py-1 mb-2 max-h-fit"> 
      <div className='bg-[#091747] max-w-fit px-2 rounded-tl-none rounded-bl-none rounded-md'>
-       <span className="text-[12px] font-normal text-navy-900 mb-8 text-white max-w-fit">Services</span>
+       <span className="text-[12px] font-medium text-navy-900 mb-8 text-white max-w-fit">Services</span>
       </div>
-    <div className="container px-2">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-2">
+    <div className="container px-2 mb-2"> 
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mt-2">
         <ServiceCard
           title="Start Business"
           href="/services/start-business"

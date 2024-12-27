@@ -9,6 +9,8 @@ import Modal from "@/components/model/custom-modal";
 import { StackLeadsExchangeDialog } from "../(sales)/leads/_component/table/StackLeadsExchangeDialog";
 import { useEffect, useState } from "react";
 import { StackBussinessExchangeDialog } from "../business/_component/tables/StackExchangeDialog";
+import Profile from "../../../../public/assets/profileimg.png";
+import Image from "next/image";
 
 const ClientShowcase = () => {
   const { data } = useGetClients();
@@ -76,7 +78,14 @@ const ClientShowcase = () => {
               key={index}
               className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
             >
-              <RxAvatar size={35} />
+             <Image
+                alt="profile"
+                src={Profile}
+                height="40"
+                width="40"
+                className="rounded-full mr-2"
+                style={{ boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)" }}
+              />
 
               <div className="flex flex-col items-start">
                 <span className="text-[10px] text-[#F20101] font-medium">
@@ -106,7 +115,14 @@ const ClientShowcase = () => {
               key={index}
               className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
             >
-              <RxAvatar size={35} />
+               <Image
+                alt="profile"
+                src={Profile}
+                height="40"
+                width="40"
+                className="rounded-full mr-2"
+                style={{ boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)" }}
+              />
 
               <div className="flex flex-col items-start w-full">
                 <span className="text-[10px] text-[#F20101] font-medium">
@@ -151,8 +167,14 @@ const ClientShowcase = () => {
               key={index}
               className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
             >
-              <RxAvatar size={35} />
-
+              <Image
+                alt="profile"
+                src={Profile}
+                height="40"
+                width="40"
+                className="rounded-full mr-2"
+                style={{ boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)" }}
+              />
               <div className="flex flex-col items-start">
                 <span className="text-[10px] text-[#F20101] font-medium">
                   {`LED${index} | ${leads.createdAt.split("T")[0]}`}
@@ -182,8 +204,14 @@ const ClientShowcase = () => {
                 key={index}
                 className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
               >
-                <RxAvatar size={35} />
-
+               <Image
+                alt="profile"
+                src={Profile}
+                height="40"
+                width="40"
+                className="rounded-full mr-2"
+                style={{ boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)" }}
+              />
                 <div className="flex flex-col items-start w-full">
                   <span className="text-[10px] text-[#F20101] font-medium">
                     {`BUSSINESS ${index} | ${

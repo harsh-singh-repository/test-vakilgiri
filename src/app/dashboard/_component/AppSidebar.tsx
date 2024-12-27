@@ -28,8 +28,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { TfiClip } from "react-icons/tfi";
 
 import {
-  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
-  SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
+  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
   SidebarMenuSub, SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
@@ -131,7 +130,7 @@ export function AppSidebar() {
   // };
 
   return (
-    <div className=''>
+    <div className='shadow-lg border-r-2'>
       <Sidebar className=''>
         <SidebarContent className='mt-8'>
           <SidebarGroup>

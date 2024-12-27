@@ -1,4 +1,4 @@
-import { FaUser, FaPhone, FaBuilding, FaProjectDiagram, FaMoneyBill, FaChartLine, FaUniversity, FaHeadset } from "react-icons/fa";
+import { FaUser, FaPhoneAlt, FaHeartbeat, FaBullhorn, FaUniversity, FaHeadphones,FaRupeeSign } from "react-icons/fa";
 
 const cardData = [
   {
@@ -21,7 +21,7 @@ const cardData = [
     ]
   },
   {
-    icon: <FaPhone size={25} />,
+    icon: <FaPhoneAlt size={25} />,
     BgColor: "bg-[#C0F0FF]",
     iconBgColor: "bg-[#0078964d]",
     iconColor: "text-[#093A49]",
@@ -44,7 +44,7 @@ const cardData = [
     ]
   },
   {
-    icon: <FaBuilding size={25} />,
+    icon: <FaHeartbeat size={25} />,
     BgColor: "bg-[#DEF9BD]",
     iconBgColor: "bg-[#0064004d]",
     iconColor: "text-[#007B23]",
@@ -67,7 +67,7 @@ const cardData = [
     ]
   },
   {
-    icon: <FaProjectDiagram size={25} />,
+    icon: <FaBullhorn size={25} />,
     BgColor: "bg-[#CCD7FF]",
     iconBgColor: "bg-[#00008B4d]",
     iconColor: "text-[#091747]",
@@ -90,7 +90,7 @@ const cardData = [
     ]
   },
   {
-    icon: <FaMoneyBill size={25} />,
+    icon: <FaRupeeSign size={25} />,
     BgColor: "bg-[#F9E2C6]",
     iconBgColor: "bg-[#8B45004d]",
     iconColor: "text-[#FE8903]",
@@ -113,7 +113,7 @@ const cardData = [
     ]
   },
   {
-    icon: <FaChartLine size={25} />,
+    icon: <FaRupeeSign size={25} />,
     BgColor: "bg-[#FFCEF2]",
     iconBgColor: "bg-[#8B28504d]",
     iconColor: "text-[#FE01BF]",
@@ -151,7 +151,7 @@ const cardData = [
     ]
   },
   {
-    icon: <FaHeadset size={25} />,
+    icon: <FaHeadphones size={25} />,
     BgColor: "bg-[#FFCFCC]",
     iconBgColor: "bg-[#8B00004d]",
     iconColor: "text-[#f32100]",
@@ -184,21 +184,21 @@ const DashboardCard = () => {
           <div key={index} className={`w-full h-fit xl:order-1 flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 ${card.BgColor}`}>
             <div className="w-full h-fit flex flex-col justify-center items-center">
               <div className="w-full h-fit flex justify-center gap-x-2 items-center p-1 px-2">
-                <div className={`w-14 h-12 rounded-2xl flex justify-center items-center ${card.iconBgColor}`}>
-                  <span className={`text-xl ${card.iconColor}`}>{card.icon}</span>
+                <div className={`w-[39px] h-[39px] rounded-[10px] flex justify-center items-center p-5 ${card.iconBgColor}`}>
+                  <span className={`${card.iconColor}`}>{card.icon}</span>
                 </div>
-                <div className="w-full flex justify-between items-center">
+                <div className="w-full flex justify-between items-center px-8">
                   {card.data.map((data, dataIndex) => {
                     return (
                       <div className="flex flex-col justify-center items-center gap-x-2" key={data.label + dataIndex}>
                         <span className={`text-[18px] font-medium ${card.textColor}`}>{data.value}</span>
-                        <span className={`text-[12px] font-medium ${card.textColor}`}>{data.label}</span>
+                        <span className={`text-[12px] font-semibold ${card.textColor}`}>{data.label}</span>
                       </div>
                     );
                   })}
                 </div>
               </div>
-              <div className={`w-full m-0 text-white font-medium ${card.footerBgColor} text-white rounded-b-xl text-center text-xs py-1`}>
+              <div className={`w-full m-0 text-white font-medium ${card.footerBgColor} text-white rounded-b-xl text-center text-xs`}>
                 {card.footerTitle}
               </div>
             </div>
