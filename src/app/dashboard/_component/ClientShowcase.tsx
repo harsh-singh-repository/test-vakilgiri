@@ -1,103 +1,59 @@
-"use client"
+"use client";
 import { useGetBussiness } from "@/hooks/business/manage-business";
 import { useGetClients } from "@/hooks/clients/manage-client";
 import { useGetLeads } from "@/hooks/leads/manage-leads";
 import { RxAvatar } from "react-icons/rx";
-import { LeadGetType } from "../_types/options";
+import { BussinessGetType, LeadGetType } from "../_types/options";
+import { FaStackExchange } from "react-icons/fa";
+import Modal from "@/components/model/custom-modal";
+import { StackLeadsExchangeDialog } from "../(sales)/leads/_component/table/StackLeadsExchangeDialog";
+import { useEffect, useState } from "react";
+import { StackBussinessExchangeDialog } from "../business/_component/tables/StackExchangeDialog";
 
 const ClientShowcase = () => {
-  // const tables = [
-  //   {
-  //     tableId: 1,
-  //     tableName: "Pending Reminders",
-  //     clients: [
-  //       { name: "John Doe", date: "2024-11-01", workingStatus: "Active" },
-  //       { name: "Jane Smith", date: "2024-11-02", workingStatus: "Inactive" },
-  //       { name: "Alice Johnson", date: "2024-11-03", workingStatus: "Active" },
-  //       { name: "Alice Johnson", date: "2024-11-03", workingStatus: "Active" },
-  //       { name: "Alice Johnson", date: "2024-11-03", workingStatus: "Active" },
-  //       { name: "Alice Johnson", date: "2024-11-03", workingStatus: "Active" },
-  //       { name: "Alice Johnson", date: "2024-11-03", workingStatus: "Active" },
-  //       { name: "Alice Johnson", date: "2024-11-03", workingStatus: "Active" },
-  //     ],
-  //   },
-  //   {
-  //     tableId: 2,
-  //     tableName: "New/ Unassigned Leads",
-  //     clients: [
-  //       { name: "Bob Brown", date: "2024-11-01", workingStatus: "Active" },
-  //       { name: "Carol White", date: "2024-11-02", workingStatus: "Inactive" },
-  //       { name: "David Clark", date: "2024-11-03", workingStatus: "Active" },
-  //       { name: "David Clark", date: "2024-11-03", workingStatus: "Active" },
-  //       { name: "David Clark", date: "2024-11-03", workingStatus: "Active" },
-  //       { name: "David Clark", date: "2024-11-03", workingStatus: "Active" },
-  //       { name: "David Clark", date: "2024-11-03", workingStatus: "Active" },
-  //       { name: "David Clark", date: "2024-11-03", workingStatus: "Active" },
-  //       { name: "David Clark", date: "2024-11-03", workingStatus: "Active" },
-  //     ],
-  //   },
-  //   {
-  //     tableId: 3,
-  //     tableName: "New/ Unassigned Clients",
-  //     clients: [
-  //       { name: "Emily Davis", date: "2024-11-01", workingStatus: "Active" },
-  //       { name: "Frank Evans", date: "2024-11-02", workingStatus: "Inactive" },
-  //       { name: "Grace Harris", date: "2024-11-03", workingStatus: "Active" },
-  //     ],
-  //   },
-  //   {
-  //     tableId: 4,
-  //     tableName: "New/ Unassigned Business",
-  //     clients: [
-  //       { name: "Henry Adams", date: "2024-11-01", workingStatus: "Active" },
-  //       { name: "Ivy Brooks", date: "2024-11-02", workingStatus: "Inactive" },
-  //       { name: "Jack Carter", date: "2024-11-03", workingStatus: "Active" },
-  //     ],
-  //   },
-  //   {
-  //     tableId: 5,
-  //     tableName: "Table 5",
-  //     clients: [
-  //       { name: "Kara Daniels", date: "2024-11-01", workingStatus: "Active" },
-  //       { name: "Leo Foster", date: "2024-11-02", workingStatus: "Inactive" },
-  //       { name: "Mia Garcia", date: "2024-11-03", workingStatus: "Active" },
-  //     ],
-  //   },
-  //   {
-  //     tableId: 6,
-  //     tableName: "Table 6",
-  //     clients: [
-  //       { name: "Nina Howard", date: "2024-11-01", workingStatus: "Active" },
-  //       { name: "Owen Johnson", date: "2024-11-02", workingStatus: "Inactive" },
-  //       { name: "Paula King", date: "2024-11-03", workingStatus: "Active" },
-  //     ],
-  //   },
-  //   {
-  //     tableId: 7,
-  //     tableName: "Table 7",
-  //     clients: [
-  //       { name: "Quinn Lewis", date: "2024-11-01", workingStatus: "Active" },
-  //       { name: "Riley Martin", date: "2024-11-02", workingStatus: "Inactive" },
-  //       { name: "Sophia Nelson", date: "2024-11-03", workingStatus: "Active" },
-  //     ],
-  //   },
-  //   {
-  //     tableId: 8,
-  //     tableName: "Table 8",
-  //     clients: [
-  //       { name: "Thomas Parker", date: "2024-11-01", workingStatus: "Active" },
-  //       { name: "Uma Quinn", date: "2024-11-02", workingStatus: "Inactive" },
-  //       { name: "Vera Scott", date: "2024-11-03", workingStatus: "Active" },
-  //     ],
-  //   },
-  // ];
+  const { data } = useGetClients();
+  const { data: leadData } = useGetLeads();
+  const { data: bussinessData } = useGetBussiness();
 
-  const {data} = useGetClients();
-  const {data:leadData} = useGetLeads();
-  const {data:bussinessData} = useGetBussiness();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBussinessModalOpen, setIsBussinessModalOpen] = useState(false);
 
-  const unassignedLeads = leadData?.filter((lead:LeadGetType) => 
-    lead.assigned.length === 0
+  // const openModal = () => setIsModalOpen(true);
+  // const closeModal = () => setIsModalOpen(false);
+
+  const [dialogId, setDialogId] = useState<string>("");
+  const [bussinessDialogId, setBussinessDialogId] = useState<string>("");
+
+  useEffect(() => {
+    console.log("Bussiness Dialog ID:", bussinessDialogId);
+  }, [bussinessDialogId]);
+
+  const openModal = (id: string) => {
+    setDialogId(id);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setDialogId("");
+    setIsModalOpen(false);
+  };
+
+  const openBussinessModal = (id: string) => {
+    setBussinessDialogId(id);
+    setIsBussinessModalOpen(true);
+  };
+
+  const closeBussinessModal = () => {
+    setBussinessDialogId("");
+    setIsBussinessModalOpen(false);
+  };
+
+  const unassignedLeads = leadData?.filter(
+    (lead: LeadGetType) => lead.assigned.length === 0
+  );
+
+  const unassignedBussiness = bussinessData?.filter(
+    (business: BussinessGetType) => business?.managers.length === 0
   );
   // const unassignedBussiness = leadData?.filter((lead:LeadGetType) => lead.assigned === null) || [];
 
@@ -105,129 +61,159 @@ const ClientShowcase = () => {
   console.log(data);
   console.log(bussinessData);
 
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 p-5 md:grid-cols-2 lg:grid-cols-4">
-        <div
-          // key={table.tableId}
-          className="border px-2 py-4 rounded-md shadow bg-[#E2E2E2]"
-        >
-          <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
+      <div
+        // key={table.tableId}
+        className="border px-2 py-4 rounded-md shadow bg-[#E2E2E2]"
+      >
+        <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
           Pending Reminder
-          </span>
-          <div className="flex flex-col gap-2 mt-2 overflow-y-auto h-[350px] custom-scrollbar">
-            {leadData?.map((leads:LeadGetType, index:number) => (
-              <div
-                key={index}
-                className="mb-1 bg-white flex flex-row rounded-md p-2 gap-x-3 items-center"
-              >
-                <RxAvatar size={35} />
+        </span>
+        <div className="flex flex-col gap-2 mt-2 overflow-y-auto h-[350px] custom-scrollbar">
+          {leadData?.map((leads: LeadGetType, index: number) => (
+            <div
+              key={index}
+              className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
+            >
+              <RxAvatar size={35} />
 
-                <div className="flex flex-col items-start">
-                  <span className="text-[10px] text-[#F20101] font-medium">
-                    {`LED${index} | ${leads.createdAt.split("T")[0]}`}
-                  </span>
-                  <span className="text-[13px] text-[#091747] font-medium uppercase">
-                    {leads.firstName + " " + leads.lastName}
-                  </span>
-                  <div className="text-[10px] text-white bg-[#FAB515] rounded-xl text-center px-1">
-                    <span>{`Status: ${leads.status}`}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div
-          // key={table.tableId}
-          className="border px-2 py-4 rounded-md shadow bg-[#E2E2E2]"
-        >
-          <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
-          New/ Unassigned Leads
-          </span>
-          <div className="flex flex-col gap-2 mt-2 overflow-y-auto h-[350px]">
-            {unassignedLeads?.map((leads:LeadGetType, index:number) => (
-              <div
-                key={index}
-                className="mb-1 bg-white flex flex-row rounded-md p-2 gap-x-3 items-center"
-              >
-                <RxAvatar size={35} />
-
-                <div className="flex flex-col items-start">
-                  <span className="text-[10px] text-[#F20101] font-medium">
-                    {`LED${index} | ${leads.createdAt.split("T")[0]}`}
-                  </span>
-                  <span className="text-[13px] text-[#091747] font-medium uppercase">
+              <div className="flex flex-col items-start">
+                <span className="text-[10px] text-[#F20101] font-medium">
+                  {`LED${index} | ${leads.createdAt.split("T")[0]}`}
+                </span>
+                <span className="text-[13px] text-[#091747] font-medium uppercase">
                   {leads.firstName + " " + leads.lastName}
-                  </span>
+                </span>
+                <div className="text-[10px] text-white bg-[#FAB515] rounded-xl text-center px-1">
+                  <span>{`Status: ${leads.status}`}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div
+        // key={table.tableId}
+        className="border px-2 py-4 rounded-md shadow bg-[#E2E2E2]"
+      >
+        <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
+          New/ Unassigned Leads
+        </span>
+        <div className="flex flex-col gap-2 mt-2 overflow-y-auto h-[350px] custom-scrollbar">
+          {unassignedLeads?.map((leads: LeadGetType, index: number) => (
+            <div
+              key={index}
+              className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
+            >
+              <RxAvatar size={35} />
+
+              <div className="flex flex-col items-start w-full">
+                <span className="text-[10px] text-[#F20101] font-medium">
+                  {`LED${index} | ${leads.createdAt.split("T")[0]}`}
+                </span>
+                <span className="text-[13px] text-[#091747] font-medium uppercase">
+                  {leads.firstName + " " + leads.lastName}
+                </span>
+                <div className="flex justify-between w-full">
                   <div className="text-[10px] text-white bg-[#FAB515] rounded-xl text-center px-1">
                     <span>{`Status: ${leads.status}`}</span>
                   </div>
+                  <FaStackExchange
+                    className="text-[#091747] cursor-pointer"
+                    onClick={() => openModal(leads.id)}
+                  />
                 </div>
               </div>
-            ))}
-          </div>
+              {/* <div>
+                  {leads.id}
+                </div> */}
+              <Modal isOpen={isModalOpen} onClose={closeModal} className="">
+                <StackLeadsExchangeDialog
+                  onClose={closeModal}
+                  openDialogId={dialogId}
+                />
+              </Modal>
+            </div>
+          ))}
         </div>
-        <div
-          // key={table.tableId}
-          className="border px-2 py-4 rounded-md shadow bg-[#E2E2E2]"
-        >
-          <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
+      </div>
+      <div
+        // key={table.tableId}
+        className="border px-2 py-4 rounded-md shadow bg-[#E2E2E2]"
+      >
+        <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
           New/ Unassigned Clients
-          </span>
-          <div className="flex flex-col gap-2 mt-2 overflow-y-auto h-[350px]">
-            {leadData?.map((leads:LeadGetType, index:number) => (
-              <div
-                key={index}
-                className="mb-1 bg-white flex flex-row rounded-md p-2 gap-x-3 items-center"
-              >
-                <RxAvatar size={35} />
+        </span>
+        <div className="flex flex-col gap-2 mt-2 overflow-y-auto h-[350px]">
+          {leadData?.map((leads: LeadGetType, index: number) => (
+            <div
+              key={index}
+              className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
+            >
+              <RxAvatar size={35} />
 
-                <div className="flex flex-col items-start">
-                  <span className="text-[10px] text-[#F20101] font-medium">
-                    {`LED${index} | ${leads.createdAt.split("T")[0]}`}
-                  </span>
-                  <span className="text-[13px] text-[#091747] font-medium uppercase">
-                    {leads.firstName}
-                  </span>
-                  <div className="text-[10px] text-white bg-[#FAB515] rounded-xl text-center px-1">
-                    <span>{`Status: ${leads.status}`}</span>
-                  </div>
+              <div className="flex flex-col items-start">
+                <span className="text-[10px] text-[#F20101] font-medium">
+                  {`LED${index} | ${leads.createdAt.split("T")[0]}`}
+                </span>
+                <span className="text-[13px] text-[#091747] font-medium uppercase">
+                  {leads.firstName}
+                </span>
+                <div className="text-[10px] text-white bg-[#FAB515] rounded-xl text-center px-1">
+                  <span>{`Status: ${leads.status}`}</span>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-        <div
-          // key={table.tableId}
-          className="border px-2 py-4 rounded-md shadow bg-[#E2E2E2]"
-        >
-          <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
+      </div>
+      <div
+        // key={table.tableId}
+        className="border px-2 py-4 rounded-md shadow bg-[#E2E2E2]"
+      >
+        <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
           New/ Unassigned Business
-          </span>
-          <div className="flex flex-col gap-2 mt-2 overflow-y-auto h-[350px]">
-            {leadData?.map((leads:LeadGetType, index:number) => (
+        </span>
+        <div className="flex flex-col gap-2 mt-2 overflow-y-auto h-[350px] custom-scrollbar">
+          {unassignedBussiness?.map(
+            (bussiness: BussinessGetType, index: number) => (
               <div
                 key={index}
-                className="mb-1 bg-white flex flex-row rounded-md p-2 gap-x-3 items-center"
+                className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
               >
                 <RxAvatar size={35} />
 
-                <div className="flex flex-col items-start">
+                <div className="flex flex-col items-start w-full">
                   <span className="text-[10px] text-[#F20101] font-medium">
-                    {`LED${index} | ${leads.createdAt.split("T")[0]}`}
+                    {`BUSSINESS ${index} | ${
+                      bussiness.createdAt.split("T")[0]
+                    }`}
                   </span>
                   <span className="text-[13px] text-[#091747] font-medium uppercase">
-                    {leads.firstName}
+                    {bussiness.businessName}
                   </span>
-                  <div className="text-[10px] text-white bg-[#FAB515] rounded-xl text-center px-1">
-                    <span>{`Status: ${leads.status}`}</span>
+                  <div className="flex justify-between w-full">
+                    <div className="text-[10px] text-white bg-[#FAB515] rounded-xl text-center px-1">
+                      <span>{`Status: ${bussiness.businessStatus}`}</span>
+                    </div>
+                    <FaStackExchange
+                      className="text-[#091747] cursor-pointer"
+                      onClick={() => openBussinessModal(bussiness.id)}
+                    />
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+            )
+          )}
+          <Modal isOpen={isBussinessModalOpen} onClose={closeBussinessModal}>
+            <StackBussinessExchangeDialog
+              onClose={closeBussinessModal}
+              openDialogId={bussinessDialogId}
+            />
+          </Modal>
         </div>
+      </div>
     </div>
   );
 };

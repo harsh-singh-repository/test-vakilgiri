@@ -24,6 +24,8 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { MaterialInput } from "@/components/material-input";
+import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
 
 const PaymentDetails = [
   {
@@ -97,10 +99,7 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
           {selectedPaymentMethod === "default" && (
             <div className="flex flex-col gap-1">
               <div className="flex flex-col">
-                <Label className="text-xs font-semibold text-[#091747]">
-                  Enter Amount*
-                </Label>
-                <Input type="text" placeholder="Enter Amount" />
+                <MaterialInput type="text" placeholder="Enter Amount" />
               </div>
               <Button
                 variant={"none"}
@@ -158,20 +157,17 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
           )}
 
           {selectedPaymentMethod === "compact" && !createPayment && (
-            <div className="w-full space-y-4 flex flex-col justify-center">
+            <div className="w-full space-y-2 flex flex-col justify-center">
               <div className="space-y-2">
-                <Label htmlFor="amount" className="text-xs font-semibold">
-                  Enter Amount
-                </Label>
-                <Input id="amount" placeholder="Enter Amount" />
+                <MaterialInput id="amount" placeholder="Enter Amount" />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <Label htmlFor="payment-date" className="text-xs">
                     Payment Date
                   </Label>
-                  <Popover>
+                  {/* <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         id="payment-date"
@@ -190,10 +186,12 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
                         initialFocus
                       />
                     </PopoverContent>
-                  </Popover>
+                  </Popover> */}
+                  <CustomDatePicker />
+
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <Label htmlFor="payment-mode" className="text-xs">
                     Payment Mode*
                   </Label>
@@ -214,14 +212,11 @@ export function DialogDemo({ onClose }: { onClose: () => void }) {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="reference-id" className="text-xs">
-                  Reference ID
-                </Label>
-                <Input id="reference-id" placeholder="Reference ID" />
+              <div className="space-y-1">
+                <MaterialInput id="reference-id" placeholder="Reference ID" />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="account" className="text-xs">
                   Choose Account in which you have transferred
                 </Label>
