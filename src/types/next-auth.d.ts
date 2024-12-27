@@ -7,6 +7,12 @@ declare module 'next-auth' {
         refreshToken?:string;
         data?:{
             token:string,
+            data?:{
+                id:string,
+                firstName: string,
+                lastName: string,
+                email: string,
+            }
         }
     }
     interface Session{
@@ -14,6 +20,9 @@ declare module 'next-auth' {
             _id?:string;
             accessToken?:string;
             refreshToken?:string;
+            firstName?: string;
+            lastName?: string;
+            email?: string;
         }
     }
 }
@@ -23,6 +32,9 @@ declare module "next-auth/jwt"{
         _id?:string;
         accessToken?:string;
         refreshToken?:string;
+        firstname?: string;
+        lastName?: string;
+        email?: string;
     }
 
 }

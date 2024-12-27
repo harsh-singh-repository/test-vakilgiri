@@ -1,13 +1,17 @@
+"use client"
+import { useGetClients } from "@/hooks/clients/manage-client";
 import { MdPerson2, MdPeople } from "react-icons/md";
 import { MdAddReaction } from "react-icons/md";
 
 const ClientCard = () => {
 
+  const {data} = useGetClients();
+
     const clientCardData = [
         {
             logo: <MdPerson2 size={"45"} />,
             title: "All Users",
-            value: "19",
+            value: data?.length,
             iconBgColor: "bg-[#0917c84d]",
             bgColor: "bg-[#ccd7ff]",
             textColor: "text-[#091747]"

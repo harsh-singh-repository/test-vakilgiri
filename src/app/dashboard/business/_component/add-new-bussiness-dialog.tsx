@@ -31,7 +31,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
 
 const states = [
   { key: "Arunachal_Pradesh", name: "Arunachal Pradesh" },
@@ -199,7 +198,7 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                       render={({ field, fieldState: { error } }) => (
                         <div className="flex gap-3 items-center">
                           <FormLabel className="text-[13px] w-[6.75rem]">Date</FormLabel>
-                          {/* <Popover>
+                          <Popover>
                             <PopoverTrigger asChild>
                               <FormControl>
                                 <Button
@@ -237,8 +236,7 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                                 initialFocus
                               />
                             </PopoverContent>
-                          </Popover> */}
-                          <CustomDatePicker className="w-[340px]"/>
+                          </Popover>
                         </div>
                       )}
                     />

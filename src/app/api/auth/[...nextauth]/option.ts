@@ -41,13 +41,19 @@ export const authOptions: NextAuthOptions = {
             if (user) {
                 token.accessToken = user.data?.token;
                 token.refreshToken = user.refreshToken;
+                token.firstname = user.data?.data?.firstName;
+                token.lastName = user?.data?.data?.lastName;
+                token.email = user?.data?.data?.email;
             }
             return token;
         },
         async session({ session, token }) {
             session.user = {
                 refreshToken: token?.refreshToken,
-                accessToken: token?.accessToken
+                accessToken: token?.accessToken,
+                firstName:token?.firstname,
+                lastName:token?.lastName,
+                email:token?.email
             };
             return session;
         },

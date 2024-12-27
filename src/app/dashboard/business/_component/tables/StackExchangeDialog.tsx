@@ -5,7 +5,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-
 import { format } from "date-fns";
 import {
   CalendarIcon,
@@ -55,9 +54,14 @@ import { BusinessDiscussion } from "../../_types";
 
 import { RxAvatar } from "react-icons/rx";
 import { useQueryClient } from "@tanstack/react-query";
-import { bussinessReminderType, managerDetails, userType } from "@/app/dashboard/(sales)/leads/_types";
+import {
+  bussinessReminderType,
+  managerDetails,
+  userType,
+} from "@/app/dashboard/(sales)/leads/_types";
 import { MaterialInput } from "@/components/material-input";
 import { useGetUsers } from "@/hooks/user/manage-user";
+import {RotatingLines } from "react-loader-spinner";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -83,16 +87,16 @@ const formatDate = (isoString: string) => {
 function formatCreatedAtDate(dateString: string): string {
   const date = new Date(dateString);
 
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
   const year = date.getFullYear();
 
   let hours = date.getHours();
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'pm' : 'am';
-  
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const ampm = hours >= 12 ? "pm" : "am";
+
   hours = hours % 12 || 12; // Convert 24-hour time to 12-hour format
-  const formattedHours = String(hours).padStart(2, '0');
+  const formattedHours = String(hours).padStart(2, "0");
 
   return `${day}-${month}-${year}, ${formattedHours}:${minutes} ${ampm}`;
 }
@@ -133,45 +137,53 @@ export const StackBussinessExchangeDialog = ({
   console.log("Dialog ID: ", openDialogId);
   console.log(typeof openDialogId);
   const { data } = useGetBussinessById(openDialogId);
-  console.log("Bissiwnefkwnef",data);
+  console.log("Bissiwnefkwnef", data);
 
   const { data: bussinessDisscussionData } =
     useGetBussinessDisscussion(openDialogId);
 
-  const {data:businessReminderData} = useGetBussinessReminder(openDialogId);
-
+  const { data: businessReminderData } = useGetBussinessReminder(openDialogId);
 
   const { mutate } = useAddBusinessDisscussion(openDialogId);
 
   const { mutate: addReminder } = useAddBusinessReminder(openDialogId);
-  const {mutate:removeManger} = useRemoveManager(openDialogId);
-  const {mutate:deleteDisscussion} = useDeleteBussinessDisscussion(); 
+  const { mutate: removeManger } = useRemoveManager(openDialogId);
+  const { mutate: deleteDisscussion } = useDeleteBussinessDisscussion();
   const { data: assignedManager } = useGetUsers();
-  const {mutate:deleteReminder} = useDeleteBussinessReminder(openDialogId); 
-  const {mutate:addManager} = useAddManager(openDialogId);
+  const { mutate: deleteReminder } = useDeleteBussinessReminder(openDialogId);
+  const { mutate: addManager } = useAddManager(openDialogId);
 
-  const handleDeleteDisscussion = ({ id, bussinessId }: { id: string; bussinessId: string }) =>{
-     deleteDisscussion({id,bussinessId},{
-      onSuccess:()=>{
-         toast.success("Disscussion Delted Successfully");
-         queryClient.invalidateQueries({ queryKey: ["bussinessDisscussion"] });
-      },
-      onError:(error)=>{
-        toast.error(`Dissussion not Submited : ${error}`);
+  const handleDeleteDisscussion = ({
+    id,
+    bussinessId,
+  }: {
+    id: string;
+    bussinessId: string;
+  }) => {
+    deleteDisscussion(
+      { id, bussinessId },
+      {
+        onSuccess: () => {
+          toast.success("Disscussion Delted Successfully");
+          queryClient.invalidateQueries({ queryKey: ["bussinessDisscussion"] });
+        },
+        onError: (error) => {
+          toast.error(`Dissussion not Submited : ${error}`);
+        },
       }
-     });
+    );
   };
-  const handleDeleteReminder = (id:string) =>{
-     deleteReminder(id,{
-      onSuccess:()=>{
-         toast.success("Reminder deleted Successfully");
-         queryClient.invalidateQueries({ queryKey: ["bussinessReminder"] });
+  const handleDeleteReminder = (id: string) => {
+    deleteReminder(id, {
+      onSuccess: () => {
+        toast.success("Reminder deleted Successfully");
+        queryClient.invalidateQueries({ queryKey: ["bussinessReminder"] });
       },
-      onError:(error)=>{
+      onError: (error) => {
         toast.error(`Dissussion not Submited : ${error}`);
-      }
-     });
-  }
+      },
+    });
+  };
 
   console.log("Dialog Data", data);
 
@@ -207,7 +219,7 @@ export const StackBussinessExchangeDialog = ({
       },
     });
     setIsSubmittingReminder(false);
-  };
+  }
 
   const handleFormSubmit = (data: { managersId: string[] }) => {
     console.log("data", data);
@@ -215,6 +227,7 @@ export const StackBussinessExchangeDialog = ({
       onSuccess: () => {
         toast.success("Manager Assigned");
         queryClient.invalidateQueries({ queryKey: ["bussinessId"] });
+        queryClient.invalidateQueries({ queryKey: ["bussiness"] });
       },
       onError: (error) => {
         toast.error(`error : ${error}`);
@@ -222,16 +235,33 @@ export const StackBussinessExchangeDialog = ({
     });
   };
 
-  const handleRemoveManager = (id:{ managerId: string;}) => {
-     removeManger(id,{
+  const handleRemoveManager = (id: { managerId: string }) => {
+    removeManger(id, {
       onSuccess: () => {
         toast.success("Manager Removed");
         queryClient.invalidateQueries({ queryKey: ["bussinessId"] });
+        queryClient.invalidateQueries({ queryKey: ["bussiness"] });
       },
       onError: (error) => {
         toast.error(`error : ${error}`);
       },
-     })
+    });
+  };
+
+  if (!data) {
+    return (
+      <div className="flex justify-center item center p-2 h-full">
+        <RotatingLines
+          visible={true}
+          height="50"
+          width="50"
+          strokeColor="#f21300"
+          strokeWidth="2"
+          animationDuration="0.75"
+          ariaLabel="rotating-lines-loading"
+        />
+      </div>
+    );
   }
 
   return (
@@ -239,7 +269,7 @@ export const StackBussinessExchangeDialog = ({
       <div className="flex justify-center items-start gap-x-3">
         <div className="flex flex-col gap-y-3">
           <div className="text-[17px] text-[#091747] uppercase font-bold">
-            {data?.creator.firstName + " " + data?.creator.lastName}
+            {data?.businessName}
           </div>
           <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-[500px] xl:grid-cols-[500px]">
             <div className="w-full max-w-2xl mx-auto">
@@ -304,14 +334,22 @@ export const StackBussinessExchangeDialog = ({
                             <span className="font-medium">
                               {discussion.body}
                             </span>
-                           <div className="flex flex-row justify-between w-full">
-                               <div className="font-thin text-[#F21300]">
-                                    {discussion.createdAt}
-                                </div>
-                               <div className="text-[#F21300] cursor-pointer" onClick={() => handleDeleteDisscussion({ id: discussion.id, bussinessId: discussion.businessId })}>
-                                  <Trash2 size={"15"}/>
-                               </div>
-                           </div>
+                            <div className="flex flex-row justify-between w-full">
+                              <div className="font-thin text-[#F21300]">
+                                {discussion.createdAt}
+                              </div>
+                              <div
+                                className="text-[#F21300] cursor-pointer"
+                                onClick={() =>
+                                  handleDeleteDisscussion({
+                                    id: discussion.id,
+                                    bussinessId: discussion.businessId,
+                                  })
+                                }
+                              >
+                                <Trash2 size={"15"} />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       )
@@ -475,8 +513,8 @@ export const StackBussinessExchangeDialog = ({
                   </AccordionContent>
                 </AccordionItem>
                 {businessReminderData && (
-                   <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
-                      {businessReminderData.map(
+                  <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
+                    {businessReminderData.map(
                       (reminder: bussinessReminderType, index: number) => (
                         <div
                           className="flex flex-row gap-2 bg-[#E9E9E9] rounded-md px-2 py-1 "
@@ -485,203 +523,223 @@ export const StackBussinessExchangeDialog = ({
                           <RxAvatar size={30} />
                           <div className="flex flex-col w-full items-start">
                             <div className="flex flex-col text-left w-full">
-                              <span className="font-semibold">{reminder.creator?.firstName + " " + reminder.creator?.lastName}</span>
+                              <span className="font-semibold">
+                                {reminder.creator?.firstName +
+                                  " " +
+                                  reminder.creator?.lastName}
+                              </span>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Subject:</span>
-                                 <span>{reminder?.subject}</span>
+                                <span className="font-semibold">Subject:</span>
+                                <span>{reminder?.subject}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Description:</span>
-                                 <span>{reminder?.body}</span>
+                                <span className="font-semibold">
+                                  Description:
+                                </span>
+                                <span>{reminder?.body}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Reminder Type:</span>
-                                 <span>{reminder?.reminderType}</span>
+                                <span className="font-semibold">
+                                  Reminder Type:
+                                </span>
+                                <span>{reminder?.reminderType}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Due Date:</span>
-                                 <span>{formatDate(reminder?.dueDate)}</span>
+                                <span className="font-semibold">Due Date:</span>
+                                <span>{formatDate(reminder?.dueDate)}</span>
                               </div>
                               <div className="flex justify-between text-[#f21300] w-full">
-                                 <span>{formatCreatedAtDate(reminder?.createdAt)}</span>
-                                 <Trash2 size={"15"} onClick={()=>handleDeleteReminder(reminder?.id)} className="cursor-pointer"/>
+                                <span>
+                                  {formatCreatedAtDate(reminder?.createdAt)}
+                                </span>
+                                <Trash2
+                                  size={"15"}
+                                  onClick={() =>
+                                    handleDeleteReminder(reminder?.id)
+                                  }
+                                  className="cursor-pointer"
+                                />
                               </div>
                             </div>
                           </div>
                         </div>
                       )
                     )}
-                   </div>
+                  </div>
                 )}
               </Accordion>
             </div>
-            
           </div>
         </div>
         <div className="space-y-2 bg-[#ededed] rounded-md max-h-fit">
-              <div className="rounded-lg px-2 py-1">
-              <div className="justify-between flex px-1">
-                   <h3 className="font-semibold mb-1 text-[13px] text-[#091747]">
-                      Assigned Users
-                   </h3>
-                   <X onClick={onClose} strokeWidth={"3"} className="text-[#f21300] cursor-pointer"/>
-                </div>
-                <div className="flex items-center gap-2">
-                {data && (
-                      <div className="flex">
-                        {data?.managers?.map(
-                          (data: managerDetails, index: number) => (
-                            <div className="" key={index}>
-                              <RxAvatar size={"30"}/>
-                              <div className="absolute">
-                               <X className="text-[#f21300] -translate-y-8 translate-x-4 h-3 w-3 cursor-pointer" strokeWidth={"6"} onClick={()=>handleRemoveManager({managerId : data?.id})}/>
-                              </div>
-                            </div>
-                          )
-                        )}
-                      </div>
-                    )}
-                  <Popover>
-                    <PopoverTrigger>
-                    <div className="text-[#f21300]">
-                          <PlusCircle />
+          <div className="rounded-lg px-2 py-1">
+            <div className="justify-between flex px-1">
+              <h3 className="font-semibold mb-1 text-[13px] text-[#091747]">
+                Assigned Users
+              </h3>
+              <X
+                onClick={onClose}
+                strokeWidth={"3"}
+                className="text-[#f21300] cursor-pointer"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              {data && (
+                <div className="flex">
+                  {data?.managers?.map(
+                    (data: managerDetails, index: number) => (
+                      <div className="" key={index}>
+                        <RxAvatar size={"30"} />
+                        <div className="absolute">
+                          <X
+                            className="text-[#f21300] -translate-y-8 translate-x-4 h-3 w-3 cursor-pointer"
+                            strokeWidth={"6"}
+                            onClick={() =>
+                              handleRemoveManager({ managerId: data?.id })
+                            }
+                          />
                         </div>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                    {assignedManager && (
-                          <form
-                            onSubmit={formMethods.handleSubmit(
-                              handleFormSubmit
-                            )}
-                          >
-                            <div>
-                              {assignedManager
-                                .filter(
-                                  (manager: userType) =>
-                                    manager.userRoles === "Staff_Manager"
-                                ) // Filter the managers
-                                .map((manager: userType, index: number) => (
-                                  <div
-                                    key={index}
-                                    className="flex items-center gap-2"
-                                  >
-                                    <Controller
-                                      name="managersId"
-                                      control={formMethods.control}
-                                      render={({
-                                        field: { value, onChange },
-                                      }) => (
-                                        <input
-                                          type="checkbox"
-                                          checked={value?.includes(manager.id)}
-                                          onChange={(e) => {
-                                            if (e.target.checked) {
-                                              // Add manager ID to the array
-                                              onChange([...value, manager.id]);
-                                            } else {
-                                              // Remove manager ID from the array
-                                              onChange(
-                                                value.filter(
-                                                  (id: string) =>
-                                                    id !== manager.id
-                                                )
-                                              );
-                                            }
-                                          }}
-                                        />
-                                      )}
-                                    />
-                                    <span className="text-[12px] text-[#091747] font-semibold">{manager.firstName}</span>
-                                  </div>
-                                ))}
-                            </div>
-                            <button
-                              type="submit"
-                              className="btn btn-primary mt-2 bg-[#f21300] px-2 py-1 rounded-md text-[10px] text-white"
+                      </div>
+                    )
+                  )}
+                </div>
+              )}
+              <Popover>
+                <PopoverTrigger>
+                  <div className="text-[#f21300]">
+                    <PlusCircle />
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent>
+                  {assignedManager && (
+                    <form onSubmit={formMethods.handleSubmit(handleFormSubmit)}>
+                      <div>
+                        {assignedManager
+                          .filter(
+                            (manager: userType) =>
+                              manager.userRoles === "Staff_Manager"
+                          ) // Filter the managers
+                          .map((manager: userType, index: number) => (
+                            <div
+                              key={index}
+                              className="flex items-center gap-2"
                             >
-                              Assign
-                            </button>
-                          </form>
-                        )}
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                              <Controller
+                                name="managersId"
+                                control={formMethods.control}
+                                render={({ field: { value, onChange } }) => (
+                                  <input
+                                    type="checkbox"
+                                    checked={value?.includes(manager.id)}
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        // Add manager ID to the array
+                                        onChange([...value, manager.id]);
+                                      } else {
+                                        // Remove manager ID from the array
+                                        onChange(
+                                          value.filter(
+                                            (id: string) => id !== manager.id
+                                          )
+                                        );
+                                      }
+                                    }}
+                                  />
+                                )}
+                              />
+                              <span className="text-[12px] text-[#091747] font-semibold">
+                                {manager.firstName}
+                              </span>
+                            </div>
+                          ))}
+                      </div>
+                      <button
+                        type="submit"
+                        className="btn btn-primary mt-2 bg-[#f21300] px-2 py-1 rounded-md text-[10px] text-white"
+                      >
+                        Assign
+                      </button>
+                    </form>
+                  )}
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+          <div className="rounded-lg px-2 py-2">
+            <div className="bg-[#091747] rounded-md">
+              <h3 className="font-normal text-[12px] mb-3 bg-navy-900 text-white px-[10px] py-[5px] rounded">
+                Client Details
+              </h3>
+            </div>
+            <div className="">
+              <div className="text-[12px]">
+                <span className="font-semibold">NGO:</span>{" "}
+                {data?.creator.firstName + " " + data?.creator.lastName}
               </div>
-              <div className="rounded-lg px-2 py-2">
-                <div className="bg-[#091747] rounded-md">
-                  <h3 className="font-normal text-[12px] mb-3 bg-navy-900 text-white px-[10px] py-[5px] rounded">
-                    Client Details
-                  </h3>
-                </div>
-                <div className="">
-                  <div className="text-[12px]">
-                    <span className="font-semibold">NGO:</span>{" "}
-                    {data?.creator.firstName + " " + data?.creator.lastName}
-                  </div>
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Mobile:</span> 9662391342
-                  </div>
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Email:</span>{" "}
-                    {data?.creator.email}
-                  </div>
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Manager:</span> DEV
-                  </div>
-                  <div className="text-[10px] bg-[#A301D5] max-w-fit text-white px-2 py-1 rounded-md mt-1">
-                    <span className="font-normal">{data?.businessType}</span>
-                  </div>
-                  <div className="text-[10px] bg-[#A0A0A0] max-w-fit text-white px-2 py-1 rounded-md mt-1">
-                    <span className="font-semibold">NGO Status:</span>{" "}
-                    <span>Pending</span>
-                  </div>
-                </div>
+              <div className="text-[12px]">
+                <span className="font-semibold">Mobile:</span> 9662391342
               </div>
-              <div className="rounded-lg px-2 py-2">
-                <div className="bg-[#091747] rounded-md">
-                  <h3 className="font-normal text-[12px] mb-3 bg-navy-900 text-white px-[10px] py-[5px] rounded">
-                    Bussiness List
-                  </h3>
-                </div>
-                <div className="">
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Client:</span>{" "}
-                    {data?.firstName + " " + data?.lastName}
-                  </div>
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Mobile:</span> 9662391342
-                  </div>
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Email:</span>{" "}
-                    {data?.creator.email}
-                  </div>
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Manager:</span> DEV
-                  </div>
-                  <div className="text-[10px] bg-[#FAB515] max-w-fit text-white px-2 py-1 rounded-md mt-1">
-                    <span className="font-semibold">KYC Status:</span>{" "}
-                    <span>Pending</span>
-                  </div>
-                </div>
+              <div className="text-[12px]">
+                <span className="font-semibold">Email:</span>{" "}
+                {data?.creator.email}
               </div>
-              <div className="rounded-lg border px-2 py-2">
-                <div className="bg-[#091747] rounded-md">
-                  <h3 className="font-normal text-[12px] mb-3 bg-navy-900 text-white px-[10px] py-[5px] rounded">
-                    Creator Details
-                  </h3>
-                </div>
-                <div className="">
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Creator</span>{" "}
-                    {data?.creator.firstName + " " + data?.creator.lastName}
-                  </div>
-                  <div className="text-[12px]">
-                    <span className="font-semibold">Created On</span>{" "}
-                    {formattedDate}
-                  </div>
-                </div>
+              <div className="text-[12px]">
+                <span className="font-semibold">Manager:</span> DEV
+              </div>
+              <div className="text-[10px] bg-[#A301D5] max-w-fit text-white px-2 py-1 rounded-md mt-1">
+                <span className="font-normal">{data?.businessType}</span>
+              </div>
+              <div className="text-[10px] bg-[#A0A0A0] max-w-fit text-white px-2 py-1 rounded-md mt-1">
+                <span className="font-semibold">NGO Status:</span>{" "}
+                <span>Pending</span>
               </div>
             </div>
+          </div>
+          <div className="rounded-lg px-2 py-2">
+            <div className="bg-[#091747] rounded-md">
+              <h3 className="font-normal text-[12px] mb-3 bg-navy-900 text-white px-[10px] py-[5px] rounded">
+                Bussiness List
+              </h3>
+            </div>
+            <div className="">
+              <div className="text-[12px]">
+                <span className="font-semibold">Client:</span>{" "}
+                {data?.firstName + " " + data?.lastName}
+              </div>
+              <div className="text-[12px]">
+                <span className="font-semibold">Mobile:</span> 9662391342
+              </div>
+              <div className="text-[12px]">
+                <span className="font-semibold">Email:</span>{" "}
+                {data?.creator.email}
+              </div>
+              <div className="text-[12px]">
+                <span className="font-semibold">Manager:</span> DEV
+              </div>
+              <div className="text-[10px] bg-[#FAB515] max-w-fit text-white px-2 py-1 rounded-md mt-1">
+                <span className="font-semibold">KYC Status:</span>{" "}
+                <span>Pending</span>
+              </div>
+            </div>
+          </div>
+          <div className="rounded-lg border px-2 py-2">
+            <div className="bg-[#091747] rounded-md">
+              <h3 className="font-normal text-[12px] mb-3 bg-navy-900 text-white px-[10px] py-[5px] rounded">
+                Creator Details
+              </h3>
+            </div>
+            <div className="">
+              <div className="text-[12px]">
+                <span className="font-semibold">Creator</span>{" "}
+                {data?.creator.firstName + " " + data?.creator.lastName}
+              </div>
+              <div className="text-[12px]">
+                <span className="font-semibold">Created On</span>{" "}
+                {formattedDate}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

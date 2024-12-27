@@ -18,6 +18,14 @@ export const useGetBussiness = () => {
     return query;
 };
 
+export const useGetBussinessCount = () => {
+    const query =  useQuery({
+        queryKey: ['bussinessCount'],
+        queryFn: bussinessService.getCount,
+    });
+    return query;
+};
+
 export const useGetBussinessDisscussion = (id:string) =>{
     const query =  useQuery({
         queryKey: ['bussinessDisscussion',id],
