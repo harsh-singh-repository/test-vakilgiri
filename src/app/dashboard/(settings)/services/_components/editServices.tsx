@@ -5,10 +5,10 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 import { Services } from "../types";
 import Quotation from "../serviceEdit/quotation";
 import Setting from "../serviceEdit/setting";
-import { FormModal } from "./formModal";
 import ContentCreate from "../serviceEdit/contentCreate";
 import Content from "../serviceEdit/content";
 import Distribution from "../serviceEdit/distribution";
+import Modal from "@/components/model/custom-modal";
 
 interface EditServicesProps {
   data: Services; 
@@ -40,26 +40,26 @@ const EditServices: React.FC<EditServicesProps> = ({ data, close, onToggle }) =>
                 </div>
                 <div className="flex items-center space-x-2 mr-4">
                   {
-                    activeButton==="Content" && <button className="text-white bg-[#f21300] p-1 rounded-md"
+                    activeButton==="Content" && <button className="text-white bg-[#f21300] px-2 py-1 text-xs rounded-md"
                     onClick={()=>setIsModalOpen(true)}
                     >create</button>
                   }
-                  <FormModal isOpen={isModalOpen} onClose={handleCloseModal}>
+                  <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                       <div>
                        <ContentCreate data={data} close={handleCloseModal}  contentfetch={contentfetch} 
   setContentfetch={setContentfetch} />
                       </div>
-                      </FormModal>
+                      </Modal>
                       <div
-  className="bg-[#f21300] rounded-md h-8 w-8 flex items-center justify-center group cursor-pointer"
+  className="bg-[#f21300] rounded-md h-5 w-7 flex items-center justify-center group cursor-pointer"
   onClick={close}
 >
   <div
-    className="bg-[#f21300] h-8 w-8 flex items-center justify-center rounded-md group-hover:bg-white transition-colors"
+    className="bg-[#f21300] h-5 w-7 flex items-center justify-center rounded-md group-hover:bg-white transition-colors"
   >
     {/* Cross Icon */}
     <Cross1Icon
-      className="stroke-white group-hover:stroke-[#f21300] h-5 w-5 transition-all"
+      className="stroke-white group-hover:stroke-[#f21300] h-3 w-5 transition-all"
       style={{ strokeWidth: '2px' }}
     />
   </div>
@@ -73,7 +73,7 @@ const EditServices: React.FC<EditServicesProps> = ({ data, close, onToggle }) =>
             key={button}
             className={`px-4 py-2 text-sm font-medium rounded-md ${
               activeButton === button
-                ? "bg-red-500 text-white"
+                ? "bg-[#f21300] text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
             onClick={() => setActiveButton(button)}

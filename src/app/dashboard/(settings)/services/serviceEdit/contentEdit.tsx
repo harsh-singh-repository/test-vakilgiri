@@ -113,7 +113,7 @@ const ContentEdit: React.FC<ContentEditProps> = ({ data, close,setContentfetch }
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 w-80">
       <div className='flex justify-between'>
       <h1 className="font-poppins font-semibold text-xl">Edit {data.type}</h1>
       <button className='text-red-600 font-bold text-lg' onClick={close}><Cross2Icon/></button>

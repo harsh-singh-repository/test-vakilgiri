@@ -6,12 +6,12 @@ import { Input } from "@/components/ui/input";
 import { columns } from "./columns";
 import { useSearchParams } from "next/navigation";
 import { Oval } from "react-loader-spinner";
-import { FormModal } from "@/app/dashboard/tickets/_components/ticketFormModal";
 import ProjectCreate from "./projectCreate";
 import { projectServices } from "../services/manage-projects";
 import { Project } from "../types";
 import ProjectCard from "./client-card";
 import { ProjectTable } from "./client-table";
+import Modal from "@/components/model/custom-modal";
 
 // Define the response structure for projects
 type ResponseData = {
@@ -89,9 +89,9 @@ export default function ProjectPage() {
           </div>
         </div>
         {isModalOpen && (
-          <FormModal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
             <ProjectCreate close={handleCloseModal} />
-          </FormModal>
+          </Modal>
         )}
       </div>
       <Separator />
