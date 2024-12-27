@@ -68,7 +68,7 @@ export default function LabelForm({ onSubmit,close }: LabelFormProps) {
   };
 
   return (
-    <div className="min-w-80">
+    <div className="w-80">
       <div className="flex justify-between w-full mb-2">
             <h1 className="text-lg font-bold">Custom Fee</h1>
             <button onClick={close} className="text-red-600 font-bold bg-white"><Cross2Icon/></button>
