@@ -2,7 +2,6 @@
 import { useGetBussiness } from "@/hooks/business/manage-business";
 import { useGetClients } from "@/hooks/clients/manage-client";
 import { useGetLeads } from "@/hooks/leads/manage-leads";
-import { RxAvatar } from "react-icons/rx";
 import { BussinessGetType, LeadGetType } from "../_types/options";
 import { FaStackExchange } from "react-icons/fa";
 import Modal from "@/components/model/custom-modal";
