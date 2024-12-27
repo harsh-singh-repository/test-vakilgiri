@@ -294,7 +294,7 @@ export const StackExchangeDialog = ({
                                     className={cn(
                                       "min-h-[60px] border-gray-300",
                                       error &&
-                                        "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                        "border-[#f32100] focus:border-[#f32100] focus:ring-[#f32100]"
                                     )}
                                     {...field}
                                   />
@@ -305,7 +305,7 @@ export const StackExchangeDialog = ({
                           <div className="flex justify-end">
                             <button
                               type="submit"
-                              className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-[12px] px-2 right-0 rounded-md"
+                              className="max-w-fit bg-[#f32100] hover:bg-[#f32100]/70 text-white text-[12px] px-2 right-0 rounded-md"
                               disabled={isSubmittingDiscussion}
                             >
                               {isSubmittingDiscussion ? "Saving..." : "Save"}
@@ -324,7 +324,7 @@ export const StackExchangeDialog = ({
                           className="flex flex-row gap-2 items-center bg-[#E9E9E9] rounded-md px-2 py-1 "
                           key={index}
                         >
-                          <RxAvatar size={30} />
+                          <RxAvatar size={25} />
                           <div className="flex flex-col w-full">
                             <span className="font-bold">Nahar Singh</span>
                             <span className="font-medium">
@@ -374,7 +374,7 @@ export const StackExchangeDialog = ({
                                       className={cn(
                                         "bg-white border-gray-300",
                                         error &&
-                                          "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                          "border-[#f32100] focus:border-[#f32100] focus:ring-[#f32100]"
                                       )}
                                     >
                                       <SelectValue placeholder="Select reminder type" />
@@ -410,7 +410,7 @@ export const StackExchangeDialog = ({
                                           !field.value &&
                                             "text-muted-foreground",
                                           error &&
-                                            "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                            "border-[#f32100] focus:border-[#f32100] focus:ring-[#f32100]"
                                         )}
                                       >
                                         <CalendarIcon
@@ -462,7 +462,7 @@ export const StackExchangeDialog = ({
                                   className={cn(
                                     "bg-white border-gray-300",
                                     error &&
-                                      "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                      "border-[#f32100] focus:border-[#f32100] focus:ring-[#f32100]"
                                   )}
                                   {...field}
                                 />
@@ -482,7 +482,7 @@ export const StackExchangeDialog = ({
                                   className={cn(
                                     "min-h-[100px] bg-white border-gray-300",
                                     error &&
-                                      "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                      "border-[#f32100] focus:border-[#f32100] focus:ring-[#f32100]"
                                   )}
                                   {...field}
                                 />
@@ -494,7 +494,7 @@ export const StackExchangeDialog = ({
                         <div className="flex justify-end">
                           <button
                             type="submit"
-                            className="max-w-fit bg-red-500 hover:bg-red-600 text-white text-[12px] px-2 rounded-md"
+                            className="max-w-fit bg-[#f32100] hover:bg-[#f32100]/70 text-white text-[12px] px-2 rounded-md"
                             disabled={isSubmittingReminder}
                           >
                             {isSubmittingReminder ? "Saving..." : "Save"}
@@ -572,6 +572,7 @@ export const StackExchangeDialog = ({
               <X
                 onClick={onClose}
                 strokeWidth={"5"}
+                size={20}
                 className="text-[#f21300] cursor-pointer"
               />
             </div>
@@ -590,7 +591,7 @@ export const StackExchangeDialog = ({
               <Popover>
                 <PopoverTrigger>
                   <div className="text-[#f21300]">
-                    <PlusCircle/>
+                    <PlusCircle />
                   </div>
                 </PopoverTrigger>
                 <PopoverContent>

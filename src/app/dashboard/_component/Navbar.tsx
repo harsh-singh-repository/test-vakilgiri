@@ -72,7 +72,7 @@ const Navbar = () => {
  
   return (
     // <Dialog open={open} onOpenChange={setOpen}>
-      <div className="w-full sticky top-0 bg-white shadow-lg p-2 border-black flex items-center justify-between h-16 z-50">
+      <div className="w-full sticky top-0 bg-white shadow-lg p-2 border-black flex items-center justify-between h-12 z-50">
         <div className="flex justify-center gap-2 items-center">
           <SidebarTrigger>
             <CiMenuBurger />
@@ -101,7 +101,7 @@ const Navbar = () => {
               <PopoverContent className="w-full px-[10px] py-[15px] bg-[#ffffff] rounded-[10px] mt-2 ml-2">
                 <div className="flex flex-col gap-1 items-start justify-center">
                   <div className="w-full flex gap-1 items-start justify-start">
-                    <TbUserSquare size={60} className="mt-2 text-slate-700 shadow-sm shadoe-slate-300" />
+                    <FaRegCircleUser size={60} className="mt-2 text-slate-700 shadow-sm shadoe-slate-300" />
                     <div className="flex flex-col">
                       <p className="text-[16px] font-bold text-[#F20101]">{session?.user.firstname + " " + session?.user.lastName}</p>
                       <div className="flex items-center gap-1 m-0">

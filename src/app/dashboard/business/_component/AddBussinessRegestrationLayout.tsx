@@ -54,7 +54,7 @@ export default function AddBussinessRegistrationLayout() {
                 {/* CSR-1 Registration */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div>
+                    <div className="flex flex-col flex-1">
                       <h3 className="text-xs font-medium">1. Do you have CSR-1 Registration?</h3>
                       <p className="text-xs text-gray-500 font-normal">
                         This registration enables NGO to get exemption on donations under IncomeTax
@@ -69,7 +69,7 @@ export default function AddBussinessRegistrationLayout() {
                             <Switch
                               checked={field.value}
                               onCheckedChange={field.onChange}
-                              className="data-[state=checked]:bg-red-500"
+                              className="data-[state=checked]:bg-[#f32100] ml-4"
                             />
                           </FormControl>
                         </FormItem>
@@ -111,7 +111,7 @@ export default function AddBussinessRegistrationLayout() {
                             <Switch
                               checked={field.value}
                               onCheckedChange={field.onChange}
-                              className="data-[state=checked]:bg-red-500"
+                              className="data-[state=checked]:bg-[#f32100] ml-4"
                             />
                           </FormControl>
                         </FormItem>
@@ -155,7 +155,7 @@ export default function AddBussinessRegistrationLayout() {
                             <Switch
                               checked={field.value}
                               onCheckedChange={field.onChange}
-                              className="data-[state=checked]:bg-red-500"
+                              className="data-[state=checked]:bg-[#f32100] ml-4"
                             />
                           </FormControl>
                         </FormItem>
@@ -197,7 +197,7 @@ export default function AddBussinessRegistrationLayout() {
                             <Switch
                               checked={field.value}
                               onCheckedChange={field.onChange}
-                              className="data-[state=checked]:bg-red-500"
+                              className="data-[state=checked]:bg-[#f32100] ml-4"
                             />
                           </FormControl>
                         </FormItem>
@@ -224,7 +224,7 @@ export default function AddBussinessRegistrationLayout() {
             </div>
 
             <div className="flex justify-end">
-              <Button type="submit" className="bg-red-500 hover:bg-red-600 text-white px-8 py-2 text-sm">
+              <Button type="submit" className="bg-[#f32100] hover:bg-[#f32100]/70 text-white px-8 py-2 text-sm">
                 Update
               </Button>
             </div>

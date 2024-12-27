@@ -133,9 +133,8 @@ export function AppSidebar() {
   return (
     <div className=''>
       <Sidebar className=''>
-        <SidebarContent className='mt-5'>
+        <SidebarContent className='mt-8'>
           <SidebarGroup>
-            <SidebarGroupLabel></SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu className='mt-5'>
                 {items.map((item) => {
