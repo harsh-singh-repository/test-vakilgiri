@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Project } from "../types";
 import { Plus } from "lucide-react";
+import { FaUser } from "react-icons/fa";
 
 const ProjectPage = () => {
   const [projectData, setProjectData] = useState<Project | null>(null);
@@ -15,6 +16,54 @@ const ProjectPage = () => {
       setProjectData(JSON.parse(data));
     }
   }, []);
+  const events = [
+    {
+      date: "24-12-2024, 4:41 pm",
+      person: "Admin",
+      description: "Created a new project",
+    },
+    {
+      date: "26-12-2024, 5:31 am",
+      person: "Admin",
+      description: "Created a new business",
+    },
+    {
+      date: "28-12-2024, 7:09 pm",
+      person: "Admin",
+      description: "updated project",
+    }
+  ];
+  const timeline=()=>{
+    return (
+      <div className="flex flex-col items-start space-y-6">
+      {events.map((event, index) => (
+        <div key={index} className="flex items-start space-x-4 relative">
+          <div className="flex items-center justify-center gap-3">
+          {/* Icon and Dotted Line */}
+          <div className="relative flex-shrink-0 flex flex-col items-center">
+            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center shadow">
+              <FaUser className="text-gray-500 text-lg" />
+            </div>
+            {/* Dotted Line */}
+            {index !== events.length - 1 && (
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-px h-full border-dotted border-gray-700 border"></div>
+            )}
+          </div>
+
+          {/* Timeline Content */}
+          <div className="flex flex-col p-2 bg-white rounded-2xl shadow-md">
+            <div className="text-sm">
+              <span className="font-bold text-red-500">{`(${event.person})`}</span>{" "}
+              <span className="text-gray-900">{event.description}</span>
+            </div>
+            <div className="text-xs text-gray-500">{event.date}</div>
+          </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    )
+  }
 
   return (
     <div className="p-4 bg-[#eaeaea] min-h-screen">
@@ -46,8 +95,8 @@ const ProjectPage = () => {
       </div>
 
       {/* Tab Content */}
-      <div className="mt-4 p-4 bg-white rounded-lg shadow">
-        {activeTab === "Timeline" && <div>(Admin) created a new project</div>}
+      <div className="mt-4 p-2">
+        {activeTab === "Timeline" && timeline()}
         {activeTab !== "Timeline" && <div>{activeTab} content coming soon...</div>}
       </div>
     </div>
