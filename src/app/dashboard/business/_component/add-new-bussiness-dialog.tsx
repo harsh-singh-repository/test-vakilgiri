@@ -29,6 +29,8 @@ import { useAddBusiness } from "@/hooks/business/manage-business";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
 
 const states = [
@@ -135,147 +137,181 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
       </span>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 mt-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-3">
-            <FormField
-              name="business_type"
-              control={form.control}
-              render={({ field }) => (
-                <div>
-                  <FormControl>
-                     <CustomSelect placeholder="BussinessType" {...field} options={bussinessType} className="w-full" onValueChange={field.onChange}
-                    value={field.value}/>
-                  </FormControl>
-                  <FormMessage />
-                </div>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="business_name"
-              render={({ field }) => (
-                <div>
-                  {/* <FormLabel className="text-xs">Business Name</FormLabel> */}
-                  <FormControl>
-                    <MaterialInput {...field} className="text-xs" placeholder="Business Names"/>
-                  </FormControl>
-                  <FormMessage />
-                </div>
-              )}
-            />
-
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="flex flex-col gap-3">
             <div>
-              {/* <FormLabel className="text-xs">Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-full justify-start text-left text-xs font-normal",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PPP") : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover> */}
-              <FormField
-                control={form.control}
-                name="business_reg_date"
-                render={({ field, fieldState: { error } }) => (
-                  <div>
-                    {/* <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left text-xs font-normal",
-                              !field.value && "text-muted-foreground",
-                              error &&
-                                "border-red-500 focus:border-red-500 focus:ring-red-500"
-                            )}
-                          >
-                            <CalendarIcon
-                              className="mr-2 h-4 w-4"
-                              aria-hidden="true"
-                            />
-                            {field.value
-                              ? format(new Date(field.value), "PPP")
-                              : "Pick a date"}
-                          </Button>
-                        </FormControl>
-
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={
-                            field.value ? new Date(field.value) : undefined
-                          }
-                          onSelect={(date) =>
-                            field.onChange(
-                              date ? format(date, "yyyy-MM-dd") : ""
-                            )
-                          }
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover> */}
-                    <CustomDatePicker />
-                    <FormMessage/>
+              <div className="flex flex-col md:flex-col lg:flex-row xl:flex-row gap-4">
+                <div className="flex gap-3 flex-col w-full">
+                  <div className="flex gap-3 items-center">
+                    <FormField
+                      name="business_type"
+                      control={form.control}
+                      render={({ field }) => (
+                        <div className="flex items-center">
+                          <FormLabel className="w-[7rem] text-[13px]">
+                            Business Type
+                          </FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <SelectTrigger className="w-[340px] text-[13px]">
+                                <SelectValue placeholder="Select business type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {bussinessType.map((bussiness, index) => (
+                                  <SelectItem key={index} value={bussiness.key}>
+                                    {bussiness.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </div>
+                      )}
+                    />
                   </div>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="business_pan"
-              render={({ field }) => (
-                <div>
-                  {/* <FormLabel className="text-xs">PAN Card</FormLabel> */}
-                  <FormControl>
-                    <MaterialInput {...field} className="text-xs" placeholder="PAN Card"/>
-                  </FormControl>
-                  <FormMessage />
-                </div>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="business_email"
-              render={({ field }) => (
-                <div>
-                  <FormControl>
-                    <MaterialInput {...field} className="text-xs" placeholder="Official Email Id"/>
-                  </FormControl>
-                  <FormMessage />
-                </div>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="state"
-              render={({ field }) => (
-                <div>
-                    <FormControl>
-                      <CustomSelect {...field} className="w-full" placeholder="State" options={states} onValueChange={field.onChange} value={field.value}/>
-                    </FormControl>
-
-                  <FormMessage />
+                  <FormField
+                    control={form.control}
+                    name="business_name"
+                    render={({ field }) => (
+                      <div>
+                        <div className="flex gap-3 items-center">
+                          <FormLabel className="text-[13px] w-[6.75rem]">
+                            Business Name
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              className="w-[340px] text-[13px]"
+                            />
+                          </FormControl>
+                        </div>
+                      </div>
+                    )}
+                  />
+                  {/* <div className="flex gap-3 items-center"> */}
+                    <FormField
+                      control={form.control}
+                      name="business_reg_date"
+                      render={({ field, fieldState: { error } }) => (
+                        <div className="flex gap-3 items-center">
+                          <FormLabel className="text-[13px] w-[6.75rem]">Date</FormLabel>
+                          {/* <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  className={cn(
+                                    "w-[340px] justify-start text-left text-xs font-normal",
+                                    !field.value && "text-muted-foreground",
+                                    error &&
+                                      "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                  )}
+                                >
+                                  <CalendarIcon
+                                    className="mr-2 h-4 w-4"
+                                    aria-hidden="true"
+                                  />
+                                  {field.value
+                                    ? format(new Date(field.value), "PPP")
+                                    : "Pick a date"}
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar
+                                mode="single"
+                                selected={
+                                  field.value
+                                    ? new Date(field.value)
+                                    : undefined
+                                }
+                                onSelect={(date) =>
+                                  field.onChange(
+                                    date ? format(date, "yyyy-MM-dd") : ""
+                                  )
+                                }
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover> */}
+                          <CustomDatePicker className="w-[340px]"/>
+                        </div>
+                      )}
+                    />
+                  {/* </div> */}
+                  <FormField
+                    control={form.control}
+                    name="business_pan"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex gap-3 items-center">
+                          <FormLabel className="text-[13px] w-[6.75rem]">
+                            PAN Card
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              className="w-[340px] text-[13px]"
+                            />
+                          </FormControl>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="business_email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex gap-3 items-center">
+                          <FormLabel className="text-[13px] w-[6.75rem]">
+                            Official Email Id
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              className="w-[340px] text-[13px]"
+                            />
+                          </FormControl>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex gap-3 items-center">
+                          <FormLabel className="text-[13px] w-[6.75rem]">
+                            State
+                          </FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-[340px] text-[13px]">
+                                <SelectValue placeholder="Select State" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {states.map((state) => (
+                                <SelectItem key={state.key} value={state.key}>
+                                  {state.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div className="flex gap-3 flex-col w-full">
                   <FormField

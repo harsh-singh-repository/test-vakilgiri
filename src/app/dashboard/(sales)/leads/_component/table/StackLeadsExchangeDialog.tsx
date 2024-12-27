@@ -652,7 +652,7 @@ export const StackLeadsExchangeDialog = ({
                           (assign: managerDetails, index: number) => (
                             <div className="" key={index}>
                               <RxAvatar size={"30"}/>
-                              <div className="absolute">
+                              <div className=" w-full justify-start items-center">
                                <X className="text-[#f21300] -translate-y-8 translate-x-4 h-3 w-3 cursor-pointer" strokeWidth={"6"} onClick={()=>handleRemoveManager(assign?.id)}/>
                               </div>
                             </div>

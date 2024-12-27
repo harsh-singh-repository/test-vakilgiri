@@ -82,10 +82,10 @@ export default function ProjectPage() {
             className="w-full md:max-w-sm ml-auto bg-white"
           />
           <div
-            className="bg-[#f21300] text-white p-2 rounded-md cursor-pointer"
+            className="bg-[#f21300] text-white p-1 rounded-md cursor-pointer"
             onClick={handleOpenModal}
           >
-            <Plus className="h-6 w-6" />
+            <Plus strokeWidth={5} className="h-6 w-6" />
           </div>
         </div>
         {isModalOpen && (

@@ -88,8 +88,8 @@ export default function RetailersPage() {
               />
             </Suspense>
 
-              <div className="bg-[#f21300] text-white p-2 rounded-md cursor-pointer" onClick={openModal}>
-                <Plus className="h-6 w-6" />
+              <div className="bg-[#f21300] text-white p-1 rounded-md cursor-pointer" onClick={openModal}>
+                <Plus strokeWidth={5} className="h-6 w-6" />
               </div>
 
               <Modal isOpen={isModalOpen} onClose={closeModal} className="w-[400px]">

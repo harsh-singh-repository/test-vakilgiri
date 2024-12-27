@@ -291,7 +291,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
             />
 
             {/* Submit Button */}
-            <Button type="submit" className="mt-4 w-full">
+            <Button type="submit" className="mt-4 w-full bg-[#f32100] text-white hover:bg-[#f32100]/70">
               Save & Continue
             </Button>
           </form>
@@ -358,7 +358,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
     <div
       key={index}
       className={`bg-red-100 p-2 rounded-md shadow-sm cursor-pointer ${
-        activeIndices.includes(index) ? "ring-2 ring-red-500 bg-red-200" : ""
+        activeIndices.includes(index) ? "ring-2 ring-[#f32100] bg-red-200" : ""
       }`}
       onClick={() => toggleRing(index)}
     >
@@ -401,7 +401,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
               Back
             </button>
             <button
-              className="px-4 py-2 bg-red-600 text-white font-medium rounded-md hover:bg-red-700 focus:outline-none"
+              className="px-4 py-2 bg-[#f32100] text-white font-medium rounded-md hover:bg-[#f32100] focus:outline-none"
               onClick={()=>setCurrentStep(3)}
             >
               Calculate Cost
@@ -454,7 +454,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
             <tr>
               <td className="py-1 px-2">Less: Discount</td>
               <td className="py-1 px-2"></td>
-              <td className="py-1 px-2 text-right text-red-600">-₹{discount.toFixed(2)}</td>
+              <td className="py-1 px-2 text-right text-[#f32100]">-₹{discount.toFixed(2)}</td>
             </tr>
             <tr>
               <td className="py-1 px-2">Add: GST @ 18%</td>
@@ -471,16 +471,16 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
     
         <div className="bg-red-50 p-3 rounded-xl flex items-center justify-between shadow-sm">
   <div className="flex items-center space-x-2">
-  <div className="text-red-600">
+  <div className="text-[#f32100]">
   <AiOutlineBank className="h-8 w-8" />
 </div>
     <div>
-      <div className="text-red-600 font-semibold text-sm">Wallet Balance</div>
+      <div className="text-[#f32100] font-semibold text-sm">Wallet Balance</div>
       <div className="text-blue-950 font-extrabold text-xl">₹3,476,612.06</div>
     </div>
   </div>
   <div className="flex items-center space-x-2">
-    <button className="bg-red-600 text-white p-1 rounded-full text-sm shadow-md">
+    <button className="bg-[#f32100] text-white p-1 rounded-full text-sm shadow-md">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-4 w-4"
@@ -492,7 +492,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
         />
       </svg>
     </button>
-    <button className="bg-red-600 text-white p-1 rounded-full text-sm shadow-md">
+    <button className="bg-[#f32100] text-white p-1 rounded-full text-sm shadow-md">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-4 w-4"
@@ -514,7 +514,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
             Back
           </button>
           <button
-            className="px-2 py-2 bg-red-600 text-white rounded-sm text-xs hover:bg-red-700 focus:outline-none"
+            className="px-2 py-2 bg-[#f32100] text-white rounded-sm text-xs hover:bg-[#f32100] focus:outline-none"
             onClick={handleOpenModal}
           >
             Create Project
@@ -529,7 +529,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
   </p>
   <div className="text-blue-950 font-semibold text-lg">Section-8 Registration</div>
   <div className="space-y-2">
-    <button className="w-full bg-red-600 text-white py-2 rounded-md font-medium hover:bg-red-700"
+    <button className="w-full bg-[#f32100] text-white py-2 rounded-md font-medium hover:bg-[#f32100]"
     onClick={()=>setCurrentStep(4)}
     >
       Create Project & Pay
@@ -551,10 +551,10 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
       <div className="max-w-sm mx-auto bg-white p-4 text-center space-y-1">
       {/* Success Icon and Message */}
       <div>
-        <div className="text-red-600">
+        <div className="text-[#f32100]">
           <AiOutlineCheckCircle className="h-8 w-8 mx-auto" />
         </div>
-        <h2 className="text-red-600 font-bold text-lg mt-1">Success</h2>
+        <h2 className="text-[#f32100] font-bold text-lg mt-1">Success</h2>
         <p className="text-blue-950 font-medium text-xs">
           Your Project has been created successfully
         </p>
@@ -591,7 +591,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
 
       {/* Upload Documents Button */}
       <div>
-        <button className="w-full bg-red-600 text-white py-2 rounded-md font-medium text-xs hover:bg-red-700"
+        <button className="w-full bg-[#f32100] text-white py-2 rounded-md font-medium text-xs hover:bg-[#f32100]"
         onClick={()=>setCurrentStep(5)}
         >
           Upload Documents &rarr;
@@ -654,7 +654,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
   </div>
 
   {/* View Project Button */}
-  <button className="w-full bg-red-600 text-white py-2 rounded-md font-medium text-sm hover:bg-red-700">
+  <button className="w-full bg-[#f32100] text-white py-2 rounded-md font-medium text-sm hover:bg-[#f32100]">
     View Project &raquo;
   </button>
 </div>
@@ -682,7 +682,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
             className="absolute right-0 top-0 text-[#f21300] cursor-pointer"
             onClick={close}
           >
-            <ImCross size={18} />
+            <ImCross size={15} />
           </div>
         </div>
         <div className="mt-1 mb-2 max-h-4">

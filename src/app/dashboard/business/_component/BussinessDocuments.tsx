@@ -68,7 +68,7 @@ export default function BussinessDocuments() {
       </div>
 
       <div className="flex justify-end">
-        <Button className="bg-red-500 hover:bg-red-600 text-white px-8">
+        <Button className="bg-[#f32100] hover:bg-[#f32100]/70 text-white px-8">
           Save & Proceed
         </Button>
       </div>
