@@ -75,7 +75,7 @@ const ClientShowcase = () => {
           {leadData?.map((leads: LeadGetType, index: number) => (
             <div
               key={index}
-              className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
+              className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center shadow-lg border-gray-700/30"
             >
              <Image
                 alt="profile"
@@ -112,7 +112,7 @@ const ClientShowcase = () => {
           {unassignedLeads?.map((leads: LeadGetType, index: number) => (
             <div
               key={index}
-              className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
+              className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center shadow-lg border-gray-700/30"
             >
                <Image
                 alt="profile"
@@ -164,7 +164,7 @@ const ClientShowcase = () => {
           {leadData?.map((leads: LeadGetType, index: number) => (
             <div
               key={index}
-              className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
+              className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center shadow-lg border-gray-700/30"
             >
               <Image
                 alt="profile"
@@ -201,7 +201,7 @@ const ClientShowcase = () => {
             (bussiness: BussinessGetType, index: number) => (
               <div
                 key={index}
-                className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center"
+                className="mb-1 bg-white flex flex-row rounded-2xl p-2 gap-x-3 items-center shadow-lg border-gray-700/30"
               >
                <Image
                 alt="profile"
