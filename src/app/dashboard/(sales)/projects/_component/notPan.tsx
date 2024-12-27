@@ -166,11 +166,11 @@ const NotPan = () => {
 <FormField
           control={form.control}
           name="businessName"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel className={labelstyle}>Business Name</FormLabel>
               <FormControl>
-                <Input placeholder="Business Name" disabled  value="Business Name" />
+                <Input placeholder="Business Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
