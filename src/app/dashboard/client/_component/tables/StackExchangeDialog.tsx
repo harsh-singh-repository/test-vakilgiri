@@ -640,7 +640,7 @@ export const StackExchangeDialog = ({
               </div>
               <div className="text-[12px] ">
                 <span className="font-bold">Manager:</span>{" "}
-                <span className="font-medium">{data?.manager}</span>
+                <span className="font-medium">{}</span>
               </div>
               <div className="text-[10px] bg-[#f21300] max-w-fit text-white px-2 max-h-fit mt-1 rounded-full">
                 <span className="font-bold">KYC Status:</span>{" "}
