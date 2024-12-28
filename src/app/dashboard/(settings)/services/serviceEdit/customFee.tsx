@@ -20,15 +20,15 @@ function CustomFee() {
   };
 
   return (
-    <div className="container mx-auto p-2">
+    <div className="container mx-auto py-1">
       {/* Header Section */}
-      <div className="flex gap-4 items-center mb-6">
-        <h1 className="text-lg font-bold text-blue-950">Custom Wise Fees</h1>
+      <div className="flex gap-2 items-center mb-6">
+        <h1 className="text-[#091747] font-bold font-poppins text-[17px]">Custom Wise Fees</h1>
         <button
           onClick={handleOpenModal}
-          className="bg-green-700 text-white text-xs px-4 h-6 rounded-full hover:bg-green-800"
+          className="bg-[#007822] h-4 w-16 flex justify-center items-center rounded-full text-white text-xs cursor-pointer"
         >
-          + Create
+          Create
         </button>
       </div>
 

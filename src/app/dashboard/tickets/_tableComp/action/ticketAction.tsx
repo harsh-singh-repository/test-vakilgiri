@@ -7,9 +7,9 @@ import { ImBin } from "react-icons/im";
 import { Button } from "@/components/ui/button";
 import { Ticket } from "../ticketColumn";
 import { TicketCategory } from "../../page";
-import { Modal } from "../../_components/ticketModal";
 import ViewTicket from "../../_components/viewTicket";
 import EditTicket from "../../_components/editTicket";
+import Modal from "@/components/model/custom-modal";
 
 
 interface TicketActionProps {

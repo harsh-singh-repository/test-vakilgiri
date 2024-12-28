@@ -89,16 +89,16 @@ const ServiceFee: React.FC<QuotationProps> = ({ data }) => {
     return (
       <div>
         <div className="flex gap-2 w-full">
-          <p className="text-blue-950 font-bold font-poppins text-xl">State Wise Fees</p>
+          <p className="text-[#091747] font-bold font-poppins text-[17px]">State Wise Fees</p>
           <div
-            className="bg-green-700 h-4 w-16 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer"
+            className="bg-[#007822] h-4 w-16 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer"
             onClick={handleFetch}
           >
             Create
           </div>
           {
             Object.entries(stateWiseFees || {}).length>0 && (
-              <div className="bg-red-500 h-4 w-20 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer"
+              <div className="bg-[#f21300] h-4 w-20 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer"
               onClick={handleDeleteAll}
               >
                 Delete All
@@ -126,24 +126,27 @@ const ServiceFee: React.FC<QuotationProps> = ({ data }) => {
                    </tr>
                  </thead>
                  <tbody>
-                   {states.map((state) => (
-                     <tr key={state.id} className="border-t">
-                       <td className="px-3 py-2 whitespace-nowrap text-gray-800">
-                         {state.state.replace("_", " ")}
-                       </td>
-                       <td className="px-3 py-2">
-                         <input
-                           type="number"
-                           placeholder={activeInput === state.id ? "0.00" : "Amount"}
-                           onFocus={() => setActiveInput(state.id)}
-                           onBlur={() => setActiveInput(null)}
-                           onChange={(e) => handleInputChange(state.id, e.target.value)}
-                           className="w-full px-2 py-1 border rounded text-gray-700 min-w-[100px]"
-                         />
-                       </td>
-                     </tr>
-                   ))}
-                 </tbody>
+  {states.map((state) => (
+    <tr key={state.id} className="border-t">
+      <td className="px-3 py-2 whitespace-nowrap text-gray-800">
+        {state.state.replace("_", " ")}
+      </td>
+      <td className="px-3 py-2">
+        <div>
+          <input
+            type="number"
+            placeholder={activeInput === state.id ? "0.00" : "Amount"}
+            onFocus={() => setActiveInput(state.id)}
+            onBlur={() => setActiveInput(null)}
+            onChange={(e) => handleInputChange(state.id, e.target.value)}
+            className="w-[80px] px-2 py-1 border rounded text-gray-700 text-xs"
+          />
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
                </table>
              </div>
            </div>

@@ -16,7 +16,7 @@ export type category = {
 export const categoryColumn:(handleFetch:()=>void)=> ColumnDef<category>[] =(handleFetch)=> [
   {
     accessorKey: "Icon",
-    header: () => <div className="ml-2 text-left">Icon</div>,
+    header: () => <div className="ml-2 text-left text-[14px] font-poppins font-medium">Icon</div>,
     cell: ({ row }) => {
       const iconUrl = `${process.env.NEXT_PUBLIC_ICON_URL}/${row.getValue("Icon")}`;
       return (
@@ -28,15 +28,15 @@ export const categoryColumn:(handleFetch:()=>void)=> ColumnDef<category>[] =(han
   },
   {
     accessorKey: "category",
-    header: () => <div className="text-left ml-4">Category</div>,
+    header: () => <div className="text-left ml-3 text-[14px] font-poppins font-medium">Category</div>,
     cell: ({ row }) => {
       return (
         <div className="text-left flex flex-col gap-0.5 ml-4 mr-2">
-          <div className="text-[10px] font-bold text-[#f21300] leading-none">
+          <div className="text-[10px] font-bold font-poppins text-[#f21300] leading-none">
             {row.original.code}
           </div>
-          <div className="text-[14px] text-[#091747] font-medium leading-none">{row.original.name}</div>
-          <div className="text-[10px] text-[#091747] leading-none">{row.original.description}</div>
+          <div className="text-[14px] text-[#091747] font-poppins font-medium leading-none">{row.original.name}</div>
+          <div className="text-[10px] text-[#091747] font-poppins leading-none">{row.original.description}</div>
         </div>
       );
     },
