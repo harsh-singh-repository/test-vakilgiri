@@ -10,6 +10,7 @@ import { TicketTable } from './_tableComp/ticketTable';
 import { TicketColumns } from './_tableComp/ticketColumn';
 import { TicketCategoryColumns } from './_tableComp/categoryColumn';
 import { FormModal } from './_components/ticketFormModal';
+import { Separator } from '@/components/ui/separator';
 
 interface TicketCreator{
   firstName:string;
@@ -193,9 +194,9 @@ function Page() {
         fetchCategories();
       }, [fetchagain]);
   return (
-    <div className='p-4'>
+    <div className='p-4 sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl overflow-x-hidden'>
       {/* Header */}
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center mb-2">
       <div className="text-2xl font-bold text-[#042559]">{`Tickets`}</div>
         <div className="flex gap-2">
         {/* <Input
@@ -212,11 +213,12 @@ function Page() {
           )}
         </div>
       </div>
-      <div className='p-2'>
+      <Separator/>
+      <div className='py-2'>
       <TicketCard tickets={numberTicket}/>
       </div>
-      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 mt-4 gap-2">
-  <div className="col-span-3">
+      <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 mt-4 gap-2 w-full">
+  <div className="grid xl:col-span-3 col-span-1">
   <TicketTable columns={TicketColumns(categories,tickets,handleFetch)} data={tickets} />
   </div>
   <div>

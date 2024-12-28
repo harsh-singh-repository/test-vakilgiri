@@ -112,9 +112,9 @@ export const TicketColumns:(categories:TicketCategory[],tickets:Ticket[], handle
             {
               row.original.status==='Open' && <div className="bg-[#f21300] text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">Open</div>
               ||
-              row.original.status==='Closed' && <div className="bg-green-600 text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">Closed</div>
+              row.original.status==='Closed' && <div className="bg-[#008626] text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">Closed</div>
               ||
-              row.original.status==='New' && <div className="bg-gray-400 text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">New</div>
+              row.original.status==='New' && <div className="bg-[#bdbdbd] text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">New</div>
             }
           </div>
         )

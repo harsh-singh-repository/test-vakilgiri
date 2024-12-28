@@ -28,23 +28,24 @@ export const ServiceAction: React.FC<ServiceActionProps> = ({
   };
 
   return (
-    <div className="flex justify-end items-center space-x-1">
+    <div className="flex justify-center items-center space-x-1">
       {/* View Button */}
       <Button
-        className="bg-blue-950 text-white rounded-md p-2 hover:bg-red-600 hover:text-white"
+        className="bg-[#091747] text-white rounded-md p-2 hover:bg-[#f21300] hover:text-white h-[25px] w-[25px]"
         variant="ghost"
       >
-        <EyeIcon className="h-5 w-5" />
+        <EyeIcon className="h-[13px]"
+         style={{ strokeWidth: "3px" }} />
       </Button>
 
       {/* Edit Button */}
       <Button
         onClick={handleEdit}
-        className="bg-blue-950 text-white rounded-md p-2 hover:bg-red-600 hover:text-white"
+        className="bg-blue-950 text-white rounded-md p-2 hover:bg-red-600 hover:text-white h-[25px] w-[25px]"
         variant="ghost"
       >
         <CogIcon
-          className="h-5 w-5 stroke-white"
+          className="h-[13px] stroke-white"
           style={{ strokeWidth: "3px" }}
         />
       </Button>

@@ -5,14 +5,14 @@ import { ServiceStatus } from "./action/serviceStatus";
 import { ServiceAction } from "./action/serviceAction";
 // import { getSession } from "next-auth/react";
 
-
+const sameStyle="text-[14px] font-poppins font-medium"
 export const columns: (
   onToggle: (id: string, newActive: boolean) => void,
   setFetchAgain: React.Dispatch<React.SetStateAction<boolean>>
 ) => ColumnDef<Services>[] = (onToggle, setFetchAgain) => [
   {
     accessorKey: "Icon",
-    header: () => <div className="ml-2 text-left">Icon</div>,
+    header: () => <div className="ml-2 text-left text-[14px] font-poppins font-medium">Icon</div>,
     cell: ({ row }) => {
       const iconUrl = `${process.env.NEXT_PUBLIC_ICON_URL}/${row.getValue("Icon")}`;
       return (
@@ -24,7 +24,7 @@ export const columns: (
   },
   {
     accessorKey: "ServiceId",
-    header: () => <div className="text-left">Service id</div>,
+    header: () => <div className="text-left text-[14px] font-poppins font-medium">Service id</div>,
     cell: ({ row }) => (
       <div className="text-left text-[#091747] text-[14px] font-medium ml-1">
         {row.getValue("ServiceId")}
@@ -33,13 +33,13 @@ export const columns: (
   },
   {
     accessorKey: "ServiceName",
-    header: () => <div className="text-left">Service Name</div>,
+    header: () => <div className="text-left text-[14px] font-poppins font-medium">Service Name</div>,
     cell: ({ row }) => (
       <div className="text-left flex flex-col gap-0.5">
-        <div className="text-[14px] leading-none text-[#091747] font-medium">
+        <div className="text-[14px] leading-none font-poppins text-[#091747] font-medium">
           {row.getValue("ServiceName")}
         </div>
-        <div className="text-[10px] font-medium text-[#f21300] leading-none">
+        <div className="text-[10px] font-semibold font-poppins text-[#f21300] leading-none">
           {row.original.description}
         </div>
       </div>
@@ -47,16 +47,16 @@ export const columns: (
   },
   {
     accessorKey: "projects",
-    header: () => <div className="flex justify-center items-center">Projects</div>,
+    header: () => <div className="flex justify-center items-center text-[14px] font-poppins font-medium">Projects</div>,
     cell: ({ row }) => (
-      <div className="flex justify-center items-center text-[#091474] font-medium text-[14px]">
+      <div className="flex justify-center items-center text-[#091747] font-medium text-[14px]">
         {row.getValue("projects")}
       </div>
     ),
   },
   {
     accessorKey: "active",
-    header: () => <div className="flex justify-end items-center mr-3">Active</div>,
+    header: () => <div className="flex justify-center items-center mr-3 text-[14px] font-poppins font-medium">Active</div>,
     cell: ({ row }) => {
       const isActive: boolean = row.getValue("active");  // Explicitly type as boolean
       const handleSwitchChange = () => {
@@ -64,7 +64,7 @@ export const columns: (
       };
     
       return (
-        <div className="flex justify-end items-center mr-3">
+        <div className="flex justify-center items-center mr-3">
           <label className="relative inline-block w-10 h-5">
             <input
               type="checkbox"
@@ -81,14 +81,14 @@ export const columns: (
   },  
   {
     accessorKey: "status",
-    header: () => <div className="flex justify-end items-center mr-1">Status</div>,
+    header: () => <div className="flex justify-center items-center mr-2 text-[14px] font-poppins font-medium">Status</div>,
     cell: ({ row }) => (
       <ServiceStatus isActive={row.getValue("active")} />
     ),
   },
   {
     id: "action",
-    header: () => <div className="flex justify-end items-center mr-3">Action</div>,
+    header: () => <div className="flex justify-center items-center mr-3 text-[14px] font-poppins font-medium">Action</div>,
     cell: ({ row }) => (
       <ServiceAction
         original={row.original}

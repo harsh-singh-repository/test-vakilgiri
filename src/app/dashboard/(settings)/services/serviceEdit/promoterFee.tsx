@@ -94,16 +94,16 @@ const PromoterFee: React.FC<QuotationProps> = ({ data }) => {
   return (
     <div className="mt-1">
       <div className="flex gap-2 w-full">
-        <p className="text-blue-950 font-bold font-poppins text-xl">Promoter Wise Fees</p>
+        <p className="text-[#091747] font-bold font-poppins text-[17px]">Promoter Wise Fees</p>
         <div
-          className="bg-green-700 h-4 w-16 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer"
+          className="bg-[#007822] h-4 w-16 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer"
           onClick={handleFetch}
         >
           Create
         </div>
         {Object.entries(promoterWiseFees || {}).length > 0 && (
           <div
-            className="bg-red-500 h-4 w-20 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer"
+            className="bg-[#f21300] h-4 w-20 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer"
             onClick={handleDeleteAll}
           >
             Delete All
@@ -111,13 +111,13 @@ const PromoterFee: React.FC<QuotationProps> = ({ data }) => {
         )}
       </div>
       {Object.entries(promoterWiseFees || {}).length > 0 ? (
-        <div className="flex gap-2 mt-2 overflow-x-auto">
+        <div className="flex gap-2 mt-2 w-[500px] overflow-x-auto">
           {Object.entries(promoterWiseFees || {}).map(([promoterCount, promoters]) => (
             <div
               key={promoterCount}
               className="border rounded-xl shadow-md bg-white w-80 overflow-hidden"
             >
-              <table className="w-full text-sm">
+              <table className="w-fit text-sm">
                 <thead className="bg-blue-950 text-white">
                   <tr>
                     <th className="px-3 py-2 text-left font-semibold">
@@ -139,7 +139,7 @@ const PromoterFee: React.FC<QuotationProps> = ({ data }) => {
                           onFocus={() => setActiveInput(promoter.id)}
                           onBlur={() => setActiveInput(null)}
                           onChange={(e) => handleInputChange(promoter.id, e.target.value)}
-                          className="w-full px-2 py-1 border rounded text-gray-700"
+                          className="w-[80px] text-xs px-2 py-1 border rounded text-gray-700"
                         />
                       </td>
                     </tr>

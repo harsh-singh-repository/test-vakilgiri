@@ -35,10 +35,10 @@ export function ServiceTable<TData, TValue>({
   })
 
   return (
-    <ScrollArea className="p-2 w-full max-h-fit overflow-y-auto rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+    <ScrollArea className="py-2 w-full max-h-fit overflow-y-auto rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
     <div className="rounded-md border bg-white mb-1">
       <Table>
-        <TableHeader className="bg-blue-950 hover:bg-blue-950 text-white">
+        <TableHeader className="bg-[#091747] max-h-[35px] text-white">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {

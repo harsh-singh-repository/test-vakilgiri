@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import {EditIcon } from "lucide-react";
 import { FormModal } from "../_components/formModal";
 import AddCategory from "../_components/addCategory";
 import { ImCross } from "react-icons/im";
 import { Plus } from "lucide-react";
+import { FaPencilAlt } from "react-icons/fa";
 interface ActionCellProps {
   handleFetch: () => void;
 }
@@ -49,10 +49,10 @@ export const CategoryEditCell: React.FC = () => {
   return (
     <div className="flex justify-end mr-4">
       <button
-        className="w-8 h-8 bg-blue-950 text-white rounded flex items-center justify-center hover:bg-[#f21300] hover:text-white"
+        className="w-[20px] h-[20px] bg-[#091747] text-white rounded flex items-center justify-center hover:bg-[#f21300] hover:text-white"
         title="Edit"
       >
-        <EditIcon size={16} />
+        <FaPencilAlt size={10} />
       </button>
     </div>
   );

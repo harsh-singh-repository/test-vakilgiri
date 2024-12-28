@@ -10,6 +10,8 @@ import { IoIosSave, IoMdEye } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import TicketReplyCreate from "./ticketReplyCreate";
 import { toast } from "sonner";
+import Profile from "../../../../../public/assets/profileimg.png";
+import Image from "next/image";
 interface TicketCreator {
   firstName: string;
   lastName: string;
@@ -296,27 +298,27 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
     return `${day}${daySuffix(day)} ${month}, ${year}, ${hours}:${minutes} ${amPm}`;
   };
   return (
-    <div className="p-3">
+    <div className="p-3 min-w-[300px] mx-auto">
       <div className="flex justify-between mb-1">
         <div className="flex gap-2">
-          <div className="text-xl font-bold">
+          <div className="text-[18px] font-poppins font-semibold">
             {`Tickets | #${data.sn} | ${new Date(data.modifiedAt)
               .toLocaleDateString("en-GB")
               .replaceAll("/", "-")}`}
           </div>
           <div className="flex justify-center items-center">
             {(data.status === "Open" && (
-              <div className="bg-red-500 text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
+              <div className="bg-[#f21300] text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
                 Open
               </div>
             )) ||
               (data.status === "Closed" && (
-                <div className="bg-green-500 text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
+                <div className="bg-[#008626] text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
                   Closed
                 </div>
               )) ||
               (data.status === "New" && (
-                <div className="bg-gray-400 text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">
+                <div className="bg-[#bdbdbd] text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">
                   New
                 </div>
               ))}
@@ -324,19 +326,20 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
         </div>
 
         <div
-          className="p-1 bg-blue-950 rounded-xl text-white cursor-pointer"
+          className="p-1 bg-[#091747] rounded-xl text-white cursor-pointer h-8"
           onClick={close}
         >
           <X />
         </div>
       </div>
-      <div className="grid grid-cols-5 gap-2">
-        <div className="col-span-3">
-          <div className="bg-gray-200 rounded-xl p-2">
+      <div className="grid xl:grid-cols-5 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-2">
+        <div className="grid xl:col-span-3 lg:col-span-2 md:col-span-1 sm:col-span-1">
+          <div className="flex flex-col gap-2">
+          <div className="bg-gray-200 rounded-xl p-4 flex items-center font-poppins text-[#091747] h-[32px]">
             <strong>Category:</strong>
             {` ${data.category.name}`}
           </div>
-          <div className="bg-gray-200 rounded-xl p-2 mt-1">
+          <div className="bg-gray-200 flex items-center font-poppins text-[#091747] rounded-xl p-4 h-[32px]">
             <strong>Subject:</strong>
             {` ${data.subject}`}
           </div>
@@ -344,11 +347,21 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
   <ScrollArea className="min-h-10 max-h-80 flex flex-col gap-4">
     {replies.length > 0 ? (
       replies.map((reply, index) => (
-        <div key={index} className="bg-red-100 p-2 rounded-xl mt-2">
-          <div className="flex flex-col">
-            <div className="font-bold">{reply.creator?.firstName || "Unknown"}</div>
-            <div className="text-gray-700">{reply.replyBody || "No content"}</div>
-            <div className="text-xs text-[#f21300]">
+        <div key={index} className="bg-[#fcd7d780] p-2 rounded-xl mt-2 flex gap-2">
+          <div>
+            <Image
+                alt="profile"
+                src={Profile}
+                height="40"
+                width="40"
+                className="rounded-full mr-2"
+                style={{ boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)" }}
+              />
+          </div>
+          <div className="flex flex-col leading-none gap-2">
+            <div className="font-bold text-[14px] font-poppins text-[#091747]">{reply.creator?.firstName || "Unknown"}</div>
+            <div className="text-[#091747] text-[14px] font-poppins">{reply.replyBody || "No content"}</div>
+            <div className="text-[10px] text-[#f21300] font-poppins font-medium">
               {reply.modifiedAt ? formatDate(reply.modifiedAt) : "No date available"}
             </div>
           </div>
@@ -360,6 +373,7 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
   </ScrollArea>
 
 </div>
+</div>
 {
   data.status!=='Closed' && (
   <div className="flex flex-col justify-end h-fit">
@@ -370,7 +384,7 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
 }
           
         </div>
-        <div className="col-span-2">
+        <div className="grid xl:col-span-2 lg:col-span-1 md:col-span-1 sm:col-span-1">
           <div className="bg-gray-200 p-2 h-16 rounded-xl flex flex-col">
             <div className="ml-3">
               <strong>Manager</strong>
