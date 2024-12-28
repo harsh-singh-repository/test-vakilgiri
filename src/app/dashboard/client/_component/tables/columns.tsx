@@ -58,10 +58,10 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: 'kyc',
-    header: 'KYC\'s'
+    header: 'KYC\'s',
   },
   {
     accessorKey: 'action',
     header: 'Action',
-  }
-];
+  },
+]

@@ -22,13 +22,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
+
+
       <body
         className={`${poppins.className} antialiased bg-[#002537]` }
-      >
+        >
         <Providers>
           {children} 
         </Providers>
       </body>
+
     </html>
   );
 }

@@ -124,9 +124,11 @@ export function ClientTable<TData, TValue>({
     // const cellValue = cell.value;
 
     if (columnId === 'kyc') {
+      const rowData = cell.row.original as RowData;
+      const kyc = rowData.kyc
       return (
         <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-[#f21300] text-white text-sm">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          {kyc}
         </div>
       );
     }

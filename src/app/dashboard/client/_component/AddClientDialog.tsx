@@ -100,20 +100,20 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
       <div >
         <div className="relative flex items-center justify-between px-4 ">
           <div className="flex-1 text-center">
-            <h2 className="text-2xl font-bold tracking-tight text-[#091747]">
+            <h2 className="text-[20px] font-bold text-black">
               Create New Client
             </h2>
-            <p className="text-[#f21300] text-sm">
+            <p className="text-[#f21300] text-[13px] font-medium leading-none">
               Fill all the information correctly to avoid duplicacy.
             </p>
           </div>
-          <button className="absolute text-[#f21300] top-0 right-0" onClick={onClose}>
-            <X size={24} />
-          </button>
+          <div className="absolute text-[#f21300] top-0 right-0 cursor-pointer" onClick={onClose}>
+            <X className="" size={"16"} strokeWidth={"5"}/>
+          </div>
         </div>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 mt-1">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 mt-3">
           <FormField
             control={form.control}
             name="PAN"

@@ -59,7 +59,7 @@ const ActionButton = ({id}:ActionButtonProps) => {
             }}>
             <FaStackExchange />
           </Button>
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <Modal isOpen={isModalOpen} onClose={closeModal} className="w-[900px] rounded-2xl">
              <StackExchangeDialog openDialogId={openDialogId} onClose={closeModal}/>
           </Modal>
         {/* </DialogTrigger> */}
