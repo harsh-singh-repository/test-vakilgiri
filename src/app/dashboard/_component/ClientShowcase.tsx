@@ -64,7 +64,7 @@ const ClientShowcase = () => {
   console.log(bussinessData);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 p-5 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 p-5 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
       <div
         // key={table.tableId}
         className="border px-2 py-4 rounded-md shadow bg-[#E2E2E2]"

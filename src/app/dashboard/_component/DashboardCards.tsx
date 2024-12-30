@@ -178,7 +178,7 @@ const cardData = [
 
 const DashboardCard = () => {
   return (
-    <div className="p-5 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+    <div className="p-5 grid grid-cols-1 gap-3 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4">
       {cardData.map((card, index) => {
         return (
           <div key={index} className={`w-full h-fit xl:order-1 flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 ${card.BgColor}`}>
