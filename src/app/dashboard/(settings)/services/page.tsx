@@ -100,7 +100,7 @@ export default function DemoPage() {
       if (!response.ok) {
         throw new Error(`Failed to update service status: ${response.statusText}`);
       }
-      setData((prevData) =>
+      setData((prevData:Services[]) =>
         prevData.map((service) =>
           service.id === id ? { ...service, active: newActive, status: newActive ? "Active" : "Inactive" } : service
         )
