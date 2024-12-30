@@ -1,9 +1,10 @@
 "use client";
 
-import { FormModal } from "@/app/dashboard/(settings)/services/_components/formModal";
+
 import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import CategoryForm from "../../_components/addCategory";
+import Modal from "@/components/model/custom-modal";
 
 
 interface TicketCategoryActionProps {
@@ -27,9 +28,9 @@ const TicketCategoryAction: React.FC<TicketCategoryActionProps> = ({ handleFetch
       </div>
 
       {isModalOpen && (
-        <FormModal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <CategoryForm close={handleCloseModal} fetchagain={handleFetch} />
-        </FormModal>
+        </Modal>
       )}
     </div>
   );

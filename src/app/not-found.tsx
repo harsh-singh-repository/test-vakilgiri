@@ -31,7 +31,7 @@ export default function Page() {
         <Link href="/dashboard">
           <Button className="inline-flex items-center space-x-2 my-2 bg-[#f21300]">
             <HomeIcon className="w-4 h-4" />
-            <span>Return Home</span>
+            <span>Return Dashboard</span>
           </Button>
         </Link>
       </div>

@@ -77,7 +77,7 @@ const EditTicket: React.FC<EditTicketProps> = ({ data, close,categories,handleFe
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md">
+    <div className="p-4 bg-white rounded-lg shadow-md w-[950px]">
      <div className="flex items-center justify-between w-full mb-2">
   <div className="flex justify-center w-full font-bold text-xl">{`Edit: ${data.sn}`}</div>
   <div className="flex justify-end cursor-pointer" onClick={close}>

@@ -11,7 +11,7 @@ export interface BusinessStats {
       section8: number
       trust: number
       society: number
-      micro: number
+      Micro_Finance: number
       producer: number
       proprietor: number
       partnership: number

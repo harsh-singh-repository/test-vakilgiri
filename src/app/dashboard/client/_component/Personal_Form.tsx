@@ -62,7 +62,7 @@ const Personal_Form = ({clientId}:clientIdProps) => {
           email: data.email ?? "",
           gender: data.gender ?? "Male",
           mobileNumber: data.mobileNumber ?? "",
-          dob: data.dob.split("T")[0] ?? "11/07/2024",
+          dob: data.dob?.split("T")[0] ?? "11/07/2024",
           aadhaar: data.aadhaar ?? "112312312321",
           din: data.din ?? "",
           dscInfo: data.dscInfo ?? "Not_Applicable",

@@ -147,10 +147,6 @@ const ServiceInfo: React.FC<ServiceInfoProps> = ({ id,name }) => {
             return <p className="p-4">No content available.</p>;
     }
 };
-
-
-
-
   const videoId = "GDEAEGrZAI8";
   const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
@@ -193,14 +189,14 @@ const ServiceInfo: React.FC<ServiceInfoProps> = ({ id,name }) => {
         <p className="text-[#091747] font-medium font-poppins text-[15px]">{shortDescription?.description}</p>
       </div>
       </div>
-      <div className="flex mt-4 space-x-2">
+      <div className="flex flex-wrap mt-4 gap-2 sm:gap-4">
         {buttons.map((button) => (
           <button
             key={button}
-            className={`px-4 py-2 text-sm font-medium rounded-md ${
+            className={`flex-shrink-0 px-4 py-2 text-sm font-medium rounded-md ${
               activeButton === button
                 ? "bg-[#f32100] text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                : "bg-gray-100 text-gray-700 hover:bg-red-100"
             }`}
             onClick={() => setActiveButton(button)}
           >

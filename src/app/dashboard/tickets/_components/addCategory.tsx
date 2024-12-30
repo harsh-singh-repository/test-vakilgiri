@@ -74,11 +74,11 @@ const CategoryForm: React.FC<CategoryFormProps> = ({fetchagain}) => {
     fetchagain();
   }
   return (
-    <div className="p-4 max-w-lg mx-auto">
+    <div className="p-4 w-80 mx-auto">
         <div className="flex justify-between">
         <h1 className="text-lg font-bold mb-4">Create Category</h1>
-        <Button className="text-[#F31F0D] bg-none hover:text-red-600" variant="ghost" onClick={handleClose}>
-        <X className="h-5 w-5" />
+        <Button className="text-[#F31F0D] bg-none hover:text-red-600 font-bold" variant="ghost" onClick={handleClose}>
+        <X className="h-5 w-5" strokeWidth={5} />
       </Button>
         </div>
       

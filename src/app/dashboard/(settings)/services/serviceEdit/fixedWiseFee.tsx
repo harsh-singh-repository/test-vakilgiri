@@ -88,14 +88,14 @@ const FixedWiseFee: React.FC<FixedWiseProps> = ({ data }) => {
   return (
     <div>
       <div className="flex gap-2 w-full">
-        <p className="text-blue-950 font-bold font-poppins text-xl">Fixed Govt Fees</p>
+        <p className="text-[#091747] font-bold font-poppins text-[17px]">Fixed Govt Fees</p>
         <div
-          className="bg-green-700 h-4 w-16 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer"
+          className="bg-[#007822] h-4 w-16 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer"
           onClick={handleOpenModal}
         >
           Create
         </div>
-        <div className="bg-red-500 h-4 w-20 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer">
+        <div className="bg-[#f21300] h-4 w-20 flex justify-center items-center mt-1 rounded-full text-white text-xs cursor-pointer">
           Delete All
         </div>
       </div>
@@ -118,8 +118,9 @@ const FixedWiseFee: React.FC<FixedWiseProps> = ({ data }) => {
             </tbody>
           </table>
         ) : (
-          <table className="table-auto w-96 mt-4 rounded-xl border shadow-md">
-            <thead>
+          <div className='rounded-xl w-fit overflow-hidden'>
+          <table className="table-auto w-96 rounded-xl border shadow-md">
+            <thead className='rounded-xl'>
               <tr className=" rounded-xl bg-blue-950">
                 <th className="px-4 py-2 text-left text-white">Particular</th>
                 <th className="px-4 py-2 text-white">Amount</th>
@@ -129,28 +130,29 @@ const FixedWiseFee: React.FC<FixedWiseProps> = ({ data }) => {
               {fixedwise.map((item, index) => (
                 <tr key={item.id}>
                   <td className="px-4 py-2">
-                    <div className='flex gap-2 font-semibold text-lg'>
-                    <div className='text-red-500'>
+                    <div className='flex gap-2 font-medium text-[14px]'>
+                    <div className='text-[#f21300] font-poppins'>
                      {index + 1}
                     </div>
-                    <div className='text-red-500'>
+                    <div className='text-[#f21300] font-poppins'>
                        {item.title}
                     </div>
                     </div>
                    
-                    <div>
+                    <div className='text-[11px] font-poppins'>
                        {item.description}
                     </div>
-                    <div className='flex gap-2'>
-                      <strong>Type : </strong>{item.fixedType}
+                    <div className='flex gap-2 font-poppins text-[12px]'>
+                      <strong className='font-poppins text-[12px]'>{`Type : `}</strong>{item.fixedType}
                     </div>
                   </td>
                   <td className=" px-4 py-2 text-right">
-                    <div className='flex gap-2 items-center justify-center'>
+                    <div className='flex gap-2 items-center justify-end'>
                     <Input
                       defaultValue={item.amount}
                       type="number"
                       onBlur={(e) => handleAmountChange(item.id, Number(e.target.value))}
+                      className='w-[100px]'
                     />
                     <div className='text-red-500 cursor-pointer' onClick={()=>handleDelete(item.id)}>
                     <RiDeleteBin5Line />
@@ -162,6 +164,7 @@ const FixedWiseFee: React.FC<FixedWiseProps> = ({ data }) => {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>

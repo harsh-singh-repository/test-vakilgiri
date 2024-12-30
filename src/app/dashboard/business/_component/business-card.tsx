@@ -52,7 +52,7 @@ export default function BusinessCardSection() {
         section8: 0,
         trust: 0,
         society: 0,
-        micro: 0,
+        Micro_Finance: 0,
         producer: 0,
         proprietor: 0,
         partnership: 0,
@@ -72,7 +72,7 @@ export default function BusinessCardSection() {
       LLP: "llps",
       Section_8: "section8",
       Society: "society",
-      Micro: "micro",
+      Micro_Finance: "Micro_Finance",
       Producer: "producer",
       Proprietor: "proprietor",
       Partnership: "partnership",
@@ -98,14 +98,7 @@ export default function BusinessCardSection() {
     }, [data]);
   
   // Helper function to render key-value pairs
-  const renderStatItems = (statObj: { [key: string]: number }, label: { [key: string]: string }) => {
-    return Object.entries(statObj).map(([key, value]) => (
-      <div className="flex flex-col justify-center items-center" key={key}>
-        <span className="font-medium text-xl text-black">{value}</span>
-        <span className="text-xs font-semibold lg:text-nowrap">{label[key as keyof typeof label]}</span>
-      </div>
-    ));
-  };
+
   
 
   const businessLabels = {
@@ -121,7 +114,7 @@ export default function BusinessCardSection() {
     section8: "Section 8",
     trust: "Trust",
     society: "Society",
-    micro: "Micro",
+    Micro_Finance: "Micro",
     producer: "Producer",
     proprietor: "Proprietor",
     partnership: "Partnership"
@@ -131,6 +124,15 @@ export default function BusinessCardSection() {
     registered: "Registered",
     pending: "Pending",
     suspended: "Suspended"
+  };
+
+    const renderStatItems = (statObj: { [key: string]: number }, label: { [key: string]: string }) => {
+    return Object.entries(statObj).map(([key, value]) => (
+      <div className="flex flex-col justify-center items-center" key={key}>
+        <span className="font-medium text-xl text-black">{value}</span>
+        <span className="text-xs font-semibold lg:text-nowrap">{label[key as keyof typeof label]}</span>
+      </div>
+    ));
   };
 
   return (

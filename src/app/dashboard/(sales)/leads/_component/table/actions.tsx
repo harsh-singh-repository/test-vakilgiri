@@ -64,7 +64,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ id }) => {
       >
         <FaStackExchange />
       </Button>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onClose={closeModal} className="rounded-2xl">
          <StackLeadsExchangeDialog openDialogId={openDialogId} onClose={closeModal}/> 
       </Modal>
       <Button className="bg-[#f21300] text-white w-6 h-7 text-sm" onClick={()=>handleDeleteLeads(id)}>

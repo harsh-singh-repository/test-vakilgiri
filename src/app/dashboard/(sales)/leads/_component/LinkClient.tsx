@@ -70,7 +70,7 @@ const LinkClient = ({ leadId }: { leadId: string }) => {
           className="w-[250px]"
           onChange={handleChange}
         />
-        <div className="text-xs text-[#091747] flex flex-col gap-y-2 w-full px-2 cursor-pointer custom-scrollbar">
+        <div className="text-xs text-[#091747] flex flex-col gap-y-2 w-full px-2 cursor-pointer custom-scrollbar overflow-auto h-32">
           {data?.map((searchClient: clientDetailsType, index: number) => {
             const isSelected = searchClient.id === selectedClientId;
             return (

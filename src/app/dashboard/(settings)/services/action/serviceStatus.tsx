@@ -14,10 +14,10 @@ export const ServiceStatus: React.FC<ServiceStatusProps> = ({ isActive }) => {
   }, [isActive]);
 
   return (
-    <div className="flex justify-end items-center">
     <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center h-[20px] w-[100px]">
       <span
-        className={`px-2 py-1 rounded-full text-white text-[13px] ${
+        className={`px-2 py-1 rounded-full text-white text-[10px] font-poppins ${
           status === "Active" ? "bg-[#007321] mr-1" : "bg-[#f21300]"
         }`}
       >

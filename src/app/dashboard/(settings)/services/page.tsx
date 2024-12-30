@@ -150,11 +150,11 @@ export default function DemoPage() {
         </FormModal>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-2 h-[100%]">
-        <div className="col-span-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-7 gap-2 h-[100%]">
+        <div className="grid xl:col-span-5 lg:col-span-5">
           <ServiceTable columns={columns(handleToggle, setFetchagain)} data={data} />
         </div>
-        <div className="col-span-2">
+        <div className="grid xl:col-span-2 lg:col-span-2">
           <ServiceTable columns={categoryColumn(handleFetch)} data={categoryData} />
         </div>
       </div>

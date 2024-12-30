@@ -60,6 +60,7 @@ import { useDeleteClientReminder } from "@/hooks/tickets/manage-ticket";
 import { useGetUsers } from "@/hooks/user/manage-user";
 import { MaterialInput } from "@/components/material-input";
 import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
+import { RotatingLines } from "react-loader-spinner";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -259,6 +260,22 @@ export const StackExchangeDialog = ({
     setIsSubmittingReminder(false);
   }
 
+  if (!data) {
+    return (
+      <div className="flex justify-center item center p-2 h-full">
+        <RotatingLines
+          visible={true}
+          height="50"
+          width="50"
+          strokeColor="#f21300"
+          strokeWidth="2"
+          animationDuration="0.75"
+          ariaLabel="rotating-lines-loading"
+        />
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="p-2 flex items-start gap-x-2">
@@ -318,7 +335,7 @@ export const StackExchangeDialog = ({
                   </AccordionContent>
                 </AccordionItem>
                 {clientDisscussionData && (
-                  <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
+                  <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2 mb-2">
                     {clientDisscussionData.map(
                       (discussion: clientDisscussionProps, index: number) => (
                         <div

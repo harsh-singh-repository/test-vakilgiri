@@ -725,8 +725,8 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
     )
   }
   return (
-    <div className="grid grid-cols-3 rounded-md w-full">
-      <div className="col-span-2 bg-gray-200 p-6 min-h-full">
+    <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 rounded-md w-full">
+      <div className="grid xl:col-span-2 grid-cols-1 bg-gray-200 p-6 min-h-full">
         <ServiceInfo id={selectedServiceId} name={(services.find((service) => service.id === selectedServiceId))?.ServiceName || ''}/>
       </div>
       <div className="col-span-1 bg-white p-6 min-h-[800px] w-full">
