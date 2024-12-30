@@ -50,11 +50,12 @@ const ClientShowcase = () => {
   };
 
   const unassignedLeads = leadData?.filter(
-    (lead: LeadGetType) => lead.assigned.length === 0
+    (lead: LeadGetType) => !lead?.assigned || lead.assigned.length === 0
   );
-
+  
+  // For business
   const unassignedBussiness = bussinessData?.filter(
-    (business: BussinessGetType) => business?.managers.length === 0
+    (business: BussinessGetType) => !business?.managers || business.managers.length === 0
   );
   // const unassignedBussiness = leadData?.filter((lead:LeadGetType) => lead.assigned === null) || [];
 
