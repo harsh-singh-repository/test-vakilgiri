@@ -1,7 +1,4 @@
 'use client';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { HomeIcon } from 'lucide-react';
 import Image from 'next/image';
 import ServerErrorImage from '@/assets/InternalServerErrorImage.jpg';
 
