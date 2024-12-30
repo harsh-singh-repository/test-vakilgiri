@@ -36,7 +36,7 @@ const ActionButton = ({id}:ActionButtonProps) => {
             }}>
             <FaStackExchange />
           </Button>
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <Modal isOpen={isModalOpen} onClose={closeModal} className="rounded-2xl">
              <StackBussinessExchangeDialog openDialogId={openDialogId} onClose={closeModal}/>
           </Modal>
       <Button

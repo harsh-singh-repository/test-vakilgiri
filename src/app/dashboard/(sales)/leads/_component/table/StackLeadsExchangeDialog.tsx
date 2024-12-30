@@ -8,8 +8,6 @@ import {
 import { format } from "date-fns";
 import {
   CalendarIcon,
-  Pencil,
-  Plus,
   PlusCircle,
   Trash2,
   X,
@@ -40,6 +38,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 //   import { RxAvatar } from "react-icons/rx";
+import Profile from "../../../../../../../public/assets/profileimg.png";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useAddLeadsDiscussion,
@@ -66,14 +65,13 @@ import {
 } from "../../_types";
 import { AxiosError } from "axios";
 import EditLeads from "../EditLeads";
-import AddClientDialog from "@/app/dashboard/client/_component/AddClientDialog";
-import Modal from "@/components/model/custom-modal";
-import { useState } from "react";
 import LinkClient from "../LinkClient";
 import LinkBussiness from "../LinkBussiness";
 import { useGetUsers } from "@/hooks/user/manage-user";
 import { MaterialInput } from "@/components/material-input";
 import { RotatingLines } from "react-loader-spinner";
+import Image from "next/image";
+import { FaPencilAlt, FaPlus } from "react-icons/fa";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -119,11 +117,6 @@ export const StackLeadsExchangeDialog = ({
   // const [date, setDate] = React.useState<Date>()
   //   const [isSubmittingReminder, setIsSubmittingReminder] = useState(false);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
   const queryClient = useQueryClient();
 
   const discussionForm = useForm<z.infer<typeof leadsDiscussionSchema>>({
@@ -166,7 +159,7 @@ export const StackLeadsExchangeDialog = ({
 
   const { mutate: deleteReminder } = useDeleteLeadsReminder(openDialogId);
 
-  const {mutate:removeManger} = useRemoveLeadManager(openDialogId);
+  const { mutate: removeManger } = useRemoveLeadManager(openDialogId);
 
   console.log("Data of leads", data);
 
@@ -306,60 +299,62 @@ export const StackLeadsExchangeDialog = ({
   };
 
   const handleRemoveManager = (id: string) => {
-    console.log("ID",id)
-    removeManger(id,{
-     onSuccess: () => {
-       toast.success("Manager Removed");
-       queryClient.invalidateQueries({ queryKey: ["leadId"] });
-       queryClient.invalidateQueries({ queryKey: ["leads"] });
-     },
-     onError: (error) => {
-      console.log("ID",id)
-      if (error instanceof AxiosError) {
-        // Safely access the response data
-        const errorMessage =
-          error.response?.data?.message || "An unexpected error occurred.";
-        // console.log("Axios Error Message:", errorMessage);
+    console.log("ID", id);
+    removeManger(id, {
+      onSuccess: () => {
+        toast.success("Manager Removed");
+        queryClient.invalidateQueries({ queryKey: ["leadId"] });
+        queryClient.invalidateQueries({ queryKey: ["leads"] });
+      },
+      onError: (error) => {
+        console.log("ID", id);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
 
-        // Display error message in toast
-        toast.error(`Failed to Remove manager: ${errorMessage}`);
-      } else {
-        // Handle non-Axios errors
-        toast.error("An unexpected error occurred.");
-      }
-     },
-    })
- }
+          // Display error message in toast
+          toast.error(`Failed to Remove manager: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
+      },
+    });
+  };
 
- if (!data) {
-  return (
-    <div className="flex justify-center item center p-2 h-full">
-      <RotatingLines
-        visible={true}
-        height="50"
-        width="50"
-        strokeColor="#f21300"
-        strokeWidth="2"
-        animationDuration="0.75"
-        ariaLabel="rotating-lines-loading"
-      />
-    </div>
-  );
-}
+  if (!data) {
+    return (
+      <div className="flex justify-center item center p-2 h-full">
+        <RotatingLines
+          visible={true}
+          height="50"
+          width="50"
+          strokeColor="#f21300"
+          strokeWidth="2"
+          animationDuration="0.75"
+          ariaLabel="rotating-lines-loading"
+        />
+      </div>
+    );
+  }
 
   return (
     <div>
-      <div className="max-w-[850px] max-h-fit">
+      <div className="max-h-fit p-2">
         <div className="flex flex-col gap-y-3">
-          <div className="grid grid-rows gap-1 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-2 xl:grid-cols-[600px,250px]">
-            <div className="w-full max-w-2xl mx-auto  p-4">
+          <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-2 xl:grid-cols-[650px,230px]">
+            <div className="w-full">
               <div className="text-[17px] text-[#091747] text-left font-bold">
                 {data?.service?.replace(/_/g, " ")}
               </div>
-              <Accordion type="multiple" className="w-full mt-2">
+              <Accordion type="multiple" className="mt-2">
                 <AccordionItem value="discussions" className="">
                   <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-md text-[#091747] text-[15px] font-medium">
-                    <span>Discussions</span>
+                    <span className="font-semibold text-[15px]">
+                      Discussions
+                    </span>
                   </AccordionTrigger>
                   <AccordionContent className="pt-2 bg-white">
                     <Form {...discussionForm}>
@@ -403,7 +398,7 @@ export const StackLeadsExchangeDialog = ({
                   </AccordionContent>
                 </AccordionItem>
                 {LeadDiscussion && (
-                  <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
+                  <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2 mb-2">
                     {LeadDiscussion.map(
                       (discussion: LeadsDiscussionType, index: number) => (
                         <div
@@ -441,9 +436,9 @@ export const StackLeadsExchangeDialog = ({
                   </div>
                 )}
 
-                <AccordionItem value="reminders" className="mt-4">
+                <AccordionItem value="reminders" className="">
                   <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-md text-[#091747] text-[15px] font-medium">
-                    <span>Reminders</span>
+                    <span className="font-semibold text-[15px]">Reminders</span>
                   </AccordionTrigger>
                   <AccordionContent className="pt-2 bg-white">
                     <Form {...reminderForm}>
@@ -652,27 +647,46 @@ export const StackLeadsExchangeDialog = ({
                 )}
               </Accordion>
             </div>
-            <div className="bg-[#FFFFFF] max-h-fit p-2">
-              <div className="max-w-md mx-auto bg-[#EDEDED] rounded-lg shadow text-sm">
+            
+              <div className="bg-[#EDEDED] rounded-lg shadow text-sm">
                 {/* Assigned Users Section */}
-                <div className="p-3 border-b">
-                  <div className="flex items-center justify-between">
-                    <h2 className="font-semibold">Assigned Manager</h2>
+                <div className="px-2">
+                  <div className="flex items-center justify-between mt-1">
+                    <h2 className="font-bold text-[13px] text-[#091747]">
+                      Assigned Manager
+                    </h2>
                     <X
-                      className="w-4 h-4 text-[#F21300] cursor-pointer"
                       onClick={onClose}
                       strokeWidth={"5"}
+                      size={20}
+                      className="text-[#f21300] cursor-pointer"
                     />
                   </div>
-                  <div className="flex gap-2 mt-2 items-start">
-                  {data && (
-                      <div className="flex  w-full">
+                  <div className="flex gap-2 mt-2 mb-2 items-center">
+                    {data && (
+                      <div className="flex">
                         {data?.assigned?.map(
                           (assign: managerDetails, index: number) => (
                             <div className="" key={index}>
-                              <RxAvatar size={"30"}/>
+                              <Image
+                                alt="profile"
+                                src={Profile}
+                                height="30"
+                                width="30"
+                                className="rounded-full mr-2"
+                                style={{
+                                  boxShadow:
+                                    "10px 10px 15px -3px rgba(0, 0, 0, 0.2)",
+                                }}
+                              />
                               <div className=" w-full justify-start items-center">
-                               <X className="text-[#f21300] -translate-y-8 translate-x-4 h-3 w-3 cursor-pointer" strokeWidth={"6"} onClick={()=>handleRemoveManager(assign?.id)}/>
+                                <X
+                                  className="text-[#f21300] -translate-y-8 translate-x-5 h-3 w-3 cursor-pointer"
+                                  strokeWidth={"6"}
+                                  onClick={() =>
+                                    handleRemoveManager(assign?.id)
+                                  }
+                                />
                               </div>
                             </div>
                           )
@@ -729,7 +743,9 @@ export const StackLeadsExchangeDialog = ({
                                         />
                                       )}
                                     />
-                                    <span className="text-[12px] text-[#091747] font-semibold">{manager.firstName}</span>
+                                    <span className="text-[12px] text-[#091747] font-semibold">
+                                      {manager.firstName}
+                                    </span>
                                   </div>
                                 ))}
                             </div>
@@ -747,104 +763,103 @@ export const StackLeadsExchangeDialog = ({
                 </div>
 
                 {/* Lead Details Section */}
-                <div className="px-2">
-                  <div className="flex item-center gap-x-1">
-                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
-                      <span className="font-normal text-[13px]">
+                <div className="px-1">
+                  <div className="flex item-center gap-x-1 pr-2">
+                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-xl">
+                      <span className="font-medium text-[13px]">
                         Lead Details
                       </span>
                     </div>
                     <Popover>
                       <PopoverTrigger>
-                        <Pencil className="text-white bg-[#f21300] rounded-md" />
+                        <FaPencilAlt className="text-white bg-[#f21300] rounded-md h-5 w-5 p-1" />
                       </PopoverTrigger>
                       <PopoverContent className="max-w-fit">
                         <EditLeads leadId={openDialogId} />
                       </PopoverContent>
                     </Popover>
                   </div>
-                  <div className="py-1 text-[12px] text-[#091747]">
+                  <div className="p-1 text-[12px] text-[#091747]">
                     <div className="flex">
-                      <span className="font-semibold">Name:</span>
-                      <span>{data?.firstName + " " + data?.lastName}</span>
+                      <span className="font-bold">Name:</span>
+                      <span className="font-medium">
+                        {data?.firstName + " " + data?.lastName}
+                      </span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Mobile:</span>
-                      <span>{data?.mobile}</span>
+                      <span className="font-bold">Mobile:</span>
+                      <span className="font-medium">{data?.mobile}</span>
+                    </div>
+                    <div className="flex text-[#ECECEC]">
+                      <span className="font-bold">Email:</span>
+                      <span className="font-medium">{data?.email}</span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Email:</span>
-                      <span>{data?.email}</span>
-                    </div>
-                    <div className="flex">
-                      <span className="font-semibold">Service:</span>
-                      <span>{data?.service?.replace(/_/g, " ")}</span>
+                      <span className="font-bold">Service:</span>
+                      <span className="font-medium">
+                        {data?.service?.replace(/_/g, " ")}
+                      </span>
                     </div>
                     <div className="flex ">
-                      <span className="font-semibold">Value:</span>
-                      <span>{data?.value}</span>
+                      <span className="font-bold">Value:</span>
+                      <span className="font-medium">{data?.value}</span>
                     </div>
                     <div className="flex ">
-                      <span className="font-semibold">Existing:</span>
+                      <span className="font-bold">Existing:</span>
                       <span>{data?.existing === true ? "Yes" : "No"}</span>
                     </div>
-                    <div className="flex  items-center text-white bg-[#7F7E7E] max-w-fit rounded-md px-2 text-[10px]">
+                    <div className="flex  items-center text-white bg-[#7F7E7E] max-w-fit rounded-full px-2 text-[10px]">
                       <span className="font-semibold">Status: </span>
                       <span className="font-semibold">{data?.status}</span>
                     </div>
-                    <Button
-                      className="w-full bg-[#797979] hover:bg-[#f21300] mt-2 text-xs h-8"
-                      onClick={openModal}
-                    >
-                      Create Client
-                    </Button>
-                    <Modal isOpen={isModalOpen} onClose={closeModal}>
-                      <AddClientDialog onClose={closeModal} />
-                    </Modal>
                   </div>
                 </div>
 
                 {/* Client Details Section */}
-                <div className="px-2">
-                  <div className="flex items-center gap-x-1">
-                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
-                      <span className="font-normal text-[13px]">
+                <div className="px-1 mt-2">
+                  <div className="flex items-center gap-x-1 pr-2">
+                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-xl">
+                      <span className="font-medium text-[13px]">
                         Client Details
                       </span>
                     </div>
                     <Popover>
                       <PopoverTrigger>
-                        <Plus className="text-white bg-[#f21300] rounded-md" />
+                        <FaPlus className="text-white bg-[#f21300] rounded-md h-5 w-5 p-1" />
                       </PopoverTrigger>
                       <PopoverContent className="px-2 py-2">
                         <LinkClient leadId={openDialogId} />
                       </PopoverContent>
                     </Popover>
                   </div>
-                  <div className="py-1 text-[12px] text-[#091747]">
+                  <div className="p-1 text-[12px] text-[#091747]">
                     <div className="flex">
-                      <span className="font-semibold">Name:</span>
-                      <span>
+                      <span className="font-bold">Name:</span>
+                      <span className="font-medium">
                         {data?.client?.firstName + " " + data?.client?.lastName}
                       </span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">PAN:</span>
-                      <span className="uppercase">{data?.client?.pan}</span>
+                      <span className="font-bold">PAN:</span>
+                      <span className="uppercase font-medium">
+                        {data?.client?.pan}
+                      </span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Email:</span>
-                      <span>{data?.client?.email}</span>
+                      <span className="font-bold">Email:</span>
+                      <span className="font-medium">{data?.client?.email}</span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Mobile:</span>
-                      <span>{data?.client?.mobileNumber}</span>
+                      <span className="font-bold">Mobile:</span>
+                      <span className="font-medium">
+                        {data?.client?.mobileNumber}
+                      </span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Manager:</span>
-                      <span>DSC Registration</span>
+                      <span className="font-bold">Manager:</span>
+                      <span className="font-medium">DSC Registration</span>
                     </div>
-                    <div className="flex  items-center text-white bg-[#f21300] max-w-fit rounded-md px-2 text-[10px]">
+                    <div className="flex  items-center text-white bg-[#f21300] max-w-fit rounded-full px-2 text-[10px]">
                       <span className="font-semibold">KYC status: </span>
                       <span className="font-semibold">Incomplete</span>
                     </div>
@@ -852,42 +867,52 @@ export const StackLeadsExchangeDialog = ({
                 </div>
 
                 {/* Business Details Section */}
-                <div className="px-2">
-                  <div className="flex items-center gap-x-1">
-                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
-                      <span className="font-normal text-[13px]">
+                <div className="px-1 mt-2">
+                  <div className="flex items-center gap-x-1 pr-2">
+                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-xl">
+                      <span className="font-medium text-[13px]">
                         Bussiness Details
                       </span>
                     </div>
                     <Popover>
                       <PopoverTrigger>
-                        <Plus className="text-white bg-[#f21300] rounded-md" />
+                      <FaPlus className="text-white bg-[#f21300] rounded-md h-5 w-5 p-1" />
                       </PopoverTrigger>
                       <PopoverContent className="">
-                        <LinkBussiness clientId={data?.clientId} leadId={openDialogId}/>
+                        <LinkBussiness
+                          clientId={data?.clientId}
+                          leadId={openDialogId}
+                        />
                       </PopoverContent>
                     </Popover>
                   </div>
                   <div className="text-[12px]">
-                    <div className="flex gap-x-1">
-                      <span className="font-semibold">Business:</span><span className="uppercase">{data?.business?.businessName}</span>
+                    <div className="flex gap-x-1 pr-2">
+                      <span className="font-semibold">Business:</span>
+                      <span className="uppercase">
+                        {data?.business?.businessName}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-semibold">Manager:</span>
                     </div>
-                    <div className="flex flex-col gap-y-1">
-                    <div className="flex  items-center text-white bg-[#A301D5] max-w-fit rounded-md px-2 text-[10px]">
-                      <span className="font-medium">{data?.business?.businessType}</span>
-                    </div>
-                    <div className="flex gap-x-2 items-center text-white bg-[#f21300] max-w-fit rounded-md px-2 text-[10px]">
-                      <span className="font-semibold">Bussiness status:</span>
-                      <span className="font-medium">{data?.business?.businessStatus}</span>
-                    </div>
+                    <div className="flex flex-col gap-y-1 ]">
+                      <div className="flex  items-center text-white bg-[#A301D5] max-w-fit rounded-full px-2 text-[10px]">
+                        <span className="font-medium">
+                          {data?.business?.businessType}
+                        </span>
+                      </div>
+                      <div className="flex gap-x-2 items-center text-white bg-[#f21300] max-w-fit rounded-full px-2 text-[10px] mb-2">
+                        <span className="font-semibold">Bussiness status:</span>
+                        <span className="font-medium">
+                          {data?.business?.businessStatus}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            
           </div>
         </div>
       </div>

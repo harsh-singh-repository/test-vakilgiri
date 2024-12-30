@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@builder.io/react-hydration-overlay": "^0.3.0",
     "@faker-js/faker": "^9.2.0",
     "@hookform/resolvers": "^3.9.1",
     "@lordicon/react": "^1.10.1",
