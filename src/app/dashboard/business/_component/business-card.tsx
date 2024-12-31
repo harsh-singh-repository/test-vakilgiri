@@ -49,13 +49,13 @@ export default function BusinessCardSection() {
         pvtLtd: 0,
         public: 0,
         llps: 0,
-        section8: 0,
+        Section_Eight: 0,
         trust: 0,
         society: 0,
         Micro_Finance: 0,
-        producer: 0,
-        proprietor: 0,
-        partnership: 0,
+        Producer_Limited: 0,
+        Proprietorship: 0,
+        Partnership_Firm: 0,
       },
       status: {
         registered: 22,
@@ -70,12 +70,12 @@ export default function BusinessCardSection() {
       Trust: "trust",
       Public_Limited: "public",
       LLP: "llps",
-      Section_8: "section8",
+      Section_Eight: "Section_Eight",
       Society: "society",
       Micro_Finance: "Micro_Finance",
-      Producer: "producer",
-      Proprietor: "proprietor",
-      Partnership: "partnership",
+      Producer_Limited: "Producer_Limited",
+      Proprietorship: "Proprietorship",
+      Partnership_Firm: "Partnership_Firm",
     };
   
     // Update stats dynamically based on API data
@@ -111,13 +111,13 @@ export default function BusinessCardSection() {
     pvtLtd: "Pvt Ltd",
     public: "Public",
     llps: "LLPs",
-    section8: "Section 8",
+    Section_Eight: "Section 8",
     trust: "Trust",
     society: "Society",
     Micro_Finance: "Micro",
-    producer: "Producer",
-    proprietor: "Proprietor",
-    partnership: "Partnership"
+    Producer_Limited: "Producer",
+    Proprietorship: "Proprietor",
+    Partnership_Firm: "Partnership"
   };
 
   const statusLabels = {

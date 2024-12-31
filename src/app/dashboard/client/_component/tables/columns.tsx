@@ -4,6 +4,7 @@ import { Client } from '@/constants/data';
 // import { useGetClients } from '@/hooks/users/manage-client';
 import { ColumnDef } from '@tanstack/react-table';
 import Image from 'next/image';
+import Profile from "../../../../../../public/assets/profileimg.png";
 
 // const fetchData = ()=>{
 //   const {data,isFetching,isSuccess,error,isError} = useGetClients();
@@ -16,11 +17,17 @@ export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: 'profile-image',
     header: 'Profile',
-    cell:({row})=>{
-      const imagesrc = row.original.businessLogo;
+    cell:()=>{
       return(
         <div>
-           <Image width={20} height={20} alt="logo" src={imagesrc}/>
+          <Image
+                alt="profile"
+                src={Profile}
+                height="35"
+                width="35"
+                className="rounded-full mr-2"
+                style={{ boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)" }}
+              />
         </div>
       )
     }
@@ -74,11 +81,32 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: 'manager',
-    header: 'Manager'
+    header: 'Manager',
+    cell:()=>{
+      return(
+         <div>
+           <Image
+                alt="profile"
+                src={Profile}
+                height="35"
+                width="35"
+                className="rounded-full mr-2"
+                style={{ boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)" }}
+              />
+         </div>
+      )
+    }
   },
   {
     accessorKey: 'kyc',
     header: 'KYC\'s',
+    cell:()=>{
+        return(
+          <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-[#f21300] text-white text-sm">
+    
+         </div>
+        )
+    }
   },
   {
     accessorKey: 'action',

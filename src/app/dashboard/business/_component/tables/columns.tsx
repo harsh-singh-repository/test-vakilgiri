@@ -3,12 +3,28 @@
 import { Business } from '@/constants/data';
 import { ColumnDef } from '@tanstack/react-table';
 import ActionButton from './actions';
+import Profile from "../../../../../../public/assets/profileimg.png";
+import Image from 'next/image';
 // import { CellAction } from './cell-action';
 
 export const columns: ColumnDef<Business>[] = [
   {
     accessorKey: 'profile-image',
     header: 'Profile',
+    cell:()=>{
+      return(
+        <div>
+           <Image
+                alt="profile"
+                src={Profile}
+                height="35"
+                width="35"
+                className="rounded-full mr-2"
+                style={{ boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)" }}
+              />
+        </div>
+      )
+    }
   },
   {
     accessorKey: 'businessName',
@@ -16,7 +32,7 @@ export const columns: ColumnDef<Business>[] = [
     cell:({row})=>{
         
       return(
-         <span className='uppercase'>{row.original.businessName}</span>
+         <span className=''>{row.original.businessName}</span>
       )
     }
   },
@@ -26,8 +42,8 @@ export const columns: ColumnDef<Business>[] = [
     cell:({row})=>{
         
       return(
-        <div className="text-[10px] bg-[#A301D5] px-1 text-white w-fit rounded-md">
-            <span>{row.original.businessType}</span>
+        <div className="text-[10px] bg-[#A301D5] px-1 text-white w-fit rounded-sm">
+            <span>{row.original.businessType.replace("_"," ")}</span>
         </div>
       )
     }
