@@ -38,7 +38,7 @@ const BussinessDetailCard = ({bussinessId}:BussinessDetailCardProps) => {
         </div>
         <div className="flex flex-col text-[#091747] text-xs mt-2 gap-y-1">
         <div className="flex gap-x-1"><span className="font-bold">Client:</span><span className='font-medium'>{data?.contactPerson?.firstName + " " + data?.contactPerson?.lastName}</span></div>
-        <div className="flex gap-x-1"><span className="font-bold">Client:</span><span className='font-medium'>{data?.contactPerson?.mobile}</span></div>
+        <div className="flex gap-x-1"><span className="font-bold">Mobile:</span><span className='font-medium'>{data?.contactPerson?.mobileNumber}</span></div>
         <div className="flex gap-x-1"><span className="font-bold">Email:</span><span className='font-medium'>{data?.contactPerson?.email}</span></div>
                 <div className="px-2 bg-[#FFB200] rounded-md max-w-fit">
                      <span className="text-[10px] text-white font-bold">KYC:</span>

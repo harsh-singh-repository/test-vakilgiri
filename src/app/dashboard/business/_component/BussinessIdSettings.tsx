@@ -3,9 +3,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import BussinessIdForm from "./BussinessIdForm";
 import { BussinessIdSettingsPageProps } from "../_types";
 import UpdateSocials from "./UpdateSocials";
+import { useGetBussinessById } from "@/hooks/business/manage-business";
 
 
 const BussinessIdSettings = ({bussinessId}:BussinessIdSettingsPageProps) => {
+
+  const {data} = useGetBussinessById(bussinessId);
+
   return (
       <div className="bg-white w-full rounded-md">
         <div className="flex flex-col px-4 py-2 gap-y-3">
@@ -15,7 +19,7 @@ const BussinessIdSettings = ({bussinessId}:BussinessIdSettingsPageProps) => {
                 Edit :
                 <span className="text-[#091747] font-semibold">
                   {" "}
-                  VINEETA WELFARE FOUNDATION
+                  {data?.businessName}
                 </span>
               </span>
             </div>
@@ -36,7 +40,7 @@ const BussinessIdSettings = ({bussinessId}:BussinessIdSettingsPageProps) => {
               Change your password here.
             </TabsContent>
             <TabsContent value="social" className="w-full justify-center">
-              <UpdateSocials bussinessId={bussinessId}/>
+              <UpdateSocials/>
             </TabsContent>
           </Tabs>
         </div>

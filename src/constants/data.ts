@@ -10,7 +10,10 @@ export type Client = {
   bussinesses: string;
   projects: string;
   wallet: string;
-  manager: string;
+  manager: [];
+  businessLogo:string;
+  createdProjects:[];
+  businessesAsMember:[]
   kyc: string;
 };
 
@@ -19,6 +22,7 @@ export type businessUsers = {
   firstName: string;
   lastName: string;
   email: string;
+  kycStatus: string;
   mobileNumber: string;
 };
 

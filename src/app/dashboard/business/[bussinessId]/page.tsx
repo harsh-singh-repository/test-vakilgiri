@@ -19,6 +19,7 @@ import AddFile from "./_component/AddFile";
 import LinkClient from "./_component/LinkClient";
 import BussinessClientTable from "./_component/BussinessClientTable";
 import NoFiles from "./_component/NoFiles";
+import { Oval } from "react-loader-spinner";
 
 const Page = () => {
   const params = useParams();
@@ -38,6 +39,22 @@ const Page = () => {
   const closeLinkClientModal = () => setIsLinkClientModalOpen(false);
 
   console.log("Bussiness Id", data);
+
+  if (!data) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Oval
+          visible={true}
+          height="40"
+          width="40"
+          color="#f21300"
+          ariaLabel="oval-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="grid xl:grid-cols-[6fr_2fr] lg:grid-cols-[6fr_2fr] sm:grid-col-1 xs:grid-col-1  grid-col-1 gap-x-4 p-5 items-start h-full bg-[#E2E2E2]">

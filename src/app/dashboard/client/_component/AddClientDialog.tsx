@@ -133,7 +133,7 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
               render={({ field }) => (
                 <div>
                   <FormControl>
-                    <MaterialInput disabled {...field} placeholder="First Name" />
+                    <MaterialInput {...field} placeholder="First Name" />
                   </FormControl>
                 </div>
               )}
@@ -146,7 +146,7 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
                 <div>
 
                   <FormControl>
-                    <MaterialInput disabled placeholder="Last Name" {...field} readOnly />
+                    <MaterialInput placeholder="Last Name" {...field}/>
                   </FormControl>
                 </div>
               )}

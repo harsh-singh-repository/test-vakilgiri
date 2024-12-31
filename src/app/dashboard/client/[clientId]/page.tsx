@@ -2,7 +2,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Results from "../../_component/DashboardCards";
 import ClientDashboard from "../_component/ClientDashboard";
-import { Button } from "@/components/ui/button";
 
 // import {
 //   Select,
@@ -20,7 +19,7 @@ import { Button } from "@/components/ui/button";
 //   CardHeader,
 //   CardTitle,
 // } from "@/components/ui/card";
-import { Eye, PlusCircle } from "lucide-react";
+import {PlusCircle } from "lucide-react";
 import { RxAvatar } from "react-icons/rx";
 import Personal_Form from "../_component/Personal_Form";
 import Component from "../_component/Address_Form";
@@ -31,6 +30,7 @@ import { useGetClientsById } from "@/hooks/clients/manage-client";
 import { useRouter } from "next/navigation";
 import { ClinetBussinessDetails } from "../_types";
 import { Oval } from "react-loader-spinner";
+import { FaRegEye } from "react-icons/fa";
 
 function Page() {
   const params = useParams();
@@ -81,7 +81,7 @@ function Page() {
         <TabsList className="absolute flex flex-row justify-stretch w-full overflow-x-auto px-5">
           {tabs.map((value, index) => (
             <TabsTrigger
-              className="w-full"
+              className="w-full text-[#091747]"
               key={`tab_trigger_${index}`}
               value={value.name}
             >
@@ -94,37 +94,36 @@ function Page() {
           <ClientDashboard />
         </TabsContent>
         <TabsContent value="All Bussiness" className="mt-9 px-4 py-4 h-[100vh]">
-          <div className="flex justify-between">
-            <span className="">Businesses</span>
+          <div className="flex justify-between sm:flex-col md:flex-row">
+            <span className="text-[18px] font-semibold">Businesses</span>
             <div className="flex gap-x-2 flex-col gap-y-2 sm:flex-col md:flex-row lg:flex-row xl:flex-row">
-              <Button className="py-2 text-xs">Register New Business</Button>
-              <Button className="py-2 text-xs">Link Existing Business</Button>
+              <div className="h-fit w-fit text-[13px] font-medium bg-[#091747] text-white px-2 py-1 rounded-md">Register New Business</div>
+              <div className="h-fit w-fit text-[13px] font-medium bg-[#f21300] text-white px-2 py-1 rounded-md">Link Existing Business</div>
             </div>
           </div>
-          <div className="flex gap-x-2 gap-y-2 flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
-            {bussinessData.businessesAsCreator.map(
+          <div className="flex gap-x-2 gap-y-2 flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row mt-2">
+            {bussinessData?.businessesAsMember.map(
               (bussiness: ClinetBussinessDetails, index: number) => {
                 return (
-                  <Card className="w-[350px]" key={index}>
+                  <Card className="w-full h-[107px]" key={index}>
                     <div className="flex flex-col">
                       <div className="flex gap-x-4 p-3  items-center">
-                        <div className="h-10 w-10 bg-slate-400 rounded-md drop-shadow-lg"></div>
+                        <div className="h-10 w-10 bg-white rounded-md drop-shadow-lg"/>
                         <div className="flex flex-col">
-                          <span className="text-sm uppercase font-medium">
+                          <span className="text-[15px] font-semibold text-[#091747]">
                             {bussiness.businessName}
                           </span>
-                          <span className="text-xs">
-                            {bussiness.businessType}
+                          <span className="text-[13px] font-medium text-[#f21300]">
+                            {bussiness.businessType.replace("_"," ")}
                           </span>
                         </div>
                       </div>
-                      <div className="flex item-center justify-between p-4">
-                        <div className="bg-slate-600 px-2 text-[10px] text-white rounded-md flex items-center">
+                      <div className="flex item-center justify-between px-4 mb-3">
+                        <div className="bg-[#a8a8a8] h-fit w-fit text-[10px] text-white rounded-full px-2 font-medium">
                           <span>Active</span>
                         </div>
-                        <Eye
-                          size={"20"}
-                          className="text-[#091747] cursor-pointer"
+                        <FaRegEye
+                          className="bg-[#091747] cursor-pointer text-white h-6 w-6 rounded-md p-2"
                           onClick={() => handleRouteClick(bussiness.id)}
                         />
                       </div>

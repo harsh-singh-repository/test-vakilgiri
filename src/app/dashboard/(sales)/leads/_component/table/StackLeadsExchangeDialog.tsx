@@ -347,7 +347,7 @@ export const StackLeadsExchangeDialog = ({
           <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-2 xl:grid-cols-[650px,230px]">
             <div className="w-full">
               <div className="text-[17px] text-[#091747] text-left font-bold">
-                {data?.service?.replace(/_/g, " ")}
+                {data?.businessType.replace(/_/g, " ")}
               </div>
               <Accordion type="multiple" className="mt-2">
                 <AccordionItem value="discussions" className="">
@@ -788,16 +788,16 @@ export const StackLeadsExchangeDialog = ({
                     </div>
                     <div className="flex">
                       <span className="font-bold">Mobile:</span>
-                      <span className="font-medium">{data?.mobile}</span>
+                      <span className="font-medium">{data?.businessMobile}</span>
                     </div>
-                    <div className="flex text-[#ECECEC]">
+                    <div className="flex text-[#007B23]">
                       <span className="font-bold">Email:</span>
-                      <span className="font-medium">{data?.email}</span>
+                      <span className="font-medium">{data?.businessEmail}</span>
                     </div>
                     <div className="flex">
                       <span className="font-bold">Service:</span>
                       <span className="font-medium">
-                        {data?.service?.replace(/_/g, " ")}
+                        {data?.businessType.replace(/_/g, " ")}
                       </span>
                     </div>
                     <div className="flex ">
@@ -810,7 +810,7 @@ export const StackLeadsExchangeDialog = ({
                     </div>
                     <div className="flex  items-center text-white bg-[#7F7E7E] max-w-fit rounded-full px-2 text-[10px]">
                       <span className="font-semibold">Status: </span>
-                      <span className="font-semibold">{data?.status}</span>
+                      <span className="font-semibold">{data?.businessStatus}</span>
                     </div>
                   </div>
                 </div>

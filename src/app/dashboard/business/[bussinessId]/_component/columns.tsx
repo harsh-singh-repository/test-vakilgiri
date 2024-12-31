@@ -90,10 +90,11 @@ export const columns =  (businessId: string | string [] | undefined):  ColumnDef
   {
     accessorKey: 'status',
     header: 'KYC',
-    cell:()=>{
+    cell:({row})=>{
+        const kycStatus = row.original.kycStatus;
         return(
           <div className='bg-[#f21300] max-h-fit text-[10px] text-white rounded-md'>
-             Pending
+             {kycStatus}
           </div>
         )
     }

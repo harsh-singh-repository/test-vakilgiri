@@ -46,7 +46,7 @@ import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
 import { useState } from "react";
 import { toast } from "sonner";
 import { RxAvatar } from "react-icons/rx";
-import { clientDisscussionProps } from "../../_types";
+import { clientDisscussionProps, ClinetBussinessDetails } from "../../_types";
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import {
@@ -61,6 +61,8 @@ import { useGetUsers } from "@/hooks/user/manage-user";
 import { MaterialInput } from "@/components/material-input";
 import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
 import { RotatingLines } from "react-loader-spinner";
+import { FaRegEye } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -105,6 +107,8 @@ export const StackExchangeDialog = ({
   // const [date, setDate] = React.useState<Date>()
   const [isSubmittingDiscussion, setIsSubmittingDiscussion] = useState(false);
   const [isSubmittingReminder, setIsSubmittingReminder] = useState(false);
+
+  const router = useRouter();
 
   const discussionForm = useForm<z.infer<typeof discussionSchema>>({
     resolver: zodResolver(discussionSchema),
@@ -279,7 +283,7 @@ export const StackExchangeDialog = ({
   return (
     <div>
       <div className="p-2 flex items-start gap-x-2">
-        <div className="flex flex-col gap-y-3">
+        <div className="flex flex-col gap-y-2">
           <div className="text-[17px] text-[#091747] font-bold">
             {data?.firstName + " " + data?.lastName}
           </div>
@@ -321,13 +325,13 @@ export const StackExchangeDialog = ({
                             )}
                           />
                           <div className="flex justify-end">
-                          <button
-                            type="submit"
-                            className="max-w-fit text-[10px] bg-[#F21300] font-thin px-[10px] rounded-md text-white"
-                            disabled={isSubmittingDiscussion}
-                          >
-                            {isSubmittingDiscussion ? "Saving..." : "Save"}
-                          </button>
+                            <button
+                              type="submit"
+                              className="max-w-fit text-[10px] bg-[#F21300] font-thin px-[10px] rounded-md text-white"
+                              disabled={isSubmittingDiscussion}
+                            >
+                              {isSubmittingDiscussion ? "Saving..." : "Save"}
+                            </button>
                           </div>
                         </div>
                       </form>
@@ -479,7 +483,7 @@ export const StackExchangeDialog = ({
                         />
 
                         <div className="flex justify-end">
-                        <button
+                          <button
                             type="submit"
                             className="max-w-fit text-[10px] bg-[#F21300] font-thin px-[10px] rounded-md text-white"
                             disabled={isSubmittingReminder}
@@ -588,7 +592,7 @@ export const StackExchangeDialog = ({
                         {assignedManager
                           .filter(
                             (manager: userType) =>
-                              manager.userRoles === "Staff_Manager"
+                              manager.userRoles === "Client"
                           ) // Filter the managers
                           .map((manager: userType, index: number) => (
                             <div
@@ -645,7 +649,9 @@ export const StackExchangeDialog = ({
             <div className="text-[#091747] mt-1 w-full px-2">
               <div className="text-[12px] ">
                 <span className="font-bold">Client:</span>{" "}
-                <span className="font-medium">{data?.firstName + " " + data?.lastName}</span>
+                <span className="font-medium">
+                  {data?.firstName + " " + data?.lastName}
+                </span>
               </div>
               <div className="text-[12px] ">
                 <span className="font-bold">Mobile:</span>{" "}
@@ -666,27 +672,39 @@ export const StackExchangeDialog = ({
             </div>
           </div>
           <div className="rounded-lg border py-2">
-          <div className="bg-[#091747] rounded-xl w-[215px] ml-1">
+            <div className="bg-[#091747] rounded-xl w-[215px] ml-1">
               <h3 className="font-medium text-[12px] bg-navy-900 text-white px-[10px] py-[5px]">
                 Bussiness List
               </h3>
             </div>
             <div className="text-[#091747] mt-1 w-full px-2">
-              <div className="font-bold text-[12px]">
-                1. KARAN (OPC) PRIVATE LIMITED
-              </div>
-              <div className="mt-1 text-[12px]">
-                <div>
-                  <span className="font-bold">PAN:</span>{" "}<span className="font-medium">{data?.pan}</span>
-                </div>
-                <div>
-                  <span className="font-bold">Manager:</span>{" "}<span className="font-medium">KARAN</span>
-                </div>
-                <div className="text-[10px] bg-[#008827] max-w-fit max-h-fit text-white px-2 rounded-full mt-1">
-                  <span className="font-semibold">Status:</span>{" "}
-                  <span>Active</span>
-                </div>
-              </div>
+              {data?.businessesAsMember.map((bussiness:ClinetBussinessDetails, index: number) => {
+                return (
+                  <div key={index} className="mt-1">
+                    <div className="font-bold text-[12px] leading-none">
+                      {bussiness?.businessName}
+                    </div>
+                    <div className="text-[12px]">
+                      <div className="leading-tight">
+                        <span className="font-bold">PAN:</span>{" "}
+                        <span className="font-medium">{bussiness?.businessPan}</span>
+                      </div>
+                      <div className="leading-tight">
+                        <span className="font-bold">Manager:</span>{" "}
+                        <span className="font-medium"></span>
+                      </div>
+                      <div className="flex flex-row items-center gap-2">
+                        <div className="text-[10px] bg-[#008827] max-w-fit max-h-fit text-white px-2 rounded-full mt-1">
+                          <span className="font-semibold">Status:</span>{" "}
+                          <span>Active</span>
+                        </div>
+                        <FaRegEye className="text-[#091747] h-4 w-4 cursor-pointer" onClick={()=> router.push(`/dashboard/business/${bussiness?.id}`)}/>
+                      </div>
+                      <div className="border-b border-dashed border-1 border-[#091747] mt-1" />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@
 import { Client } from '@/constants/data';
 // import { useGetClients } from '@/hooks/users/manage-client';
 import { ColumnDef } from '@tanstack/react-table';
+import Image from 'next/image';
 
 // const fetchData = ()=>{
 //   const {data,isFetching,isSuccess,error,isError} = useGetClients();
@@ -14,7 +15,15 @@ import { ColumnDef } from '@tanstack/react-table';
 export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: 'profile-image',
-    header: 'Profile'
+    header: 'Profile',
+    cell:({row})=>{
+      const imagesrc = row.original.businessLogo;
+      return(
+        <div>
+           <Image width={20} height={20} alt="logo" src={imagesrc}/>
+        </div>
+      )
+    }
   },
   {
     accessorKey: 'usrId',
@@ -42,14 +51,25 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: 'bussinesses',
-    header: 'Businesses'
-  },
+    header: 'Businesses',
+    cell:({row})=>{
+       const bussiness = row.original.businessesAsMember.length;
+      return(
+      <span>{bussiness}</span>
+    )
+  }},
   {
     accessorKey: 'projects',
-    header: 'Projects'
+    header: 'Projects',
+    cell:({row})=>{
+      const project = row.original.createdProjects.length
+    return(
+       <span>{project}</span>
+    )
+  }
   },
   {
-    accessorKey: 'wallet',
+    accessorKey: 'walletAmount',
     header: 'Wallet'
   },
   {
