@@ -21,7 +21,7 @@ export default function Custom500() {
         <div className="space-y-4">
           <h1 className="text-4xl font-bold text-[#091747]">Internal Server Error</h1>
           <p className="text-lg text-gray-600">
-            Oops! Something went wrong on our server. We're working to fix the issue.
+            Oops! Something went wrong on our server. We&apos;re working to fix the issue.
           </p>
           <p className="text-sm text-gray-500">
             Please try again later or contact support if the problem persists.

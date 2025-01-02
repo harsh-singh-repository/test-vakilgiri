@@ -1,11 +1,18 @@
 "use client"
 import { useGetClients } from "@/hooks/clients/manage-client";
+import { GetClinet } from "@/types";
 import { MdPerson2, MdPeople } from "react-icons/md";
 import { MdAddReaction } from "react-icons/md";
 
 const ClientCard = () => {
 
   const {data} = useGetClients();
+
+  const Inactive = data?.filter((Inactive:GetClinet)=> Inactive.loginStatus === "Inactive");
+
+  const active = data?.filter((active:GetClinet)=> active.loginStatus === "Active");
+  
+  // console.log("Date", new Date(Date.now()).toISOString())
 
     const clientCardData = [
         {
@@ -29,7 +36,7 @@ const ClientCard = () => {
         {
             logo: <MdAddReaction size={"45"} />,
             title: "Active",
-            value: "4",
+            value: active?.length,
             iconBgColor: "bg-[#b9100033]",
             bgColor: "bg-[#f9e2c6]",
             textColor: "text-[#b91000]",
@@ -38,7 +45,7 @@ const ClientCard = () => {
         {
           logo: <MdPerson2 size={"45"} />,
           title: "Inactive",
-          value: "16",
+          value: Inactive?.length,
           iconBgColor: "bg-[#f2130033]",
           bgColor: "bg-[#ffe6e6]",
           textColor: "text-[#f21300]",

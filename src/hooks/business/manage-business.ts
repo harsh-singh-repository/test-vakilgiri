@@ -26,6 +26,14 @@ export const useGetBussinessCount = () => {
     return query;
 };
 
+export const useGetBussinessFiles = (id:string | string [] | undefined) => {
+    const query =  useQuery({
+        queryKey: ['bussinessFiles'],
+        queryFn:() => bussinessService.getFilesOfBussiness(id),
+    });
+    return query;
+};
+
 export const useGetBussinessDisscussion = (id:string) =>{
     const query =  useQuery({
         queryKey: ['bussinessDisscussion',id],

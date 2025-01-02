@@ -154,6 +154,7 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
       onSuccess: () => {
         toast.success("Bussiness upadated Successfully");
         queryClient.invalidateQueries({ queryKey: ["bussinessId"] });
+        queryClient.invalidateQueries({ queryKey: ["bussinessCount"] });
       },
       onError: (error) => {
         toast.error(`Failed to update Bussiness: ${error}`);
@@ -203,7 +204,7 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
                               <SelectContent>
                                 {bussinessType.map((bussiness, index) => (
                                   <SelectItem key={index} value={bussiness}>
-                                    {bussiness}
+                                    {bussiness.replace("_"," ")}
                                   </SelectItem>
                                 ))}
                               </SelectContent>

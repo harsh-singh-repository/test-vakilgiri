@@ -13,35 +13,10 @@ export default function BusinessCardSection() {
 
    console.log("Data Count",data);
 
-  // const stats: BusinessStats = {
-  //   businesses: {
-  //     all: 25,
-  //     unverified: 22,
-  //     forSale: 1
-  //   },
-  //   businessTypes: {
-  //     pvtLtd: 1,
-  //     public: 0,
-  //     llps: 1,
-  //     section8: 5,
-  //     trust: 1,
-  //     society: 0,
-  //     micro: 1,
-  //     producer: 1,
-  //     proprietor: 1,
-  //     partnership: 0
-  //   },
-  //   status: {
-  //     registered: 22,
-  //     pending: 0,
-  //     suspended: 1
-  //   }
-  // }
-
     // Initial stats
     const [stats, setStats] = useState<BusinessStats>({
       businesses: {
-        all: 25,
+        all: data?.length,  
         unverified: 22,
         forSale: 1,
       },

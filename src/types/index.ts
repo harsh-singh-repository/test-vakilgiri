@@ -15,6 +15,40 @@ export interface NavItem {
   items?: NavItem[];
 }
 
+export interface EstimateProps{
+    date: string;
+    estimateId: string;
+    business: string;
+    state: string;
+    quotations: string;
+    payments: string;
+    dueAmount: string;
+    status: string;
+    action: string;
+}
+
+export interface GetClinet{
+  aadhaar: string;
+  address1: string;
+  address2: string;
+  alternativeMobileNumber: string;
+  city: string;
+  createdProjects: [];
+  email: string;
+  emailStatus: string;
+  firstName: string;
+  id: string;
+  lastLogin: string | null;
+  lastName: string;
+  loginStatus: string;
+  managers: [];
+  mobileNumber: string;
+  pan: string;
+  pincode: string;
+  userRoles: string;
+  walletAmount: number;
+}
+
 
 export interface NavItemWithChildren extends NavItem {
   items: NavItemWithChildren[];
@@ -121,7 +155,11 @@ export interface editBussinessDetails{
   businessPincode?: string;
   businessEmail?: string;
   businessLogo?: File | null;
-  about?: string;
+  about?: string; 
+  businessWebsite?: string | undefined;
+  twitterLink?: string | undefined;
+  fbLink?: string | undefined;
+  instaLink?: string | undefined;
 }
 export interface updateleadDetails{
   firstName?:string,

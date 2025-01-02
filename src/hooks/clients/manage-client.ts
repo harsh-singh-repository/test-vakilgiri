@@ -86,6 +86,12 @@ export const useAddClientDisscussion = (id:string) => {
     });
 };
 
+export const useRemoveManager = (id: string) => {
+    return useMutation({
+        mutationFn: (managerId: { managerId: string }) => clientService.removeManager(id, managerId.managerId),
+    });
+};
+
 export const useDeleteClientDiscussion = () => {
     return useMutation({
        mutationFn:(id:string)=> clientService.deleteDisscussion(id)

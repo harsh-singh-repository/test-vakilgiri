@@ -26,7 +26,7 @@ const BussinessDetailCard = ({bussinessId}:BussinessDetailCardProps) => {
             <div className="flex gap-x-1"><span className="font-bold">Paidup Capital:</span><span className='font-medium'>{data?.paidUpCapital}</span></div>
             <div className="flex gap-x-2 font-bold">
                 <div className="px-2 bg-[#A800F0] rounded-md">
-                     <span className="text-[10px] text-white">{data?.businessType}</span>
+                     <span className="text-[10px] text-white">{data?.businessType.replace("_"," ")}</span>
                 </div>
                 <div className="px-2 bg-[#008827] rounded-md">
                      <span className="text-[10px] text-white">{data?.businessStatus}</span>

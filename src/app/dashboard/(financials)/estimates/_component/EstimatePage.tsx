@@ -1,33 +1,23 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./columns";
 import { useSearchParams } from "next/navigation";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Oval } from "react-loader-spinner";
 import ClientCard from "./client-card";
-import { ServiceTable } from "./client-table";
-import { ProjectPageServer } from "./ClientPageServer";
+import { EstimateTable } from "./estimate-table";
+import { useGetEstimate } from "@/hooks/estimates/manage-estimates";
 
-type ResponseData = {
-  projects: {
-    date: string;
-    estimateId: string;
-    business: string;
-    state: string;
-    quotations: number;
-    transactions: number;
-    dueAmount: string;
-    status: string;
-  }[];
-  totalProjects: number;
-  pageCount: number;
-};
 
-export default function ProjectPage() {
+export default function EstimatePage() {
+
+  const {data} = useGetEstimate();
+
+  console.log("Estimate",data)
+
   const searchParams = useSearchParams();
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
   const pageLimit = searchParams.get("limit")
@@ -36,18 +26,9 @@ export default function ProjectPage() {
   const [searchValue, setSearchValue] = useState(
     searchParams.get("search") || ""
   );
-  const [responseData, setResponseData] = useState<ResponseData | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await ProjectPageServer({ page, pageLimit, searchValue });
-      setResponseData(data);
-    };
 
-    fetchData();
-  }, [page, pageLimit, searchValue]);
-
-  if (!responseData) {
+  if (!data) {
     return (
       <div className="flex justify-center items-center h-[100vh]">
         <Oval
@@ -64,10 +45,10 @@ export default function ProjectPage() {
   }
 
   return (
-    <Dialog>
+
       <div className="flex-1 space-y-1 p-4 pt-6 md:p-4">
         <div className="flex items-start justify-between">
-          <div className="text-[20px] font-bold text-[#042559] ml-1">{`Estimates (${responseData.totalProjects})`}</div>
+          <div className="text-[20px] font-bold text-[#042559] ml-1">{`Estimates (${data?.length})`}</div>
 
           <div className="flex justify-center items-center gap-4">
             <Suspense>
@@ -81,21 +62,28 @@ export default function ProjectPage() {
               />
             </Suspense>
 
-            <DialogTrigger>
+
               <div className="bg-[#f21300] text-white p-2 rounded-md">
                 <Plus className="h-6 w-6" />
               </div>
-            </DialogTrigger>
+
           </div>
         </div>
-        <Separator />
+
 
         <ClientCard />
 
         <Separator />
 
-        <ServiceTable columns={columns} data={responseData.projects} />
+        <EstimateTable
+        searchKey="businessSearch"
+        searchValue={searchValue} // Pass the searchValue here
+        pageNo={page} // Pass the 'page' value here
+        columns={columns}
+        totalUsers={data?.length} // Pass the total number of businesses here
+        data={data} // Pass the actual business data here
+        pageCount={Math.ceil(data.length / pageLimit)} // Pass the page count here
+      />
       </div>
-    </Dialog>
   );
 }

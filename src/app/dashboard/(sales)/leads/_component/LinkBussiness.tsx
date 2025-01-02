@@ -63,6 +63,7 @@ const LinkBussiness = ({ clientId, leadId }: LinkBussinessProp) => {
   };
 
   const { data } = useGetBussinessOfClient(clientId);
+  console.log("ClientBussiness",data)
 
   return (
     <div className="flex justify-center items-center flex-col p-0">

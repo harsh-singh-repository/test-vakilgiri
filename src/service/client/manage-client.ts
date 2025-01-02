@@ -14,6 +14,7 @@ const CLIENT_API = {
     // DELETE: (id: number) => `/client/delete-client/${id}`,
     GET_ALL: '/client/',
     GET_BUSSINESS:(id:string | string[] | undefined) => `/client/${id}/businesses`,
+    REMOVE_MANAGER:(id:string) => `/client/${id}/manager`,
     GET_BY_ID: (id : string | string [] | undefined) => `/client/${id}`,
     GET_CURRENT: '/admin/current-user',
     ADD_DICUSSION: (id: string) => `/client/${id}/discussions`,
@@ -87,6 +88,13 @@ export const clientService = {
     assignManger:async(id:string,managersId: {managersId: string[]})=>{
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.ASSIGN_MANAGER(id)}`,managersId);
+    },
+
+    removeManager : async (id:string,managerId:string)=>{
+        return await axiosInstance.delete(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.REMOVE_MANAGER(id)}`, {
+                data: { managerId },
+              });
     },
 
     searchClient: async(searchQuery:string)=>{

@@ -13,31 +13,59 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Facebook, Globe, Instagram, Twitter } from 'lucide-react'
+import { useEditBussinessDetails } from "@/hooks/business/manage-business"
+import { toast } from "sonner"
+import { AxiosError } from "axios"
 // import { BussinessIdSettingsPageProps } from "../_types"
 
+interface UpdateSocialsProps{
+  bussinessId?:string | string[] | undefined
+}
+
 const formSchema = z.object({
-  website: z.string().url({ message: "Please enter a valid URL" }).optional(),
-  twitter: z.string().url({ message: "Please enter a valid Twitter URL" }).optional(),
-  facebook: z.string().url({ message: "Please enter a valid Facebook URL" }).optional(),
-  instagram: z.string().url({ message: "Please enter a valid Instagram URL" }).optional(),
+  businessWebsite: z.string().url({ message: "Please enter a valid URL" }).optional(),
+  twitterLink: z.string().url({ message: "Please enter a valid Twitter URL" }).optional(),
+  fbLink: z.string().url({ message: "Please enter a valid Facebook URL" }).optional(),
+  instaLink: z.string().url({ message: "Please enter a valid Instagram URL" }).optional(),
 })
 
-export default function UpdateSocials() {
+export default function UpdateSocials({bussinessId}:UpdateSocialsProps) {
   
     // console.log(bussinessId);
+
+    const {mutate} = useEditBussinessDetails(bussinessId);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      website: "",
-      twitter: "",
-      facebook: "",
-      instagram: "",
+      businessWebsite: "",
+      twitterLink: "",
+      fbLink: "",
+      instaLink: "",
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    mutate(values,{
+      onSuccess:()=>{
+        toast.success("Updated Socials")
+      },
+      onError:(error)=>{
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to Remove manager: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
+      }
+    })
   }
 
   return (
@@ -46,7 +74,7 @@ export default function UpdateSocials() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="website"
+            name="businessWebsite"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -65,7 +93,7 @@ export default function UpdateSocials() {
           />
           <FormField
             control={form.control}
-            name="facebook"
+            name="fbLink"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -84,7 +112,7 @@ export default function UpdateSocials() {
           />
           <FormField
             control={form.control}
-            name="twitter"
+            name="twitterLink"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -103,7 +131,7 @@ export default function UpdateSocials() {
           />
           <FormField
             control={form.control}
-            name="instagram"
+            name="instaLink"
             render={({ field }) => (
               <FormItem>
                 <FormControl>

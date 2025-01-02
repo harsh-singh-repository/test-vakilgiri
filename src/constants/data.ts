@@ -47,6 +47,8 @@ export type Business = {
   contactPersonId: string | null;
   createdFromLeadId: string | null;
   fbLink: string | null;
+  estimate:[];
+  projects:[];
   instaLink: string | null;
   officialEmail: string | null;
   paidUpCapital: string | null;
@@ -81,6 +83,42 @@ export type Leads = {
     slug: string | null;
     isDisabled: boolean;
 };
+
+export interface Creator {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export interface BusinessFile {
+  id: string;
+  businessName: string;
+  businessPan: string;
+  businessType: string;
+  businessStatus: string | null;
+}
+
+export interface FileInterface {
+  id: string;
+  businessId: string;
+  clientId: string | null;
+  fileURL: string;
+  fileName: string;
+  Link: string | null;
+  projectId: string | null;
+  relatedTo: string | null;
+  visibility: boolean;
+  creatorId: string;
+  updatedAt: string;
+  createdAt: string;
+  slug: string | null;
+  userId: string | null;
+  isDisabled: boolean;
+  creator: Creator;
+  business: BusinessFile;
+}
+
 
 export interface Reminder {
   id: string; // Unique identifier for the reminder

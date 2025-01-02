@@ -11,7 +11,6 @@ import {
   PlusCircle,
   Trash2,
   X,
-  //  X
 } from "lucide-react";
 
 import { Controller, useForm } from "react-hook-form";
@@ -33,9 +32,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-// import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   useAddBusinessDisscussion,
   useAddBusinessReminder,
@@ -48,7 +45,7 @@ import {
   useRemoveManager,
 } from "@/hooks/business/manage-business";
 import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { BusinessDiscussion } from "../../_types";
 
@@ -56,8 +53,8 @@ import { RxAvatar } from "react-icons/rx";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   bussinessReminderType,
+  Manager,
   managerDetails,
-  userType,
 } from "@/app/dashboard/(sales)/leads/_types";
 import { MaterialInput } from "@/components/material-input";
 import { useGetUsers } from "@/hooks/user/manage-user";
@@ -106,9 +103,11 @@ export const StackBussinessExchangeDialog = ({
   onClose,
   openDialogId,
 }: StackExchangeDialogProp) => {
-  // const [date, setDate] = React.useState<Date>()
   const [isSubmittingDiscussion, setIsSubmittingDiscussion] = useState(false);
   const [isSubmittingReminder, setIsSubmittingReminder] = useState(false);
+  const [storedManager,setStoredManager] = useState<string[]>();
+
+
 
   const queryClient = useQueryClient();
 
@@ -144,15 +143,20 @@ export const StackBussinessExchangeDialog = ({
     useGetBussinessDisscussion(openDialogId);
 
   const { data: businessReminderData } = useGetBussinessReminder(openDialogId);
-
   const { mutate } = useAddBusinessDisscussion(openDialogId);
-
   const { mutate: addReminder } = useAddBusinessReminder(openDialogId);
   const { mutate: removeManger } = useRemoveManager(openDialogId);
   const { mutate: deleteDisscussion } = useDeleteBussinessDisscussion();
   const { data: assignedManager } = useGetUsers();
   const { mutate: deleteReminder } = useDeleteBussinessReminder(openDialogId);
   const { mutate: addManager } = useAddManager(openDialogId);
+
+
+  useEffect(()=>{
+    const storedManagerID =  data?.managers?.map((manager:{id:string})=> manager.id);
+    setStoredManager(storedManagerID);
+  },[data]);
+
 
   const handleDeleteDisscussion = ({
     id,
@@ -615,12 +619,8 @@ export const StackBussinessExchangeDialog = ({
                   {assignedManager && (
                     <form onSubmit={formMethods.handleSubmit(handleFormSubmit)}>
                       <div>
-                        {assignedManager
-                          .filter(
-                            (manager: userType) =>
-                              manager.userRoles === "Staff_Manager"
-                          ) // Filter the managers
-                          .map((manager: userType, index: number) => (
+                        {assignedManager.filter((manager:Manager) => !storedManager?.includes(manager.id))
+                          .map((manager: Manager, index: number) => (
                             <div
                               key={index}
                               className="flex items-center gap-2"
@@ -649,7 +649,7 @@ export const StackBussinessExchangeDialog = ({
                                 )}
                               />
                               <span className="text-[12px] text-[#091747] font-semibold">
-                                {manager.firstName}
+                                {manager.adminStaff?.user.firstName + " " + manager.adminStaff?.user.lastName}
                               </span>
                             </div>
                           ))}
@@ -686,7 +686,7 @@ export const StackBussinessExchangeDialog = ({
             </div>
             <div className="text-[12px]">
               <span className="font-bold">Manager:</span>{" "}
-              <span className="font-medium">{data?.managers[0].firstName}</span>
+              <span className="font-medium">{data?.managers[0]?.firstName}</span>
             </div>
             <div className="text-[10px] bg-[#A301D5] max-w-fit  text-white px-2 rounded-full mt-1">
               <span className="font-medium">
@@ -708,21 +708,21 @@ export const StackBussinessExchangeDialog = ({
               <div className="text-[12px]">
                 <span className="font-bold">Client:</span>{" "}
                 <span className="font-medium">
-                  {data?.businessUsers[0].firstName +
+                  {data?.businessUsers[0]?.firstName +
                     " " +
-                    data?.businessUsers[0].lastName}
+                    data?.businessUsers[0]?.lastName}
                 </span>
               </div>
               <div className="text-[12px]">
                 <span className="font-bold">Mobile:</span>{" "}
                 <span className="font-medium">
-                  {data?.businessUsers[0].mobileNumber}
+                  {data?.businessUsers[0]?.mobileNumber}
                 </span>
               </div>
               <div className="text-[12px]">
                 <span className="font-bold">Email:</span>{" "}
                 <span className="font-medium">
-                  {data?.businessUsers[0].email}
+                  {data?.businessUsers[0]?.email}
                 </span>
               </div>
               <div className="text-[12px]">
