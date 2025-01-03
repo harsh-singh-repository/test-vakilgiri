@@ -59,18 +59,42 @@ export const columns: ColumnDef<Business>[] = [
   },
   {
     accessorKey: 'estimates',
-    header: 'Estimates'
+    header: 'Estimates',
+    cell:({row})=>{
+      return(
+          <span>{row.original.estimate.length}</span>
+      )
+    }
   },
   {
     accessorKey: 'projects',
-    header: 'Projects'
+    header: 'Projects',
+    cell:({row})=>{
+      return(
+          <span>{row.original.projects.length}</span>
+      )
+    }
   },
   {
     accessorKey: 'manager',
-    header: 'Manager'
+    header: 'Manager',
+    cell:()=>{
+      return(
+        <div>
+           <Image
+                alt="profile"
+                src={Profile}
+                height="35"
+                width="35"
+                className="rounded-full mr-2"
+                style={{ boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)" }}
+              />
+        </div>
+      )
+    }
   },
   {
-    accessorKey: 'status',
+    accessorKey: 'businessStatus',
     header: 'Status'
   },
   {

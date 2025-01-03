@@ -61,7 +61,7 @@ import {
   LeadsDiscussionType,
   LeadsReminderType,
   managerDetails,
-  userType,
+  Manager,
 } from "../../_types";
 import { AxiosError } from "axios";
 import EditLeads from "../EditLeads";
@@ -72,6 +72,7 @@ import { MaterialInput } from "@/components/material-input";
 import { RotatingLines } from "react-loader-spinner";
 import Image from "next/image";
 import { FaPencilAlt, FaPlus } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -115,7 +116,7 @@ export const StackLeadsExchangeDialog = ({
   openDialogId,
 }: StackExchangeDialogProp) => {
   // const [date, setDate] = React.useState<Date>()
-  //   const [isSubmittingReminder, setIsSubmittingReminder] = useState(false);
+    const [storedManager, setStoredManager] = useState<string[]>();
 
   const queryClient = useQueryClient();
 
@@ -143,7 +144,7 @@ export const StackLeadsExchangeDialog = ({
 
   const { data: assignedManager } = useGetUsers();
 
-  console.log("manager", assignedManager);
+  console.log("dataLead", data);
 
   const { data: LeadDiscussion } = useGetLeadsDisscussion(openDialogId);
 
@@ -269,11 +270,11 @@ export const StackLeadsExchangeDialog = ({
 
   const formMethods = useForm({
     defaultValues: {
-      managerId: [] as string[], // Array to store selected manager IDs
+      managersId: [] as string[], // Array to store selected manager IDs
     },
   });
 
-  const handleFormSubmit = (data: { managerId: string[] }) => {
+  const handleFormSubmit = (data: { managersId: string[] }) => {
     console.log("data", data);
     addManager(data, {
       onSuccess: () => {
@@ -324,6 +325,11 @@ export const StackLeadsExchangeDialog = ({
     });
   };
 
+  useEffect(()=>{
+    const storedManagerId = data?.managers.map((item:{id:string})=> item.id);
+    setStoredManager(storedManagerId)
+  },[data])
+
   if (!data) {
     return (
       <div className="flex justify-center item center p-2 h-full">
@@ -347,7 +353,7 @@ export const StackLeadsExchangeDialog = ({
           <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-2 xl:grid-cols-[650px,230px]">
             <div className="w-full">
               <div className="text-[17px] text-[#091747] text-left font-bold">
-                {data?.businessType.replace(/_/g, " ")}
+                {data?.service.replace("_"," ")}
               </div>
               <Accordion type="multiple" className="mt-2">
                 <AccordionItem value="discussions" className="">
@@ -665,7 +671,7 @@ export const StackLeadsExchangeDialog = ({
                   <div className="flex gap-2 mt-2 mb-2 items-center">
                     {data && (
                       <div className="flex">
-                        {data?.assigned?.map(
+                        {data?.managers?.map(
                           (assign: managerDetails, index: number) => (
                             <div className="" key={index}>
                               <Image
@@ -709,16 +715,16 @@ export const StackLeadsExchangeDialog = ({
                             <div>
                               {assignedManager
                                 .filter(
-                                  (manager: userType) =>
-                                    manager.userRoles === "Staff_Manager"
+                                  (manager: Manager) =>
+                                    !storedManager?.includes(manager.id)
                                 ) // Filter the managers
-                                .map((manager: userType, index: number) => (
+                                .map((manager: Manager, index: number) => (
                                   <div
                                     key={index}
                                     className="flex items-center gap-2"
                                   >
                                     <Controller
-                                      name="managerId"
+                                      name="managersId"
                                       control={formMethods.control}
                                       render={({
                                         field: { value, onChange },
@@ -744,7 +750,7 @@ export const StackLeadsExchangeDialog = ({
                                       )}
                                     />
                                     <span className="text-[12px] text-[#091747] font-semibold">
-                                      {manager.firstName}
+                                      {manager.adminStaff?.user.firstName + " " + manager.adminStaff?.user.lastName}
                                     </span>
                                   </div>
                                 ))}
@@ -788,16 +794,16 @@ export const StackLeadsExchangeDialog = ({
                     </div>
                     <div className="flex">
                       <span className="font-bold">Mobile:</span>
-                      <span className="font-medium">{data?.businessMobile}</span>
+                      <span className="font-medium">{data?.mobile}</span>
                     </div>
                     <div className="flex text-[#007B23]">
                       <span className="font-bold">Email:</span>
-                      <span className="font-medium">{data?.businessEmail}</span>
+                      <span className="font-medium">{data?.email}</span>
                     </div>
                     <div className="flex">
                       <span className="font-bold">Service:</span>
                       <span className="font-medium">
-                        {data?.businessType.replace(/_/g, " ")}
+                        {data?.service.replace("_"," ")}
                       </span>
                     </div>
                     <div className="flex ">
@@ -809,8 +815,8 @@ export const StackLeadsExchangeDialog = ({
                       <span>{data?.existing === true ? "Yes" : "No"}</span>
                     </div>
                     <div className="flex  items-center text-white bg-[#7F7E7E] max-w-fit rounded-full px-2 text-[10px]">
-                      <span className="font-semibold">Status: </span>
-                      <span className="font-semibold">{data?.businessStatus}</span>
+                      <span className="font-semibold">Status:</span>
+                      <span className="font-semibold">{data?.status}</span>
                     </div>
                   </div>
                 </div>
@@ -846,8 +852,8 @@ export const StackLeadsExchangeDialog = ({
                       </span>
                     </div>
                     <div className="flex">
-                      <span className="font-bold">Email:</span>
-                      <span className="font-medium">{data?.client?.email}</span>
+                    <span className="font-bold">Email:</span>{" "}
+                    <span className="font-medium">{data?.email}</span>
                     </div>
                     <div className="flex">
                       <span className="font-bold">Mobile:</span>

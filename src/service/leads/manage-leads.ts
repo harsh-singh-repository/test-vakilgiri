@@ -86,9 +86,9 @@ export const leadServices = {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.LINK_BUSSINESS(id)}`,businessId);
     },
-    assignManager : async(id:string, managerId: {managerId: string[]}) => {
+    assignManager : async(id:string, managersId: {managersId: string[]}) => {
         return await axiosInstance.post(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.ASSIGN_MANAGER(id)}`,managerId);
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${LEADS_API.ASSIGN_MANAGER(id)}`,managersId);
     },
     removeManager : async (id:string,managerId:string)=>{
         return await axiosInstance.delete(

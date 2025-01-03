@@ -18,7 +18,7 @@ export const useAddLeads = () => {
 
 export const useAddManager = (id:string) => {
     return useMutation({
-        mutationFn:(managerId:{managerId: string[]})=> leadServices.assignManager(id,managerId),
+        mutationFn:(managersId:{managersId: string[]})=> leadServices.assignManager(id,managersId),
     });
 };
 

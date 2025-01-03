@@ -1,25 +1,16 @@
 "use client";
 import { useState } from "react";
-import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./table/columns";
 import { LeadsTable } from "./table/leads-table";
 import LeadsCard from "./leads-card";
 import { useSearchParams } from "next/navigation";
-// import { LeadsPageServer } from "./LeadsPageServer";s
-// import { Leads } from "@/constants/data";s
-import { Dialog} from "@/components/ui/dialog";
 import CreateLeadForm from "./create-lead-form";
 import { Oval } from "react-loader-spinner";
 import { useGetLeads } from "@/hooks/leads/manage-leads";
 import Modal from "@/components/model/custom-modal";
 
-// type ResponseData = {
-//   employee: Leads[];
-//   totalUsers: number;
-//   pageCount: number;
-// };
 
 export default function LeadsPage() {
   const searchParams = useSearchParams();
@@ -56,21 +47,18 @@ export default function LeadsPage() {
     );
   }
 
-
-
   return (
-    <Dialog>
       <div className="w-full flex-1 space-y-4 p-4 pt-6 md:p-4 overflow-hidden">
         <div className="flex items-start justify-between">
-          <div className="text-2xl font-bold text-[#042559]">{`Leads`}</div>
+          <div className="text-xl font-semibold text-[#042559]">{`Leads (${data.length})`}</div>
 
           <div className="flex justify-center items-center gap-4">
             <div className='flex gap-2 items-center'>
           <Input
-            placeholder="Search name..."
+            placeholder="Type Here..."
             value={searchValue}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
-            className="w-full md:max-w-sm ml-auto bg-white"
+            className="w-full md:max-w-sm ml-auto bg-white p-[5px] text-[14px] lg:w-[249px] h-[30px] placeholder:text-black/40"
             />
 
               <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1" onClick={openModal}>
@@ -82,7 +70,6 @@ export default function LeadsPage() {
               </Modal>
           </div>
         </div>
-        <Separator />
 
         <LeadsCard />
 
@@ -96,6 +83,5 @@ export default function LeadsPage() {
           pageCount={Math.ceil(data.length / pageLimit)}
         />
       </div>
-    </Dialog>
   );
 }

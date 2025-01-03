@@ -2,7 +2,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import { StaffDataTypes } from "@/types";
 
 const USER_API = {
-    GET_ALL : `/user`,
+    GET_ALL : `/manager`,
     CREATE_ROLES:`/user/registerByRole`
 }
 

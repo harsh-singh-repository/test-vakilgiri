@@ -99,7 +99,8 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
     addBussiness(data, {
       onSuccess: () => {
         toast.success("Bussiness Added Succesfully");
-        queryClient.invalidateQueries({queryKey:['bussiness']})
+        queryClient.invalidateQueries({queryKey:['bussiness']});
+        queryClient.invalidateQueries({queryKey:['bussinessCount']});
       },
       onError: (error) => {
         if (error instanceof AxiosError) {

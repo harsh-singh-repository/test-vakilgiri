@@ -18,8 +18,8 @@ import Modal from "@/components/model/custom-modal";
 import AddFile from "./_component/AddFile";
 import LinkClient from "./_component/LinkClient";
 import BussinessClientTable from "./_component/BussinessClientTable";
-import NoFiles from "./_component/NoFiles";
 import { Oval } from "react-loader-spinner";
+import GetFiles from "./_component/NoFiles";
 
 const Page = () => {
   const params = useParams();
@@ -125,7 +125,7 @@ const Page = () => {
             <BussinessIdSettings bussinessId={paramsId} />
           </TabsContent>
           <TabsContent value="file">
-            <NoFiles/>
+            <GetFiles id={paramsId}/>
           </TabsContent>
         </Tabs>
       </div>

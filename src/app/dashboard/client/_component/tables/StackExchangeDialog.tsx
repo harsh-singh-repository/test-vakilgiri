@@ -17,7 +17,7 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import Profile from "../../../../../../public/assets/profileimg.png";
 import { cn } from "@/lib/utils";
 import { Form, FormControl, FormField } from "@/components/ui/form";
 import {
@@ -40,10 +40,11 @@ import {
   useDeleteClientDiscussion,
   useGetClientReminder,
   useAddClientManager,
+  useRemoveManager,
 } from "@/hooks/clients/manage-client";
 // import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { discussionSchema, reminderSchema } from "../../_types/zodSchema";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { RxAvatar } from "react-icons/rx";
 import { clientDisscussionProps, ClinetBussinessDetails } from "../../_types";
@@ -51,7 +52,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import {
   ClientReminderType,
-  userType,
+  Manager
 } from "@/app/dashboard/(sales)/leads/_types";
 // import { useGetUsers } from "@/hooks/user/manage-user";
 import { useDeleteClientReminder } from "@/hooks/tickets/manage-ticket";
@@ -63,6 +64,7 @@ import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
 import { RotatingLines } from "react-loader-spinner";
 import { FaRegEye } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -107,6 +109,7 @@ export const StackExchangeDialog = ({
   // const [date, setDate] = React.useState<Date>()
   const [isSubmittingDiscussion, setIsSubmittingDiscussion] = useState(false);
   const [isSubmittingReminder, setIsSubmittingReminder] = useState(false);
+  const [storedManager,setStoredManager] = useState<string[]>();
 
   const router = useRouter();
 
@@ -144,6 +147,7 @@ export const StackExchangeDialog = ({
   const { mutate: deleteDiscussion } = useDeleteClientDiscussion();
   const { data: assignedManager } = useGetUsers();
   const { mutate: deleteReminder } = useDeleteClientReminder();
+  const {mutate:removeManger} = useRemoveManager(openDialogId)
   const { mutate: addManager } = useAddClientManager(openDialogId);
 
   const queryClient = useQueryClient();
@@ -263,6 +267,26 @@ export const StackExchangeDialog = ({
     });
     setIsSubmittingReminder(false);
   }
+
+  const handleRemoveManager = (id: { managerId: string }) => {
+    removeManger(id, {
+      onSuccess: () => {
+        toast.success("Manager Removed");
+        queryClient.invalidateQueries({ queryKey: ["bussinessId"] });
+        queryClient.invalidateQueries({ queryKey: ["bussiness"] });
+      },
+      onError: (error) => {
+        toast.error(`error : ${error}`);
+      },
+    });
+  };
+
+  console.log("Manager",assignedManager);
+
+  useEffect(()=>{
+    const managerId = data?.managers.map((item:{id:string})=> item.id);
+    setStoredManager(managerId);
+  },[data])
 
   if (!data) {
     return (
@@ -568,17 +592,35 @@ export const StackExchangeDialog = ({
               />
             </div>
             <div className="flex items-center gap-2">
-              {/* {data && (
+              {data && (
                       <div className="flex">
-                        {data?.manager?.map(
-                          (data: managerDetails, index: number) => (
+                        {data?.managers?.map(
+                          (manager: Manager, index: number) => (
                             <div className="" key={index}>
-                              <RxAvatar size={"30"} />
-                            </div>
+                        <Image
+                          alt="profile"
+                          src={Profile}
+                          height="40"
+                          width="40"
+                          className="rounded-full mr-2"
+                          style={{
+                            boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)",
+                          }}
+                        />
+                        <div className="absolute">
+                          <X
+                            className="text-[#f21300] -translate-y-9 translate-x-8 h-3 w-3 cursor-pointer"
+                            strokeWidth={"6"}
+                            onClick={() =>
+                              handleRemoveManager({ managerId:manager?.id})
+                            }
+                          />
+                        </div>
+                      </div>
                           )
                         )}
                       </div>
-                    )} */}
+                    )}
               <Popover>
                 <PopoverTrigger>
                   <div className="text-[#f21300]">
@@ -589,12 +631,7 @@ export const StackExchangeDialog = ({
                   {assignedManager && (
                     <form onSubmit={formMethods.handleSubmit(handleFormSubmit)}>
                       <div>
-                        {assignedManager
-                          .filter(
-                            (manager: userType) =>
-                              manager.userRoles === "Client"
-                          ) // Filter the managers
-                          .map((manager: userType, index: number) => (
+                        {assignedManager.filter((item:Manager)=> !storedManager?.includes(item.id)).map((manager: Manager, index: number) => (
                             <div
                               key={index}
                               className="flex items-center gap-2"
@@ -623,7 +660,7 @@ export const StackExchangeDialog = ({
                                 )}
                               />
                               <span className="text-[12px] text-[#091747] font-semibold">
-                                {manager.firstName}
+                                {manager.adminStaff?.user.firstName + " "  + manager.adminStaff?.user.lastName}
                               </span>
                             </div>
                           ))}

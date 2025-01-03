@@ -2,10 +2,10 @@
 // import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import ActionButton from './actions';
-import { Project } from './ClientPageServer';
+import { EstimateProps } from '@/types';
 // import { CellAction } from './cell-action';
 
-export const columns: ColumnDef<Project>[] = [
+export const columns: ColumnDef<EstimateProps>[] = [
   {
     accessorKey: 'date',
     header: 'Date',
@@ -52,11 +52,11 @@ export const columns: ColumnDef<Project>[] = [
 }
   },
   {
-    accessorKey: 'transactions',
-    header: 'Transactions',
+    accessorKey: 'payment',
+    header: 'Payments',
     cell:({row})=>{
       return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.transactions}</div>
+        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.payments}</div>
       )
 }
   },

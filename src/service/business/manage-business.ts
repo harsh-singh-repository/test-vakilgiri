@@ -21,7 +21,8 @@ const BUSINESS_API = {
     ADD_FILE:`/files/upload/business`,
     ASSIGN_CONTACT_PERSON:(id:string  | string [] | undefined)=>`/business/${id}/contact-person`,
     REMOVE_MANAGER:(id:string) => `/business/${id}/managers`,
-    CLIENT_TO_BUSSINESS:(id:string|string[]|undefined)=>`/business/${id}/clients`
+    CLIENT_TO_BUSSINESS:(id:string|string[]|undefined)=>`/business/${id}/clients`,
+    GET_FILES:(id:string | string [] | undefined) => `/files/business/${id}`
 } as const;
 
 export const bussinessService = {
@@ -33,6 +34,11 @@ export const bussinessService = {
 
     get: async () => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.GET_ALL}`);
+        return response.data.data;
+    },
+
+    getFilesOfBussiness: async (id:string | string [] | undefined) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.GET_FILES(id)}`);
         return response.data.data;
     },
 

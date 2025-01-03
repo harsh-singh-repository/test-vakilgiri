@@ -28,7 +28,7 @@ const BussinessIdSettings = ({bussinessId}:BussinessIdSettingsPageProps) => {
             </div>
           </div>
           <Tabs defaultValue="basicDetails" className="w-full max-h-fit">
-            <TabsList>
+            <TabsList className="text-[#091747]">
               <TabsTrigger value="basicDetails">Basic Details</TabsTrigger>
               <TabsTrigger value="regestration">Regestration</TabsTrigger>
               <TabsTrigger value="social">Social Handles</TabsTrigger>
@@ -40,7 +40,7 @@ const BussinessIdSettings = ({bussinessId}:BussinessIdSettingsPageProps) => {
               Change your password here.
             </TabsContent>
             <TabsContent value="social" className="w-full justify-center">
-              <UpdateSocials/>
+              <UpdateSocials bussinessId={bussinessId}/>
             </TabsContent>
           </Tabs>
         </div>

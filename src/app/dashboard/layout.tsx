@@ -1,14 +1,24 @@
+"use client"
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./_component/AppSidebar";
 import Navbar from "./_component/Navbar";
+// import { useState } from "react";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+  // const [sideBarOpen,setSideBarOpen] = useState<boolean>(false);
+  
+  // const isMobile = useMediaQuery({ maxWidth: 768 });
 
-
+  // useEffect(() => {
+  //   if (isMobile) {
+  //     setIsSidebarOpen(false);
+  //   }
+  // }, [isMobile]);
 
   return (
     <div className="h-full bg-white object-contain">
