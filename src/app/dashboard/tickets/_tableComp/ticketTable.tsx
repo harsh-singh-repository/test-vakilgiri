@@ -35,7 +35,7 @@ export function TicketTable<TData, TValue>({
   })
 
   return (
-    <ScrollArea className="w-full max-h-fit overflow-y-auto border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+    <ScrollArea className="w-full max-h-fit overflow-y-auto border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar overflow-x-auto">
     <div className="rounded-md border bg-white mb-1">
       <Table>
         <TableHeader className="bg-blue-950 text-white">

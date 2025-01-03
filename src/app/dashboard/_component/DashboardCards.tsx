@@ -178,16 +178,16 @@ const cardData = [
 
 const DashboardCard = () => {
   return (
-    <div className="p-5 grid grid-cols-1 gap-3 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4">
+    <div className="p-5 grid grid-cols-1 gap-3 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4">
       {cardData.map((card, index) => {
         return (
           <div key={index} className={`w-full h-fit xl:order-1 flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 ${card.BgColor}`}>
             <div className="w-full h-fit flex flex-col justify-center items-center">
-              <div className="w-full h-fit flex justify-center gap-x-2 items-center p-1 px-2">
+              <div className="w-full h-fit flex justify-center gap-x-2 items-center py-1 px-[10px]">
                 <div className={`w-[39px] h-[39px] rounded-[10px] flex justify-center items-center p-5 ${card.iconBgColor}`}>
                   <span className={`${card.iconColor}`}>{card.icon}</span>
                 </div>
-                <div className="w-full flex justify-between items-center px-8">
+                <div className="w-full flex justify-between items-center 2xl:px-8 xl:px-4 lg:px-8 md:px-8 sm:px-8">
                   {card.data.map((data, dataIndex) => {
                     return (
                       <div className="flex flex-col justify-center items-center gap-x-2" key={data.label + dataIndex}>

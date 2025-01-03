@@ -37,6 +37,7 @@ interface Ticket {
   categoryId: string;
   createdAt: string;
   modifiedAt: string;
+  updatedAt:string;
   slug: string | null;
   managerId: string | null;
   creatorId: string;
@@ -217,9 +218,11 @@ function Page() {
       <div className='py-2'>
       <TicketCard tickets={numberTicket}/>
       </div>
-      <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 mt-4 gap-2 w-full">
-  <div className="grid xl:col-span-3 col-span-1">
-  <TicketTable columns={TicketColumns(categories,tickets,handleFetch)} data={tickets} />
+      <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 mt-4 gap-2 w-full">
+  <div className="grid xl:col-span-3 lg:col-span-2 col-span-1">
+    <div className='overflow-x-auto'>
+    <TicketTable columns={TicketColumns(categories,tickets,handleFetch)} data={tickets} />
+    </div>
   </div>
   <div>
   <TicketTable
