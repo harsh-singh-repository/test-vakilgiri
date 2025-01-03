@@ -270,11 +270,11 @@ export const StackLeadsExchangeDialog = ({
 
   const formMethods = useForm({
     defaultValues: {
-      managerId: [] as string[], // Array to store selected manager IDs
+      managersId: [] as string[], // Array to store selected manager IDs
     },
   });
 
-  const handleFormSubmit = (data: { managerId: string[] }) => {
+  const handleFormSubmit = (data: { managersId: string[] }) => {
     console.log("data", data);
     addManager(data, {
       onSuccess: () => {
@@ -671,7 +671,7 @@ export const StackLeadsExchangeDialog = ({
                   <div className="flex gap-2 mt-2 mb-2 items-center">
                     {data && (
                       <div className="flex">
-                        {data?.assigned?.map(
+                        {data?.managers?.map(
                           (assign: managerDetails, index: number) => (
                             <div className="" key={index}>
                               <Image
@@ -724,7 +724,7 @@ export const StackLeadsExchangeDialog = ({
                                     className="flex items-center gap-2"
                                   >
                                     <Controller
-                                      name="managerId"
+                                      name="managersId"
                                       control={formMethods.control}
                                       render={({
                                         field: { value, onChange },

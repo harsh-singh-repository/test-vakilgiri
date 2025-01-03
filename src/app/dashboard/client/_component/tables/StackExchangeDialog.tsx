@@ -612,7 +612,7 @@ export const StackExchangeDialog = ({
                             className="text-[#f21300] -translate-y-9 translate-x-8 h-3 w-3 cursor-pointer"
                             strokeWidth={"6"}
                             onClick={() =>
-                              handleRemoveManager({ managerId: data?.id })
+                              handleRemoveManager({ managerId:manager?.id})
                             }
                           />
                         </div>
