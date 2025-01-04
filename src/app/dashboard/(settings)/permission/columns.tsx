@@ -5,11 +5,13 @@ import React from "react";
 import ActionCell from "./_components/action";
 
 export type role = {
+  id:string;
   Sno: number;
   userType: string;
   role: string;
+  name:string;
   department: string;
-  Assigned: string;
+  assigned: string;
 };
 
 export const roleColumn: ColumnDef<role>[] = [
@@ -51,6 +53,6 @@ export const roleColumn: ColumnDef<role>[] = [
   {
     id: "action", // Updated id
     header: () => <div className="text-right mr-4">Action</div>, // Updated header
-    cell: ({ row }) => <ActionCell rowId={row.id} />
+    cell: ({ row }) => <ActionCell rowId={row.original.id} />
   },
 ];

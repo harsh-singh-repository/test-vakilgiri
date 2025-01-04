@@ -6,10 +6,10 @@ import RoleEditForm from "./roleEditForm";
 import { RoleModal } from "./roleEditModal";
 
 interface ActionCellProps {
-  rowId: string | number; // You can use this to identify the row if needed
+  rowId: string; 
 }
 
-const ActionCell: React.FC<ActionCellProps> = () => {
+const ActionCell: React.FC<ActionCellProps> = ({rowId}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
@@ -33,7 +33,7 @@ const ActionCell: React.FC<ActionCellProps> = () => {
       {isModalOpen && (
         <RoleModal isOpen={isModalOpen} onClose={handleCloseModal}>
           <div className="p-4">
-            <RoleEditForm close={handleCloseModal} />
+            <RoleEditForm close={handleCloseModal} id={rowId} />
           </div>
         </RoleModal>
       )}
