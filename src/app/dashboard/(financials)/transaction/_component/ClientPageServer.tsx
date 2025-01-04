@@ -59,7 +59,7 @@ export async function ProjectPageServer({
 }> {
   const totalProjects = fakeProjects.records.length;
   const pageCount = Math.ceil(totalProjects / pageLimit);
-
+  
   // Fetch paginated projects
   const { projects: paginatedProjects, total } = fakeProjects.getProjects({
     page,
