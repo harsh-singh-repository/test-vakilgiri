@@ -9,6 +9,14 @@ export const useGetUsers = () => {
     return query;
 };
 
+export const useGetAllStaff = () => {
+    const query =  useQuery({
+        queryKey: ['userStaff'],
+        queryFn: userServices.get,
+    });
+    return query;
+};
+
 export const useAddStaffRoles = () => {
     return useMutation({
         mutationFn: userServices.create,

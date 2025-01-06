@@ -11,7 +11,7 @@ import { useSearchParams } from "next/navigation";
 import {Oval} from "react-loader-spinner"
 // import Modal from "@/components/model/custom-modal";
 // import CreateStaff from "./CreateStaff";
-import { useGetUsers } from "@/hooks/user/manage-user";
+import { useGetAllStaff} from "@/hooks/user/manage-user";
 // import CreateStaff from "./CreateStaff";
 import EditStaff from "./EditStaff";
 import Modal from "@/components/model/custom-modal";
@@ -31,7 +31,7 @@ import { StaffType } from "../_types/types";
 
 export default function StaffPage() {
   
-  const {data} = useGetUsers();
+  const {data} = useGetAllStaff();
   const [staffEdit,setStaffEdit] = useState<boolean>(false);
 
 
