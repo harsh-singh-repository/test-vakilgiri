@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/react';
 interface QuotationProps {
     data: Services;
   }
-  interface StateWiseFee {
+ export interface StateWiseFee {
     [authorizedCapital: string]: {
       id: string;
       amount: number;

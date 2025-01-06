@@ -62,8 +62,31 @@ export default function ProjectPage() {
 
   if (!responseData) {
     return (
-      <div className="flex justify-center items-center h-[100vh]">
-        <Oval visible={true} height="40" width="40" color="#f21300" ariaLabel="oval-loading" />
+      <div className="flex items-center justify-center h-screen">
+        <img
+          src="/favicon.ico"
+          alt="Loading"
+          className="w-12 h-12"
+          style={{
+            animation: "blurInOut 2s infinite ease-in-out",
+          }}
+        />
+        <style jsx>{`
+          @keyframes blurInOut {
+            0%,{
+            filter: blur(2px);
+              opacity: 1;
+            }
+            100% {
+              filter: blur(4px);
+              opacity: 0.3;
+            }
+            50% {
+              filter: blur(2px);
+              opacity: 1;
+            }
+          }
+        `}</style>
       </div>
     );
   }
