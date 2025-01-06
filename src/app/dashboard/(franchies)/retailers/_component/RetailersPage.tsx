@@ -1,13 +1,13 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./columns";
 import { useSearchParams } from "next/navigation";
 import { Oval } from "react-loader-spinner";
-import { ServiceTable } from "./client-table";
+import { RetailersTable} from "./retailers-table";
 import { ProjectPageServer } from "./ClientPageServer";
 import ClientCard from "./client-card";
 import Modal from "@/components/model/custom-modal";
@@ -74,23 +74,25 @@ export default function RetailersPage() {
   return (
       <div className="flex-1 space-y-1 p-4 pt-6 md:p-4">
         <div className="flex items-start justify-between">
-          <div className="text-[20px] font-bold text-[#042559] ml-1">{`Retailers`}</div>
+          <div className="text-xl font-semibold text-[#042559]">{`Retailers`}</div>
 
           <div className="flex justify-center items-center gap-4">
-            <Suspense>
-              <Input
-                placeholder="Search project..."
+          <div className='flex gap-2 items-center'>
+          <Input
+                placeholder="Type here..."
                 value={searchValue}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                   setSearchValue(event.target.value)
                 }
-                className="w-full md:max-w-sm ml-auto bg-white"
+                className="w-full md:max-w-sm ml-auto bg-white p-[5px] text-[14px] lg:w-[249px] h-[30px] placeholder:text-black/40"
               />
-            </Suspense>
 
-              <div className="bg-[#f21300] text-white p-1 rounded-md cursor-pointer" onClick={openModal}>
-                <Plus strokeWidth={5} className="h-6 w-6" />
+
+              <div className="bg-[#f21300] text-white max-h-[25px] min-h-[25px] min-w-[25px] max-w-[25px] rounded-sm cursor-pointer p-1" onClick={openModal}>
+                <Plus strokeWidth={"5"} size={"18"}/>
               </div>
+          </div>
+             
 
               <Modal isOpen={isModalOpen} onClose={closeModal} className="w-[400px]">
                 <AddRetailer onClose={closeModal}/>
@@ -104,9 +106,14 @@ export default function RetailersPage() {
 
         <Separator />
 
-        <ServiceTable
+        <RetailersTable
           columns={columns}
           data={responseData.projects}
+          pageNo={page}
+          searchKey="search"
+          searchValue={searchValue}
+          totalUsers={responseData.totalProjects}
+          pageCount={responseData.pageCount}
         />
       </div>
   );

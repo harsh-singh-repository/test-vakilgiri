@@ -2,35 +2,12 @@
 // import { Checkbox } from '@/components/ui/checkbox';
 // import { Client } from '@/constants/data';
 import { ColumnDef } from '@tanstack/react-table';
-import { UserTypes } from '../../_types/types';
 import ActionButton from './actions';
+import { StaffType } from '../../_types/types';
 // import { CellAction } from './cell-action';
 
 
-export const columns = (setStaffEdit: React.Dispatch<React.SetStateAction<boolean>>) : ColumnDef<UserTypes>[] => [
-  // {
-    // id: 'select',
-    // header: ({ table }) => (
-    //   <Checkbox
-    //     checked={table.getIsAllPageRowsSelected()}
-    //     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //     aria-label="Select all"
-    //   />
-    // ),
-    // cell: ({ row }) => (
-    //   <Checkbox
-    //     checked={row.getIsSelected()}
-    //     onCheckedChange={(value) => row.toggleSelected(!!value)}
-    //     aria-label="Select row"
-    //   />
-    // ),
-  //   enableSorting: false,
-  //   enableHiding: false
-  // },
-  // {
-  //   accessorKey: 'id',
-  //   header: 'ID'
-  // },
+export const columns = (setStaffEdit: React.Dispatch<React.SetStateAction<boolean>>) : ColumnDef<StaffType>[] => [
   {
     accessorKey: 'profile-image',
     header: '',
@@ -96,20 +73,13 @@ export const columns = (setStaffEdit: React.Dispatch<React.SetStateAction<boolea
     header: 'Assigned'
   },
   {
-    accessorKey: 'loginStatus',
+    accessorKey: 'login',
     header: 'Status',
     cell:({row})=>{
       const status = row.original.loginStatus;
        if(status === "Active"){
         return (
           <div className='bg-[#008626] text-white rounded-full w-fit px-2'>
-            <span className='text-[10px]'>{status}</span>
-          </div>
-        )
-       }
-       if(status === "None"){
-        return (
-          <div className='bg-gray-400 text-white rounded-full w-fit px-2'>
             <span className='text-[10px]'>{status}</span>
           </div>
         )

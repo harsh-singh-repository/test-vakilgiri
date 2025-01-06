@@ -1,28 +1,54 @@
-import React from 'react'
-import { FiEye } from 'react-icons/fi';
-import { AiOutlineCreditCard } from 'react-icons/ai';
-import { FiEdit } from 'react-icons/fi';
-import { Button } from '@/components/ui/button';
-const ActionButton = () => {
+"use client"
+import { IoMdMail } from "react-icons/io"
+import { FaStackExchange } from "react-icons/fa"
+import { MdEdit } from "react-icons/md"
+import { Button } from '@/components/ui/button'
 
-    const icons = [
-        <FiEye />,
-        <AiOutlineCreditCard />,
-        <FiEdit />
-    ]
+// import { useRouter } from 'next/navigation'
+// import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+
+
+const ActionButton = () => {
+  
+
+  console.log("open dialog iD");
+  
+  // const router = useRouter()
+
+  // const handleEditClick = () => {
+  //   console.log("id one",id)
+  //   // console.log("id type4",typeof((id)))
+  //   router.push(`/dashboard/client/${id}`)
+  // }
+
+
+  // console.log("Harsh",id);
+
+
+
   return (
-    <div className='flex justify-center items-center gap-1'>
-      {
-        icons.map((item, index) => {
-            return (
-                <Button key={index} className='bg-[#042559] text-white w-6 h-7 text-sm'>
-                    {item}
-                </Button>
-            )
-        })
-      }
+    <div className="flex justify-center items-center gap-1">
+      <Button
+        className="bg-[#042559] text-white w-6 h-7 text-sm"
+        onClick={() => {}}
+      >
+        <IoMdMail />
+      </Button>
+        {/* <DialogTrigger asChild> */}
+          <Button
+            className="bg-[#042559] text-white w-6 h-7 text-sm">
+            <FaStackExchange />
+          </Button>
+        {/* </DialogTrigger> */}
+      <Button
+        className="bg-[#042559] text-white w-6 h-7 text-sm"
+        // onClick={handleEditClick}
+      >
+        <MdEdit />
+      </Button>
     </div>
   )
 }
 
-export default ActionButton
+export default ActionButton;
+
