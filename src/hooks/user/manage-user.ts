@@ -12,7 +12,7 @@ export const useGetUsers = () => {
 export const useGetAllStaff = () => {
     const query =  useQuery({
         queryKey: ['userStaff'],
-        queryFn: userServices.get,
+        queryFn: userServices.getStaff,
     });
     return query;
 };
