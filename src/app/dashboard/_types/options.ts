@@ -18,6 +18,30 @@ interface Manager {
   // Define the structure for the manager if more details are available
   [key: string]: string;
 }
+
+export interface ClientGetType{
+  aadhaar: string;
+  address1: string;
+  address2: string;
+  alternativeMobileNumber: string;
+  businessesAsCreator: []; // Replace `any` with a specific type if available
+  businessesAsMember: []; // Assuming each business has a type
+  city: string;
+  createdProjects: []; // Replace `any` with a specific type if available
+  email: string;
+  emailStatus: string;
+  firstName: string;
+  id: string;
+  lastLogin: Date | null;
+  lastName: string;
+  loginStatus: "Active" | "Inactive";
+  managers: []; // Replace `any` with a specific type if available
+  mobileNumber: string;
+  pan: string;
+  pincode: string;
+  userRoles: string // Add more roles if needed
+  walletAmount: number;
+}
   
   export interface LeadGetType{
     id: string;
@@ -38,7 +62,7 @@ interface Manager {
     createdAt: string;
     slug: string | null;
     isDisabled: boolean;
-    assigned: string[];
+    managers: string[];
   }
   export interface BussinessGetType{
     about: string | null;

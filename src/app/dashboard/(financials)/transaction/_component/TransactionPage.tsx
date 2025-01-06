@@ -1,14 +1,13 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./columns";
-import { useSearchParams } from "next/navigation";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { useSearchParams } from "next/navigation"
 import { Oval } from "react-loader-spinner";
-import { ServiceTable } from "./client-table";
+import {TransactionTable} from "./transaction-table";
 import { ProjectPageServer } from "./ClientPageServer";
 import ClientCard from "./client-card";
 
@@ -65,28 +64,23 @@ export default function TransactionPage() {
   }
 
   return (
-    <Dialog>
-      <div className="flex-1 space-y-1 p-4 pt-6 md:p-4">
+      <div className="flex-1 space-y-3 p-4 pt-6 md:p-4">
         <div className="flex items-start justify-between">
-          <div className="text-[20px] font-bold text-[#042559] ml-1">{`Transaction`}</div>
+          <div className="text-xl font-semibold text-[#042559]">{`Transaction`}</div>
 
           <div className="flex justify-center items-center gap-4">
-            <Suspense>
-              <Input
-                placeholder="Search project..."
-                value={searchValue}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setSearchValue(event.target.value)
-                }
-                className="w-full md:max-w-sm ml-auto bg-white"
-              />
-            </Suspense>
+          <div className='flex gap-2 items-center'>
+          <Input
+            placeholder="Type here..."
+            value={searchValue}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
+            className="w-full md:max-w-sm ml-auto bg-white p-[5px] text-[14px] lg:w-[249px] h-[30px] placeholder:text-black/40"
+            />
 
-            <DialogTrigger>
-              <div className="bg-[#f21300] text-white p-2 rounded-md">
-                <Plus className="h-6 w-6" />
+              <div className="bg-[#f21300] text-white max-h-[25px] min-h-[25px] min-w-[25px] max-w-[25px] rounded-sm cursor-pointer p-1">
+                <Plus strokeWidth={"5"} size={"18"}/>
               </div>
-            </DialogTrigger>
+          </div>
           </div>
         </div>
         <Separator />
@@ -95,11 +89,15 @@ export default function TransactionPage() {
 
         <Separator />
 
-        <ServiceTable
-          columns={columns}
-          data={responseData.projects}
+        <TransactionTable
+            columns={columns}
+            data={responseData.projects}
+            pageNo={page}
+            searchKey="search"
+            searchValue={searchValue}
+            totalUsers={responseData.totalProjects}
+            pageCount={responseData.pageCount}
         />
       </div>
-    </Dialog>
   );
 }

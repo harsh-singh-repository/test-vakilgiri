@@ -1,14 +1,12 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
-import { Separator } from "@/components/ui/separator";
+import React, { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./columns";
 import { useSearchParams } from "next/navigation";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Oval } from "react-loader-spinner";
-import { ServiceTable } from "./client-table";
+import { PaymentTable } from "./payment-table";
 import { ProjectPageServer } from "./ClientPageServer";
 import ClientCard from "./client-card";
 
@@ -28,7 +26,7 @@ type ResponseData = {
   pageCount: number;
 };
 
-export default function ProjectPage() {
+export default function PaymentPage() {
   const searchParams = useSearchParams();
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
   const pageLimit = searchParams.get("limit")
@@ -65,41 +63,38 @@ export default function ProjectPage() {
   }
 
   return (
-    <Dialog>
-      <div className="flex-1 space-y-1 p-4 pt-6 md:p-4">
+      <div className="flex-1 space-y-3 p-4 pt-6 md:p-4">
         <div className="flex items-start justify-between">
-          <div className="text-[20px] font-bold text-[#042559] ml-1">{`Payments (${responseData.totalProjects})`}</div>
+          <div className="text-xl font-semibold text-[#042559]">{`Payments (${responseData.totalProjects})`}</div>
 
           <div className="flex justify-center items-center gap-4">
-            <Suspense>
-              <Input
-                placeholder="Search project..."
-                value={searchValue}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setSearchValue(event.target.value)
-                }
-                className="w-full md:max-w-sm ml-auto bg-white"
-              />
-            </Suspense>
+          <div className='flex gap-2 items-center'>
+          <Input
+            placeholder="Type here..."
+            value={searchValue}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
+            className="w-full md:max-w-sm ml-auto bg-white p-[5px] text-[14px] lg:w-[249px] h-[30px] placeholder:text-black/40"
+            />
 
-            <DialogTrigger>
-              <div className="bg-[#f21300] text-white p-2 rounded-md">
-                <Plus className="h-6 w-6" />
+              <div className="bg-[#f21300] text-white max-h-[25px] min-h-[25px] min-w-[25px] max-w-[25px] rounded-sm cursor-pointer p-1">
+                <Plus strokeWidth={"5"} size={"18"}/>
               </div>
-            </DialogTrigger>
+          </div>
           </div>
         </div>
-        <Separator />
 
         <ClientCard />
 
-        <Separator />
 
-        <ServiceTable
+        <PaymentTable
           columns={columns}
           data={responseData.projects}
+          pageNo={page}
+          searchKey="search"
+          searchValue={searchValue}
+          totalUsers={responseData.totalProjects}
+          pageCount={responseData.pageCount}
         />
       </div>
-    </Dialog>
   );
 }

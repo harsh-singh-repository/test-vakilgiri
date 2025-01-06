@@ -206,7 +206,9 @@ export const StackExchangeDialog = ({
       onSuccess: () => {
         toast.success("Manager Assigned");
         queryClient.invalidateQueries({ queryKey: ["clientsId"] });
+        queryClient.invalidateQueries({ queryKey: ["clients"] });
       },
+      
       onError: (error) => {
         toast.error(`error : ${error}`);
       },
@@ -280,8 +282,6 @@ export const StackExchangeDialog = ({
       },
     });
   };
-
-  console.log("Manager",assignedManager);
 
   useEffect(()=>{
     const managerId = data?.managers.map((item:{id:string})=> item.id);

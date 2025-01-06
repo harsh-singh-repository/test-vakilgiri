@@ -1,7 +1,6 @@
 // ClientPage.tsx
 "use client";
 import React, {useState } from "react";
-import { Separator } from "@/components/ui/separator";
 import { ChevronsLeft, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./table/columns";
@@ -9,15 +8,15 @@ import { StaffTable } from "./table/client-table";
 import ClientCard from "./table/client-card";
 import { useSearchParams } from "next/navigation";
 // import { ClientPageServer } from "./table/ClientPageServer";
-import { UserTypes } from "../_types/types";
 import {Oval} from "react-loader-spinner"
 // import Modal from "@/components/model/custom-modal";
 // import CreateStaff from "./CreateStaff";
-import { useGetUsers } from "@/hooks/user/manage-user";
+import { useGetAllStaff} from "@/hooks/user/manage-user";
 // import CreateStaff from "./CreateStaff";
 import EditStaff from "./EditStaff";
 import Modal from "@/components/model/custom-modal";
 import CreateStaff from "./CreateStaff";
+import { StaffType } from "../_types/types";
 
 // type ResponseData = {
 //   employee: Client[];
@@ -32,13 +31,14 @@ import CreateStaff from "./CreateStaff";
 
 export default function StaffPage() {
   
-  const {data} = useGetUsers();
+  const {data} = useGetAllStaff();
   const [staffEdit,setStaffEdit] = useState<boolean>(false);
 
 
-  const staffUsers: UserTypes[] = (data || []).filter((user: UserTypes) => user.userRoles === "Staff_Manager");
+  const staffUsers: StaffType[] = (data || []).filter((user: StaffType) => user.userRoles === "Staff_Manager");
 
-  console.log("Staffs",staffUsers);
+  console.log("Staffs eee",staffUsers);
+  console.log("Staffs",data);
 
   const searchParams = useSearchParams();
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
@@ -84,14 +84,14 @@ export default function StaffPage() {
      (!staffEdit ? <div className="flex-1 space-y-4 p-4 pt-6 md:p-4">
         {/* <Breadcrumbs items={breadcrumbItems} /> */}
         <div className="flex items-start justify-between">
-          <div className="text-[20px] font-bold text-[#042559]">{`Staff (${staffUsers.length})`}</div>
+          <div className="text-xl font-semibold text-[#042559]">{`Staff (${staffUsers.length})`}</div>
 
           <div className="flex justify-center item-center gap-4">
             <Input
               placeholder="Search name..."
               value={searchValue}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
-              className="w-full md:max-w-sm ml-auto bg-white"
+              className="w-full md:max-w-sm ml-auto bg-white p-[5px] text-[14px] lg:w-[249px] h-[30px] placeholder:text-black/40"
               />
 
               <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1" onClick={openModal}>
@@ -103,7 +103,6 @@ export default function StaffPage() {
 
           </div>
         </div> 
-        <Separator />
 
         <ClientCard />
 

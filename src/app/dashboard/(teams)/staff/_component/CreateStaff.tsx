@@ -117,7 +117,7 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
     addStaffRoles(data,{
         onSuccess:()=>{
              toast.success("Role add to Staff.")
-             queryClient.invalidateQueries({queryKey:["user"]})
+             queryClient.invalidateQueries({queryKey:["userStaff"]})
         },
         onError:(error)=>{
             if (error instanceof AxiosError) {

@@ -1,13 +1,13 @@
 "use client";
 
 import React, { Suspense } from "react";
-import ProjectPage from "./_component/ProjectPage";
+import PaymentPage from "./_component/PaymentPage";
 
 
 export default function ClientPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ProjectPage/>
+      <PaymentPage/>
     </Suspense>
   );
 }

@@ -75,14 +75,9 @@ export const useSearchClinetQuery = (searchQuery:string) => {
 }
 
 export const useAddClientDisscussion = (id:string) => {
-    // const queryClient = useQueryClient();
-    // const toast = useCustomToast();
 
     return useMutation({
         mutationFn:(discussion:clientDiscussionType)=> clientService.addDiscussion(discussion,id),
-        // onSuccess: (response) =>
-        //     handleMutationSuccess(response, toast, queryClient, ["clients"]),
-        // onError: (error) => handleMutationError(error, toast),
     });
 };
 

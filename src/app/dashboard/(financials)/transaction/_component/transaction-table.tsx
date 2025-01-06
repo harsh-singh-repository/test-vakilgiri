@@ -17,9 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import Image from 'next/image';
-import profileImage from '../../../../../../../public/assets/profileimg.png';
-// import ActionButton from './actions';
+import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
 
@@ -34,18 +32,18 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
 }
 
-interface CustomCellProps<TData, TValue> {
+interface CustomCellProps<TData, TValue>{
   cell: Cell<TData, TValue>; // Adjust `any` for your data type
 }
 
-export function StaffTable<TData, TValue>({
+export function TransactionTable<TData, TValue>({
   columns,
   data,
   pageNo,
   searchKey,
   // totalUsers,
   pageCount,
-  pageSizeOptions = [20, 30, 40, 50,100]
+  pageSizeOptions = [20, 30, 50, 100]
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -55,7 +53,6 @@ export function StaffTable<TData, TValue>({
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: pageNo - 1,
     pageSize: parseInt(searchParams?.get('limit') || '20', 10),
-    
   });
 
   // Handle search params and update pagination or search value
@@ -97,7 +94,7 @@ export function StaffTable<TData, TValue>({
       };
       router.push(`${pathname}?${createQueryString(newQueryParams)}`, { scroll: false });
     }
-  }, [pageIndex, pageSize, searchValue, pathname, router, createQueryString, searchKey]);
+  }, [pageIndex, pageSize, searchValue, pathname, router, createQueryString, searchKey,searchParams]);
 
   const table = useReactTable({
     data,
@@ -116,22 +113,9 @@ export function StaffTable<TData, TValue>({
 
   const renderCellContent = (cell: CustomCellProps<TData, TValue>['cell']) => {
     const { id: columnId } = cell.column;
-    // const cellValue = cell.value;
 
-
-    if (columnId === 'profile-image' || columnId === 'assigned') {
-      return (
-        <div className="flex items-center justify-center w-full h-full rounded-full">
-          <Image
-            src={profileImage}
-            alt="Profile Image"
-            width={35}
-            height={35}
-            className="rounded-full mr-2"
-            style={{ boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)" }}
-          />
-        </div>
-      );
+    if (columnId === 'action') {
+        return <ActionButton/>;
     }
 
     return flexRender(cell.column.columnDef.cell, cell.getContext());
@@ -139,7 +123,7 @@ export function StaffTable<TData, TValue>({
 
   return (
     <>
-      <ScrollArea className="w-full overflow-y-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+      <ScrollArea className='w-full overflow-x-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar'>
         <Table className="border rounded-2xl bg-white">
           <TableHeader className="bg-[#042559] text-white text-center">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -160,7 +144,7 @@ export function StaffTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'name' ? 'text-[#f21300] hover:text-[#042559]' : ''} ${cell.column.id === 'login' ? "flex justify-center items-center mt-2":""}`}
+                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'firstName' ? 'text-[#f21300] hover:text-[#042559]' : ''}  ${cell.column.id === 'profile-image' ? 'flex justify-center items-center' : ''} ${cell.column.id === 'manager' ? 'flex justify-center items-center' : ''}`}
                     >
                       {renderCellContent(cell)}
                     </TableCell>
