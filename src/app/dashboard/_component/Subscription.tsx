@@ -1,13 +1,6 @@
 "use client"
 
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
-
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import {
   ChartConfig,
   ChartContainer,
@@ -39,11 +32,11 @@ const chartConfig = {
 
 const SubscriptionGraph = () => {
   return (
-      <Card>
-        <CardHeader className="flex flex-col justify-center items-center">
-          <CardTitle>Subscription</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div>
+        <div className="flex flex-col justify-center items-center">
+          <div className="text-[20px] font-semibold text-[#091747]">Subscription</div>
+        </div>
+        <div>
           <ChartContainer config={chartConfig}>
             <BarChart accessibilityLayer data={chartData}>
               <CartesianGrid vertical={false} />
@@ -62,8 +55,8 @@ const SubscriptionGraph = () => {
               <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
             </BarChart>
           </ChartContainer>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
   );
 };
 

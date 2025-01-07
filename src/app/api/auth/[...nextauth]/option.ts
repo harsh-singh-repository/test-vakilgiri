@@ -12,53 +12,54 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
+                // console.log("env",process.env.NEXT_PUBLIC_API_BASE_URL)
                 try {
                     const user = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/login`, {
                         email: credentials?.email,
                         password: credentials?.password
                     });
+                    // console.log(user);
+                    console.log(user.data.data.token);
 
-                    console.log(user); // Log the entire response
-                    console.log(user.data); // Log the response data
-
-                    if (user.data.success === false) {
+                    if(user.data.success === false){
                         throw new Error(user.data.message);
                     }
-
-                    return user.data; // Ensure user.data contains the expected information
+                    return user.data;
                 } catch (error) {
-                    if (axios.isAxiosError(error)) {
-                        const axiosError = error as AxiosError<ApiResponse>;
-                        throw new Error(axiosError.response?.data?.message || "Something went wrong");
-                    } else {
-                        throw new Error("Unexpected error occurred");
-                    }
+                    // type error
+                    const axiosError = error as AxiosError<ApiResponse>;
+                    throw new Error(axiosError.response?.data?.message || "Something went wrong");
                 }
             },
         }),
     ],
-
+    pages: {
+        signIn: "/",
+    },
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                console.log(user);  // Log the entire user object to ensure tokens are present
-                token.accessToken = user.data?.token;  // Adjust based on the API response structure
-                token.refreshToken = user.refreshToken; // Ensure refreshToken exists
+                token.accessToken = user.data?.token;
+                token.refreshToken = user.refreshToken;
+                token.firstname = user.data?.data?.firstName;
+                token.lastName = user?.data?.data?.lastName;
+                token.email = user?.data?.data?.email;
             }
             return token;
         },
         async session({ session, token }) {
-            if (token) {
-                session.user.accessToken = token?.accessToken;
-                session.user.refreshToken = token?.refreshToken;
-                console.log("Session object:", session);  // Log session to verify
-            }
+            session.user = {
+                refreshToken: token?.refreshToken,
+                accessToken: token?.accessToken,
+                firstName:token?.firstname,
+                lastName:token?.lastName,
+                email:token?.email
+            };
             return session;
-        }
+        },
     },
+    secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: 'jwt',
     },
-    
-  secret: "c2Fkc2FkYXNkYXNkYXNkYXNk",
 };

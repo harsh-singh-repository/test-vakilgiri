@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { Input } from "@/components/ui/input";
 import Image from 'next/image';
@@ -51,10 +51,8 @@ const ForgetPassword: React.FC<ForgetPasswordProps> = ({
       <span className="text-[#091747] font-medium text-base">We all forget !</span>
 
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="grid w-full max-w-sm items-center gap-1.5 text-left"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid w-full max-w-sm items-center gap-1.5 text-left">
+          
           <FormField
             control={form.control}
             name="email"
@@ -62,12 +60,7 @@ const ForgetPassword: React.FC<ForgetPasswordProps> = ({
               <div>
                 <FormLabel htmlFor="email" className="text-[#091747] font-[600] text-[13px]">Email ID</FormLabel>
                 <FormControl>
-                  <Input
-                    type="email"
-                    id="email"
-                    placeholder="Email"
-                    {...field}
-                  />
+                  <Input type="email" id="email" placeholder="Email" {...field} />
                 </FormControl>
                 <FormMessage />
               </div>
@@ -76,21 +69,14 @@ const ForgetPassword: React.FC<ForgetPasswordProps> = ({
           
           <Button type="submit" className="hover:bg-[#091747] bg-[#f21300]">Send Password Reset Link</Button>
 
-          <Button type="submit" className="hover:bg-[#091747] bg-[#F20101]">
-            Send Password Reset Link
-          </Button>
-
-          <div
-            className="flex gap-1 items-center justify-center"
-            onClick={handleBackToLogin}
-          >
+          <div className="flex gap-1 items-center justify-center" onClick={handleBackToLogin}>
             <ChevronLeft />
             <span className="font-medium text-[#f21300] cursor-pointer" >Back to Login</span>
           </div>
         </form>
       </Form>
     </div>
-  );
-};
+  )
+}
 
 export default ForgetPassword;

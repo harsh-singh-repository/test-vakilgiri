@@ -1,31 +1,53 @@
 'use client';
-import { Client } from '@/constants/data';
+import {Reminder } from '@/constants/data';
 import { ColumnDef } from '@tanstack/react-table';
+import ActionButton from './actions';
 
-export const columns: ColumnDef<Client>[] = [
+export const columns: ColumnDef<Reminder>[] = [
   {
     accessorKey: 'id',
-    header: ''
+    header: 'ID',
+    cell:({row})=>{
+      return(
+        <span>{`REMIND ${row.index}`}</span>
+      )
+    }
   },
   {
-    accessorKey: 'date',
-    header: 'Due Date'
+    accessorKey: 'dueDate',
+    header: 'Due Date',
+    cell:({row})=>{
+      return(
+        <span>{row.original.dueDate.split('T')[0]}</span>
+      )
+    }
   },
   {
-    accessorKey: 'service',
-    header: 'Service'
+    accessorKey: 'reminderType',
+    header: 'Mode',
+    cell:({row})=>{
+      return(
+        <span>{row.original.reminderType}</span>
+      )
+    }
   },
   {
-    accessorKey: 'mode',
-    header: 'Mode'
+    accessorKey: 'subject',
+    header: 'Title',
+    cell:({row})=>{
+      return(
+        <span className='text-[#f21300] hover:text-[#091747]'>{row.original.subject}</span>
+      )
+    }
   },
   {
-    accessorKey: 'title',
-    header: 'Title'
-  },
-  {
-    accessorKey: 'description',
-    header: 'Description'
+    accessorKey: 'body',
+    header: 'Description',
+    cell:({row})=>{
+      return(
+        <span>{row.original.body}</span>
+      )
+    }
   },
   {
     accessorKey: 'status',
@@ -34,5 +56,11 @@ export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: 'action',
     header: 'Action',
+    cell:({row})=>{
+      const id = row.original.id;
+        return(
+          <ActionButton id={id}/>
+        )
+    }
   }
 ];

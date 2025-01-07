@@ -1,7 +1,7 @@
 import { MdPerson2, MdPeople } from "react-icons/md";
-import { MdAddReaction } from "react-icons/md";
-
-const ClientCard = () => {
+import { FaExclamationCircle } from 'react-icons/fa';
+import { FaClock } from 'react-icons/fa';
+const ProjectCard = () => {
 
     const clientCardData = [
         {
@@ -21,7 +21,7 @@ const ClientCard = () => {
             textColor: "text-[#007b23]"
         },
         {
-            logo: <MdAddReaction size={"45"} />,
+            logo: <FaClock size={"45"} />,
             title: "In Progress",
             value: "4",
             iconBgColor: "bg-[#b9100033]",
@@ -29,7 +29,7 @@ const ClientCard = () => {
             textColor: "text-[#b91000]"
         },
         {
-          logo: <MdPerson2 size={"45"} />,
+          logo: <FaExclamationCircle size={"45"} />,
           title: "On hold",
           value: "16",
           iconBgColor: "bg-[#f2130033]",
@@ -60,4 +60,4 @@ const ClientCard = () => {
   )
 }
 
-export default ClientCard
+export default ProjectCard

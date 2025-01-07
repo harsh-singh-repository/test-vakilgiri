@@ -1,5 +1,4 @@
-import { Megaphone } from "lucide-react";
-import { FaUserAlt, FaPhoneAlt, FaHeartbeat } from "react-icons/fa";
+import { FaUserAlt, FaPhoneAlt, FaHeartbeat, FaBullhorn } from "react-icons/fa";
 import { LeadsStats } from "../_types";
 
 
@@ -38,7 +37,7 @@ export default function LeadsCardSection() {
       data: stats.leads,
       labels: { all: "All", converted: "Converted", contracted: "Contracted" },
       icon: <FaUserAlt size={30} />,
-      bgColor: "bg-[#eabfff4d]",
+      bgColor: "bg-[#EABFFF]",
       iconBgColor: "bg-[#3009494d]",
       iconColor: "text-[#300949]",
       titleBgColor: "bg-[#300949]"
@@ -48,7 +47,7 @@ export default function LeadsCardSection() {
       data: stats.today,
       labels: { converted: "Converted", potential: "Potential", disqualified: "Disqualified" },
       icon: <FaPhoneAlt size={30} />,
-      bgColor: "bg-[#c0f0ff4d]",
+      bgColor: "bg-[#C0F0FF]",
       iconBgColor: "bg-[#093a494d]",
       iconColor: "text-[#093a49]",
       titleBgColor: "bg-[#093a49]"
@@ -67,7 +66,7 @@ export default function LeadsCardSection() {
       title: "This Year",
       data: stats.thisYear,
       labels: { converted: "Converted", potential: "Potential", disqualified: "Disqualified" },
-      icon: <Megaphone size={30} />,
+      icon: <FaBullhorn size={30} />,
       bgColor: "bg-[#ccd7ff]",
       iconBgColor: "bg-[#0917c84d]",
       iconColor: "text-[#091747]",
@@ -86,7 +85,7 @@ export default function LeadsCardSection() {
   };
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
       {sections.map((section, index) => (
         <div
           key={index}

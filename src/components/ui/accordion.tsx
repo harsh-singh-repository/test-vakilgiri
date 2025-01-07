@@ -35,7 +35,7 @@ const AccordionTrigger = React.forwardRef<
     >
       {children}
      <div className="bg-[#091747] rounded-sm">
-     <Plus className="h-4 w-4 shrink-0 text-muted-foreground text-white" />
+     <Plus className="h-4 w-4 shrink-0 text-muted-foreground text-white" strokeWidth={"3"} />
      </div>
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>

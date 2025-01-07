@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 const FinancialsPage = () => {
   return (
     <Tabs defaultValue="account" className="w-[400px]">
-    <TabsList>
+    <TabsList className='text-[#091747]'>
       <TabsTrigger value="estimates">Estimates</TabsTrigger>
       <TabsTrigger value="invoice">Invoice</TabsTrigger>
       <TabsTrigger value="payments">Payment</TabsTrigger>

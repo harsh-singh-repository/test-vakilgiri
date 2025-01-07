@@ -39,6 +39,7 @@ import {
   useGetBussinessById,
 } from "@/hooks/business/manage-business";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 // import { toast } from "sonner";
 
 const bussinessType = [
@@ -73,6 +74,7 @@ const states = [
 const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
   // const [date, setDate] = React.useState<Date>();
   const { data } = useGetBussinessById(bussinessId);
+  const queryClient = useQueryClient();
   // const [logo, setLogo] = React.useState<string | null>(null);
   const [defaultValues, setDefaultValues] = useState<
     z.infer<typeof BussinessIdformSchema>
@@ -151,6 +153,8 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
     editBussiness(data, {
       onSuccess: () => {
         toast.success("Bussiness upadated Successfully");
+        queryClient.invalidateQueries({ queryKey: ["bussinessId"] });
+        queryClient.invalidateQueries({ queryKey: ["bussinessCount"] });
       },
       onError: (error) => {
         toast.error(`Failed to update Bussiness: ${error}`);
@@ -200,7 +204,7 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
                               <SelectContent>
                                 {bussinessType.map((bussiness, index) => (
                                   <SelectItem key={index} value={bussiness}>
-                                    {bussiness}
+                                    {bussiness.replace("_"," ")}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
@@ -215,7 +219,7 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
                     control={form.control}
                     name="businessName"
                     render={({ field }) => (
-                      <FormItem>
+                      <div>
                         <div className="flex gap-3 items-center">
                           <FormLabel className="text-[13px] w-[6.75rem]">
                             Business Name
@@ -227,7 +231,7 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
                             />
                           </FormControl>
                         </div>
-                      </FormItem>
+                      </div>
                     )}
                   />
                   {/* <div className="flex gap-3 items-center"> */}

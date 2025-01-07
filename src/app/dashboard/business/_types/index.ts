@@ -8,13 +8,13 @@ export interface BusinessStats {
       pvtLtd: number
       public: number
       llps: number
-      section8: number
+      Section_Eight: number
       trust: number
       society: number
-      micro: number
-      producer: number
-      proprietor: number
-      partnership: number
+      Micro_Finance: number
+      Producer_Limited: number
+      Proprietorship: number
+      Partnership_Firm: number
     }
     status: {
       registered: number

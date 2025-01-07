@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import vakilGiriAuth from "@/app/assets/vakilgiri_auth.png";
 import Image from "next/image";
@@ -9,8 +9,8 @@ import Register from "./Register";
 
 const Form = () => {
   const [login, setLogin] = useState<boolean>(true);
-  const [registration, setRegistration] = useState<boolean>(false);
   const [forgetPassword, setForgetPassword] = useState<boolean>(false);
+  const [registration, setRegistration] = useState<boolean>(false);
 
   const handleForgetPassword = () => {
     setLogin(false);
@@ -18,19 +18,20 @@ const Form = () => {
   };
 
   const handleBackToLogin = () => {
-    setForgetPassword(false);
-    setLogin(true);
+      setForgetPassword(false);
+      setLogin(true);
   };
 
   const alreadyLogin = () => {
-    setRegistration(false);
-    setLogin(true);
+      setRegistration(false);
+      setLogin(true);
   };
 
   const handleRegistration = () => {
     setLogin(false);
     setRegistration(true);
-  };
+  }
+
 
   return (
       <div className="font-poppins min-h-screen w-full flex justify-center items-center">
