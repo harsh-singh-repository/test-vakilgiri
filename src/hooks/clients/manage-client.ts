@@ -31,7 +31,7 @@ export const useAddClient = () => {
 
 export const useGetClientsById = (id:string | string [] | undefined) =>{
     const query =  useQuery({
-        queryKey: ['clients',id],
+        queryKey: ['clientsId',id],
         queryFn:() => clientService.getClientById(id),
         enabled:!!id,
     });

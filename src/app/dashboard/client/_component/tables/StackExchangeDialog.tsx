@@ -274,8 +274,8 @@ export const StackExchangeDialog = ({
     removeManger(id, {
       onSuccess: () => {
         toast.success("Manager Removed");
-        queryClient.invalidateQueries({ queryKey: ["bussinessId"] });
-        queryClient.invalidateQueries({ queryKey: ["bussiness"] });
+        queryClient.invalidateQueries({ queryKey: ["clientsId"] });
+        queryClient.invalidateQueries({ queryKey: ["clients"] });
       },
       onError: (error) => {
         toast.error(`error : ${error}`);
