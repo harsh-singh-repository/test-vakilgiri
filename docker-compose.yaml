@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: vg-backend
+    build: .
+    ports:
+      - "8000:9000"
+    volumes:
+       - public-data:/public
+    environment:
+      - PORT=9000
+    restart: always
+
+
+volumes:
+  public-data:
