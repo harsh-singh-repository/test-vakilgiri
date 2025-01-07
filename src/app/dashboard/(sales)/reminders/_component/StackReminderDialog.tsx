@@ -6,9 +6,9 @@ import {
 } from "@/components/ui/accordion";
 
 
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import {
-  CalendarIcon,
+  // CalendarIcon,
   PlusCircle,
   X,
   //  X
@@ -19,7 +19,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
+// import { Calendar } from "@/components/ui/calendar";
 import { Form, FormControl, FormField } from "@/components/ui/form";
 import {
   Select,
@@ -34,17 +34,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-// import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
-//   import { useState } from "react";
-//   import { toast } from "sonner";
-//   import { BusinessDiscussion } from "../../_types";
 
 import { MaterialInput } from "@/components/material-input";
 import { ReminderDiscussionSchema, reminderReminderSchema } from "./types/zodSchema";
 import { useGetReminderById } from "@/hooks/reminder/manage-reminder";
-import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
   
   interface StackExchangeDialogProp {
     openDialogId: string;
@@ -243,61 +237,7 @@ export const StackReminderDialog = ({
                               )}
                             />
   
-                            <FormField
-                              control={reminderForm.control}
-                              name="dueDate"
-                              render={({ field, fieldState: { error } }) => (
-                                <div className="flex flex-col w-1/2">
-                                  {/* <Popover>
-                                    <PopoverTrigger asChild>
-                                      <FormControl>
-                                        <Button
-                                          variant="outline"
-                                          className={cn(
-                                            "w-full justify-start text-left font-normal bg-white border-gray-300",
-                                            !field.value &&
-                                              "text-muted-foreground",
-                                            error &&
-                                              "border-red-500 focus:border-red-500 focus:ring-red-500"
-                                          )}
-                                        >
-                                          <CalendarIcon
-                                            className="mr-2 h-4 w-4"
-                                            aria-hidden="true"
-                                          />
-                                          {field.value
-                                            ? format(
-                                                new Date(field.value),
-                                                "dd-MM-yyyy"
-                                              )
-                                            : "Select date"}
-                                        </Button>
-                                      </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent
-                                      className="w-auto p-0"
-                                      align="start"
-                                    >
-                                      <Calendar
-                                        mode="single"
-                                        selected={
-                                          field.value
-                                            ? new Date(field.value)
-                                            : undefined
-                                        }
-                                        onSelect={(date) =>
-                                          field.onChange(
-                                            date ? format(date, "yyyy-MM-dd") : ""
-                                          )
-                                        }
-                                        initialFocus
-                                      />
-                                    </PopoverContent>
-                                  </Popover> */}
-                                  <CustomDatePicker />
-                                </div>
-                              )}
-                            />
+                            
                           </div>
   
                           <FormField

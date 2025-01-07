@@ -1,32 +1,22 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./columns";
 import { useSearchParams } from "next/navigation";
 import { Oval } from "react-loader-spinner";
 import { PaymentTable } from "./payment-table";
-import { ProjectPageServer } from "./ClientPageServer";
 import ClientCard from "./client-card";
+import { useGetPayments } from "@/hooks/payments/manage-payments";
 
-type Project = {
-  date: string;
-  paymentId: string;
-  invoiceId: string;
-  business: string;
-  project: string;
-  amount: string;
-  status: string;
-};
-
-type ResponseData = {
-  projects: Project[];
-  totalProjects: number;
-  pageCount: number;
-};
 
 export default function PaymentPage() {
+  
+  const {data} = useGetPayments();
+
+  console.log("Data",data)
+
   const searchParams = useSearchParams();
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
   const pageLimit = searchParams.get("limit")
@@ -35,18 +25,9 @@ export default function PaymentPage() {
   const [searchValue, setSearchValue] = useState(
     searchParams.get("search") || ""
   );
-  const [responseData, setResponseData] = useState<ResponseData | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await ProjectPageServer({ page, pageLimit, searchValue });
-      setResponseData(data);
-    };
 
-    fetchData();
-  }, [page, pageLimit, searchValue]);
-
-  if (!responseData) {
+  if (!data) {
     return (
       <div className="flex justify-center items-center h-[100vh]">
         <Oval
@@ -65,7 +46,7 @@ export default function PaymentPage() {
   return (
       <div className="flex-1 space-y-3 p-4 pt-6 md:p-4">
         <div className="flex items-start justify-between">
-          <div className="text-xl font-semibold text-[#042559]">{`Payments (${responseData.totalProjects})`}</div>
+          <div className="text-xl font-semibold text-[#042559]">{`Payments (${data?.length})`}</div>
 
           <div className="flex justify-center items-center gap-4">
           <div className='flex gap-2 items-center'>
@@ -87,13 +68,13 @@ export default function PaymentPage() {
 
 
         <PaymentTable
-          columns={columns}
-          data={responseData.projects}
-          pageNo={page}
           searchKey="search"
           searchValue={searchValue}
-          totalUsers={responseData.totalProjects}
-          pageCount={responseData.pageCount}
+          pageNo={page}
+          columns={columns}
+          totalUsers={data.length}
+          data={data}
+          pageCount={Math.ceil(data.length / pageLimit)}
         />
       </div>
   );
