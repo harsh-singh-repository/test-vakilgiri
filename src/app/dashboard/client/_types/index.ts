@@ -3,11 +3,11 @@ export type clientIdProps = {
 }
 
 export interface ClinetBussinessDetails{
-    id: string;
-    businessName: string;
-    businessPan: string;
-    businessType: string; // Extend as needed
-    businessStatus: string | null;
+    businessName: string; // Name of the business
+    businessPan: string;  // PAN of the business
+    businessStatus: string | null; // Status of the business, nullable
+    businessType: string;  // Type of the business
+    id: string;  
 }
 
 export interface BusinessDetails {

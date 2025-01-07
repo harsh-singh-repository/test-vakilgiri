@@ -47,7 +47,12 @@ export const columns: ColumnDef<Leads>[] = [
   },
   {
     accessorKey: 'value',
-    header: 'Value'
+    header: 'Value',
+    cell:({row})=>{
+      return(
+        <span>&#8377;{row.original.value}</span>
+      )
+    }
   },
   {
     accessorKey: 'assigned',

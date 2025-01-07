@@ -1,20 +1,40 @@
-import {  NextRequest,NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
-export { default } from "next-auth/middleware";
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
-    const token = await getToken({ req: request });
-    const url = request.nextUrl;
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+    // cookieName: "__Secure-next-auth.session-token",
+  });
 
-    if (!token && url.pathname.startsWith("/dashboard")) {
-        console.log("Unauthorized access to /dashboard, redirecting to home");
-        return NextResponse.redirect(new URL('/', request.url));
+  const url = request.nextUrl;
+
+  // Handle redirection to the original route
+
+  if (token && url.pathname === "/") {
+    // Check if a redirect path is provided via query parameter
+    const redirectPath = url.searchParams.get("redirect");
+
+    console.log("Redirect path",redirectPath)
+
+    if (redirectPath) {
+      return NextResponse.redirect(new URL(redirectPath, request.url));
     }
 
-    console.log("Authorized request or non-protected path");
-    return NextResponse.next();
+    // Default redirection if no redirect path is specified
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  // Redirect to home if not authenticated and trying to access "/dashboard/*"
+  if (!token && url.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/dashboard/:path*'],
+  matcher: ["/dashboard/:path*", "/"],
 };
+

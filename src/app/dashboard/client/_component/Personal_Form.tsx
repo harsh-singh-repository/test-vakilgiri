@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useEditClient, useGetClientsById } from "@/hooks/users/manage-client"
+import { useEditClient, useGetClientsById } from "../../../../hooks/clients/manage-client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -62,7 +62,7 @@ const Personal_Form = ({clientId}:clientIdProps) => {
           email: data.email ?? "",
           gender: data.gender ?? "Male",
           mobileNumber: data.mobileNumber ?? "",
-          dob: data.dob.split("T")[0] ?? "11/07/2024",
+          dob: data.dob?.split("T")[0] ?? "11/07/2024",
           aadhaar: data.aadhaar ?? "112312312321",
           din: data.din ?? "",
           dscInfo: data.dscInfo ?? "Not_Applicable",

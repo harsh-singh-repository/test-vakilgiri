@@ -5,18 +5,16 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { Input } from "@/components/ui/input";
-
 import { format } from "date-fns";
 import {
   CalendarIcon,
-  Plus,
+  PlusCircle,
   Trash2,
   X,
   //  X
 } from "lucide-react";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -35,38 +33,46 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-
-
-
 //   import { RxAvatar } from "react-icons/rx";
+import Profile from "../../../../../../../public/assets/profileimg.png";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useAddLeadsDiscussion,
   useAddLeadsReminder,
+  useAddManager,
   useDeleteLeadsDisscussion,
+  useDeleteLeadsReminder,
   useGetLeadsById,
   useGetLeadsDisscussion,
   useGetLeadsReminder,
+  useRemoveLeadManager,
 } from "@/hooks/leads/manage-leads";
 import {
   leadsDiscussionSchema,
   leadsReminderSchema,
 } from "../../_types/zodSchema";
-import { MdEdit } from "react-icons/md";
+// import { MdEdit } from "react-icons/md";
 import { RxAvatar } from "react-icons/rx";
-import { LeadsDiscussionType, LeadsReminderType } from "../../_types";
+import {
+  LeadsDiscussionType,
+  LeadsReminderType,
+  managerDetails,
+  Manager,
+} from "../../_types";
 import { AxiosError } from "axios";
 import EditLeads from "../EditLeads";
-import AddClientDialog from "@/app/dashboard/client/_component/AddClientDialog";
-import Modal from "@/components/model/custom-modal";
-import { useState } from "react";
 import LinkClient from "../LinkClient";
 import LinkBussiness from "../LinkBussiness";
+import { useGetUsers } from "@/hooks/user/manage-user";
+import { MaterialInput } from "@/components/material-input";
+import { RotatingLines } from "react-loader-spinner";
+import Image from "next/image";
+import { FaPencilAlt, FaPlus } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
 interface StackExchangeDialogProp {
   openDialogId: string;
@@ -76,47 +82,41 @@ interface StackExchangeDialogProp {
 
 function formatDate(dateString: string): string {
   const options: Intl.DateTimeFormatOptions = {
-    month: 'short',
-    day: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
     hour12: true,
   };
 
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', options);
+  return date.toLocaleDateString("en-US", options);
 }
 
 function formatCreatedAtDate(dateString: string): string {
   const date = new Date(dateString);
 
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
   const year = date.getFullYear();
 
   let hours = date.getHours();
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'pm' : 'am';
-  
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const ampm = hours >= 12 ? "pm" : "am";
+
   hours = hours % 12 || 12; // Convert 24-hour time to 12-hour format
-  const formattedHours = String(hours).padStart(2, '0');
+  const formattedHours = String(hours).padStart(2, "0");
 
   return `${day}-${month}-${year}, ${formattedHours}:${minutes} ${ampm}`;
 }
-
 
 export const StackLeadsExchangeDialog = ({
   onClose,
   openDialogId,
 }: StackExchangeDialogProp) => {
   // const [date, setDate] = React.useState<Date>()
-  //   const [isSubmittingReminder, setIsSubmittingReminder] = useState(false);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-const openModal = () => setIsModalOpen(true);
-const closeModal = () => setIsModalOpen(false);
+    const [storedManager, setStoredManager] = useState<string[]>();
 
   const queryClient = useQueryClient();
 
@@ -142,15 +142,25 @@ const closeModal = () => setIsModalOpen(false);
 
   const { data } = useGetLeadsById(openDialogId);
 
+  const { data: assignedManager } = useGetUsers();
+
+  console.log("dataLead", data);
+
   const { data: LeadDiscussion } = useGetLeadsDisscussion(openDialogId);
 
   const { data: LeadReminder } = useGetLeadsReminder(openDialogId);
+
+  const { mutate: addManager } = useAddManager(openDialogId);
 
   const { mutate: addDisscussion } = useAddLeadsDiscussion(openDialogId);
 
   const { mutate: deleteDisscussion } = useDeleteLeadsDisscussion();
 
   const { mutate: addReminder } = useAddLeadsReminder(openDialogId);
+
+  const { mutate: deleteReminder } = useDeleteLeadsReminder(openDialogId);
+
+  const { mutate: removeManger } = useRemoveLeadManager(openDialogId);
 
   console.log("Data of leads", data);
 
@@ -186,6 +196,29 @@ const closeModal = () => setIsModalOpen(false);
     );
   };
 
+  const handleDeleteReminder = (id: string) => {
+    deleteReminder(id, {
+      onSuccess: () => {
+        toast.success("Reminder Deleted Successfully");
+        queryClient.invalidateQueries({ queryKey: ["leadsReminder"] });
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to delete Reminder: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
+      },
+    });
+  };
+
   async function onDiscussionSubmit(
     values: z.infer<typeof leadsDiscussionSchema>
   ) {
@@ -216,27 +249,118 @@ const closeModal = () => setIsModalOpen(false);
     addReminder(values, {
       onSuccess: () => {
         toast.success(`Added Reminder Successfully`);
-        queryClient.invalidateQueries({queryKey:['leadsReminder']})
+        queryClient.invalidateQueries({ queryKey: ["leadsReminder"] });
       },
       onError: (error) => {
-        toast.error(`Failed to add reminder : ${error}`);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to add reminder: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
       },
     });
   }
 
+  const formMethods = useForm({
+    defaultValues: {
+      managersId: [] as string[], // Array to store selected manager IDs
+    },
+  });
+
+  const handleFormSubmit = (data: { managersId: string[] }) => {
+    console.log("data", data);
+    addManager(data, {
+      onSuccess: () => {
+        toast.success("Manager Assigned");
+        queryClient.invalidateQueries({ queryKey: ["leadId"] });
+        queryClient.invalidateQueries({ queryKey: ["leads"] });
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to Assign manager: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
+      },
+    });
+  };
+
+  const handleRemoveManager = (id: string) => {
+    console.log("ID", id);
+    removeManger(id, {
+      onSuccess: () => {
+        toast.success("Manager Removed");
+        queryClient.invalidateQueries({ queryKey: ["leadId"] });
+        queryClient.invalidateQueries({ queryKey: ["leads"] });
+      },
+      onError: (error) => {
+        console.log("ID", id);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to Remove manager: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
+      },
+    });
+  };
+
+  useEffect(()=>{
+    const storedManagerId = data?.managers.map((item:{id:string})=> item.id);
+    setStoredManager(storedManagerId)
+  },[data])
+
+  if (!data) {
+    return (
+      <div className="flex justify-center item center p-2 h-full">
+        <RotatingLines
+          visible={true}
+          height="50"
+          width="50"
+          strokeColor="#f21300"
+          strokeWidth="2"
+          animationDuration="0.75"
+          ariaLabel="rotating-lines-loading"
+        />
+      </div>
+    );
+  }
+
   return (
     <div>
-      <div className="max-w-[850px] max-h-fit">
+      <div className="max-h-fit p-2">
         <div className="flex flex-col gap-y-3">
-          <div className="grid grid-rows gap-1 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-2 xl:grid-cols-[600px,250px]">
-            <div className="w-full max-w-2xl mx-auto  p-4">
+          <div className="grid grid-rows gap-4 md:grid-rows-1 sm:grid-rows-1 lg:grid-cols-2 xl:grid-cols-[650px,230px]">
+            <div className="w-full">
               <div className="text-[17px] text-[#091747] text-left font-bold">
-                {data?.service?.replace(/_/g, " ")}
+                {data?.service.replace("_"," ")}
               </div>
-              <Accordion type="multiple" className="w-full mt-2">
+              <Accordion type="multiple" className="mt-2">
                 <AccordionItem value="discussions" className="">
                   <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-md text-[#091747] text-[15px] font-medium">
-                    <span>Discussions</span>
+                    <span className="font-semibold text-[15px]">
+                      Discussions
+                    </span>
                   </AccordionTrigger>
                   <AccordionContent className="pt-2 bg-white">
                     <Form {...discussionForm}>
@@ -253,8 +377,8 @@ const closeModal = () => setIsModalOpen(false);
                             render={({ field, fieldState: { error } }) => (
                               <div>
                                 <FormControl>
-                                  <Textarea
-                                    placeholder="Enter Description"
+                                  <MaterialInput
+                                    placeholder="Enter Discussion"
                                     className={cn(
                                       "min-h-[60px] border-gray-300 focus:border-blue-500",
                                       error &&
@@ -280,7 +404,7 @@ const closeModal = () => setIsModalOpen(false);
                   </AccordionContent>
                 </AccordionItem>
                 {LeadDiscussion && (
-                  <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2">
+                  <div className="flex flex-col gap-2 w-full text-[#091747] text-[12px] mt-2 mb-2">
                     {LeadDiscussion.map(
                       (discussion: LeadsDiscussionType, index: number) => (
                         <div
@@ -318,15 +442,15 @@ const closeModal = () => setIsModalOpen(false);
                   </div>
                 )}
 
-                <AccordionItem value="reminders" className="mt-4">
+                <AccordionItem value="reminders" className="">
                   <AccordionTrigger className="bg-[#d4d4d4] px-3 py-1 rounded-md text-[#091747] text-[15px] font-medium">
-                    <span>Reminders</span>
+                    <span className="font-semibold text-[15px]">Reminders</span>
                   </AccordionTrigger>
                   <AccordionContent className="pt-2 bg-white">
                     <Form {...reminderForm}>
                       <form
                         onSubmit={reminderForm.handleSubmit(onReminderSubmit)}
-                        className="space-y-1"
+                        className="space-y-2"
                       >
                         <div className="flex space-x-4">
                           <FormField
@@ -426,10 +550,10 @@ const closeModal = () => setIsModalOpen(false);
                           render={({ field, fieldState: { error } }) => (
                             <div>
                               <FormControl>
-                                <Input
+                                <MaterialInput
                                   placeholder="Subject"
                                   className={cn(
-                                    "bg-white border-gray-300",
+                                    "bg-white border-gray-300 focus:border-blue-500",
                                     error &&
                                       "border-red-500 focus:border-red-500 focus:ring-red-500"
                                   )}
@@ -446,10 +570,10 @@ const closeModal = () => setIsModalOpen(false);
                           render={({ field, fieldState: { error } }) => (
                             <div>
                               <FormControl>
-                                <Textarea
+                                <MaterialInput
                                   placeholder="Enter description"
                                   className={cn(
-                                    "min-h-[100px] bg-white border-gray-300",
+                                    "min-h-[60px] bg-white border-gray-300 focus:border-blue-500",
                                     error &&
                                       "border-red-500 focus:border-red-500 focus:ring-red-500"
                                   )}
@@ -483,26 +607,42 @@ const closeModal = () => setIsModalOpen(false);
                           <RxAvatar size={30} />
                           <div className="flex flex-col w-full items-start">
                             <div className="flex flex-col text-left w-full">
-                              <span className="font-semibold">{reminder.creator.firstName + " " + reminder.creator.lastName}</span>
+                              <span className="font-semibold">
+                                {reminder.creator.firstName +
+                                  " " +
+                                  reminder.creator.lastName}
+                              </span>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Subject:</span>
-                                 <span>{reminder.subject}</span>
+                                <span className="font-semibold">Subject:</span>
+                                <span>{reminder.subject}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Description:</span>
-                                 <span>{reminder.body}</span>
+                                <span className="font-semibold">
+                                  Description:
+                                </span>
+                                <span>{reminder.body}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Reminder Type:</span>
-                                 <span>{reminder.reminderType}</span>
+                                <span className="font-semibold">
+                                  Reminder Type:
+                                </span>
+                                <span>{reminder.reminderType}</span>
                               </div>
                               <div className="flex gap-x-1">
-                                 <span className="font-semibold">Due Date:</span>
-                                 <span>{formatDate(reminder.dueDate)}</span>
+                                <span className="font-semibold">Due Date:</span>
+                                <span>{formatDate(reminder.dueDate)}</span>
                               </div>
                               <div className="flex justify-between text-[#f21300] w-full">
-                                 <span>{formatCreatedAtDate(reminder.createdAt)}</span>
-                                 <Trash2 size={"15"}/>
+                                <span>
+                                  {formatCreatedAtDate(reminder.createdAt)}
+                                </span>
+                                <Trash2
+                                  size={"15"}
+                                  onClick={() =>
+                                    handleDeleteReminder(reminder?.id)
+                                  }
+                                  className="cursor-pointer"
+                                />
                               </div>
                             </div>
                           </div>
@@ -513,131 +653,219 @@ const closeModal = () => setIsModalOpen(false);
                 )}
               </Accordion>
             </div>
-            <div className="bg-[#FFFFFF] max-h-fit p-2">
-              <div className="max-w-md mx-auto bg-[#EDEDED] rounded-lg shadow text-sm">
+            
+              <div className="bg-[#EDEDED] rounded-lg shadow text-sm">
                 {/* Assigned Users Section */}
-                <div className="p-3 border-b">
-                  <div className="flex items-center justify-between">
-                    <h2 className="font-semibold">Assigned Users</h2>
+                <div className="px-2">
+                  <div className="flex items-center justify-between mt-1">
+                    <h2 className="font-bold text-[13px] text-[#091747]">
+                      Assigned Manager
+                    </h2>
                     <X
-                      className="w-4 h-4 text-[#F21300] cursor-pointer"
                       onClick={onClose}
                       strokeWidth={"5"}
+                      size={20}
+                      className="text-[#f21300] cursor-pointer"
                     />
                   </div>
-                  <div className="flex gap-2 mt-2">
-                    <Avatar className="w-6 h-6">
-                      <AvatarImage src="/placeholder.svg" />
-                      <AvatarFallback>U1</AvatarFallback>
-                    </Avatar>
-                    <div className="relative">
-                      <Avatar className="w-6 h-6">
-                        <AvatarImage src="/placeholder.svg" />
-                        <AvatarFallback>U2</AvatarFallback>
-                      </Avatar>
-                      <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-3 h-3 flex items-center justify-center text-[10px]">
-                        +
-                      </span>
-                    </div>
+                  <div className="flex gap-2 mt-2 mb-2 items-center">
+                    {data && (
+                      <div className="flex">
+                        {data?.managers?.map(
+                          (assign: managerDetails, index: number) => (
+                            <div className="" key={index}>
+                              <Image
+                                alt="profile"
+                                src={Profile}
+                                height="30"
+                                width="30"
+                                className="rounded-full mr-2"
+                                style={{
+                                  boxShadow:
+                                    "10px 10px 15px -3px rgba(0, 0, 0, 0.2)",
+                                }}
+                              />
+                              <div className=" w-full justify-start items-center">
+                                <X
+                                  className="text-[#f21300] -translate-y-8 translate-x-5 h-3 w-3 cursor-pointer"
+                                  strokeWidth={"6"}
+                                  onClick={() =>
+                                    handleRemoveManager(assign?.id)
+                                  }
+                                />
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    )}
+                    <Popover>
+                      <PopoverTrigger>
+                        <div className="text-[#f21300]">
+                          <PlusCircle />
+                        </div>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        {assignedManager && (
+                          <form
+                            onSubmit={formMethods.handleSubmit(
+                              handleFormSubmit
+                            )}
+                          >
+                            <div>
+                              {assignedManager
+                                .filter(
+                                  (manager: Manager) =>
+                                    !storedManager?.includes(manager.id)
+                                ) // Filter the managers
+                                .map((manager: Manager, index: number) => (
+                                  <div
+                                    key={index}
+                                    className="flex items-center gap-2"
+                                  >
+                                    <Controller
+                                      name="managersId"
+                                      control={formMethods.control}
+                                      render={({
+                                        field: { value, onChange },
+                                      }) => (
+                                        <input
+                                          type="checkbox"
+                                          checked={value?.includes(manager.id)}
+                                          onChange={(e) => {
+                                            if (e.target.checked) {
+                                              // Add manager ID to the array
+                                              onChange([...value, manager.id]);
+                                            } else {
+                                              // Remove manager ID from the array
+                                              onChange(
+                                                value.filter(
+                                                  (id: string) =>
+                                                    id !== manager.id
+                                                )
+                                              );
+                                            }
+                                          }}
+                                        />
+                                      )}
+                                    />
+                                    <span className="text-[12px] text-[#091747] font-semibold">
+                                      {manager.adminStaff?.user.firstName + " " + manager.adminStaff?.user.lastName}
+                                    </span>
+                                  </div>
+                                ))}
+                            </div>
+                            <button
+                              type="submit"
+                              className="btn btn-primary mt-2 bg-[#f21300] px-2 py-1 rounded-md text-[10px] text-white"
+                            >
+                              Assign
+                            </button>
+                          </form>
+                        )}
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
 
                 {/* Lead Details Section */}
-                <div className="px-2">
-                  <div className="flex item-center gap-x-1">
-                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
-                      <span className="font-normal text-[13px]">
+                <div className="px-1">
+                  <div className="flex item-center gap-x-1 pr-2">
+                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-xl">
+                      <span className="font-medium text-[13px]">
                         Lead Details
                       </span>
                     </div>
                     <Popover>
                       <PopoverTrigger>
-                        <div className="flex justify-center items-center text-white">
-                          <MdEdit className="bg-[#f21300] rounded-sm" />
-                        </div>
+                        <FaPencilAlt className="text-white bg-[#f21300] rounded-md h-5 w-5 p-1" />
                       </PopoverTrigger>
                       <PopoverContent className="max-w-fit">
-                          <EditLeads leadId={openDialogId}/>
+                        <EditLeads leadId={openDialogId} />
                       </PopoverContent>
                     </Popover>
                   </div>
-                  <div className="py-1 text-[12px] text-[#091747]">
+                  <div className="p-1 text-[12px] text-[#091747]">
                     <div className="flex">
-                      <span className="font-semibold">Name:</span>
-                      <span>{data?.firstName + " " + data?.lastName}</span>
+                      <span className="font-bold">Name:</span>
+                      <span className="font-medium">
+                        {data?.firstName + " " + data?.lastName}
+                      </span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Mobile:</span>
-                      <span>{data?.mobile}</span>
+                      <span className="font-bold">Mobile:</span>
+                      <span className="font-medium">{data?.mobile}</span>
+                    </div>
+                    <div className="flex text-[#007B23]">
+                      <span className="font-bold">Email:</span>
+                      <span className="font-medium">{data?.email}</span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Email:</span>
-                      <span>{data?.email}</span>
-                    </div>
-                    <div className="flex">
-                      <span className="font-semibold">Service:</span>
-                      <span>{data?.service?.replace(/_/g, " ")}</span>
+                      <span className="font-bold">Service:</span>
+                      <span className="font-medium">
+                        {data?.service.replace("_"," ")}
+                      </span>
                     </div>
                     <div className="flex ">
-                      <span className="font-semibold">Value:</span>
-                      <span>{data?.value}</span>
+                      <span className="font-bold">Value:</span>
+                      <span className="font-medium">{data?.value}</span>
                     </div>
                     <div className="flex ">
-                      <span className="font-semibold">Existing:</span>
+                      <span className="font-bold">Existing:</span>
                       <span>{data?.existing === true ? "Yes" : "No"}</span>
                     </div>
-                    <div className="flex  items-center text-white bg-[#7F7E7E] max-w-fit rounded-md px-2 text-[10px]">
-                      <span className="font-semibold">Status: </span>
+                    <div className="flex  items-center text-white bg-[#7F7E7E] max-w-fit rounded-full px-2 text-[10px]">
+                      <span className="font-semibold">Status:</span>
                       <span className="font-semibold">{data?.status}</span>
                     </div>
-                    <Button className="w-full bg-[#797979] hover:bg-[#f21300] mt-2 text-xs h-8" onClick={openModal}>
-                      Create Client
-                    </Button>
-                    <Modal isOpen={isModalOpen} onClose={closeModal}>
-                      <AddClientDialog onClose={closeModal}/>
-                    </Modal>
                   </div>
                 </div>
 
                 {/* Client Details Section */}
-                <div className="px-2">
-                   <div className="flex items-center gap-x-1">
-                   <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
-                    <span className="font-normal text-[13px]">
-                      Client Details
-                    </span>
+                <div className="px-1 mt-2">
+                  <div className="flex items-center gap-x-1 pr-2">
+                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-xl">
+                      <span className="font-medium text-[13px]">
+                        Client Details
+                      </span>
+                    </div>
+                    <Popover>
+                      <PopoverTrigger>
+                        <FaPlus className="text-white bg-[#f21300] rounded-md h-5 w-5 p-1" />
+                      </PopoverTrigger>
+                      <PopoverContent className="px-2 py-2">
+                        <LinkClient leadId={openDialogId} />
+                      </PopoverContent>
+                    </Popover>
                   </div>
-                  <Popover>
-                    <PopoverTrigger>
-                       <Plus className="text-white bg-[#f21300] rounded-md"/>
-                    </PopoverTrigger>
-                    <PopoverContent className="px-2 py-2">
-                        <LinkClient leadId={openDialogId}/>
-                    </PopoverContent>
-                  </Popover>
-                   </div>
-                  <div className="py-1 text-[12px] text-[#091747]">
+                  <div className="p-1 text-[12px] text-[#091747]">
                     <div className="flex">
-                      <span className="font-semibold">Name:</span>
-                      <span>{data?.client.firstName + " " + data?.client.lastName}</span>
+                      <span className="font-bold">Name:</span>
+                      <span className="font-medium">
+                        {data?.client?.firstName + " " + data?.client?.lastName}
+                      </span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">PAN:</span>
-                      <span className="uppercase">{data?.client.pan}</span>
+                      <span className="font-bold">PAN:</span>
+                      <span className="uppercase font-medium">
+                        {data?.client?.pan}
+                      </span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Email:</span>
-                      <span>{data?.client.email}</span>
+                    <span className="font-bold">Email:</span>{" "}
+                    <span className="font-medium">{data?.email}</span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Mobile:</span>
-                      <span>{data?.client.mobileNumber}</span>
+                      <span className="font-bold">Mobile:</span>
+                      <span className="font-medium">
+                        {data?.client?.mobileNumber}
+                      </span>
                     </div>
                     <div className="flex">
-                      <span className="font-semibold">Manager:</span>
-                      <span>DSC Registration</span>
+                      <span className="font-bold">Manager:</span>
+                      <span className="font-medium">DSC Registration</span>
                     </div>
-                    <div className="flex  items-center text-white bg-[#f21300] max-w-fit rounded-md px-2 text-[10px]">
+                    <div className="flex  items-center text-white bg-[#f21300] max-w-fit rounded-full px-2 text-[10px]">
                       <span className="font-semibold">KYC status: </span>
                       <span className="font-semibold">Incomplete</span>
                     </div>
@@ -645,37 +873,52 @@ const closeModal = () => setIsModalOpen(false);
                 </div>
 
                 {/* Business Details Section */}
-                <div className="px-2">
-                 <div className="flex items-center gap-x-1">
-                 <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-md">
-                    <span className="font-normal text-[13px]">
-                      Bussiness Details
-                    </span>
+                <div className="px-1 mt-2">
+                  <div className="flex items-center gap-x-1 pr-2">
+                    <div className="flex items-center justify-between w-full px-2 py-1 bg-[#091747] text-white rounded-xl">
+                      <span className="font-medium text-[13px]">
+                        Bussiness Details
+                      </span>
+                    </div>
+                    <Popover>
+                      <PopoverTrigger>
+                      <FaPlus className="text-white bg-[#f21300] rounded-md h-5 w-5 p-1" />
+                      </PopoverTrigger>
+                      <PopoverContent className="">
+                        <LinkBussiness
+                          clientId={data?.clientId}
+                          leadId={openDialogId}
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
-                  <Popover>
-                    <PopoverTrigger>
-                      <Plus className="text-white bg-[#f21300] rounded-md"/>
-                    </PopoverTrigger>
-                    <PopoverContent className="">
-                        <LinkBussiness/>
-                    </PopoverContent>
-                  </Popover>
-                 </div>
                   <div className="text-[12px]">
-                    <div className="flex">
+                    <div className="flex gap-x-1 pr-2">
                       <span className="font-semibold">Business:</span>
+                      <span className="uppercase">
+                        {data?.business?.businessName}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-semibold">Manager:</span>
                     </div>
-                    <div className="flex  items-center text-white bg-[#f21300] max-w-fit rounded-md px-2 text-[10px]">
-                      <span className="font-semibold">Bussiness status: </span>
-                      <span className="font-semibold">Incomplete</span>
+                    <div className="flex flex-col gap-y-1 ]">
+                      <div className="flex  items-center text-white bg-[#A301D5] max-w-fit rounded-full px-2 text-[10px]">
+                        <span className="font-medium">
+                          {data?.business?.businessType}
+                        </span>
+                      </div>
+                      <div className="flex gap-x-2 items-center text-white bg-[#f21300] max-w-fit rounded-full px-2 text-[10px] mb-2">
+                        <span className="font-semibold">Bussiness status:</span>
+                        <span className="font-medium">
+                          {data?.business?.businessStatus}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            
           </div>
         </div>
       </div>

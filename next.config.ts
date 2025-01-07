@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     // Ignore ESLint errors during builds
     ignoreDuringBuilds: true,
   },
+
   typescript: {
     // Ignore TypeScript build errors
     ignoreBuildErrors: true,
@@ -16,6 +17,6 @@ const nextConfig: NextConfig = {
     // Add any experimental features if needed
     appDir: true, // Example: enabling app directory
   },
-};
 
+};
 export default nextConfig;

@@ -53,7 +53,7 @@ export default function BusinessIdCardSection() {
   };
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-between items-center gap-4">
+    <div className="w-full grod grid-cols-1 md:grid-cols-2 xl:flex justify-between items-center gap-4">
       {/* Businesses Section */}
       <div className="w-full xl:order-1 flex justify-start items-center border border-gray-300 rounded-xl shadow-md shadow-gray-300 bg-[#eabfff4d]">
         <div className="w-full flex flex-col justify-center items-center">

@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { StackExchangeDialog } from './StackExchangeDialog'
 // import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import {  useState } from "react"
+import Modal from "@/components/model/custom-modal"
 
 
 interface ActionButtonProps {
@@ -17,12 +18,17 @@ interface ActionButtonProps {
 
 const ActionButton = ({id}:ActionButtonProps) => {
   const [openDialogId, setOpenDialogId] = useState<string>("");
-  const [open,setOpen] = useState<boolean>(false);
+  // const [open,setOpen] = useState<boolean>(false);
   // console.log("id type",typeof((id)))
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   
 
   console.log("open dialog iD",openDialogId);
-
+  
   const router = useRouter()
 
   const handleEditClick = () => {
@@ -47,13 +53,15 @@ const ActionButton = ({id}:ActionButtonProps) => {
         {/* <DialogTrigger asChild> */}
           <Button
             className="bg-[#042559] text-white w-6 h-7 text-sm" onClick={()=>{
-              setOpen(true);
+              openModal();
               setOpenDialogId(id); 
               // console.log("SetDialogID",openDialogId)
             }}>
             <FaStackExchange />
           </Button>
-          <StackExchangeDialog open={open} setOpen={setOpen} openDialogId={openDialogId}/>
+          <Modal isOpen={isModalOpen} onClose={closeModal} className="rounded-2xl">
+             <StackExchangeDialog openDialogId={openDialogId} onClose={closeModal}/>
+          </Modal>
         {/* </DialogTrigger> */}
       <Button
         className="bg-[#042559] text-white w-6 h-7 text-sm"

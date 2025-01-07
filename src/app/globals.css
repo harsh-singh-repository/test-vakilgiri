@@ -6,6 +6,30 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.custom-scrollbar {
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #f21300; /* For Firefox */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  background-color: #f21300; /* Background of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #f21300; /* Scrollbar handle */
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #f21300; /* Handle on hover */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #f21300; /* Track of the scrollbar */
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;

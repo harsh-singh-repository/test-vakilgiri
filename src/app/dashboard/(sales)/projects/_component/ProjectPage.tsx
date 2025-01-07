@@ -1,103 +1,113 @@
-// ClientPage.tsx
 "use client";
-import React, {Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./columns";
-import { ClientTable } from "./client-table";
-import ClientCard from "./client-card";
 import { useSearchParams } from "next/navigation";
-import { ClientPageServer } from "./ClientPageServer";
-import { Client } from "@/constants/data";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import {Oval} from "react-loader-spinner"
+import { Oval } from "react-loader-spinner";
+import ProjectCreate from "./projectCreate";
+import { projectServices } from "../services/manage-projects";
+import { Project } from "../types";
+import ProjectCard from "./client-card";
+import { ProjectTable } from "./client-table";
+import Modal from "@/components/model/custom-modal";
 
+// Define the response structure for projects
 type ResponseData = {
-  employee: Client[];
-  totalUsers: number;
+  projects: Project[];
+  totalProjects: number;
   pageCount: number;
 };
-
-// const breadcrumbItems = [
-//   { title: "Dashboard", link: "/dashboard" },
-//   { title: "Client", link: "/dashboard/client" },
-// ];
 
 export default function ProjectPage() {
   const searchParams = useSearchParams();
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
-  const pageLimit = searchParams.get("limit")
-    ? Number(searchParams.get("limit"))
-    : 10;
-  const [searchValue, setSearchValue] = useState(
-    searchParams.get("search") || ""
-  );
+  const pageLimit = searchParams.get("limit") ? Number(searchParams.get("limit")) : 10;
+  const [searchValue, setSearchValue] = useState(searchParams.get("search") || "");
   const [responseData, setResponseData] = useState<ResponseData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  // Fetch data using projectServices
   useEffect(() => {
     const fetchData = async () => {
-      const data = await ClientPageServer({ page, pageLimit, searchValue });
-      setResponseData(data);
+      try {
+        const data = await projectServices.getAll();
+        const modifiedData = data.map((dt, index) => ({
+          ...dt,
+          code: `P${String(index + 1).padStart(3, '0')}`, // Generate code like P001, P002, etc.
+        }));
+        setResponseData({
+          projects: modifiedData,
+          totalProjects: data.length,
+          pageCount: Math.ceil(data.length / pageLimit),
+        });
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+        setResponseData(null);
+      }
     };
 
     fetchData();
   }, [page, pageLimit, searchValue]);
 
+  const handlePageChange = (newPage: number) => {
+    const newSearchParams = new URLSearchParams(window.location.search);
+    newSearchParams.set("page", String(newPage));
+    window.history.pushState({}, "", "?" + newSearchParams.toString());
+  };
+
   if (!responseData) {
     return (
-      <div className="flex justify-center item-center h-[100vh]">
-        <Oval
-          visible={true}
-          height="40"
-          width="40"
-          color="#f21300"
-          ariaLabel="oval-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-        />
+      <div className="flex justify-center items-center h-[100vh]">
+        <Oval visible={true} height="40" width="40" color="#f21300" ariaLabel="oval-loading" />
       </div>
     );
   }
 
   return (
-    <Dialog>
-      <div className="flex-1 space-y-4 p-4 pt-6 md:p-4">
-        {/* <Breadcrumbs items={breadcrumbItems} /> */}
-        <div className="flex items-start justify-between">
-          <div className="text-[20px] font-bold text-[#042559]">{`Clients (${responseData.totalUsers})`}</div>
-
-          <div className="flex justify-center item-center gap-4">
-            <Suspense>
-            <Input
-              placeholder="Search name..."
-              value={searchValue}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
-              className="w-full md:max-w-sm ml-auto bg-white"
-              />
-              </Suspense>
-
-            <DialogTrigger>
-              <div className="bg-[#f21300] text-white p-2 rounded-md">
-                <Plus className="h-6 w-6" />
-              </div>
-            </DialogTrigger>
+    <div className="flex-1 space-y-1 p-4 pt-6 md:p-4">
+      <div className="flex items-start justify-between">
+        <div className="text-[20px] font-bold text-[#042559] ml-1">
+          {`Projects (${responseData.totalProjects})`}
+        </div>
+        <div className="flex justify-center items-center gap-4">
+          <Input
+            placeholder="Search project..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            className="w-full md:max-w-sm ml-auto bg-white"
+          />
+          <div
+            className="bg-[#f21300] text-white p-1 rounded-md cursor-pointer"
+            onClick={handleOpenModal}
+          >
+            <Plus strokeWidth={5} className="h-6 w-6" />
           </div>
         </div>
-        <Separator />
-
-        <ClientCard />
-
-        <ClientTable
-          searchKey="search"
-          searchValue={searchValue}
-          pageNo={page}
-          columns={columns}
-          totalUsers={responseData.totalUsers}
-          data={responseData.employee}
-          pageCount={responseData.pageCount}
-        />
+        {isModalOpen && (
+          <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+            <ProjectCreate close={handleCloseModal} />
+          </Modal>
+        )}
       </div>
-    </Dialog>
+      <Separator />
+      <ProjectCard/>
+      <Separator />
+      <ProjectTable
+        searchKey="search"
+        searchValue={searchValue}
+        pageNo={page}
+        columns={columns}
+        totalItems={responseData.totalProjects}
+        data={responseData.projects}
+        pageCount={responseData.pageCount}
+        onPageChange={handlePageChange}
+      />
+    </div>
   );
 }
+

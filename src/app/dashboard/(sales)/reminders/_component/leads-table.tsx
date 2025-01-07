@@ -17,12 +17,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import Image from 'next/image';
-import profileImage from '../../../../../../public/assets/profile-image.png';
-import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
-import { CgProfile } from 'react-icons/cg';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -39,7 +35,7 @@ interface CustomCellProps<TData, TValue> {
   cell: Cell<TData, TValue>; // Adjust `any` for your data type
 }
 
-export function LeadsTable<TData, TValue>({
+export function ReminderTable<TData, TValue>({
   columns,
   data,
   pageNo,
@@ -98,7 +94,7 @@ export function LeadsTable<TData, TValue>({
       };
       router.push(`${pathname}?${createQueryString(newQueryParams)}`, { scroll: false });
     }
-  }, [pageIndex, pageSize, searchValue, pathname, router, createQueryString, searchKey]);
+  }, [pageIndex, pageSize, searchValue, pathname, router, createQueryString, searchKey,searchParams]);
 
   const table = useReactTable({
     data,
@@ -119,14 +115,6 @@ export function LeadsTable<TData, TValue>({
     const columnId = cell.column.id;
     // const value = cell.getValue(); // Get the raw value directly
     const cellValue = flexRender(cell.column.columnDef.cell, cell.getContext());
-
-    if(columnId==="id"){
-      return(
-        <div>
-            <CgProfile size={"30"} className=''/>
-        </div>
-      )
-    }
   
     if (columnId === 'status') {
       return (
@@ -136,48 +124,6 @@ export function LeadsTable<TData, TValue>({
           Pending
         </div>
       );
-    }
-
-    if(columnId === "mode"){
-      return(
-        <div>
-          Call
-        </div>
-      )
-    }
-
-    if(columnId === "title"){
-      return(
-        <div>
-         <span className='text-red-500'>Follow up Call for MOA Discussion</span>
-        </div>
-      )
-    }
-
-    if(columnId === "description"){
-      return(
-        <div>
-         <span className='text-red-500'>Follow up Call for MOA Discussion</span>
-        </div>
-      )
-    }
-  
-    if (columnId === 'assigned') {
-      return (
-        <div className="flex items-center justify-center w-full h-full">
-          <Image
-            src={profileImage}
-            alt="Profile Image"
-            width={35}
-            height={35}
-            className="rounded-full"
-          />
-        </div>
-      );
-    }
-  
-    if (columnId === 'action') {
-      return <ActionButton />;
     }
   
     return cellValue;

@@ -7,6 +7,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { toast } from 'sonner';
 import { StackLeadsExchangeDialog } from './StackLeadsExchangeDialog';
 import Modal from '@/components/model/custom-modal';
+import { AxiosError } from 'axios';
 
 interface ActionButtonProps{
   id:string,
@@ -20,7 +21,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ id }) => {
   const [openDialogId, setOpenDialogId] = useState<string>(""); // State for dialog ID
   // const [open, setOpen] = useState<boolean>(false); // State for open/close dialog
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -33,7 +34,18 @@ const ActionButton: React.FC<ActionButtonProps> = ({ id }) => {
 
       },
       onError:(error)=>{
-        toast.error(`Failed to delete leads : ${error.message}`)
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to delete Lead: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
       }
      })
   }
@@ -52,7 +64,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ id }) => {
       >
         <FaStackExchange />
       </Button>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onClose={closeModal} className="rounded-2xl">
          <StackLeadsExchangeDialog openDialogId={openDialogId} onClose={closeModal}/> 
       </Modal>
       <Button className="bg-[#f21300] text-white w-6 h-7 text-sm" onClick={()=>handleDeleteLeads(id)}>

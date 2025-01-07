@@ -53,7 +53,61 @@ interface Creator {
   mobileNumber: string;
 }
 
+export interface managerDetails{
+  firstName: string;
+  lastName: string;
+  email: string;
+  userRoles: string;
+  id:string;
+}
+
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  userRoles: string;
+}
+
+export interface AdminStaff {
+  id: string;
+  user: User;
+  officialEmail: string | null;
+  officialMobile: string | null;
+}
+
+export interface Manager {
+  id: string;
+  managerType: string;
+  adminStaff: AdminStaff | null;
+  professional: string; // Replace `any` with a specific interface if you know the structure of `professional`
+}
+
 export interface LeadsReminderType {
+  id: string;
+  body: string;
+  reminderType: string;
+  dueDate: string;
+  status: string | null;
+  subject: string;
+  reply: string | null;
+  leadId: string;
+  creator: Creator;
+  createdAt: string;
+}
+export interface ClientReminderType {
+  id: string;
+  body: string;
+  reminderType: string;
+  dueDate: string;
+  status: string | null;
+  subject: string;
+  reply: string | null;
+  leadId: string;
+  creator: Creator;
+  createdAt: string;
+}
+
+export interface bussinessReminderType{
   id: string;
   body: string;
   reminderType: string;
