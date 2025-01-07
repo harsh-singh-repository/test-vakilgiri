@@ -55,18 +55,18 @@ const ClientDashboard = () => {
 
   return (
     <Dialog>
-      <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 p-5 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 px-5 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
         {tables.map((table) => (
           <div
             key={table.tableId}
-            className="border px-2 py-4 rounded-md shadow bg-slate-200 h-[350px] overflow-y-auto"
+            className="border px-2 py-0.5 rounded-md shadow bg-slate-200 h-[350px] overflow-y-auto"
           >
-            <span className="text-sm font-medium mb-2 bg-[#091747] text-white px-3 text-left rounded-sm">
+            <span className="text-sm font-medium mb-1 bg-[#091747] text-white px-3 text-left rounded-sm">
               {table.tableName}
             </span>
-            <div className="flex flex-col gap-2 mt-2">
+            <div className="flex flex-col gap-2 mt-1">
               {table.clients.map((client, clientIndex) => (
-                  <div className="flex justify-between items-center bg-white p-2 rounded-md"  key={clientIndex}>
+                  <div className="flex justify-between items-center bg-white p-1 rounded-md"  key={clientIndex}>
                     <div className="flex flex-col items-start w-[6.25rem]">
                       <span className="text-[10px] text-[#F20101] font-medium">
                         {client.date}

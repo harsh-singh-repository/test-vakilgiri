@@ -1,6 +1,6 @@
 import { MaterialInput } from "@/components/material-input";
 import { Button } from "@/components/ui/button";
-import { useSearchClinetQuery } from "@/hooks/users/manage-client";
+import { useSearchClinetQuery } from "@/hooks/clients/manage-client";
 import React, { useEffect, useState } from "react";
 import { clientDetailsType } from "../_types";
 import { cn } from "@/lib/utils";
@@ -13,14 +13,18 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import { useQueryClient } from "@tanstack/react-query";
 
 const LinkClient = ({ leadId }: { leadId: string }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedClientId, setSelectedClientId] = useState<string>("");
 
+  const queryClient = useQueryClient();
+
   const { data } = useSearchClinetQuery(searchQuery);
 
   const { mutate } = useLinkClient(leadId);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -41,6 +45,7 @@ const LinkClient = ({ leadId }: { leadId: string }) => {
     mutate(data, {
       onSuccess: () => {
         toast.success("Client Linked Successfully");
+        queryClient.invalidateQueries({queryKey:["leadId"]});
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
@@ -65,7 +70,7 @@ const LinkClient = ({ leadId }: { leadId: string }) => {
           className="w-[250px]"
           onChange={handleChange}
         />
-        <div className="text-xs text-[#091747] flex flex-col gap-y-2 w-full px-2 cursor-pointer">
+        <div className="text-xs text-[#091747] flex flex-col gap-y-2 w-full px-2 cursor-pointer custom-scrollbar overflow-auto h-32">
           {data?.map((searchClient: clientDetailsType, index: number) => {
             const isSelected = searchClient.id === selectedClientId;
             return (

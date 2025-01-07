@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 
 interface ModalProps {
@@ -12,7 +12,7 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, className }) => {
   const [isModalOpen, setIsModalOpen] = useState(isOpen);
-  const modalRef = useRef<HTMLDivElement | null>(null);
+  // const modalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setIsModalOpen(isOpen);
@@ -30,37 +30,37 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, className }) =
     };
   }, [isModalOpen]);
 
-  const handleOutsideClick = useCallback(
-    (e: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(e.target as Node) &&
-        !document.querySelector('[data-ignore-click]')?.contains(e.target as Node) // Adjust based on dropdown class
-      ) {
-        onClose();
-      }
-    },
-    [onClose]
-  );
+  // const handleOutsideClick = useCallback(
+  //   (e: MouseEvent) => {
+  //     if (
+  //       modalRef.current &&
+  //       !modalRef.current.contains(e.target as Node) &&
+  //       !document.querySelector('[data-ignore-click]')?.contains(e.target as Node) // Adjust based on dropdown class
+  //     ) {
+  //       onClose();
+  //     }
+  //   },
+  //   [onClose]
+  // );
 
-  useEffect(() => {
-    if (isModalOpen) {
-      document.addEventListener('mousedown', handleOutsideClick);
-    }
+  // useEffect(() => {
+  //   if (isModalOpen) {
+  //     document.addEventListener('mousedown', handleOutsideClick);
+  //   }
 
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, [isModalOpen, handleOutsideClick]);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleOutsideClick);
+  //   };
+  // }, [isModalOpen, handleOutsideClick]);
 
   if (!isModalOpen) return null;
 
   const modalContent = (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start overflow-y-auto z-50">
       <div
-        ref={modalRef}
+        // ref={modalRef}
         className={cn(
-          'bg-white rounded-lg shadow-xl w-full max-w-fit mt-16 mb-16 max-h-fit',
+          'bg-white rounded-lg shadow-xl w-fit min-w-md mt-12 mb-16 max-h-fit',
           className
         )}
         // Ensure modal content handles propagation

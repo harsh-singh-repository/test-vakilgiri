@@ -1,12 +1,15 @@
 'use client';
-import { Suspense} from 'react';
-import { Button } from '@/components/ui/button';
+import { useState} from 'react';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
+import { useGetReminder } from '@/hooks/reminder/manage-reminder';
+import { ReminderTable } from './leads-table';
 // import { Input } from '@/components/ui/input';
-// import { columns } from './columns';
+import { columns } from './columns';
+import { Input } from '@/components/ui/input';
 // import { LeadsTable } from './leads-table';
-// import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { Oval } from 'react-loader-spinner';
 // // import { LeadsPageServer } from './LeadsPageServer';
 // // import { Client, Leads } from '@/constants/data';
 // import { Oval } from 'react-loader-spinner';
@@ -33,11 +36,16 @@ import { Plus } from 'lucide-react';
 // });
 
 export default function ReminderPage() {
-  // const searchParams = useSearchParams();
-  // const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1;
-  // const pageLimit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 10;
-  // const [searchValue, setSearchValue] = useState(searchParams.get('search') || '');
-  // const [responseData, setResponseData] = useState<ResponseData | null>(null);
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
+  const pageLimit = searchParams.get("limit")
+    ? Number(searchParams.get("limit"))
+    : 10;
+  const [searchValue, setSearchValue] = useState(
+    searchParams.get("search") || ""
+  );
+
+  const {data} = useGetReminder();
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -56,52 +64,53 @@ export default function ReminderPage() {
   //   fetchData();
   // }, [page, pageLimit, searchValue]);
 
-  // if (!responseData) {
-  //   return (
-  //     <div className="flex justify-center item-center h-[100vh]">
-  //       <Oval
-  //         visible={true}
-  //         height="40"
-  //         width="40"
-  //         color="#f21300"
-  //         ariaLabel="oval-loading"
-  //         wrapperStyle={{}}
-  //         wrapperClass=""
-  //       />
-  //     </div>
-  //   );
-  // }
+  if (!data) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Oval
+          visible={true}
+          height="40"
+          width="40"
+          color="#f21300"
+          ariaLabel="oval-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full flex-1 space-y-4 p-4 pt-6 md:p-4 overflow-hidden">
       <div className="flex items-start justify-between">
-        <div className="text-[20px] font-bold text-[#042559]">{`Reminders`}</div>
+        <div className="text-[20px] font-bold text-[#042559]">{`Reminders (${data.length})`}</div>
 
         <div className="flex justify-center item-center gap-4">
-          <Suspense>
-          {/* <Input
-            placeholder="Search"
+        <div className='flex gap-2 items-center'>
+          <Input
+            placeholder="Search name..."
             value={searchValue}
-            onChange={(event) => setSearchValue(event.target.value)}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
             className="w-full md:max-w-sm ml-auto bg-white"
-            /> */}
-            </Suspense>
-          <Button className="bg-[#f21300] text-white">
-            <Plus className="h-2 w-2" />
-          </Button>
+            />
+
+              <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1">
+                <Plus strokeWidth={"5"}/>
+              </div>
+          </div>
         </div>
       </div>
       <Separator />
       <div className="p-0 m-0 overflow-x-auto flex flex-col">
-        {/* <LeadsTable
+        <ReminderTable
           searchKey="search"
           searchValue={searchValue}
           pageNo={page}
           columns={columns}
-          totalUsers={responseData.totalUsers}
-          data={responseData.employee} // Ensure data is of type Client[]
-          pageCount={responseData.pageCount}
-        /> */}
+          totalUsers={data?.length}
+          data={data} // Ensure data is of type Client[]
+          pageCount={Math.ceil(data.length / pageLimit)}
+        />
       </div>
     </div>
   );

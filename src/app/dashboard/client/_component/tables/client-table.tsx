@@ -17,8 +17,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import Image from 'next/image';
-import profileImage from '../../../../../../public/assets/profile-image.png';
 import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
@@ -121,29 +119,6 @@ export function ClientTable<TData, TValue>({
 
   const renderCellContent = (cell: CustomCellProps<TData, TValue>['cell']) => {
     const { id: columnId } = cell.column;
-    // const cellValue = cell.value;
-
-    if (columnId === 'kyc') {
-      return (
-        <div className="mx-auto w-[7rem] flex items-center justify-center px-2 py-1 rounded-full bg-[#f21300] text-white text-sm">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </div>
-      );
-    }
-
-    if (columnId === 'profile-image' || columnId === 'manager') {
-      return (
-        <div className="flex items-center justify-center w-full h-full rounded-full">
-          <Image
-            src={profileImage}
-            alt="Profile Image"
-            width={35}
-            height={35}
-            className="rounded-full"
-          />
-        </div>
-      );
-    }
 
     if (columnId === 'action') {
       const rowData = cell.row.original as RowData; // Cast to RowData
@@ -162,7 +137,7 @@ export function ClientTable<TData, TValue>({
 
   return (
     <>
-      <ScrollArea className="w-full h-[100vh] overflow-y-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
+      <ScrollArea className='w-full overflow-x-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar'>
         <Table className="border rounded-2xl bg-white">
           <TableHeader className="bg-[#042559] text-white text-center">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -183,7 +158,7 @@ export function ClientTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'firstName' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
+                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'firstName' ? 'text-[#f21300] hover:text-[#042559]' : ''}  ${cell.column.id === 'profile-image' ? 'flex justify-center items-center' : ''} ${cell.column.id === 'manager' ? 'flex justify-center items-center' : ''}`}
                     >
                       {renderCellContent(cell)}
                     </TableCell>

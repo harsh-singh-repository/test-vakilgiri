@@ -1,7 +1,6 @@
 // ClientPage.tsx
 "use client";
 import { useState } from "react";
-import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./tables/columns";
@@ -13,7 +12,7 @@ import { useSearchParams } from "next/navigation";
 import AddClientDialog from "./AddClientDialog";
 // import Spinner from '@/components/smooth-spinner';
 import { Oval } from "react-loader-spinner";
-import { useGetClients } from "@/hooks/users/manage-client";
+import { useGetClients } from "@/hooks/clients/manage-client";
 import Modal from "@/components/model/custom-modal";
 // import { User } from "@/constants/client-table-data";
 
@@ -22,7 +21,7 @@ import Modal from "@/components/model/custom-modal";
 //   totalUsers: number;
 //   pageCount: number;
 // };
-
+  
 // const breadcrumbItems = [
 //   { title: 'Dashboard', link: '/dashboard' },
 //   { title: 'Client', link: '/dashboard/client' }
@@ -75,33 +74,29 @@ export default function ClientPageContent() {
   }
 
   return (
-    <div className="w-full flex-1 space-y-4 p-4 pt-6 md:p-4 overflow-hidden">
+    <div className="flex-1 space-y-2 p-4 pt-[10px]">
       {/* <Breadcrumbs items={breadcrumbItems} /> */}
       <div className="flex items-start justify-between">
-        <div className="text-2xl font-bold text-[#042559]">{`Clients (7)`}</div>
+        <div className="text-xl font-semibold text-[#042559]">{`Clients (${data?.length})`}</div>
 
         <div className="flex justify-center item-center gap-4">
+        <div className='flex gap-2 items-center'>
           <Input
-            placeholder="Search name..."
+            placeholder="Type here..."
             value={searchValue}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              setSearchValue(event.target.value)
-            }
-            className="w-full md:max-w-sm ml-auto bg-white"
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
+            className="w-full md:max-w-sm ml-auto bg-white p-[5px] text-[14px] lg:w-[249px] h-[30px] placeholder:text-black/40"
             />
 
-          <div
-            className="bg-[#f21300] text-white p-2 rounded-md cursor-pointer"
-            onClick={openModal}
-          >
-            <Plus className="h-6 w-6" />
+              <div className="bg-[#f21300] text-white max-h-[25px] min-h-[25px] min-w-[25px] max-w-[25px] rounded-sm cursor-pointer p-1" onClick={openModal}>
+                <Plus strokeWidth={"5"} size={"18"}/>
+              </div>
           </div>
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <Modal isOpen={isModalOpen} onClose={closeModal} className="rounded-2xl">
               <AddClientDialog onClose={closeModal}/>
           </Modal> 
         </div>
       </div>
-      <Separator />
 
       <ClientCard />
 

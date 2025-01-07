@@ -1,5 +1,7 @@
 // THIS IS EXMAPLE
+import { getSession } from 'next-auth/react';
 import {
+    AddFileTypeClient,
     clientDiscussionType,
     ClientReminderTypes,
     // ApiResponse, 
@@ -7,6 +9,7 @@ import {
     EditClientData
 } from '../../types';
 import axiosInstance from '@/lib/axiosInstance';
+import axios from 'axios';
 
 const CLIENT_API = {
     CREATE: '/client',
@@ -14,13 +17,19 @@ const CLIENT_API = {
     // DELETE: (id: number) => `/client/delete-client/${id}`,
     GET_ALL: '/client/',
     GET_BUSSINESS:(id:string | string[] | undefined) => `/client/${id}/businesses`,
+    REMOVE_MANAGER:(id:string) => `/client/${id}/manager`,
     GET_BY_ID: (id : string | string [] | undefined) => `/client/${id}`,
     GET_CURRENT: '/admin/current-user',
+    ADD_FILE:`/files/upload/client`,
     ADD_DICUSSION: (id: string) => `/client/${id}/discussions`,
     GET_DICUSSION: (id: string) => `/client/${id}/discussions`,
     ADD_REMINDER: (id: string) => `/client/${id}/reminders`,
-    DELETE_DISCUSSION: (id: string,clientId:string) => `/client/${clientId}/discussions/${id}`,
-    SEARCH: (searchQuey:string) => `/client?query=${searchQuey}`
+    GET_REMINDER: (id: string) => `/client/${id}/reminders`,
+    DELETE_DISCUSSION: (id: string) => `/client/discussions/${id}`,
+    DELETE_REMINDER: (id: string) => `/reminders/${id}`,
+    SEARCH: (searchQuey:string) => `/client?query=${searchQuey}`,
+    ASSIGN_MANAGER:(id:string) => `/client/${id}/manager`,
+    GET_FILES:(id:string | string [] | undefined) => `/files/client/${id}`
 } as const;
 
 export const clientService = {
@@ -33,6 +42,15 @@ export const clientService = {
 
     get: async () => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_ALL}`);
+        return response.data.data;
+    },
+    getFilesOfClient: async (id:string | string [] | undefined) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_FILES(id)}`);
+        return response.data.data;
+    },
+
+    getReminder: async (id:string) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_REMINDER(id)}`);
         return response.data.data;
     },
 
@@ -51,6 +69,21 @@ export const clientService = {
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.ADD_DICUSSION(id)}`, discussion);
     },
 
+    AddFile: async (addFile:AddFileTypeClient) => {
+        const session = await getSession();
+        const token = session?.user.accessToken;
+        return await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.ADD_FILE}`,
+            addFile,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Authorization":`Bearer ${token}`,
+                },
+            }
+        );
+    },
+
     getDiscussion: async (id: string) => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_DICUSSION(id)}`);
         return response.data.data;
@@ -66,9 +99,26 @@ export const clientService = {
         return response.data.data;
     },
 
-    deleteDisscussion: async (id:string,clientId:string) => {
+    deleteDisscussion: async (id:string) => {
         return await axiosInstance.delete(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE_DISCUSSION(id,clientId)}`);
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE_DISCUSSION(id)}`);
+    },
+    
+    deleteReminder: async (id:string) => {
+        return await axiosInstance.delete(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.DELETE_REMINDER(id)}`);
+    },
+
+    assignManger:async(id:string,managersId: {managersId: string[]})=>{
+        return await axiosInstance.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.ASSIGN_MANAGER(id)}`,managersId);
+    },
+
+    removeManager : async (id:string,managerId:string)=>{
+        return await axiosInstance.delete(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.REMOVE_MANAGER(id)}`, {
+                data: { managerId },
+              });
     },
 
     searchClient: async(searchQuery:string)=>{
