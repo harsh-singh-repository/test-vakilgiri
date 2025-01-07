@@ -2,10 +2,10 @@ version: "3.8"
 
 services:
   app:
-    container_name: vg-backend
+    container_name: vg-frontend
     build: .
     ports:
-      - "8000:9000"
+      - "8100:8100"
     volumes:
        - public-data:/public
     environment:
