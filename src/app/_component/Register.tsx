@@ -51,7 +51,7 @@ export default function Register({ alreadyLogin }: RegisterProps) {
       password: "",
       confirmPassword: "",
     },
-  })
+  });
 
   async function onSubmit(data: z.infer<typeof RegisterformSchema>) {
     setIsSubmitting(true)
@@ -111,7 +111,11 @@ export default function Register({ alreadyLogin }: RegisterProps) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input type="email" placeholder="Enter Your Email" {...field} />
+                  <Input
+                    type="email"
+                    placeholder="Enter Your Email"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -124,7 +128,11 @@ export default function Register({ alreadyLogin }: RegisterProps) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input type="text" placeholder="Enter Mobile Number" {...field} />
+                  <Input
+                    type="text"
+                    placeholder="Enter Mobile Number"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -219,7 +227,11 @@ export default function Register({ alreadyLogin }: RegisterProps) {
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormControl>
-                    <Input type="password" placeholder="Confirm Password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Confirm Password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
