@@ -43,7 +43,7 @@ export const columns: ColumnDef<Business>[] = [
         
       return(
         <div className="text-[10px] bg-[#A301D5] px-1 text-white w-fit rounded-sm">
-            <span>{row.original.businessType.replace("_"," ")}</span>
+            <span>{row.original.businessType?.replace("_"," ")}</span>
         </div>
       )
     }

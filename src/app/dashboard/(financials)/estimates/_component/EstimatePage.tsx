@@ -1,8 +1,8 @@
 "use client";
 
-import React, { Suspense, useState } from "react";
+import React, { useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { Plus } from "lucide-react";
+import { LuRefreshCcw } from "react-icons/lu";
 import { Input } from "@/components/ui/input";
 import { columns } from "./columns";
 import { useSearchParams } from "next/navigation";
@@ -10,6 +10,7 @@ import { Oval } from "react-loader-spinner";
 import ClientCard from "./client-card";
 import { EstimateTable } from "./estimate-table";
 import { useGetEstimate } from "@/hooks/estimates/manage-estimates";
+import { FaFilter, FaUpload } from "react-icons/fa";
 
 
 export default function EstimatePage() {
@@ -46,25 +47,31 @@ export default function EstimatePage() {
 
   return (
 
-      <div className="flex-1 space-y-1 p-4 pt-6 md:p-4">
+      <div className="flex-1 space-y-2 p-4 pt-6 md:p-4">
         <div className="flex items-start justify-between">
-          <div className="text-[20px] font-bold text-[#042559] ml-1">{`Estimates (${data?.length})`}</div>
+          <div className="text-xl font-semibold text-[#042559]">{`Estimates (${data?.length})`}</div>
 
           <div className="flex justify-center items-center gap-4">
-            <Suspense>
+          <div className="flex gap-2 items-center">
               <Input
-                placeholder="Search project..."
+                placeholder="Type here..."
                 value={searchValue}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                   setSearchValue(event.target.value)
                 }
-                className="w-full md:max-w-sm ml-auto bg-white"
+                className="w-full md:max-w-sm ml-auto bg-white p-[5px] text-[14px] lg:w-[249px] h-[30px] placeholder:text-black/40"
               />
-            </Suspense>
 
 
-              <div className="bg-[#f21300] text-white p-2 rounded-md">
-                <Plus className="h-6 w-6" />
+              <div className="bg-[#031747] text-white max-h-fit max-w-fit rounded-sm cursor-pointer p-1.5 hover:bg-[#f21300]">
+                <FaUpload strokeWidth={"5"} size={"16"}/>
+              </div>
+              <div className="bg-[#031747] text-white max-h-fit max-w-fit rounded-sm cursor-pointer p-1.5 hover:bg-[#f21300]">
+                <FaFilter strokeWidth={"5"} size={"16"}/>
+              </div>
+              <div className="bg-[#031747] text-white max-h-fit max-w-fit rounded-sm cursor-pointer p-1.5 hover:bg-[#f21300]">
+                <LuRefreshCcw  strokeWidth={"3"} size={"16"}/>
+              </div>
               </div>
 
           </div>

@@ -1,5 +1,7 @@
 // THIS IS EXMAPLE
+import { getSession } from 'next-auth/react';
 import {
+    AddFileTypeClient,
     clientDiscussionType,
     ClientReminderTypes,
     // ApiResponse, 
@@ -7,6 +9,7 @@ import {
     EditClientData
 } from '../../types';
 import axiosInstance from '@/lib/axiosInstance';
+import axios from 'axios';
 
 const CLIENT_API = {
     CREATE: '/client',
@@ -17,6 +20,7 @@ const CLIENT_API = {
     REMOVE_MANAGER:(id:string) => `/client/${id}/manager`,
     GET_BY_ID: (id : string | string [] | undefined) => `/client/${id}`,
     GET_CURRENT: '/admin/current-user',
+    ADD_FILE:`/files/upload/client`,
     ADD_DICUSSION: (id: string) => `/client/${id}/discussions`,
     GET_DICUSSION: (id: string) => `/client/${id}/discussions`,
     ADD_REMINDER: (id: string) => `/client/${id}/reminders`,
@@ -24,7 +28,8 @@ const CLIENT_API = {
     DELETE_DISCUSSION: (id: string) => `/client/discussions/${id}`,
     DELETE_REMINDER: (id: string) => `/reminders/${id}`,
     SEARCH: (searchQuey:string) => `/client?query=${searchQuey}`,
-    ASSIGN_MANAGER:(id:string) => `/client/${id}/manager`
+    ASSIGN_MANAGER:(id:string) => `/client/${id}/manager`,
+    GET_FILES:(id:string | string [] | undefined) => `/files/client/${id}`
 } as const;
 
 export const clientService = {
@@ -37,6 +42,10 @@ export const clientService = {
 
     get: async () => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_ALL}`);
+        return response.data.data;
+    },
+    getFilesOfClient: async (id:string | string [] | undefined) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.GET_FILES(id)}`);
         return response.data.data;
     },
 
@@ -58,6 +67,21 @@ export const clientService = {
     addDiscussion: async (discussion:clientDiscussionType, id: string) => {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.ADD_DICUSSION(id)}`, discussion);
+    },
+
+    AddFile: async (addFile:AddFileTypeClient) => {
+        const session = await getSession();
+        const token = session?.user.accessToken;
+        return await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.ADD_FILE}`,
+            addFile,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Authorization":`Bearer ${token}`,
+                },
+            }
+        );
     },
 
     getDiscussion: async (id: string) => {

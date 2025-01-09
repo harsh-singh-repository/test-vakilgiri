@@ -17,7 +17,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import ActionButton from './actions';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { ScrollBar } from '@/components/ui/scroll-area';
 
@@ -112,11 +111,6 @@ export function TransactionTable<TData, TValue>({
   });
 
   const renderCellContent = (cell: CustomCellProps<TData, TValue>['cell']) => {
-    const { id: columnId } = cell.column;
-
-    if (columnId === 'action') {
-        return <ActionButton/>;
-    }
 
     return flexRender(cell.column.columnDef.cell, cell.getContext());
   };

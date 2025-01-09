@@ -7,27 +7,13 @@ import { columns } from "./table/columns";
 import { StaffTable } from "./table/client-table";
 import ClientCard from "./table/client-card";
 import { useSearchParams } from "next/navigation";
-// import { ClientPageServer } from "./table/ClientPageServer";
 import {Oval} from "react-loader-spinner"
-// import Modal from "@/components/model/custom-modal";
-// import CreateStaff from "./CreateStaff";
 import { useGetAllStaff} from "@/hooks/user/manage-user";
-// import CreateStaff from "./CreateStaff";
 import EditStaff from "./EditStaff";
 import Modal from "@/components/model/custom-modal";
 import CreateStaff from "./CreateStaff";
 import { StaffType } from "../_types/types";
 
-// type ResponseData = {
-//   employee: Client[];
-//   totalUsers: number;
-//   pageCount: number;
-// };
-
-// const breadcrumbItems = [
-//   { title: "Dashboard", link: "/dashboard" },
-//   { title: "Client", link: "/dashboard/client" },
-// ];
 
 export default function StaffPage() {
   
@@ -55,14 +41,6 @@ export default function StaffPage() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const data = await ClientPageServer({ page, pageLimit, searchValue });
-  //     setResponseData(data);
-  //   };
-
-  //   fetchData();
-  // }, [page, pageLimit, searchValue]);
 
   if (!data) {
     return (

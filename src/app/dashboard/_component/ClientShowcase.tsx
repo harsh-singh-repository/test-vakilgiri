@@ -253,7 +253,7 @@ const ClientShowcase = () => {
                   </span>
                   <div className="flex justify-between w-full">
                     <div className="text-[10px] text-white bg-[#FAB515] rounded-xl text-center px-1">
-                      <span>{`${bussiness.businessType.replace("_"," ")}`}</span>
+                      <span>{`${bussiness.businessType?.replace("_"," ")}`}</span>
                     </div>
                     <FaStackExchange
                       className="text-[#091747] cursor-pointer"

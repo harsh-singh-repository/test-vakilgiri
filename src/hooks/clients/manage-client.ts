@@ -1,14 +1,9 @@
 import { useQuery, useMutation} from '@tanstack/react-query';
-// import { handleMutationSuccess, handleMutationError } from '@/lib/mutation-utils';
-// import { UserPayload } from '@/types/index.d';
-// import { useCustomToast } from '@/components/providers/toaster-provider';
 import {clientService } from '@/service/client/manage-client';
 import { 
+    AddFileTypeClient,
     clientDiscussionType,
     ClientReminderTypes,
-    // ApiResponse,
-    // ApiResponse, 
-    // CreateClientData, 
     EditClientData 
 } from '@/types';
 
@@ -21,17 +16,29 @@ export const useGetClients = () => {
     return query;
 };
 
-export const useAddClient = () => {
-    // const toast = useCustomToast();
+export const useGetClientFiles = (id:string | string [] | undefined) => {
+    const query =  useQuery({
+        queryKey: ['clientFiles'],
+        queryFn:() => clientService.getFilesOfClient(id),
+    });
+    return query;
+};
 
+export const useAddClient = () => {
     return useMutation({
         mutationFn: clientService.create,
     });
 };
 
+export const useAddFiletoClient = () => {
+    return useMutation({
+        mutationFn:(file:AddFileTypeClient)=> clientService.AddFile(file),
+    });
+};
+
 export const useGetClientsById = (id:string | string [] | undefined) =>{
     const query =  useQuery({
-        queryKey: ['clients',id],
+        queryKey: ['clientsId',id],
         queryFn:() => clientService.getClientById(id),
         enabled:!!id,
     });
@@ -101,35 +108,15 @@ export const useAddClientManager = (id:string) => {
 };
 
 export const useEditClient = (id:string | string [] | undefined) => {
-    // const queryClient = useQueryClient();
-    // const toast = useCustomToast();
 
     return useMutation({
         mutationFn:(clientData:EditClientData)=> clientService.edit(clientData,id),
-        // onSuccess: (response)=>  handleMutationSuccess(response, toast, queryClient, ["clients"]),
-        // onError: (error) => handleMutationError(error, toast),
     })
 };
 
 export const useAddClientReminder = (id:string) => {
-    // const queryClient = useQueryClient();
-    // const toast = useCustomToast();
 
     return useMutation({
         mutationFn:(reminders:ClientReminderTypes)=> clientService.addReminder(reminders,id),
-        // onSuccess: (response) =>
-        //     handleMutationSuccess(response, toast, queryClient, ["clients"]),
-        // onError: (error) => handleMutationError(error, toast),
     });
 };
-
-// export const useDeleteUser = () => {
-//     const queryClient = useQueryClient();
-//     const toast = useCustomToast();
-
-//     return useMutation({
-//         mutationFn: userService.delete,
-//         onSuccess: (response) => handleMutationSuccess(response, toast, queryClient, ['users']),
-//         onError: (error) => handleMutationError(error, toast)
-//     });
-// };

@@ -5,7 +5,7 @@ import { ServiceStatus } from "./action/serviceStatus";
 import { ServiceAction } from "./action/serviceAction";
 // import { getSession } from "next-auth/react";
 
-const sameStyle="text-[14px] font-poppins font-medium"
+// const sameStyle="text-[14px] font-poppins font-medium"
 export const columns: (
   onToggle: (id: string, newActive: boolean) => void,
   setFetchAgain: React.Dispatch<React.SetStateAction<boolean>>

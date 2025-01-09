@@ -151,7 +151,7 @@ export default function BusinessPage() {
         <div className="text-[#091747] text-[22px] font-semibold">
           Link Your Bussiness
         </div>
-        <div className="text-[#F21300]">
+        <div className="text-[#F21300] text-[12px] leading-none font-medium">
           Please fill all the information correctly to get the most out of
           Vakilgiri.
         </div>

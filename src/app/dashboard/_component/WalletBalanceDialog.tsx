@@ -2,19 +2,11 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CalendarIcon, Upload } from 'lucide-react';
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 import {
   Select,
@@ -26,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { MaterialInput } from "@/components/material-input";
 import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
+import { Upload } from "lucide-react";
 
 const PaymentDetails = [
   {
@@ -46,7 +39,6 @@ const PaymentDetails = [
 
 export function DialogDemo({ onClose }: { onClose: () => void }) {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>("default");
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [file, setFile] = React.useState<File | null>(null);
   const [createPayment, setCreatePayment] = useState<boolean>(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);

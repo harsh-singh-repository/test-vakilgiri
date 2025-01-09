@@ -45,14 +45,14 @@ const ActionButton = ({id}:ActionButtonProps) => {
   return (
     <div className="flex justify-center items-center gap-1">
       <Button
-        className="bg-[#042559] text-white w-6 h-7 text-sm"
+        className="bg-[#042559] text-white w-6 h-7 text-sm hover:bg-[#f21300]"
         onClick={() => {}}
       >
         <IoMdMail />
       </Button>
         {/* <DialogTrigger asChild> */}
           <Button
-            className="bg-[#042559] text-white w-6 h-7 text-sm" onClick={()=>{
+            className="bg-[#042559] text-white w-6 h-7 text-sm hover:bg-[#f21300]" onClick={()=>{
               openModal();
               setOpenDialogId(id); 
               // console.log("SetDialogID",openDialogId)
@@ -64,7 +64,7 @@ const ActionButton = ({id}:ActionButtonProps) => {
           </Modal>
         {/* </DialogTrigger> */}
       <Button
-        className="bg-[#042559] text-white w-6 h-7 text-sm"
+        className="bg-[#042559] text-white w-6 h-7 text-sm hover:bg-[#f21300]"
         onClick={handleEditClick}
       >
         <MdEdit />

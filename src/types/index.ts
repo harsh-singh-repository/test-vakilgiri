@@ -123,6 +123,36 @@ export interface StaffDataTypes{
   userRoles: "Client" | "Staff_Manager" | "Admin"; // Enum for user roles
   loginStatus: "None" | "Active" | "Inactive"; // Enum for login status
 }
+export interface GetPaymentsInterface{
+  invoiceId: string | null;
+  amount: number;
+  approvedById: string | null;
+  approvedOn: string;
+  businessId: string | null;
+  createdAt: string;
+  creatorId: string | null;
+  customerEmail: string;
+  customerMobile: string;
+  customerName: string;
+  description: string;
+  expireBy: string | null;
+  id: string;
+  paymentMode: string;
+  projectId: string | null;
+  referenceId: string;
+  remarks: string | null;
+  screenshot: string;
+  shortUrl: string | null;
+  slug: string;
+  status: string;
+  transactionDate: string | null;
+  transactionId: string | null;
+  transactionMode: string;
+  transactionType: string;
+  updatedAt: string;
+  userWalletId: string | null;
+}
+
 
 export interface CreateBussiness{
   business_type: string;
@@ -194,6 +224,13 @@ export interface BussinessDiscussionType{
 }
 export interface AddFileType{
   businessId:string | string[] | undefined,
+  File_Name:string,
+  file:File,
+  Visibility?: boolean,
+}
+
+export interface AddFileTypeClient{
+  clientId:string | string[] | undefined,
   File_Name:string,
   file:File,
   Visibility?: boolean,
