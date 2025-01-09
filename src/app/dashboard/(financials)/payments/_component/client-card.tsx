@@ -1,3 +1,4 @@
+import { useGetPayments } from '@/hooks/payments/manage-payments';
 import { BiRupee } from 'react-icons/bi';
 import { FaUserFriends } from 'react-icons/fa';
 import { FiSmile } from 'react-icons/fi';
@@ -5,11 +6,13 @@ import { FiAlertCircle } from 'react-icons/fi';
 
 const ClientCard = () => {
 
+  const {data} = useGetPayments()
+
     const clientCardData = [
         {
             logo: <BiRupee size={"45"} />,
             title: "All Payments",
-            value: "19",
+            value: data?.length,
             iconBgColor: "bg-[#0917c84d]",
             bgColor: "bg-[#ccd7ff]",
             textColor: "text-[#091747]"

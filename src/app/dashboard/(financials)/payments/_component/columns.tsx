@@ -2,16 +2,16 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import ActionButton from "./actions";
-import { Project } from "./ClientPageServer";
+import { GetPaymentsInterface} from "@/types";
 
-export const columns: ColumnDef<Project>[] = [
+export const columns: ColumnDef<GetPaymentsInterface>[] = [
   {
     accessorKey: "date",
     header: "Date",
     cell: ({ row }) => {
       return (
         <div className="text-[14px] text-blue-950 font-medium ml-1">
-          {row.original.date}
+          {row.original.createdAt.split("T")[0]}
         </div>
       );
     },
@@ -45,7 +45,7 @@ export const columns: ColumnDef<Project>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-[14px] text-blue-950 font-medium ml-1">
-          {row.original.project}
+          {row.original.projectId}
         </div>
       );
     },
@@ -56,7 +56,7 @@ export const columns: ColumnDef<Project>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-[14px] text-blue-950 font-medium ml-1">
-          {row.original.business}
+          {row.original.paymentMode}
         </div>
       );
     },
@@ -67,7 +67,7 @@ export const columns: ColumnDef<Project>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-[14px] text-blue-950 font-medium ml-1">
-          {row.original.amount}
+            &#8377;{row.original.amount}
         </div>
       );
     },
@@ -79,9 +79,9 @@ export const columns: ColumnDef<Project>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="text-[14px] text-blue-950 font-medium ml-1 text-center">
+        <div className="font-medium ml-1 text-center">
           <span
-            className={`px-2 py-1 rounded-full text-white text-[13px] ${
+            className={`px-2 py-1 rounded-full text-white text-[10px] ${
               row.original.status === "Completed"
                 ? "bg-[#007321] mr-1"
                 : "bg-[#f21300]"
@@ -98,8 +98,9 @@ export const columns: ColumnDef<Project>[] = [
     header: () => {
       return <div className="text-center">Action</div>;
     },
-    cell: () => {
-      return <ActionButton />;
+    cell: ({row}) => {
+      const openDialogId = row.original.id
+      return <ActionButton id={openDialogId}/>;
     },
   },
 ];

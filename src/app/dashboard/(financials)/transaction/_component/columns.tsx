@@ -1,61 +1,98 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import ActionButton from './actions';
-import { Project } from './ClientPageServer';
+import { GetTransactionType} from './ClientPageServer';
 
-export const columns: ColumnDef<Project>[] = [
+
+
+export function formatDateTime(isoString: string): string {
+  const date = new Date(isoString);
+
+  // Extract date components
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+
+  // Extract time components
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const amPm = hours >= 12 ? 'pm' : 'am';
+
+  // Convert to 12-hour format
+  hours = hours % 12 || 12;
+
+  // Format the final string
+  return `${day}-${month}-${year}, ${hours}:${minutes} ${amPm}`;
+}
+
+export const columns: ColumnDef<GetTransactionType>[] = [
   {
     accessorKey: 'date',
     header: 'Date',
     cell:({row})=>{
       return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.date}</div>
+        <div className='text-[13px] text-blue-950 font-medium ml-1'>{formatDateTime(row.original.createdAt)}</div>
       )
 }
   },
   {
-    accessorKey: 'paymentId',
-    header: 'Payment ID',
+    accessorKey: 'dr/cr',
+    header: 'Dr/Cr',
     cell:({row})=>{
+      const {transactionType} = row.original
+
+      if(transactionType === "CREDIT")
       return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.paymentId}</div>
+        <div className='text-[13px] text-blue-950 font-medium ml-1'>Cr</div>
+      )
+      if(transactionType === "DEBIT")
+      return (
+        <div className='text-[13px] text-blue-950 font-medium ml-1'>Dr</div>
       )
 }
   },
   {
-    accessorKey: 'invoiceId',
-    header: 'Invoice ID',
+    accessorKey: 'txnId',
+    header: 'Txn ID',
+    cell:({})=>{
+      // return (
+      //   <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.}</div>
+      // )
+}
+  },
+  {
+    accessorKey: 'referenshId',
+    header: 'Reference ID',
     cell:({row})=>{
       return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.invoiceId}</div>
+        <div className='text-[13px] text-blue-950 font-medium ml-1'>{row.original.referenceId}</div>
       )
 }
   },
   {
-    accessorKey: 'business',
-    header: 'Business',
+    accessorKey: 'particular',
+    header: 'Particular',
+    cell:({})=>{
+      // return (
+      //   // <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.project}</div>
+      // )
+}
+  },
+  {
+    accessorKey: 'deposit',
+    header: 'Deposit',
     cell:({row})=>{
       return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.business}</div>
+        <div className='text-[13px] text-[#007321] font-medium ml-1'>+{row.original.amount}</div>
       )
 }
   },
   {
-    accessorKey: 'project',
-    header: 'Project',
+    accessorKey: 'withdrawal',
+    header: 'Withdrawral',
     cell:({row})=>{
       return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.project}</div>
-      )
-}
-  },
-  {
-    accessorKey: 'amount',
-    header: 'Amount',
-    cell:({row})=>{
-      return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.amount}</div>
+        <div className='text-[13px] text-[#f21300] font-medium ml-1'>-{row.original.amount}</div>
       )
 }
   },
@@ -68,9 +105,9 @@ export const columns: ColumnDef<Project>[] = [
     },
     cell:({row})=>{
       return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1 text-center'>
+        <div className='text-[13px] text-blue-950 font-medium ml-1 text-center'>
           <span
-        className={`px-2 py-1 rounded-full text-white text-[13px] ${
+        className={`w-fit h-fit rounded-full text-white text-[10px] px-2 ${
           row.original.status === "Completed" ? "bg-[#007321] mr-1" : "bg-[#f21300]"
         }`}
       >
@@ -86,7 +123,9 @@ export const columns: ColumnDef<Project>[] = [
       return <div className="text-center">Action</div>;
     },
     cell: () => {
-      return <ActionButton />;
+      return (
+        <span className='text-[#f21300] text-3xl cursor-pointer'>...</span>
+      )
     },
   },
 ];

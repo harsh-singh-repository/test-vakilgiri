@@ -11,6 +11,36 @@ export type Project = {
   status: string;
 };
 
+export interface GetTransactionType {
+  amount: number;
+  approvedById: string | null;
+  approvedOn: string | null;
+  businessId: string | null;
+  createdAt: string;
+  creatorId: string;
+  customerEmail: string;
+  customerMobile: string;
+  customerName: string;
+  description: string | null;
+  expireBy: string | null;
+  id: string;
+  paymentMode: string | null;
+  paymentsId: string | null;
+  projectId: string | null;
+  referenceId: string;
+  remarks: string | null;
+  screenshot: string;
+  shortUrl: string | null;
+  slug: string;
+  status: string;
+  transactionDate: string;
+  transactionId: string | null;
+  transactionMode: string;
+  transactionType: string;
+  updatedAt: string;
+  userWalletId: string;
+}
+
 // Mock data source for projects
 const fakeProjects = {
   records: Array.from({ length: 50 }, (_, index) => ({

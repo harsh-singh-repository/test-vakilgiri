@@ -2,7 +2,8 @@ import axiosInstance from "@/lib/axiosInstance";
 
 const REMINDER_API = {
     GET_ALL : `/reminders`,
-    GET_BY_ID :(id:string)=> `/reminders/${id}`
+    GET_BY_ID :(id:string)=> `/reminders/${id}`,
+    DELETE_REMINDER: (id: string) => `/reminders/${id}`,
 }
 
 export const reminderServices = {
@@ -14,5 +15,8 @@ export const reminderServices = {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${REMINDER_API.GET_BY_ID(id)}`);
         return response.data.data;
     },
-
+    deleteReminder: async (id:string) => {
+        return await axiosInstance.delete(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${REMINDER_API.DELETE_REMINDER(id)}`);
+    },
 }

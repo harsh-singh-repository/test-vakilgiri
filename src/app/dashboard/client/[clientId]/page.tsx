@@ -2,8 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Results from "../../_component/DashboardCards";
 import ClientDashboard from "../_component/ClientDashboard";
-import { Plus} from "lucide-react";
-import { RxAvatar } from "react-icons/rx";
+import { Plus } from "lucide-react";
 import Personal_Form from "../_component/Personal_Form";
 import Component from "../_component/Address_Form";
 import { Separator } from "@/components/ui/separator";
@@ -18,6 +17,8 @@ import Modal from "@/components/model/custom-modal";
 import AddFileToClient from "../_component/AddFileToClient";
 import { useState } from "react";
 import GetFiles from "../_component/File_Table/fileTable";
+import Image from "next/image";
+import Profile from "../../../../../public/assets/profileimg.png";
 
 function Page() {
   const params = useParams();
@@ -132,18 +133,27 @@ function Page() {
         </TabsContent>
         <TabsContent value="All Profile" className="mt-12 h-[100vh] px-5">
           <div className="flex flex-col items-center gap-3 md:flex-col lg:flex-row lg:items-start">
-            <Card className="p-5 w-full">
+            <Card className="px-[12px] py-[10px] w-[40%]">
               <div className="flex flex-row items-center gap-3">
-                <RxAvatar size={"50"} />
+                <Image
+                  height={50}
+                  width={50}
+                  src={Profile}
+                  alt="ProfileImg"
+                  className="rounded-sm mr-2"
+                  style={{
+                    boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)",
+                  }}
+                />
                 <div className="flex-col item-center">
-                  <span className="uppercase font-semibold">Nahar Singh</span>
-                  <div className="text-xs">
-                    <span className="text-xs font-semibold">[E]:</span>
-                    naharsingh151299@gmail.com
+                  <span className="font-bold text-[#f21300] text-[16px]">Nahar Singh</span>
+                  <div className="flex gap-x-2">
+                    <span className="text-[13px]  text-[#f21300] font-bold">[E]:</span>
+                    <span className="text-[13px] font-medium">naharsingh151299@gmail.com</span>
                   </div>
-                  <div className="text-xs">
-                    <span className="text-xs font-semibold">[P]:</span>
-                    7084380147
+                  <div className="flex gap-x-2">
+                    <span className="text-[13px] font-bold text-[#f21300]">[P]:</span>
+                    <span className="text-[13px] font-medium">7084380147</span>
                   </div>
                 </div>
               </div>
