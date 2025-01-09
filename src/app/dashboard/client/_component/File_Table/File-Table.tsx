@@ -24,7 +24,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey: string;
-  searchValue: string; // Add searchValue here
+  searchValue?: string; // Add searchValue here
   pageNo: number;
   totalUsers: number;
   pageSizeOptions?: number[];
@@ -35,7 +35,12 @@ interface CustomCellProps<TData, TValue>{
   cell: Cell<TData, TValue>; // Adjust `any` for your data type
 }
 
-export function PaymentTable<TData, TValue>({
+// type RowData = {
+//   id: string; // Ensure 'id' exists and is of the correct type
+//   // Add other properties here if necessary
+// };
+
+export function FileTable<TData, TValue>({
   columns,
   data,
   pageNo,
@@ -52,6 +57,7 @@ export function PaymentTable<TData, TValue>({
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: pageNo - 1,
     pageSize: parseInt(searchParams?.get('limit') || '20', 10),
+    
   });
 
   // Handle search params and update pagination or search value
@@ -111,15 +117,30 @@ export function PaymentTable<TData, TValue>({
   });
 
   const renderCellContent = (cell: CustomCellProps<TData, TValue>['cell']) => {
+    // const { id: columnId } = cell.column;
+    // const cellValue = cell.value;
+
+
+    // if (columnId === 'action') {
+    //   const rowData = cell.row.original as RowData; // Cast to RowData
+    //   const uniqueId = rowData.id;
+    
+    //   if (typeof uniqueId === 'string') {
+    //     return <ActionButton id={uniqueId} />;
+    //   } else {
+    //     console.error('ID is not a string:', uniqueId);
+    //     return null; // Handle the error case appropriately
+    //   }
+    // }
 
     return flexRender(cell.column.columnDef.cell, cell.getContext());
   };
 
   return (
     <>
-      <ScrollArea className='w-full overflow-x-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar'>
+      <ScrollArea className="w-full h-[100vh] overflow-y-auto max-h-fit border border-gray-300 rounded-2xl shadow-lg shadow-gray-200 hide-scrollbar">
         <Table className="border rounded-2xl bg-white">
-          <TableHeader className="bg-[#042559] text-white text-center">
+          <TableHeader className="bg-[#042559] text-white text-center hover:bg-[#042559]">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -138,7 +159,7 @@ export function PaymentTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'firstName' ? 'text-[#f21300] hover:text-[#042559]' : ''}  ${cell.column.id === 'profile-image' ? 'flex justify-center items-center' : ''} ${cell.column.id === 'manager' ? 'flex justify-center items-center' : ''}`}
+                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'firstName' ? 'text-[#f21300] hover:text-[#042559]' : ''} ${cell.column.id === 'action' ? 'flex items-center justify-center' : ''}`}
                     >
                       {renderCellContent(cell)}
                     </TableCell>

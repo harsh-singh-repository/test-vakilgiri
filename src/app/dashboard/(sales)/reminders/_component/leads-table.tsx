@@ -112,19 +112,10 @@ export function ReminderTable<TData, TValue>({
   });
 
   const renderCellContent = (cell:CustomCellProps<TData, TValue>['cell']) => {
-    const columnId = cell.column.id;
     // const value = cell.getValue(); // Get the raw value directly
     const cellValue = flexRender(cell.column.columnDef.cell, cell.getContext());
   
-    if (columnId === 'status') {
-      return (
-        <div 
-          className={`flex items-center justify-center px-2 py-1 bg-yellow-400 rounded-full text-white text-xs w-fit mx-auto`}
-        >
-          Pending
-        </div>
-      );
-    }
+
   
     return cellValue;
   };
@@ -152,7 +143,7 @@ export function ReminderTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'businessOrClient' ? 'text-[#f21300] hover:text-[#042559]' : ''}`}
+                      className={`text-[#042559] font-medium text-center ${cell.column.id === 'businessOrClient' ? 'text-[#f21300] hover:text-[#042559]' : ''} ${cell.column.id === 'status' ? 'flex items-center justify-center' : ''}`}
                     >
                       {renderCellContent(cell)}
                     </TableCell>

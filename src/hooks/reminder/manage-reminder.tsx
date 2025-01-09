@@ -1,5 +1,5 @@
 import { reminderServices } from "@/service/reminder/manage-reminder";
-import { useQuery} from "@tanstack/react-query";
+import { useMutation, useQuery} from "@tanstack/react-query";
 
 export const useGetReminder = () => {
     const query =  useQuery({
@@ -16,3 +16,10 @@ export const useGetReminderById = (id:string) => {
     });
     return query;
 };
+
+export const useGetDeleteReminder = () => {
+    return useMutation({
+       mutationFn:(id:string)=>reminderServices.deleteReminder(id)
+    })
+ };
+

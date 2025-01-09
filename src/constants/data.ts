@@ -123,9 +123,9 @@ export interface FileInterface {
 export interface Reminder {
   id: string; // Unique identifier for the reminder
   body: string; // The main content of the reminder
-  clientId: string | null; // Associated client ID, if any
+  clientId: string; // Associated client ID, if any
   dueDate: string; // ISO date string for the due date
-  leadId: string | null; // Associated lead ID, if any
+  leadId: string; // Associated lead ID, if any
   businessId: string; // Associated business ID
   projectId: string | null; // Associated project ID, if any
   reminderType: string; // Type of reminder (e.g., Call, Email, etc.)
@@ -139,7 +139,7 @@ export interface Reminder {
   slug: string | null; // Slug for the reminder, if applicable
   isDisabled: boolean; // Indicates if the reminder is disabled
   userId: string | null; // Associated user ID, if any
-  type: string | null; // Type of reminder context
+  type: string; // Type of reminder context
 }
 
 export interface Ticket {

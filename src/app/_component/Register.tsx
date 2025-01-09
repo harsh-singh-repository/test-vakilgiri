@@ -2,7 +2,6 @@
 
 import Logo from '@/app/assets/logo.png'
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import {
   Form,
@@ -12,13 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from '@/components/ui/input'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CalendarIcon, Eye, EyeOff } from "lucide-react"
 import Image from 'next/image'
 import { useState } from 'react'
 import { useForm } from "react-hook-form"
@@ -27,13 +20,13 @@ import { OtpVerifyForm } from './OtpVerify'
 import { RegisterProps } from '../_types'
 import { RegisterformSchema } from '../_types/zodSchema'
 import CustomDatePicker from '@/components/date-picker/CustomDatePicker'
+import { Eye, EyeOff } from 'lucide-react'
 
 
 
 
 export default function Register({ alreadyLogin }: RegisterProps) {
   const [otpVerified, setOtpVerified] = useState<boolean>(false)
-  const [, setDate] = useState<Date | undefined>(undefined)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -147,7 +140,7 @@ export default function Register({ alreadyLogin }: RegisterProps) {
           <FormField
             control={form.control}
             name="birthdate"
-            render={({ field }) => (
+            render={({}) => (
               <FormItem>
                 {/* <Popover>
                   <PopoverTrigger asChild>

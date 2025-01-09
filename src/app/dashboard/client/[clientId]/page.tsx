@@ -2,25 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Results from "../../_component/DashboardCards";
 import ClientDashboard from "../_component/ClientDashboard";
-
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card";
-import {PlusCircle } from "lucide-react";
-import { RxAvatar } from "react-icons/rx";
+import { Plus } from "lucide-react";
 import Personal_Form from "../_component/Personal_Form";
 import Component from "../_component/Address_Form";
 import { Separator } from "@/components/ui/separator";
@@ -31,6 +13,12 @@ import { useRouter } from "next/navigation";
 import { ClinetBussinessDetails } from "../_types";
 import { Oval } from "react-loader-spinner";
 import { FaRegEye } from "react-icons/fa";
+import Modal from "@/components/model/custom-modal";
+import AddFileToClient from "../_component/AddFileToClient";
+import { useState } from "react";
+import GetFiles from "../_component/File_Table/fileTable";
+import Image from "next/image";
+import Profile from "../../../../../public/assets/profileimg.png";
 
 function Page() {
   const params = useParams();
@@ -59,6 +47,11 @@ function Page() {
   //   { name: "MOHIT WELFARE FOUNDATION", company: "Section 8" },
   //   { name: "SUMOHIT ONLINE PRIVATE LIMITED", company: "Private Limited" },
   // ];
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   if (!bussinessData) {
     return (
@@ -97,8 +90,12 @@ function Page() {
           <div className="flex justify-between sm:flex-col md:flex-row">
             <span className="text-[18px] font-semibold">Businesses</span>
             <div className="flex gap-x-2 flex-col gap-y-2 sm:flex-col md:flex-row lg:flex-row xl:flex-row">
-              <div className="h-fit w-fit text-[13px] font-medium bg-[#091747] text-white px-2 py-1 rounded-md">Register New Business</div>
-              <div className="h-fit w-fit text-[13px] font-medium bg-[#f21300] text-white px-2 py-1 rounded-md">Link Existing Business</div>
+              <div className="h-fit w-fit text-[13px] font-medium bg-[#091747] text-white px-2 py-1 rounded-md">
+                Register New Business
+              </div>
+              <div className="h-fit w-fit text-[13px] font-medium bg-[#f21300] text-white px-2 py-1 rounded-md">
+                Link Existing Business
+              </div>
             </div>
           </div>
           <div className="flex gap-x-2 gap-y-2 flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row mt-2">
@@ -108,13 +105,13 @@ function Page() {
                   <Card className="w-full h-[107px]" key={index}>
                     <div className="flex flex-col">
                       <div className="flex gap-x-4 p-3  items-center">
-                        <div className="h-10 w-10 bg-white rounded-md drop-shadow-lg"/>
+                        <div className="h-10 w-10 bg-white rounded-md drop-shadow-lg" />
                         <div className="flex flex-col">
                           <span className="text-[15px] font-semibold text-[#091747]">
                             {bussiness.businessName}
                           </span>
                           <span className="text-[13px] font-medium text-[#f21300]">
-                            {bussiness.businessType.replace("_"," ")}
+                            {bussiness.businessType.replace("_", " ")}
                           </span>
                         </div>
                       </div>
@@ -136,25 +133,34 @@ function Page() {
         </TabsContent>
         <TabsContent value="All Profile" className="mt-12 h-[100vh] px-5">
           <div className="flex flex-col items-center gap-3 md:flex-col lg:flex-row lg:items-start">
-            <Card className="p-5 w-full">
+            <Card className="px-[12px] py-[10px] w-[40%]">
               <div className="flex flex-row items-center gap-3">
-                <RxAvatar size={"50"} />
+                <Image
+                  height={50}
+                  width={50}
+                  src={Profile}
+                  alt="ProfileImg"
+                  className="rounded-sm mr-2"
+                  style={{
+                    boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)",
+                  }}
+                />
                 <div className="flex-col item-center">
-                  <span className="uppercase font-semibold">Nahar Singh</span>
-                  <div className="text-xs">
-                    <span className="text-xs font-semibold">[E]:</span>
-                    naharsingh151299@gmail.com
+                  <span className="font-bold text-[#f21300] text-[16px]">Nahar Singh</span>
+                  <div className="flex gap-x-2">
+                    <span className="text-[13px]  text-[#f21300] font-bold">[E]:</span>
+                    <span className="text-[13px] font-medium">naharsingh151299@gmail.com</span>
                   </div>
-                  <div className="text-xs">
-                    <span className="text-xs font-semibold">[P]:</span>
-                    7084380147
+                  <div className="flex gap-x-2">
+                    <span className="text-[13px] font-bold text-[#f21300]">[P]:</span>
+                    <span className="text-[13px] font-medium">7084380147</span>
                   </div>
                 </div>
               </div>
             </Card>
             <Card className="p-5 w-full">
               <Tabs defaultValue="personal" className="">
-                <TabsList>
+                <TabsList className="text-[#031747]">
                   <TabsTrigger value="personal">Personal</TabsTrigger>
                   <TabsTrigger value="address">Address</TabsTrigger>
                   <TabsTrigger value="documents">Documents</TabsTrigger>
@@ -167,9 +173,21 @@ function Page() {
                 </TabsContent>
                 <TabsContent value="documents">
                   <div className="flex flex-col items-end">
-                    <PlusCircle className="text-[#F20101]" />
+                    <div
+                      className="bg-[#f21300] hover:bg-[#031747] text-white max-h-[25px] min-h-[25px] min-w-[25px] max-w-[25px] rounded-sm cursor-pointer p-1"
+                      onClick={openModal}
+                    >
+                      <Plus strokeWidth={"5"} size={"18"} />
+                    </div>
+                    <Modal isOpen={isModalOpen} onClose={closeModal}>
+                      <AddFileToClient
+                        clientId={clientId}
+                        onClose={closeModal}
+                      />
+                    </Modal>
                     <Separator className="w-full my-4" />
                   </div>
+                  <GetFiles id={clientId} />
                 </TabsContent>
               </Tabs>
             </Card>
