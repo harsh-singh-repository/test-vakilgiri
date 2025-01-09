@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Services } from '../types';
 import FixedWiseForm from './fixedWiseForm';
-import { FormModal } from '../_components/formModal';
 import { getSession } from 'next-auth/react';
 import axios from 'axios';
 import { Input } from '@/components/ui/input';
 import { RiDeleteBin5Line } from "react-icons/ri";
+import Modal from '@/components/model/custom-modal';
 
 interface FixedWiseProps {
   data: Services;
@@ -116,9 +116,9 @@ const FixedWiseFee: React.FC<FixedWiseProps> = ({ data }) => {
         </div>
       </div>
 
-      <FormModal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <FixedWiseForm data={data} />
-      </FormModal>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <FixedWiseForm data={data} close={handleCloseModal}/>
+      </Modal>
 
       <div className="mt-4">
         {fixedwise.length === 0 ? (

@@ -28,7 +28,6 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import { debounce } from "lodash";
 import { AiOutlineBank, AiOutlineCheckCircle } from "react-icons/ai";
-import { SmallModal } from "@/app/dashboard/tickets/_components/smallModal";
 import { Services } from "@/app/dashboard/(settings)/services/types";
 import { getServices } from "@/app/dashboard/(settings)/services/page";
 import Modal from "@/components/model/custom-modal";
@@ -38,6 +37,7 @@ import {
 } from "@/app/dashboard/(settings)/services/serviceEdit/fixedWiseFee";
 import { PromoterWiseFee } from "@/app/dashboard/(settings)/services/serviceEdit/promoterFee";
 import { StateWiseFee } from "@/app/dashboard/(settings)/services/serviceEdit/serviceFee";
+import { Switch } from "@/components/ui/switch";
 
 interface BussinessUsers {
   id: string;
@@ -91,11 +91,20 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
   const totalSteps = 5;
   const onSubmit = () => {
     console.log("Form Data:");
+    console.log({
+      serviceValue,
+      businessStorage,
+      stateValue,
+      contactPersonValue
+    })
     setCurrentStep(currentStep + 1);
-    // Perform further actions such as API calls
+
   };
   const { watch } = form;
   const businessNameValue = watch("businessName");
+  const stateValue=watch("state")
+  const contactPersonValue=watch("contactPerson")
+  const serviceValue=watch("service")
   const [businessData, setBusinessData] = useState<Business[] | null>(null);
   const [showBusinessSearch, setShowBusinessSearch] = useState(true);
   // const [loading, setLoading] = useState<boolean>(false);
@@ -213,7 +222,8 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
   const [selectedServiceId, setSelectedServiceId] = useState<string>("");
 
   const [fixedwise, setFixedwise] = useState<FixedGovtWise[]>([]);
-
+  const [promoters, setPromoters] = useState("Two_Promoters"); // Default value
+  const [dscs, setDscs] = useState("Two_Promoters"); // Default value
   const fetchData = async () => {
     if (selectedServiceId) {
       const fetchedData = await fetchFixedWise(selectedServiceId);
@@ -325,18 +335,42 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
         return acc + fee.amount;
       }, 0)
     );
-    setProfessionalFees(
-      profFees.reduce((acc, fee) => {
-        return acc + fee.amount;
-      }, 0)
-    );
+    const dscFees = promoterWiseFees?.DSC.find(
+      (fee) => fee.promoter_count === dscs
+    )?.amount || 0;
+  
+    const documentationFees = promoterWiseFees?.Documentaion.find(
+      (fee) => fee.promoter_count === promoters
+    )?.amount || 0;
+  
+    const totalFees =
+      profFees.reduce((acc, fee) => acc + fee.amount, 0) +
+      dscFees +
+      documentationFees;
+  
+    setProfessionalFees(totalFees);
+    console.log(promoterWiseFees)
   }, [stateFee, govtFees, moduleFees, profFees]);
   const baseQuotation = governmentFee + modulesFee + professionalFees;
   const gstAmount = (baseQuotation - discount) * gstRate;
   const finalQuotation = baseQuotation - discount + gstAmount;
+
+  const handleCreateProject=()=>{
+    const payload={
+      "business_id":businessStorage?.id,
+      "contact_person_id":contactPersonValue,
+      "state":stateValue,
+      "service_id":serviceValue,
+      "project_description":"",
+      "project_module_description":"",
+      "state_wise_fees":"",
+      "promoter_fees":"",
+      "professional_fee_discount":""
+    }
+  }
   const firstStep = () => {
     return (
-      <div>
+      <div className="py-2">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             {/* Business Name */}
@@ -344,15 +378,15 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
               control={form.control}
               name="businessName"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="space-y-0">
                   <FormLabel>
-                    <div className="flex justify-between items-center">
-                      <div className="text-xs font-medium font-poppins text-[#091747]">
+                    <div className="flex justify-between items-center max-h-fit">
+                      <div className="text-[12px] font-semibold font-poppins text-[#091747]">
                         Business
                       </div>
                       <div>
                         <label
-                          className="text-xs cursor-pointer text-[#f21300]"
+                          className="text-[12px] cursor-pointer text-[#f21300]"
                           onClick={handleOpenModal}
                         >
                           Create Business
@@ -397,8 +431,8 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
               control={form.control}
               name="state"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-xs font-medium font-poppins text-[#091747]">
+                <FormItem className="space-y-0">
+                  <FormLabel className="text-[12px] font-semibold font-poppins text-[#091747]">
                     State
                   </FormLabel>
                   <FormControl>
@@ -427,8 +461,8 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
               control={form.control}
               name="contactPerson"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-xs font-medium font-poppins text-[#091747]">
+                <FormItem className="space-y-0">
+                  <FormLabel className="text-[12px] font-semibold font-poppins text-[#091747]">
                     Contact/Concerned Person
                   </FormLabel>
                   <FormControl>
@@ -455,8 +489,8 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
               control={form.control}
               name="service"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-xs font-medium font-poppins text-[#091747]">
+                <FormItem className="space-y-0">
+                  <FormLabel className="text-[12px] font-semibold font-poppins text-[#091747]">
                     Select Service
                   </FormLabel>
                   <FormControl>
@@ -505,12 +539,12 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
   const secondStep = () => {
     return (
       <div className="max-w-lg mx-auto bg-white">
-        <div className="space-y-4">
+        <div className="space-y-2">
           {stateWiseFees && (
             <div>
               <label
                 htmlFor="authCapital"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-[12px] font-semibold text-[#091747] font-poppins"
               >
                 Authorised Capital*
               </label>
@@ -532,13 +566,15 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
               <div>
                 <label
                   htmlFor="promoters"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block font-semibold text-[#091747] font-poppins text-[12px]"
                 >
                   No. of Promoters*
                 </label>
                 <select
                   id="promoters"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  value={promoters} // Controlled by state
+                  onChange={(e) => setPromoters(e.target.value)} 
                 >
                   <option value="Two_Promoters">2 Promoters</option>
                   <option value="Three_Promoters">3 Promoters</option>
@@ -553,13 +589,15 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
               <div>
                 <label
                   htmlFor="dscs"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block font-semibold text-[#091747] font-poppins text-[12px]"
                 >
                   No. of DSCs*
                 </label>
                 <select
                   id="dscs"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  value={dscs} // Controlled by state
+                  onChange={(e) => setDscs(e.target.value)}
                 >
                   <option value="Two_Promoters">2 Promoters</option>
                   <option value="Three_Promoters">3 Promoters</option>
@@ -573,25 +611,25 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
             </div>
           )}
 
-          <div className="">
+          <div className="space-y-0">
             {addOns.length > 0 && (
               <div>
-                <h3 className="text-lg font-medium leading-6 text-blue-950">
+                <h3 className="text-[14px] font-bold text-[#091747] font-poppins">
                   Service Addons
                 </h3>
                 <div className="mt-2 space-y-2">
                   {addOns.map((item, index) => (
                     <div
                       key={index}
-                      className={`bg-red-100 p-2 rounded-md shadow-sm cursor-pointer ${
+                      className={`bg-red-100 p-2 rounded-md shadow-sm cursor-pointer leading-tight ${
                         activeIndices.includes(index)
                           ? "ring-2 ring-[#f32100] bg-red-200"
                           : ""
                       }`}
                       onClick={() => toggleRing(item, index)}
                     >
-                      <strong>{item.title}</strong>
-                      <p className="text-sm text-gray-600">
+                      <strong className="font-poppins text-[16px] text-[#091747]">{index+1}. {item.title.toUpperCase()}</strong>
+                      <p className="text-[11px] text-[#091747] font-poppins">
                         {item.description}
                       </p>
                     </div>
@@ -604,7 +642,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
           <div>
             <label
               htmlFor="specialInstructions"
-              className="block text-sm font-medium text-gray-700"
+              className="block font-semibold text-[#091747] font-poppins text-[14px]"
             >
               Suggested Names & Other Information
             </label>
@@ -617,18 +655,18 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
           </div>
 
           <div className="flex items-center">
-            <input
-              id="sendDetails"
-              type="checkbox"
-              className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-            />
-            <label
-              htmlFor="sendDetails"
-              className="ml-2 block text-sm text-gray-700"
-            >
-              Send Project details on mail to Client?
-            </label>
-          </div>
+  <Switch
+    id="sendDetails"
+    className="bg-[#f21300] data-[state=checked]:bg-red-600 focus:ring-red-500"
+  />
+  <label
+    htmlFor="sendDetails"
+    className="ml-4 block text-[14px] text-[#091747] font-poppins font-medium"
+  >
+    Send Project details on mail to Client?
+  </label>
+</div>
+
 
           <div className="grid grid-cols-2 gap-4 w-full mt-6">
             <button
@@ -651,38 +689,39 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
   const thirdStep = () => {
     return (
       <div className="max-w-fit mx-auto bg-white rounded-lg text-xs">
+        <div className="h-fit w-fit rounded-xl">
         <table className="w-full border-separate border-spacing-y-1 rounded-xl">
           <thead>
-            <tr className="text-left text-white bg-blue-950 rounded-xl">
-              <th className="py-1 px-2">Quotation</th>
+            <tr className="text-left text-white bg-[#091747] rounded-xl leading-none">
+              <th className="py-1 px-2 rounded-tl-lg">Quotation</th>
               <th className="py-1 px-2 text-right">Discount</th>
-              <th className="py-1 px-2">Amount</th>
+              <th className="py-1 px-2 rounded-tr-lg">Amount</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td className="py-1 px-2">Government Fee</td>
-              <td className="py-1 px-2"></td>
-              <td className="py-1 px-2 text-right">
+          <tbody className="leading-none">
+            <tr className="">
+              <td className="py-0.5 px-2">Government Fee</td>
+              <td className="py-0.5 px-2"></td>
+              <td className="py-0.5 px-2 text-right">
                 ₹
                 {govtFees.reduce((acc, fee) => {
                   return acc + fee.amount;
                 }, 0) + stateFee}
               </td>
             </tr>
-            <tr>
-              <td className="py-1 px-2">Modules Fee</td>
-              <td className="py-1 px-2"></td>
-              <td className="py-1 px-2 text-right">
+            <tr className="">
+              <td className="py-0.5 px-2">Modules Fee</td>
+              <td className="py-0.5 px-2"></td>
+              <td className="py-0.5 px-2 text-right">
                 ₹
                 {moduleFees.reduce((acc, fee) => {
                   return acc + fee.amount;
                 }, 0)}
               </td>
             </tr>
-            <tr>
-              <td className="py-1 px-2">Professional Fees</td>
-              <td className="py-1 px-2">
+            <tr className="">
+              <td className="py-0.5 px-2">Professional Fees</td>
+              <td className="py-0.5 px-2">
                 <input
                   type="number"
                   value={discount}
@@ -691,41 +730,43 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
                   placeholder="Enter Discount"
                 />
               </td>
-              <td className="py-1 px-2 text-right">
+              <td className="py-0.5 px-2 text-right">
                 ₹
                 {profFees.reduce((acc, fee) => {
                   return acc + fee.amount;
                 }, 0)}
               </td>
             </tr>
-            <tr className="bg-gray-200">
-              <td className="py-1 px-2 font-semibold">Base Quotation</td>
-              <td className="py-1 px-2"></td>
-              <td className="py-1 px-2 text-right font-semibold">
+            <tr className="">
+              <td className="py-0.5 px-2 font-semibold">Base Quotation</td>
+              <td className="py-0.5 px-2"></td>
+              <td className="py-0.5 px-2 text-right font-semibold">
                 ₹{baseQuotation.toFixed(2)}
               </td>
             </tr>
             <tr>
-              <td className="py-1 px-2">Less: Discount</td>
-              <td className="py-1 px-2"></td>
-              <td className="py-1 px-2 text-right text-[#f32100]">
+              <td className="py-0.5 px-2 font-semibold">Less: Discount</td>
+              <td className="py-0.5 px-2"></td>
+              <td className="py-0.5 px-2 text-right font-semibold text-[#f32100]">
                 -₹{discount.toFixed(2)}
               </td>
             </tr>
             <tr>
-              <td className="py-1 px-2">Add: GST @ 18%</td>
-              <td className="py-1 px-2"></td>
-              <td className="py-1 px-2 text-right">₹{gstAmount.toFixed(2)}</td>
+              <td className="py-0.5 px-2 font-semibold" >Add: GST @ 18%</td>
+              <td className="py-0.5 px-2"></td>
+              <td className="py-0.5 px-2 text-right font-semibold">₹{gstAmount.toFixed(2)}</td>
             </tr>
-            <tr className="bg-blue-950 text-white font-medium">
-              <td className="py-1 px-2 font-semibold">Final Quotation</td>
+            <tr className="bg-[#091747] text-white font-medium rounded-xl">
+              <td className="py-1 px-2 font-semibold rounded-bl-lg">Final Quotation</td>
               <td className="py-1 px-2"></td>
-              <td className="py-1 px-2 text-right font-semibold">
+              <td className="py-1 px-2 text-right font-semibold rounded-br-lg">
                 ₹{finalQuotation.toFixed(2)}
               </td>
             </tr>
           </tbody>
         </table>
+        </div>
+      
 
         <div className="bg-red-50 p-3 rounded-xl flex items-center justify-between shadow-sm">
           <div className="flex items-center space-x-2">
@@ -766,45 +807,48 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
         </div>
         <div className="grid grid-cols-2 w-full gap-2 mt-4">
           <button
-            className="px-2 py-2 bg-blue-950 text-white rounded-sm text-xs hover:bg-blue-900 focus:outline-none"
+            className="px-2 py-2 bg-[#091747] text-white rounded-sm text-[14px] font-poppins font-semibold hover:bg-blue-900 focus:outline-none"
             onClick={() => setCurrentStep(2)}
           >
             Back
           </button>
           <button
-            className="px-2 py-2 bg-[#f32100] text-white rounded-sm text-xs hover:bg-[#f32100] focus:outline-none"
+            className="px-2 py-2 bg-[#f32100] text-white rounded-sm text-[14px] font-poppins font-semibold hover:bg-[#f32100] focus:outline-none"
             onClick={handleOpenModal}
           >
             Create Project
           </button>
         </div>
         {isModalOpen && (
-          <SmallModal isOpen={isModalOpen} onClose={handleCloseModal}>
-            <div className="max-w-md mx-auto bg-white p-4 text-center space-y-2">
-              <h2 className="text-blue-950 font-bold text-xl">Are you sure?</h2>
-              <p className="text-[#f21300] font-poppins text-sm">
+          <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+            <div className="max-w-[400px] bg-white p-4 text-center space-y-0">
+              <h2 className="text-[#091747] font-bold text-xl">Are you sure?</h2>
+              <p className="text-[#f21300] font-poppins text-[14px] font-semibold">
                 You are going to create a project. Amount will be deducted from
                 your Wallet.
               </p>
-              <div className="text-blue-950 font-semibold text-lg">
-                Section-8 Registration
+              <div className="text-[#091747] font-semibold text-lg mt-4 py-4">
+                {
+                  services.find((service) => service.id === selectedServiceId)
+              ?.ServiceName.toUpperCase() || ""
+                }
               </div>
               <div className="space-y-2">
                 <button
-                  className="w-full bg-[#f32100] text-white py-2 rounded-md font-medium hover:bg-[#f32100]"
+                  className="w-[200px] bg-[#f32100] text-white py-2 rounded-md font-medium hover:bg-[#f32100]"
                   onClick={() => setCurrentStep(4)}
                 >
                   Create Project & Pay
                 </button>
                 <button
-                  className="w-full text-blue-950 py-2 rounded-md font-medium"
+                  className="w-[200px] text-blue-950 py-2 rounded-md font-medium"
                   onClick={handleCloseModal}
                 >
                   Cancel
                 </button>
               </div>
             </div>
-          </SmallModal>
+          </Modal>
         )}
       </div>
     );
@@ -935,14 +979,14 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
           }
         />
       </div>
-      <div className="col-span-1 bg-white p-6 min-h-[800px] w-full">
+      <div className="col-span-1 bg-white p-6 min-h-[600px] w-full">
         <div className="relative flex items-center justify-center">
           {/* Centered Header */}
           <div className="text-center">
             <h2 className="text-[20px] font-poppins text-[#000000] font-bold">
               Create Project
             </h2>
-            <p className="text-[13px] text-[#f21300] max-w-xs font-poppins font-medium">
+            <p className="text-[13px] text-[#f21300] max-w-xs font-poppins font-semibold">
               Fill all the information correctly to avoid duplicacy.
             </p>
           </div>
@@ -955,7 +999,7 @@ const ProjectCreate: React.FC<ProjecctCreateProps> = ({ close }) => {
             <ImCross size={15} />
           </div>
         </div>
-        <div className="mt-1 mb-2 max-h-4">
+        <div className="mt-2 mb-1 max-h-4">
           <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
         </div>
         {(currentStep === 1 && firstStep()) ||

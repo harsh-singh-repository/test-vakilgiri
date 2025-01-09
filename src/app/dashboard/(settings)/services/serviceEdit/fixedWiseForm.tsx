@@ -24,6 +24,7 @@ import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { Services } from '../types';
 import { MaterialInput } from '@/components/material-input';
+import { ImCross } from 'react-icons/im';
 
 const formSchema = z.object({
   fixedType: z.enum(['Government_Fees', 'Module_Fees', 'Professional_Fees'], {
@@ -39,9 +40,13 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 interface FixedWiseProps {
   data: Services;
+  close:()=>void;
 }
-
-const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData }) => {
+interface dropDownData{
+  id:string;
+  name:string;
+}
+const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) => {
   const [services, setServices] = useState<{ id: string; name: string }[]>([]);
 
   const form = useForm<FormSchema>({
@@ -74,10 +79,11 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData }) => {
           }
         );
         if (response.data && response.data.data) {
+          console.log(response.data)
           setServices(
-            response.data.data.map((service: Services) => ({
+            response.data.data.map((service:dropDownData) => ({
               id: service.id,
-              name: service.ServiceName,
+              name: service.name,
             }))
           );
         }
@@ -101,7 +107,7 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData }) => {
         description: data.description,
         fixedType: data.fixedType,
         priority: data.priority,
-        relatedServiceName:'',
+        relatedServiceName:data.serviceId || '',
         relatedService: data.relatedService,
       };
 
@@ -114,7 +120,7 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData }) => {
           description: data.description,
           fixedType: data.fixedType,
           priority: data.priority,
-          relatedServiceName:'',
+          relatedServiceName:data.serviceId || '',
           relatedService: data.relatedService,
         },
         {
@@ -131,10 +137,13 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData }) => {
   };
 
   return (
-    <div className="p-4 flex flex-col gap-4">
+    <div className="p-4 flex flex-col gap-4 w-80">
+      <div className='flex justify-between'>
       <h1 className="font-semibold text-blue-950 text-lg">
         Add {feeType.replace('_', ' ')}
       </h1>
+      <button onClick={close} className="text-[#f21300] font-bold bg-white"><ImCross size={14}/></button>
+      </div>
       <Form {...form}>
         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           {/* Fee Type */}
@@ -235,7 +244,7 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData }) => {
                       </SelectTrigger>
                       <SelectContent>
                         {services.map((service) => (
-                          <SelectItem key={service.id} value={service.id}>
+                          <SelectItem key={service.id} value={service.name}>
                             {service.name}
                           </SelectItem>
                         ))}
@@ -267,7 +276,7 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData }) => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Textarea placeholder="Enter Description" {...field} />
+                  <Textarea className='h-40' placeholder="Enter Description" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
