@@ -8,3 +8,11 @@ export const useGetPayments = () => {
     });
     return query;
 };
+
+export const useGetPaymentsById = (id:string) => {
+    const query =  useQuery({
+        queryKey: ['paymentId'],
+        queryFn:()=> PaymentServices.getPaymentById(id),
+    });
+    return query;
+};

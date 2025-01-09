@@ -1,39 +1,49 @@
-import { MdPerson2, MdPeople } from "react-icons/md";
-import { MdAddReaction } from "react-icons/md";
+import { useGetAllStaff } from "@/hooks/user/manage-user";
+import { MdPerson2, MdOnlinePrediction, MdError, MdCurrencyRupee } from "react-icons/md";
+import { StaffType } from "../../_types/types";
 
 const ClientCard = () => {
+
+  const {data} = useGetAllStaff();
+
+
+  const staffUsers: StaffType[] = (data || []).filter((user: StaffType) => user.userRoles === "Staff_Manager");
+  const ActiveUsers: StaffType[] = (data || []).filter((user: StaffType) => user.loginStatus === "Active");
+  const InactiveUsers: StaffType[] = (data || []).filter((user: StaffType) => user.loginStatus === "Inactive");
+
+  console.log("Inactive Length",InactiveUsers?.length)
 
     const clientCardData = [
         {
             logo: <MdPerson2 size={"45"} />,
-            title: "All Projects",
-            value: "19",
+            title: "All Staff",
+            value: staffUsers?.length,
             iconBgColor: "bg-[#0917c84d]",
             bgColor: "bg-[#ccd7ff]",
             textColor: "text-[#091747]"
         },
         {
-            logo: <MdPeople size={"45"} />,
-            title: "Completed",
+            logo: <MdCurrencyRupee size={"45"} />,
+            title: "Salaries",
             value: "0",
             iconBgColor: "bg-[#007b234d]",
             bgColor: "bg-[#def9b9]",
             textColor: "text-[#007b23]"
         },
         {
-            logo: <MdAddReaction size={"45"} />,
-            title: "In Progress",
-            value: "4",
-            iconBgColor: "bg-[#b9100033]",
+            logo: <MdOnlinePrediction size={"45"} />,
+            title: "Active",
+            value: ActiveUsers?.length,
+            iconBgColor: "bg-[#F6C18A]",
             bgColor: "bg-[#f9e2c6]",
-            textColor: "text-[#b91000]"
+            textColor: "text-[#F57600]"
         },
         {
-          logo: <MdPerson2 size={"45"} />,
-          title: "On hold",
-          value: "16",
+          logo: <MdError size={"45"} />,
+          title: "Inactive",
+          value: InactiveUsers?.length,
           iconBgColor: "bg-[#f2130033]",
-          bgColor: "bg-[#ffe6e6]",
+          bgColor: "bg-[#FFE6E6]",
           textColor: "text-[#f21300]"
         }
     ]

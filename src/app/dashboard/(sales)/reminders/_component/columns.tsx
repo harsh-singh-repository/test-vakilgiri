@@ -9,7 +9,7 @@ export const columns: ColumnDef<Reminder>[] = [
     header: 'ID',
     cell:({row})=>{
       return(
-        <span>{`REMIND ${row.index}`}</span>
+        <span>{`REMIND ${row.index+1}`}</span>
       )
     }
   },
@@ -51,16 +51,28 @@ export const columns: ColumnDef<Reminder>[] = [
   },
   {
     accessorKey: 'status',
-    header: 'Status'
+    header: 'Status', 
+    cell:({row})=>{
+      return(
+        <div 
+          className={`flex items-center justify-center bg-yellow-400 rounded-full text-white text-[10px] w-fit h-fit px-2`}
+        >
+          {row.original.status}
+        </div>
+      )
+    }
   },
   {
     accessorKey: 'action',
     header: 'Action',
     cell:({row})=>{
-      const id = row.original.id;
-        return(
-          <ActionButton id={id}/>
-        )
+      const { leadId, businessId, clientId, type: dialogType, id:reminderId } = row.original;
+
+      const id = dialogType === 'lead' ? leadId 
+                : dialogType === 'business' ? businessId 
+                : clientId;
+  
+      return <ActionButton id={id} dialogType={dialogType} reminderId={reminderId}/>;
     }
   }
 ];
