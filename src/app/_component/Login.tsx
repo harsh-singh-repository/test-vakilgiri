@@ -25,9 +25,6 @@ import { LoginformSchema } from "../_types/zodSchema";
 import { toast } from "sonner";
 
 // Define schema with gender and birthdate fields
-
-
-
 const Login: React.FC<LoginProps> = ({
   handleForgetPassword,
   handleRegistration,

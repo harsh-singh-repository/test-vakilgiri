@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { DialogClose, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
     Form,
     FormControl,
@@ -23,7 +22,7 @@ import {
 import { OtpFormSchema } from "../_types/zodSchema";
 
 
-export function OtpVerifyForm({ setOtpVerify }: { setOtpVerify: (verified: boolean) => void }) {
+export function OtpVerifyForm({ setOtpVerify,onClose}: { setOtpVerify: (verified: boolean) => void ; onClose:()=>void }) {
     const form = useForm<z.infer<typeof OtpFormSchema>>({
         resolver: zodResolver(OtpFormSchema),
         defaultValues: {
@@ -38,12 +37,12 @@ export function OtpVerifyForm({ setOtpVerify }: { setOtpVerify: (verified: boole
 
     return (
         <div className="sm:max-w-[425px]">
-            <DialogHeader>
-                <DialogTitle>Email Verification</DialogTitle>
-                <DialogDescription className="text-[#F20101]">
+            <div>
+                <div>Email Verification</div>
+                <div className="text-[#F20101]">
                     Verify the entered email
-                </DialogDescription>
-            </DialogHeader>
+                </div>
+            </div>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <FormField
@@ -72,11 +71,11 @@ export function OtpVerifyForm({ setOtpVerify }: { setOtpVerify: (verified: boole
                         )}
                     />
 
-                    <DialogClose asChild>
-                        <Button className="w-full bg-[#f21300] text-white" type="submit">
+  
+                        <Button className="w-full bg-[#f21300] text-white" type="submit" onClick={onClose}>
                             Verify OTP
                         </Button>
-                    </DialogClose>
+
                 </form>
             </Form>
         </div>

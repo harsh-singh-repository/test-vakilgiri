@@ -30,7 +30,8 @@ export const stateZodSchema = z.enum([
   "Uttar_Pradesh",
   "Tamil_Nadu",
   "Others",
-]);
+],
+{ required_error: "Select state" });
 
 export const panZodSchema = z
   .string()
