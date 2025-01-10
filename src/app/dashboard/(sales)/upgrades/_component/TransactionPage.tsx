@@ -2,15 +2,15 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./columns";
 import { useSearchParams } from "next/navigation";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { Oval } from "react-loader-spinner";
 import { ServiceTable } from "./client-table";
 import { ProjectPageServer } from "./ClientPageServer";
 import ClientCard from "./client-card";
+import { BsUpload } from "react-icons/bs";
+import { FiFilter } from "react-icons/fi";
 
 type Project = {
   date: string;
@@ -50,16 +50,31 @@ export default function TransactionPage() {
 
   if (!responseData) {
     return (
-      <div className="flex justify-center items-center h-[100vh]">
-        <Oval
-          visible={true}
-          height="40"
-          width="40"
-          color="#f21300"
-          ariaLabel="oval-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
+      <div className="flex items-center justify-center h-screen">
+        <img
+          src="/favicon.ico"
+          alt="Loading"
+          className="w-12 h-12"
+          style={{
+            animation: "blurInOut 2s infinite ease-in-out",
+          }}
         />
+        <style jsx>{`
+          @keyframes blurInOut {
+            0%,{
+            filter: blur(2px);
+              opacity: 1;
+            }
+            100% {
+              filter: blur(4px);
+              opacity: 0.3;
+            }
+            50% {
+              filter: blur(2px);
+              opacity: 1;
+            }
+          }
+        `}</style>
       </div>
     );
   }
@@ -68,12 +83,12 @@ export default function TransactionPage() {
     <Dialog>
       <div className="flex-1 space-y-1 p-4 pt-6 md:p-4">
         <div className="flex items-start justify-between">
-          <div className="text-[20px] font-bold text-[#042559] ml-1">{`Transaction`}</div>
+          <div className="text-[20px] font-bold text-[#042559] ml-1">{`Upgrades`}</div>
 
           <div className="flex justify-center items-center gap-4">
             <Suspense>
               <Input
-                placeholder="Search project..."
+                placeholder="Type here..."
                 value={searchValue}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                   setSearchValue(event.target.value)
@@ -83,9 +98,14 @@ export default function TransactionPage() {
             </Suspense>
 
             <DialogTrigger>
-              <div className="bg-[#f21300] text-white p-2 rounded-md">
-                <Plus className="h-6 w-6" />
-              </div>
+              <div className="flex gap-1">
+              <div className="bg-[#091747] w-[30px] h-[30px] flex items-center justify-center rounded-lg hover:bg-[#f21300]">
+        <BsUpload className="text-white stroke-[2]" size={16} />
+      </div>
+      <div className="bg-[#091747] w-[30px] h-30px[] flex items-center justify-center rounded-lg hover:bg-[#f21300]">
+        <FiFilter className="text-white stroke-[2]" size={16} />
+      </div>
+      </div>
             </DialogTrigger>
           </div>
         </div>

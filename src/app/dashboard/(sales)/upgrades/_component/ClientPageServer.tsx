@@ -15,7 +15,7 @@ export type Project = {
 const fakeProjects = {
   records: Array.from({ length: 50 }, (_, index) => ({
     date: new Date(Date.now() - Math.random() * 1e10).toISOString().split('T')[0], // Random past date
-    paymentId: `PAY-${index + 1}`,
+    paymentId: `UPG${index + 1}`,
     invoiceId: `INV-${index + 1}`,
     business: `Business ${Math.ceil(Math.random() * 5)}`, // Random business
     project: `Project ${Math.ceil(Math.random() * 10)}`, // Random project

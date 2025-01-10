@@ -15,8 +15,8 @@ export const columns: ColumnDef<Project>[] = [
 }
   },
   {
-    accessorKey: 'paymentId',
-    header: 'Payment ID',
+    accessorKey: 'upgradeId',
+    header: 'Upgrade ID',
     cell:({row})=>{
       return (
         <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.paymentId}</div>
@@ -24,40 +24,34 @@ export const columns: ColumnDef<Project>[] = [
 }
   },
   {
-    accessorKey: 'invoiceId',
-    header: 'Invoice ID',
-    cell:({row})=>{
-      return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.invoiceId}</div>
-      )
-}
+    accessorKey: 'service',
+    header: 'Service',
   },
   {
-    accessorKey: 'business',
-    header: 'Business',
-    cell:({row})=>{
-      return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.business}</div>
-      )
-}
+    accessorKey: 'particular',
+    header: 'Particular',
   },
   {
-    accessorKey: 'project',
-    header: 'Project',
-    cell:({row})=>{
-      return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.project}</div>
-      )
-}
-  },
-  {
-    accessorKey: 'amount',
-    header: 'Amount',
+    accessorKey: 'Quotation',
+    header: 'quotation',
     cell:({row})=>{
       return (
         <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.amount}</div>
       )
 }
+  },
+  {
+    accessorKey: 'payments',
+    header: 'Payments',
+    cell:({row})=>{
+      return (
+        <div className='text-[14px] text-blue-950 font-medium ml-1'>{row.original.amount}</div>
+      )
+}
+  },
+  {
+    accessorKey:'assigned',
+    header:'Assigned'
   },
   {
     accessorKey: 'status',
@@ -66,24 +60,16 @@ export const columns: ColumnDef<Project>[] = [
         <div className='text-center'>Status</div>
       )
     },
-    cell:({row})=>{
+    cell:()=>{
       return (
-        <div className='text-[14px] text-blue-950 font-medium ml-1 text-center'>
-          <span
-        className={`px-2 py-1 rounded-full text-white text-[13px] ${
-          row.original.status === "Completed" ? "bg-[#007321] mr-1" : "bg-[#f21300]"
-        }`}
-      >
-        {row.original.status}
-      </span>
-        </div>
+        <div></div>
       )
-}
+    }
   },
   {
     accessorKey: 'action',
     header: () => {
-      return <div className="text-center">Action</div>;
+      return <div className="text-right mr-4">Action</div>;
     },
     cell: () => {
       return <ActionButton />;

@@ -5,7 +5,6 @@ import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./columns";
 import { useSearchParams } from "next/navigation";
-import { Oval } from "react-loader-spinner";
 import ProjectCreate from "./projectCreate";
 import { projectServices } from "../services/manage-projects";
 import { Project } from "../types";
