@@ -25,7 +25,7 @@ const Distribution: React.FC<DistributionProps> = ({ data }) => {
       const session = await getSession();
       try {
         const response = await axios.get(
-          `https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/distribution/service/${data.id}`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/distribution/service/${data.id}`,
           {
             headers: {
               Authorization: `Bearer ${session?.user.accessToken}`,
@@ -55,7 +55,7 @@ const Distribution: React.FC<DistributionProps> = ({ data }) => {
     try {
       console.log(1)
       const response=await axios.patch(
-        `https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/distribution/${distributionData?.id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/distribution/${distributionData?.id}`,
         { [field]: value },
         {
           headers: {

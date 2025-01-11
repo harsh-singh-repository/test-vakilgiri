@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { FormModal } from "../_components/formModal";
 import AddCategory from "../_components/addCategory";
 import { ImCross } from "react-icons/im";
 import { Plus } from "lucide-react";
 import { FaPencilAlt } from "react-icons/fa";
+import Modal from "@/components/model/custom-modal";
 interface ActionCellProps {
   handleFetch: () => void;
 }
@@ -29,7 +29,7 @@ export const CategoryActionCell: React.FC<ActionCellProps> = ({ handleFetch }) =
 
       {/* Modal for Adding Category */}
       {isModalOpen && (
-        <FormModal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <div className="p-4">
             <div className="flex justify-between">
               <h2 className="text-lg font-semibold mb-4">Create Category</h2>
@@ -39,7 +39,7 @@ export const CategoryActionCell: React.FC<ActionCellProps> = ({ handleFetch }) =
             </div>
             <AddCategory again={handleFetch} />
           </div>
-        </FormModal>
+        </Modal>
       )}
     </div>
   );

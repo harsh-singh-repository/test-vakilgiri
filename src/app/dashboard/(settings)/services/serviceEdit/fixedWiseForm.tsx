@@ -31,7 +31,7 @@ const formSchema = z.object({
     required_error: 'Fee type is required',
   }),
   priority: z.number().min(1).max(10, 'Priority must be between 1 and 10'),
-  relatedService: z.boolean(),
+  relatedService: z.boolean().default(false),
   serviceId: z.string().optional(),
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
@@ -41,14 +41,15 @@ type FormSchema = z.infer<typeof formSchema>;
 interface FixedWiseProps {
   data: Services;
   close:()=>void;
+  handleFetch:()=>void;
 }
 interface dropDownData{
   id:string;
   name:string;
 }
-const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) => {
+const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close,handleFetch }) => {
   const [services, setServices] = useState<{ id: string; name: string }[]>([]);
-
+  const [loading,setLoading]=useState<boolean>(false)
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -95,6 +96,7 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) =
   }, []);
 
   const onSubmit = async (data: FormSchema) => {
+    setLoading(true)
     const session=await getSession();
     try {
       // const relatedServiceName = data.relatedService
@@ -107,10 +109,10 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) =
         description: data.description,
         fixedType: data.fixedType,
         priority: data.priority,
-        relatedServiceName:data.serviceId || '',
+        relatedServiceId:data.serviceId || '',
         relatedService: data.relatedService,
       };
-
+      console.log(data.serviceId)
       console.log(payload)
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/promoters/fixed-wise-fee/${serviceData.id}`,
@@ -120,7 +122,7 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) =
           description: data.description,
           fixedType: data.fixedType,
           priority: data.priority,
-          relatedServiceName:data.serviceId || '',
+          relatedServiceId:data.serviceId || '',
           relatedService: data.relatedService,
         },
         {
@@ -133,6 +135,10 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) =
       console.log('API Response:', response.data);
     } catch (error) {
       console.error('Error submitting form:', error);
+    }
+    finally{
+      handleFetch();
+      setLoading(false)
     }
   };
 
@@ -244,7 +250,7 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) =
                       </SelectTrigger>
                       <SelectContent>
                         {services.map((service) => (
-                          <SelectItem key={service.id} value={service.name}>
+                          <SelectItem key={service.id} value={service.id}>
                             {service.name}
                           </SelectItem>
                         ))}
@@ -283,8 +289,10 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) =
             )}
           />
 
-          <Button type="submit" className="bg-red-600 w-full">
-            Create
+          <Button type="submit" className="bg-red-600 w-full" disabled={loading}>
+            {
+              loading? "loading...":"create"
+            }
           </Button>
         </form>
       </Form>

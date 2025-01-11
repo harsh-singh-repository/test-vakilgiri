@@ -9,9 +9,20 @@ export const useForgetPassoword = ()=> {
      })
 }
 
+export const useRegisterUser = ()=> {
+     return useMutation({
+        mutationFn:auth_services.register,
+     })
+}
+
 export const useResetPassoword = ()=> {
      return useMutation({
         mutationFn:auth_services.resetPassword,
+     })
+}
+export const useVerifyEmail = ()=> {
+     return useMutation({
+        mutationFn:auth_services.verifyEmail,
      })
 }
 

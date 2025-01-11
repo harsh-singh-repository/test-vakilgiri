@@ -215,7 +215,8 @@ export const StackExchangeDialog = ({
     });
   };
 
-  console.log("Dialog Disscussion", clientDisscussionData);
+  console.log("Dialog Disscussion", clientDisscussionData); 
+  console.log("Dialog Disscussion", ClientReminder); 
 
   async function onDiscussionSubmit(values: z.infer<typeof discussionSchema>) {
     setIsSubmittingDiscussion(true);
@@ -278,7 +279,18 @@ export const StackExchangeDialog = ({
         queryClient.invalidateQueries({ queryKey: ["clients"] });
       },
       onError: (error) => {
-        toast.error(`error : ${error}`);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Error: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
       },
     });
   };

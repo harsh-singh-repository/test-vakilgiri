@@ -1,15 +1,16 @@
 import { z } from "zod"
 
 export const RegisterformSchema = z.object({
-    firstName: z.string().min(1, { message: "First Name is required" }),
-    lastName: z.string().min(1, { message: "Last Name is required" }),
+    firstname: z.string().min(1, { message: "First Name is required" }),
+    lastname: z.string().min(1, { message: "Last Name is required" }),
     email: z.string().email({ message: "Invalid email address" }),
-    mobile: z.string().min(10, { message: "Invalid mobile number" }),
+    mobile_number: z.string().min(10, { message: "Invalid mobile number" }),
     pan: z.string().min(10, { message: "PAN number should be 10 characters" }),
-    birthdate: z.date({ required_error: "Birthdate is required" }),
+    dob: z.date({ required_error: "Birthdate is required" }),
     password: z.string().min(8, { message: "Password must be at least 8 characters" }),
-    confirmPassword: z.string().min(8, { message: "Please confirm your password" }),
-  }).refine((data) => data.password === data.confirmPassword, {
+    confirm_password: z.string().min(8, { message: "Please confirm your password" }),
+    gender: z.enum(["Male", "Female", "Other"]),
+  }).refine((data) => data.password === data.confirm_password, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
   })

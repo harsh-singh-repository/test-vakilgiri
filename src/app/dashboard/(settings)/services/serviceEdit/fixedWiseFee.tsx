@@ -31,6 +31,7 @@ export const fetchFixedWise = async (serviceId: string) => {
       }
     );
     if (response.data && response.data.data) {
+      console.log(response.data.data)
       return response.data.data;
     }
     return [];
@@ -43,7 +44,7 @@ export const fetchFixedWise = async (serviceId: string) => {
 const FixedWiseFee: React.FC<FixedWiseProps> = ({ data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fixedwise, setFixedwise] = useState<FixedGovtWise[]>([]);
-
+  const [fetchagain,setFetchagain]=useState<boolean>(false)
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
@@ -56,8 +57,11 @@ const FixedWiseFee: React.FC<FixedWiseProps> = ({ data }) => {
 
   useEffect(() => {
     fetchData();
-  }, [data.id]);
-
+  }, [data.id,fetchagain]);
+  
+  const handleFetchagain=()=>{
+    setFetchagain(!fetchagain)
+  }
   const handleAmountChange = async (id: string, newAmount: number) => {
     const session = await getSession();
     try {
@@ -117,7 +121,7 @@ const FixedWiseFee: React.FC<FixedWiseProps> = ({ data }) => {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <FixedWiseForm data={data} close={handleCloseModal}/>
+        <FixedWiseForm data={data} close={handleCloseModal} handleFetch={handleFetchagain}/>
       </Modal>
 
       <div className="mt-4">

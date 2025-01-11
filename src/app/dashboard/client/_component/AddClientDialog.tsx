@@ -14,6 +14,7 @@ import {
   FormControl,
   FormField,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form"
 import { MaterialInput } from "@/components/material-input"
 import {
@@ -25,6 +26,7 @@ import {
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useAddClient } from "@/hooks/clients/manage-client"
+import { AxiosError } from "axios"
 
 const states = [
   "Andhra Pradesh",
@@ -69,7 +71,7 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
       Last_Name: "",
       PAN: "",
       email: "",
-      gender: "Male",
+      gender: undefined,
       Mobile_Number: "",
       City: "",
       State: "",
@@ -90,7 +92,18 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
         form.reset()
       },
       onError: (error) => {
-        toast.error(`Failed to create client: ${error.message}`)
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Error: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
+        }
       },
     })
   }
@@ -117,11 +130,12 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
           <FormField
             control={form.control}
             name="PAN"
-            render={({ field }) => (
+            render={({ field , fieldState:{error} }) => (
               <div>
                 <FormControl>
-                  <MaterialInput placeholder="PAN" {...field} />
+                  <MaterialInput placeholder="PAN" {...field} className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}/>
                 </FormControl>
+                <FormMessage/>
               </div>
             )}
           />
@@ -130,11 +144,12 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
             <FormField
               control={form.control}
               name="First_Name"
-              render={({ field }) => (
+              render={({ field, fieldState:{error}  }) => (
                 <div>
                   <FormControl>
-                    <MaterialInput {...field} placeholder="First Name" />
+                  <MaterialInput placeholder="First Name" {...field} className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}/>
                   </FormControl>
+                  <FormMessage/>
                 </div>
               )}
             />
@@ -142,12 +157,13 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
             <FormField
               control={form.control}
               name="Last_Name"
-              render={({ field }) => (
+              render={({ field, fieldState:{error}  }) => (
                 <div>
 
                   <FormControl>
-                    <MaterialInput placeholder="Last Name" {...field}/>
+                  <MaterialInput placeholder="Last Name" {...field} className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}/>
                   </FormControl>
+                  <FormMessage/>
                 </div>
               )}
             />
@@ -156,12 +172,13 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
           <FormField
             control={form.control}
             name="email"
-            render={({ field }) => (
+            render={({ field , fieldState:{error} }) => (
               <div>
 
                 <FormControl>
-                  <MaterialInput placeholder="Email" {...field} />
+                <MaterialInput placeholder="Email" {...field} className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}/>
                 </FormControl>
+                <FormMessage/>
               </div>
             )}
           />
@@ -170,11 +187,12 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
             <FormField
               control={form.control}
               name="Mobile_Number"
-              render={({ field }) => (
+              render={({ field, fieldState:{error}  }) => (
                 <div>
                   <FormControl>
-                    <MaterialInput placeholder="Mobile Number" {...field} />
+                  <MaterialInput placeholder="Mobile Number" {...field} className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}/>
                   </FormControl>
+                  <FormMessage/>
                 </div>
               )}
             />
@@ -182,11 +200,12 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
             <FormField
               control={form.control}
               name="Aadhaar"
-              render={({ field }) => (
+              render={({ field, fieldState:{error}  }) => (
                 <div>
                   <FormControl>
-                    <MaterialInput placeholder="Aadhaar Number" {...field} />
+                  <MaterialInput placeholder="Adhaar Number" {...field} className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}/>
                   </FormControl>
+                  <FormMessage/>
                 </div>
               )}
             />
@@ -195,11 +214,12 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
           <FormField
             control={form.control}
             name="Address_1"
-            render={({ field }) => (
+            render={({ field, fieldState:{error}  }) => (
               <div>
                 <FormControl>
-                  <MaterialInput placeholder="Address-1" {...field} />
+                <MaterialInput placeholder="Address-1" {...field} className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}/>
                 </FormControl>
+                <FormMessage/>
               </div>
             )}
           />
@@ -207,11 +227,12 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
           <FormField
             control={form.control}
             name="Address_2"
-            render={({ field }) => (
+            render={({ field, fieldState:{error}  }) => (
               <div>
                 <FormControl>
-                  <MaterialInput placeholder="Address-2" {...field} />
+                <MaterialInput placeholder="Address-2" {...field} className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}/>
                 </FormControl>
+                <FormMessage/>
               </div>
             )}
           />
@@ -219,11 +240,11 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
           <FormField
             control={form.control}
             name="State"
-            render={({ field }) => (
+            render={({ field, fieldState:{error}  }) => (
               <div>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}>
                       <SelectValue placeholder="Select State" />
                     </SelectTrigger>
                   </FormControl>
@@ -235,6 +256,7 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
                     ))}
                   </SelectContent>
                 </Select>
+                <FormMessage/>
               </div>
             )}
           />
@@ -242,11 +264,11 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
           <FormField
             control={form.control}
             name="gender"
-            render={({ field }) => (
+            render={({ field, fieldState:{error}  }) => (
               <div>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}>
                       <SelectValue placeholder="Select Gender" />
                     </SelectTrigger>
                   </FormControl>
@@ -256,6 +278,7 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
                     <SelectItem value="Other">Other</SelectItem>
                   </SelectContent>
                 </Select>
+                <FormMessage/>
               </div>
             )}
           />
@@ -264,11 +287,12 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
             <FormField
               control={form.control}
               name="City"
-              render={({ field }) => (
+              render={({ field, fieldState:{error}  }) => (
                 <div>
                   <FormControl>
-                    <MaterialInput placeholder="City" {...field} />
+                  <MaterialInput placeholder="City" {...field} className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}/>
                   </FormControl>
+                  <FormMessage/>
                 </div>
               )}
             />
@@ -276,16 +300,12 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
             <FormField
               control={form.control}
               name="Pincode"
-              render={({ field }) => (
+              render={({ field ,fieldState:{error}}) => (
                 <div>
                   <FormControl>
-                    <MaterialInput
-                      type="text"
-                      placeholder="Pincode"
-                      {...field}
-
-                    />
+                  <MaterialInput placeholder="PinCode" {...field} className={`${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}/>
                   </FormControl>
+                  <FormMessage/>
                 </div>
               )}
             />

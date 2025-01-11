@@ -35,7 +35,7 @@ const fieldSchema = z.object({
     .custom<FileList>(
       (val) => val instanceof FileList && val.length > 0,
       "File is required"
-    )
+    ).optional()
 });
 
 type FormData = z.infer<typeof fieldSchema>;
@@ -82,7 +82,7 @@ const AddService: React.FC<addServiceProps> = ({close,fetch:refreshData,category
       setLoading(false);
       return;
     }
-  
+    console.log(id)
     console.log("Submitted Data:", data);
     const session = await getSession();
     const token = session?.user?.accessToken;
@@ -100,7 +100,7 @@ const AddService: React.FC<addServiceProps> = ({close,fetch:refreshData,category
   
     try {
       const response = await fetch(
-        "https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/service",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/service`,
         {
           method: "POST",
           headers: {
@@ -127,7 +127,7 @@ const AddService: React.FC<addServiceProps> = ({close,fetch:refreshData,category
       // Send POST request to distribution service
       if (serviceId) {
         const distributionResponse = await fetch(
-          `https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/distribution/service/${serviceId}`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/distribution/service/${serviceId}`,
           {
             method: "POST",
             headers: {
