@@ -49,4 +49,4 @@ jobs:
             cd /root/vg/frontend
             git checkout main
             git pull origin main --rebase
-            docker-compose -p vgadmin up -d
+            docker-compose up --build -d
