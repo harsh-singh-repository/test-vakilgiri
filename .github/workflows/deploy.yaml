@@ -46,6 +46,7 @@ jobs:
           username: ${{ secrets.VM_USERNAME }}
           password: ${{ secrets.VM_SSH_PASSWORD }}
           script: |
+            sudo -s
             cd /root/vg/frontend
             git checkout main
             git pull origin main --rebase
