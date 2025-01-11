@@ -28,7 +28,7 @@ const formSchema = z.object({
   description: z.string().optional(),
   file: z
     .any()
-    .refine((files) => files && files.length > 0, "File is required if provided"),
+    .refine((files) => files && files.length > 0, "File is required if provided").optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -78,7 +78,7 @@ const AddCategory: React.FC<AddCategoryProps> = ({ again }) => {
 
       // Send POST request
       const response = await fetch(
-        "https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/service-category",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/service-category`,
         {
           method: "POST",
           headers: {

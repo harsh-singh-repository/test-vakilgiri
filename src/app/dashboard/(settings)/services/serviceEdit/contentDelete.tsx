@@ -31,7 +31,7 @@ const ContentDelete:React.FC<contentDeleteProps>=({data,close})=> {
             return;
           }
     
-          const response = await fetch(`https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/content/${id}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/content/${id}`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${session?.user.accessToken}`,

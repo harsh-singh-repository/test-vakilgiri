@@ -48,7 +48,7 @@ interface dropDownData{
 }
 const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) => {
   const [services, setServices] = useState<{ id: string; name: string }[]>([]);
-
+  const [loading,setLoading]=useState<boolean>(false)
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -95,6 +95,7 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) =
   }, []);
 
   const onSubmit = async (data: FormSchema) => {
+    setLoading(true)
     const session=await getSession();
     try {
       // const relatedServiceName = data.relatedService
@@ -120,7 +121,7 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) =
           description: data.description,
           fixedType: data.fixedType,
           priority: data.priority,
-          relatedServiceName:data.serviceId || '',
+          relatedServiceId:data.serviceId || '',
           relatedService: data.relatedService,
         },
         {
@@ -133,6 +134,9 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) =
       console.log('API Response:', response.data);
     } catch (error) {
       console.error('Error submitting form:', error);
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -283,8 +287,10 @@ const FixedWiseForm: React.FC<FixedWiseProps> = ({ data: serviceData, close }) =
             )}
           />
 
-          <Button type="submit" className="bg-red-600 w-full">
-            Create
+          <Button type="submit" className="bg-red-600 w-full" disabled={loading}>
+            {
+              loading? "loading...":"create"
+            }
           </Button>
         </form>
       </Form>

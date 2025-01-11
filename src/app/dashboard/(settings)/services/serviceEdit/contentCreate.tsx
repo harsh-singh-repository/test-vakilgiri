@@ -76,7 +76,7 @@ const ContentCreate: React.FC<CreateContentProps> = ({ data, close,contentfetch,
   
     try {
       const response = await axios.post(
-        'https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/content/',
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/content/`,
         formDataToSubmit,
         {
           headers: {

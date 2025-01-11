@@ -58,7 +58,7 @@ const AddRole: React.FC<AddCategoryProps> = ({ again }) => {
       };
 
       const response = await fetch(
-        "https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/rolePermission",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/rolePermission`,
         {
           method: "POST",
           headers: {
