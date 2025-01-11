@@ -52,7 +52,6 @@ const Login: React.FC<LoginProps> = ({
       password: data.password,
     });
     setloader(false);
-    console.log(result);
     if (result?.error) {
       if (result.error === "CredentialsSignin") {
         toast.error("Incorrect Email or password")

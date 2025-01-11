@@ -264,15 +264,15 @@ export interface CreateLeadData{
 
 
 export interface UserRegisterType{
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
-  confirm_password: string;
-  mobile_number: string;
+  confirmPassword: string;
+  mobileNumber: string;
   pan: string;
   gender: "Male" | "Female" | "Other";
-  dob: Date; // Use Date if you want to handle it as a Date object
+  dob: string;
 }
 
 export type MainNavItem = NavItemWithOptionalChildren;

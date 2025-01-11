@@ -26,3 +26,9 @@ export const useVerifyEmail = ()=> {
      })
 }
 
+export const useVerifyOtp = ()=> {
+     return useMutation({
+        mutationFn:auth_services.verifyOtp,
+     })
+}
+

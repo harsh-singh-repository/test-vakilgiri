@@ -7,25 +7,10 @@ import { columns } from "./tables/columns";
 import { ClientTable } from "./tables/client-table";
 import ClientCard from "./client-card";
 import { useSearchParams } from "next/navigation";
-// import { ClientPageServer } from "./ClientPageServer";
-// import { Client } from "@/constants/data";
 import AddClientDialog from "./AddClientDialog";
-// import Spinner from '@/components/smooth-spinner';
 import { Oval } from "react-loader-spinner";
 import { useGetClients } from "@/hooks/clients/manage-client";
 import Modal from "@/components/model/custom-modal";
-// import { User } from "@/constants/client-table-data";
-
-// type ResponseData = {
-//   employee: User[];
-//   totalUsers: number;
-//   pageCount: number;
-// };
-  
-// const breadcrumbItems = [
-//   { title: 'Dashboard', link: '/dashboard' },
-//   { title: 'Client', link: '/dashboard/client' }
-// ];
 
 export default function ClientPageContent() {
   const {data} = useGetClients();
@@ -46,16 +31,6 @@ export default function ClientPageContent() {
   const [searchValue, setSearchValue] = useState(
     searchParams.get("search") || ""
   );
-  // const [responseData, setResponseData] = useState<ResponseData | null>(null);
-
-//  useEffect(() => {
-//     const fetchData = async () => {
-//       const data = await ClientPageServer({ page, pageLimit, searchValue });
-//       setResponseData(data);
-//     };
-
-//     fetchData();
-//   }, [page, pageLimit, searchValue]);
 
   if(!data){
     return (
@@ -75,7 +50,6 @@ export default function ClientPageContent() {
 
   return (
     <div className="flex-1 space-y-2 p-4 pt-[10px]">
-      {/* <Breadcrumbs items={breadcrumbItems} /> */}
       <div className="flex items-start justify-between">
         <div className="text-xl font-semibold text-[#042559]">{`Clients (${data?.length})`}</div>
 
@@ -100,7 +74,6 @@ export default function ClientPageContent() {
 
       <ClientCard />
 
-      {/* <div className='p-0 m-0 overflow-x-auto flex flex-col'> */}
 
       {data && (
         <ClientTable
@@ -113,7 +86,6 @@ export default function ClientPageContent() {
           pageCount={Math.ceil(data.length / pageLimit)}
         />
       )}
-      {/* </div> */}
     </div>
   );
 }

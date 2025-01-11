@@ -98,7 +98,7 @@ export const columns = (setStaffEdit: React.Dispatch<React.SetStateAction<boolea
     header: 'Action',
     cell:()=>{
       return(
-         <ActionButton setStaffEdit={setStaffEdit} />
+         <ActionButton setStaffEdit={setStaffEdit}/>
       )
     }
   }

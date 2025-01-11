@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -33,87 +34,79 @@ import {
 import Modal from "@/components/model/custom-modal";
 
 export default function Register({ alreadyLogin }: RegisterProps) {
-  const [otpVerified, setOtpVerified] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [otpEmail, setOtpEmail] = useState<string>("");
+  const [passwordValue, setPasswordValue] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
-  const [email, setEmail] = useState<string>("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const { mutate } = useRegisterUser();
+  const { mutate:RegisterUser } = useRegisterUser();
 
   const { mutate: VerifyEmail } = useVerifyEmail();
 
   const form = useForm<z.infer<typeof RegisterformSchema>>({
     resolver: zodResolver(RegisterformSchema),
     defaultValues: {
-      firstname: "",
-      lastname: "",
+      firstName: "",
+      lastName: "",
       email: "",
-      mobile_number: "",
+      mobileNumber: "",
       pan: "",
       dob: undefined,
       gender: undefined,
       password: "",
-      confirm_password: "",
+      confirmPassword: "",
     },
   });
 
-  const clickVerifyOtp = (email:{email:string}) => {
-    VerifyEmail(email, {
-      onSuccess: () => {
-        toast.success("Manager Removed");
-        openModal(); 
-      },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
-          const errorMessage =
-            error.response?.data?.message || "An unexpected error occurred.";
-          toast.error(`Error: ${errorMessage}`);
-        } else {
-          toast.error("An unexpected error occurred.");
-        }
-      },
-    });
-  };
+  function handleError(error: unknown) {
+    if (error instanceof AxiosError) {
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred.";
+      toast.error(`Error: ${errorMessage}`);
+    } else {
+      toast.error("An unexpected error occurred.");
+    }
+  }
 
+  
   async function onSubmit(data: z.infer<typeof RegisterformSchema>) {
-    setIsSubmitting(true);
     setError(null);
+  
     try {
-      // Simulate API call
+      // Simulate API call for user registration
       await new Promise((resolve) => setTimeout(resolve, 2000));
       console.log("Form submitted:", data);
-      setIsSuccess(true);
-      mutate(data, {
-        onSuccess: () => {
-          toast.success("Manager Removed");
+  
+      // Register user
+      await RegisterUser(data, {
+        onSuccess: async () => {
+          toast.success("User Registered");
+  
+          // Automatically send email verification
+          await VerifyEmail({ email: data.email }, {
+            onSuccess: () => {
+              toast.success("Verification email sent!");
+              if (!isModalOpen) {
+                openModal();
+              }
+             // Open OTP verification modal
+            },
+            onError: handleError,
+          });
         },
-        onError: (error) => {
-          if (error instanceof AxiosError) {
-            const errorMessage =
-              error.response?.data?.message || "An unexpected error occurred.";
-            toast.error(`Error: ${errorMessage}`);
-          } else {
-            toast.error("An unexpected error occurred.");
-          }
-        },
+        onError: handleError,
       });
     } catch (err) {
       console.error(err);
-      setError(
-        "An error occurred while submitting the form. Please try again."
-      );
-    } finally {
-      setIsSubmitting(false);
+      setError("An error occurred while submitting the form. Please try again.");
     }
   }
+  
 
   return (
     <div className="text-black flex flex-col justify-center items-center text-center w-full max-w-3xl p-4">
@@ -130,7 +123,7 @@ export default function Register({ alreadyLogin }: RegisterProps) {
         >
           <FormField
             control={form.control}
-            name="firstname"
+            name="firstName"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -143,7 +136,7 @@ export default function Register({ alreadyLogin }: RegisterProps) {
 
           <FormField
             control={form.control}
-            name="lastname"
+            name="lastName"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -166,7 +159,7 @@ export default function Register({ alreadyLogin }: RegisterProps) {
                     {...field}
                     onChange={(e) => {
                       field.onChange(e);
-                      setEmail(e.target.value);
+                      setOtpEmail(e.target.value);
                     }}
                   />
                 </FormControl>
@@ -177,7 +170,7 @@ export default function Register({ alreadyLogin }: RegisterProps) {
 
           <FormField
             control={form.control}
-            name="mobile_number"
+            name="mobileNumber"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -242,9 +235,16 @@ export default function Register({ alreadyLogin }: RegisterProps) {
           <FormField
             control={form.control}
             name="dob"
-            render={({}) => (
+            render={({ field }) => (
               <FormItem>
-                <CustomDatePicker />
+                <CustomDatePicker
+                  value={field.value || ""}
+                  onChange={(date) =>
+                    field.onChange(
+                      date ? format(new Date(date), "yyyy-MM-dd") : ""
+                    )
+                  }
+                />
                 <FormMessage />
               </FormItem>
             )}
@@ -261,8 +261,13 @@ export default function Register({ alreadyLogin }: RegisterProps) {
                       <Input
                         type={showPassword ? "text" : "password"}
                         placeholder="Password"
-                        {...field}
+                        {...field} // Spread field first
+                        onChange={(e) => {
+                          field.onChange(e); // Call the form's onChange
+                          setPasswordValue(e.target.value); // Update state
+                        }}
                       />
+
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
@@ -283,7 +288,7 @@ export default function Register({ alreadyLogin }: RegisterProps) {
 
             <FormField
               control={form.control}
-              name="confirm_password"
+              name="confirmPassword"
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormControl>
@@ -299,42 +304,20 @@ export default function Register({ alreadyLogin }: RegisterProps) {
             />
           </div>
 
-          {!otpVerified ? (
-               <div>
-                <Button
-                  className="w-full bg-[#f21300] text-white hover:bg-[#d11100]"
-                  onClick={() => { 
-                    clickVerifyOtp({ email: email }); 
-                   
-                  }}
-                >
-                  Verify Email with OTP
-                </Button>
-
-               <Modal  isOpen={isModalOpen} onClose={closeModal} className="p-4">
-                     <OtpVerifyForm setOtpVerify={setOtpVerified} onClose={closeModal}/>
-               </Modal>
-               </div>
-          
-
-          ) : (
-            <Button
-              type="submit"
-              className="w-full bg-[#f21300] hover:bg-[#d11100] text-white"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Registering..." : "Register"}
+          <div>
+            <Button className="w-full bg-[#f21300] text-white hover:bg-[#d11100]">
+              Verify Email with OTP
             </Button>
-          )}
 
-          {isSubmitting && (
-            <p className="text-center text-gray-500">Submitting...</p>
-          )}
-          {isSuccess && (
-            <p className="text-center text-green-500">
-              Registration successful!
-            </p>
-          )}
+            <Modal isOpen={isModalOpen} onClose={closeModal} className="p-4">
+              <OtpVerifyForm
+                onClose={closeModal}
+                email={otpEmail}
+                password={passwordValue}
+              />
+            </Modal>
+          </div>
+
           {error && <p className="text-center text-red-500">{error}</p>}
 
           <div className="flex gap-1 items-center justify-center text-sky-950 font-medium">

@@ -20,20 +20,66 @@ import {
     InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { OtpFormSchema } from "../_types/zodSchema";
+import { useVerifyOtp } from "@/hooks/auth/manage-auth";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 
-export function OtpVerifyForm({ setOtpVerify,onClose}: { setOtpVerify: (verified: boolean) => void ; onClose:()=>void }) {
+export function OtpVerifyForm({onClose,email,password}: {onClose:()=>void,email:string,password:string}) {
     const form = useForm<z.infer<typeof OtpFormSchema>>({
         resolver: zodResolver(OtpFormSchema),
         defaultValues: {
-            pin: "",
+            otp: "",
+            email:email
         },
     });
 
-    function onSubmit(data: z.infer<typeof OtpFormSchema>) {
+    const router = useRouter();
+    
+    const {mutate:VerifyOtp} = useVerifyOtp();
+
+    async function onSubmitOtp(data: z.infer<typeof OtpFormSchema>) {
         console.log("OTP submitted:", data);
-        setOtpVerify(true);
-    }
+      
+        await VerifyOtp(data, {
+          onSuccess: async () => {
+            toast.success("Email Verified Successfully");
+            onClose();
+      
+            const result = await signIn("credentials", {
+              redirect: false,
+              email: data.email,
+              password: password,
+            });
+      
+            if (result?.error) {
+              if (result.error === "CredentialsSignin") {
+                toast.error("Incorrect Email or password");
+              } else {
+                toast.error(`Login failed: ${result.error}`);
+              }
+            }
+      
+            if (result?.url) {
+              toast.success("Login Successful");
+              router.push("/dashboard");
+            }
+          },
+          onError: (error) => {
+            if (error instanceof AxiosError) {
+              const errorMessage =
+                error.response?.data?.message || "An unexpected error occurred.";
+              toast.error(`Error: ${errorMessage}`);
+            } else {
+              toast.error("An unexpected error occurred.");
+            }
+          },
+        });
+      }
+      
+      
 
     return (
         <div className="sm:max-w-[425px]">
@@ -44,10 +90,10 @@ export function OtpVerifyForm({ setOtpVerify,onClose}: { setOtpVerify: (verified
                 </div>
             </div>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <form onSubmit={form.handleSubmit(onSubmitOtp)} className="space-y-6">
                     <FormField
                         control={form.control}
-                        name="pin"
+                        name="otp"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>One-Time Password</FormLabel>
@@ -64,7 +110,7 @@ export function OtpVerifyForm({ setOtpVerify,onClose}: { setOtpVerify: (verified
                                     </InputOTP>
                                 </FormControl>
                                 <FormDescription>
-                                    Please enter the one-time password sent to your phone.
+                                    Please enter the one-time password sent to your email.
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
@@ -72,7 +118,7 @@ export function OtpVerifyForm({ setOtpVerify,onClose}: { setOtpVerify: (verified
                     />
 
   
-                        <Button className="w-full bg-[#f21300] text-white" type="submit" onClick={onClose}>
+                        <Button className="w-full bg-[#f21300] text-white" type="submit">
                             Verify OTP
                         </Button>
 

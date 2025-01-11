@@ -2,17 +2,15 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-// import { X } from 'lucide-react'
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   Form,
   FormControl,
   FormField,
   FormMessage,
-  // FormItem,
-  // FormMessage,
 } from "@/components/ui/form";
 import {
   Select,
@@ -36,19 +34,44 @@ import { useSearchBussinessQuery } from "@/hooks/business/manage-business";
 import { useState } from "react";
 import { BussinessSearchType } from "../_types";
 
-interface onCloseProp{
-   onClose:()=>void;
+interface onCloseProp {
+  onClose: () => void;
 }
 
-export default function CreateLeadForm({onClose}:onCloseProp) {
-  
-  const [searchQuery,setSearchQuery] = useState<string>("");
+interface BusinessUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  emailStatus: string;
+  mobileNumber: string;
+  pan: string;
+  aadhaar: string | null;
+  userRoles: string;
+}
+
+export default function CreateLeadForm({ onClose }: onCloseProp) {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const [selectClient, setSetClient] = useState<BusinessUser[] | null>(null);
+  const [bussinessId, setBussinessId] = useState<string>("");
+
+  const handleDivClick = (index: number, businessId: string) => {
+    setSelectedIndex(index);
+    setBussinessId(businessId);
+    form.setValue("businessId", businessId); // Sync with form state
+  };
+
+  const handleClientClick = (business: BusinessUser[]) => {
+    setSetClient(business);
+  };
 
   const { mutate: addLeads } = useAddLeads();
 
-  const {data:bussinessSearch} = useSearchBussinessQuery(searchQuery);
+  const { data: bussinessSearch } = useSearchBussinessQuery(searchQuery);
 
-  console.log("data",bussinessSearch);
+  console.log("data", bussinessSearch);
 
   const query = useQueryClient();
 
@@ -56,8 +79,8 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
     resolver: zodResolver(CreateLeadformSchema),
     defaultValues: {
       existing: true,
-      businessId: undefined,
-      client: undefined,
+      businessId: bussinessId,
+      clientId: undefined,
       firstName: "",
       lastName: "",
       email: "",
@@ -74,7 +97,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
     addLeads(values, {
       onSuccess: () => {
         toast.success("Leads created Successfully");
-        query.invalidateQueries({queryKey:['leads']})
+        query.invalidateQueries({ queryKey: ["leads"] });
         onClose();
       },
       onError: (error) => {
@@ -85,35 +108,42 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
 
   const existingLead = form.watch("existing");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = e.target.value;
-    setSearchQuery(value)
-  }
+    setSearchQuery(value);
+  };
 
   console.log(form.watch("existing")); // Watch existingLead state
 
   return (
     // <DialogContent>
-    <div className="max-w-[400px] w-full flex flex-col justify-center items-center"> 
+    <div className="max-w-[400px] w-full flex flex-col justify-center items-center">
       <div className="w-full bg-white rounded-lg shadow-sm px-2 py-1">
-      <div className="relative pb-2 text-center">
-      <h2 className="text-2xl font-bold text-[#F31F0D] mt-2">Create Lead</h2>
-      <p className="text-sm text-[#091747] font-medium">
-        Fill all the information correctly
-      </p>
-      <button className="absolute right-0 top-0 text-[#F31F0D]" onClick={onClose}>
-        <X className="h-5 w-5" />
-      </button>
-    </div>
+        <div className="relative pb-2 text-center">
+          <h2 className="text-2xl font-bold text-[#F31F0D] mt-2">
+            Create Lead
+          </h2>
+          <p className="text-sm text-[#091747] font-medium">
+            Fill all the information correctly
+          </p>
+          <button
+            className="absolute right-0 top-0 text-[#F31F0D]"
+            onClick={onClose}
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <FormField
               control={form.control}
               name="existing"
-              render={({ field,}) => (
+              render={({ field }) => (
                 <div className="">
-                  <label className="text-[11px] font-semibold text-[#091747]">Existing Lead</label>
+                  <label className="text-[11px] font-semibold text-[#091747]">
+                    Existing Lead
+                  </label>
                   <Select
                     onValueChange={(value) => field.onChange(value === "yes")}
                     defaultValue={field.value ? "yes" : "no"}
@@ -128,44 +158,64 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                       <SelectItem value="no">No</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage/>
+                  <FormMessage />
                 </div>
               )}
             />
 
             {existingLead && (
               <>
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="businessId"
-                  render={({ field}) => (
-                    <div>
-                      <FormControl>
-                        <MaterialInput placeholder="Business Name" {...field} className="w-full" onChange={handleChange}/>
-                      </FormControl>
-                      <FormMessage/>
-                    </div>
-                  )}
-                />
+                  render={({ field }) => ( */}
+                <div>
+                  {/* <FormControl> */}
+                  <MaterialInput
+                    placeholder="Business Name"
+                    // {...field}
+                    className="w-full"
+                    onChange={handleChange}
+                  />
+                  {/* </FormControl> */}
+                  {/* <FormMessage /> */}
+                </div>
 
                 <div className="flex flex-col gap-2">
-                {bussinessSearch?.map((bussiness:BussinessSearchType,index:number)=> (
-                    <div key={index} className="flex flex-col gap-x-2 bg-[#E7E7E7] text-[#091747] px-2 py-1 rounded-md">
-                          <span className="text-[13px] uppercase font-semibold">{bussiness.businessName}</span>
-                       <div className="flex flex-row text-[12px]">
+                  {bussinessSearch?.map(
+                    (bussiness: BussinessSearchType, index: number) => (
+                      <div
+                        key={index}
+                        className={`flex flex-col gap-x-2 px-2 py-1 rounded-md cursor-pointer ${
+                          selectedIndex === index
+                            ? "bg-[#FFD7D7]"
+                            : "bg-[#E7E7E7]"
+                        } text-[#091747]`}
+                        onClick={() => {
+                          handleDivClick(index, bussiness.id);
+                          handleClientClick(bussiness.businessUsers);
+                        }}
+                      >
+                        <span className="text-[13px] uppercase font-semibold">
+                          {bussiness.businessName}
+                        </span>
+                        <div className="flex flex-row text-[12px]">
                           <span className="font-semibold">PAN:{""}</span>
                           <span>{bussiness.businessPan}</span>
-                       </div>
-                    </div>
-                  ))}
+                        </div>
+                      </div>
+                    )
+                  )}
                 </div>
 
                 <FormField
                   control={form.control}
-                  name="client"
-                  render={({ field}) => (
+                  name="clientId"
+                  render={({ field }) => (
                     <div>
-                      <label className="text-[11px] font-semibold text-[#091747]">Contact Person</label>
+                      <label className="text-[11px] font-semibold text-[#091747]">
+                        Contact Person
+                      </label>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -176,9 +226,13 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="client1">Client 1</SelectItem>
-                          <SelectItem value="client2">Client 2</SelectItem>
-                          <SelectItem value="client3">Client 3</SelectItem>
+                          {selectClient?.map(
+                            (client: BusinessUser) => (
+                              <SelectItem key={client.id} value={client.id}>
+                                {client.firstName + " " + client.lastName}
+                              </SelectItem>
+                            )
+                          )}
                         </SelectContent>
                       </Select>
                     </div>
@@ -190,11 +244,27 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
             <div className="flex gap-2">
               <FormField
                 control={form.control}
+                name="businessId"
+                render={({ field }) => (
+                  <VisuallyHidden>
+                    <FormControl>
+                      <MaterialInput {...field} readOnly />
+                    </FormControl>
+                  </VisuallyHidden>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="firstName"
-                render={({ field}) => (
+                render={({ field }) => (
                   <div>
                     <FormControl>
-                       <MaterialInput placeholder="First Name" {...field} className="w-full"/>
+                      <MaterialInput
+                        placeholder="First Name"
+                        {...field}
+                        className="w-full"
+                      />
                     </FormControl>
                     <FormMessage />
                   </div>
@@ -204,10 +274,14 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               <FormField
                 control={form.control}
                 name="lastName"
-                render={({ field}) => (
+                render={({ field }) => (
                   <div>
                     <FormControl>
-                       <MaterialInput placeholder="Last Name" {...field} className="w-full"/>
+                      <MaterialInput
+                        placeholder="Last Name"
+                        {...field}
+                        className="w-full"
+                      />
                     </FormControl>
                     <FormMessage />
                   </div>
@@ -218,10 +292,14 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
             <FormField
               control={form.control}
               name="email"
-              render={({ field}) => (
+              render={({ field }) => (
                 <div>
                   <FormControl>
-                    <MaterialInput placeholder="Enter email Id" {...field} className="w-full"/>
+                    <MaterialInput
+                      placeholder="Enter email Id"
+                      {...field}
+                      className="w-full"
+                    />
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -231,10 +309,14 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
             <FormField
               control={form.control}
               name="mobile"
-              render={({ field}) => (
+              render={({ field }) => (
                 <div>
                   <FormControl>
-                    <MaterialInput placeholder="Mobile Number" {...field} className="w-full border-[#091747]"/>
+                    <MaterialInput
+                      placeholder="Mobile Number"
+                      {...field}
+                      className="w-full border-[#091747]"
+                    />
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -244,9 +326,11 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
             <FormField
               control={form.control}
               name="state"
-              render={({ field}) => (
+              render={({ field }) => (
                 <div>
-                  <label className="text-[11px] font-semibold text-[#091747]">Select State</label>
+                  <label className="text-[11px] font-semibold text-[#091747]">
+                    Select State
+                  </label>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -272,9 +356,11 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
             <FormField
               control={form.control}
               name="service"
-              render={({ field}) => (
+              render={({ field }) => (
                 <div>
-                  <label className="text-[11px] font-semibold text-[#091747]">Service</label>
+                  <label className="text-[11px] font-semibold text-[#091747]">
+                    Service
+                  </label>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -303,7 +389,11 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               render={({ field }) => (
                 <div>
                   <FormControl>
-                    <MaterialInput placeholder="Lead Value" {...field} className="w-full border-[#091747]"/>
+                    <MaterialInput
+                      placeholder="Lead Value"
+                      {...field}
+                      className="w-full border-[#091747]"
+                    />
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -323,8 +413,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
           </form>
         </Form>
       </div>
-
-      </div>
+    </div>
     // </DialogContent>
   );
 }

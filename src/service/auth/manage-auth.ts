@@ -5,7 +5,8 @@ const AUTH_API = {
     FORGET_PASSWORD : `/user/forget-password`,
     RESET_PASSWORD: `/user/reset-password`,
     REGISTER:`/user/register`,
-    VERIFY_EMAIL:`/user/send-email-verify-otp`
+    VERIFY_EMAIL:`/user/send-email-verify-otp`,
+    VERIFY_WITH_OTP:`/user/verify-otp`
 }
 
 export const auth_services = {
@@ -29,8 +30,11 @@ export const auth_services = {
         return await axios.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${AUTH_API.VERIFY_EMAIL}`, email);
     },
+    verifyOtp: async ({email,otp}:{email:string,otp:string}) => {
+        return await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${AUTH_API.VERIFY_WITH_OTP}`, {email,otp});
+    },
 
-    
 
 }
 

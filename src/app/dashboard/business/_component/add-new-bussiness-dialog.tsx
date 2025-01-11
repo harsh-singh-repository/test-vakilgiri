@@ -4,20 +4,8 @@ import { format } from "date-fns";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { CalendarIcon} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,8 +15,15 @@ import { useAddBusiness } from "@/hooks/business/manage-business";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
 
 const states = [
   { key: "Arunachal_Pradesh", name: "Arunachal Pradesh" },
@@ -41,7 +36,7 @@ const states = [
   { key: "Rajasthan", name: "Rajasthan" },
   { key: "Uttar_Pradesh", name: "Uttar Pradesh" },
   { key: "Tamil_Nadu", name: "Tamil Nadu" },
-  { key: "Others", name: "Others" }
+  { key: "Others", name: "Others" },
 ];
 
 const bussinessType = [
@@ -59,18 +54,17 @@ const bussinessType = [
   { key: "Nidhi_Limited", name: "Nidhi Limited" },
 ];
 
-interface AddNewBussinessDialogProp{
-  style?:string
+interface AddNewBussinessDialogProp {
+  style?: string;
 }
 
-const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
+const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
   // const [date, setDate] = React.useState<Date>();
   // const [logo, setLogo] = React.useState<string | null>(null);
 
   const queryClient = useQueryClient();
 
   const { mutate: addBussiness } = useAddBusiness();
-
 
   const form = useForm<z.infer<typeof AddBussinessformSchema>>({
     resolver: zodResolver(AddBussinessformSchema),
@@ -93,12 +87,12 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
   });
 
   const onSubmit = (data: z.infer<typeof AddBussinessformSchema>) => {
-    console.log("formdata",data);
+    console.log("formdata", data);
     addBussiness(data, {
       onSuccess: () => {
         toast.success("Bussiness Added Succesfully");
-        queryClient.invalidateQueries({queryKey:['bussiness']});
-        queryClient.invalidateQueries({queryKey:['bussinessCount']});
+        queryClient.invalidateQueries({ queryKey: ["bussiness"] });
+        queryClient.invalidateQueries({ queryKey: ["bussinessCount"] });
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
@@ -129,7 +123,12 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
   // };
 
   return (
-    <div className={cn("sm:max-w-[425px] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1000px] p-6",style)}>
+    <div
+      className={cn(
+        "sm:max-w-[425px] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1000px] p-6",
+        style
+      )}
+    >
       <span className="inline text-[10px] bg-[#091747] text-left px-2 py-1 font-semibold rounded-md max-w-fit text-white">
         Basic Details
       </span>
@@ -185,61 +184,33 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                               {...field}
                               className="w-[340px] text-[13px]"
                             />
-                           <FormMessage />
+                            <FormMessage />
                           </div>
                         </div>
                       </div>
                     )}
                   />
                   {/* <div className="flex gap-3 items-center"> */}
-                    <FormField
-                      control={form.control}
-                      name="business_reg_date"
-                      render={({ field, fieldState: { error } }) => (
-                        <div className="flex gap-3 items-center">
-                          <label className="text-[13px] w-[6.75rem] font-medium">Date</label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <div>
-                                <Button
-                                  variant="outline"
-                                  className={cn(
-                                    "w-[340px] justify-start text-left text-xs font-normal",
-                                    !field.value && "text-muted-foreground",
-                                    error &&
-                                      "border-red-500 focus:border-red-500 focus:ring-red-500"
-                                  )}
-                                >
-                                  <CalendarIcon
-                                    className="mr-2 h-4 w-4"
-                                    aria-hidden="true"
-                                  />
-                                  {field.value
-                                    ? format(new Date(field.value), "PPP")
-                                    : "Pick a date"}
-                                </Button>
-                              </div>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                              <Calendar
-                                mode="single"
-                                selected={
-                                  field.value
-                                    ? new Date(field.value)
-                                    : undefined
-                                }
-                                onSelect={(date) =>
-                                  field.onChange(
-                                    date ? format(date, "yyyy-MM-dd") : ""
-                                  )
-                                }
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                      )}
-                    />
+                  <FormField
+                    control={form.control}
+                    name="business_reg_date"
+                    render={({ field}) => (
+                      <div className="flex gap-3 items-center">
+                        <label className="text-[13px] w-[6.75rem] font-medium">
+                          Date
+                        </label>
+                        <CustomDatePicker
+                         className="w-[340px] text-[13px]"
+                          value={field.value || ""}
+                          onChange={(date) =>
+                            field.onChange(
+                              date ? format(new Date(date), "yyyy-MM-dd") : ""
+                            )
+                          }
+                        />
+                      </div>
+                    )}
+                  />
                   {/* </div> */}
                   <FormField
                     control={form.control}
@@ -255,7 +226,7 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                               {...field}
                               className="w-[340px] text-[13px]"
                             />
-                             <FormMessage />
+                            <FormMessage />
                           </div>
                         </div>
                       </FormItem>
@@ -275,7 +246,7 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                               {...field}
                               className="w-[340px] text-[13px]"
                             />
-                             <FormMessage />
+                            <FormMessage />
                           </div>
                         </div>
                       </FormItem>
@@ -290,26 +261,26 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                           <label className="text-[13px] w-[6.75rem] font-medium">
                             State
                           </label>
-                           <div className="flex flex-col">
-                           <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <div>
-                              <SelectTrigger className="w-[340px] text-[13px]">
-                                <SelectValue placeholder="Select State" />
-                              </SelectTrigger>
-                            </div>
-                            <SelectContent>
-                              {states.map((state) => (
-                                <SelectItem key={state.key} value={state.key}>
-                                  {state.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <div className="flex flex-col">
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <div>
+                                <SelectTrigger className="w-[340px] text-[13px]">
+                                  <SelectValue placeholder="Select State" />
+                                </SelectTrigger>
+                              </div>
+                              <SelectContent>
+                                {states.map((state) => (
+                                  <SelectItem key={state.key} value={state.key}>
+                                    {state.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
-                           </div>
+                          </div>
                         </div>
                       </FormItem>
                     )}
@@ -330,7 +301,7 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                               {...field}
                               className="w-[340px] text-[13px]"
                             />
-                             <FormMessage />
+                            <FormMessage />
                           </div>
                         </div>
                       </FormItem>
@@ -350,7 +321,7 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                               {...field}
                               className="w-[340px] text-[13px]"
                             />
-                             <FormMessage />
+                            <FormMessage />
                           </div>
                         </div>
                       </FormItem>
@@ -370,7 +341,7 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                               {...field}
                               className="w-[340px] text-[13px]"
                             />
-                             <FormMessage />
+                            <FormMessage />
                           </div>
                         </div>
                       </FormItem>
@@ -390,7 +361,7 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                               {...field}
                               className="w-[340px] text-[13px]"
                             />
-                             <FormMessage />
+                            <FormMessage />
                           </div>
                         </div>
                       </FormItem>
@@ -410,7 +381,7 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                               {...field}
                               className="w-[340px] text-[13px]"
                             />
-                             <FormMessage />
+                            <FormMessage />
                           </div>
                         </div>
                       </FormItem>
@@ -430,7 +401,7 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                               {...field}
                               className="w-[340px] text-[13px]"
                             />
-                             <FormMessage />
+                            <FormMessage />
                           </div>
                         </div>
                       </FormItem>
@@ -492,7 +463,7 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
                             {...field}
                             className="w-[800px] h-[100px]"
                           />
-                           <FormMessage />
+                          <FormMessage />
                         </div>
                       </div>
                     </div>
@@ -501,33 +472,33 @@ const AddNewBussinessDialog = ({style}:AddNewBussinessDialogProp) => {
               </div>
               {/* <div className="flex justify-between"> */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <FormField
-              control={form.control}
-              name="terms_conditions"
-              render={({ field }) => (
-                <div className="flex flex-row items-start space-x-3 space-y-0">
-                  <div>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </div>
-                  <div className="space-y-1 leading-none">
-                    <label className="text-xs">
-                      By checking this you agree to our Terms & Conditions,
-                      Privacy Policy, etc.
-                    </label>
-                  </div>
-                </div>
-              )}
-            />
-            <Button
-              className="py-1 px-2 w-32 text-xs bg-[#F21300] hover:bg-[#091747] text-white"
-              type="submit"
-            >
-              Save and Procced
-            </Button>
-          </div>
+                <FormField
+                  control={form.control}
+                  name="terms_conditions"
+                  render={({ field }) => (
+                    <div className="flex flex-row items-start space-x-3 space-y-0">
+                      <div>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </div>
+                      <div className="space-y-1 leading-none">
+                        <label className="text-xs">
+                          By checking this you agree to our Terms & Conditions,
+                          Privacy Policy, etc.
+                        </label>
+                      </div>
+                    </div>
+                  )}
+                />
+                <Button
+                  className="py-1 px-2 w-32 text-xs bg-[#F21300] hover:bg-[#091747] text-white"
+                  type="submit"
+                >
+                  Save and Procced
+                </Button>
+              </div>
               {/* </div> */}
             </div>
           </div>
