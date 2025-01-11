@@ -10,6 +10,7 @@ import {
   Form,
   FormControl,
   FormField,
+  FormMessage,
   // FormItem,
   // FormMessage,
 } from "@/components/ui/form";
@@ -110,7 +111,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
             <FormField
               control={form.control}
               name="existing"
-              render={({ field }) => (
+              render={({ field,}) => (
                 <div className="">
                   <label className="text-[11px] font-semibold text-[#091747]">Existing Lead</label>
                   <Select
@@ -127,7 +128,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                       <SelectItem value="no">No</SelectItem>
                     </SelectContent>
                   </Select>
-                  {/* <FormMessage /> */}
+                  <FormMessage/>
                 </div>
               )}
             />
@@ -137,11 +138,12 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                 <FormField
                   control={form.control}
                   name="businessId"
-                  render={({ field }) => (
+                  render={({ field}) => (
                     <div>
                       <FormControl>
                         <MaterialInput placeholder="Business Name" {...field} className="w-full" onChange={handleChange}/>
                       </FormControl>
+                      <FormMessage/>
                     </div>
                   )}
                 />
@@ -161,7 +163,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                 <FormField
                   control={form.control}
                   name="client"
-                  render={({ field }) => (
+                  render={({ field}) => (
                     <div>
                       <label className="text-[11px] font-semibold text-[#091747]">Contact Person</label>
                       <Select
@@ -189,12 +191,12 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               <FormField
                 control={form.control}
                 name="firstName"
-                render={({ field }) => (
+                render={({ field}) => (
                   <div>
                     <FormControl>
                        <MaterialInput placeholder="First Name" {...field} className="w-full"/>
                     </FormControl>
-                    {/* <FormMessage /> */}
+                    <FormMessage />
                   </div>
                 )}
               />
@@ -202,12 +204,12 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
               <FormField
                 control={form.control}
                 name="lastName"
-                render={({ field }) => (
+                render={({ field}) => (
                   <div>
                     <FormControl>
                        <MaterialInput placeholder="Last Name" {...field} className="w-full"/>
                     </FormControl>
-                    {/* <FormMessage /> */}
+                    <FormMessage />
                   </div>
                 )}
               />
@@ -216,12 +218,12 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
             <FormField
               control={form.control}
               name="email"
-              render={({ field }) => (
+              render={({ field}) => (
                 <div>
                   <FormControl>
                     <MaterialInput placeholder="Enter email Id" {...field} className="w-full"/>
                   </FormControl>
-                  {/* <FormMessage /> */}
+                  <FormMessage />
                 </div>
               )}
             />
@@ -229,12 +231,12 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
             <FormField
               control={form.control}
               name="mobile"
-              render={({ field }) => (
+              render={({ field}) => (
                 <div>
                   <FormControl>
                     <MaterialInput placeholder="Mobile Number" {...field} className="w-full border-[#091747]"/>
                   </FormControl>
-                  {/* <FormMessage /> */}
+                  <FormMessage />
                 </div>
               )}
             />
@@ -242,7 +244,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
             <FormField
               control={form.control}
               name="state"
-              render={({ field }) => (
+              render={({ field}) => (
                 <div>
                   <label className="text-[11px] font-semibold text-[#091747]">Select State</label>
                   <Select
@@ -262,7 +264,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                       ))}
                     </SelectContent>
                   </Select>
-                  {/* <FormMessage /> */}
+                  <FormMessage />
                 </div>
               )}
             />
@@ -270,7 +272,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
             <FormField
               control={form.control}
               name="service"
-              render={({ field }) => (
+              render={({ field}) => (
                 <div>
                   <label className="text-[11px] font-semibold text-[#091747]">Service</label>
                   <Select
@@ -290,7 +292,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                       ))}
                     </SelectContent>
                   </Select>
-                  {/* <FormMessage /> */}
+                  <FormMessage />
                 </div>
               )}
             />
@@ -303,7 +305,7 @@ export default function CreateLeadForm({onClose}:onCloseProp) {
                   <FormControl>
                     <MaterialInput placeholder="Lead Value" {...field} className="w-full border-[#091747]"/>
                   </FormControl>
-                  {/* <FormMessage /> */}
+                  <FormMessage />
                 </div>
               )}
             />

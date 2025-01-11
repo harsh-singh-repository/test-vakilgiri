@@ -16,8 +16,6 @@ export async function middleware(request: NextRequest) {
     // Check if a redirect path is provided via query parameter
     const redirectPath = url.searchParams.get("redirect");
 
-    console.log("Redirect path",redirectPath)
-
     if (redirectPath) {
       return NextResponse.redirect(new URL(redirectPath, request.url));
     }

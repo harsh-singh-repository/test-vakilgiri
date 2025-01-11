@@ -330,6 +330,8 @@ export const StackLeadsExchangeDialog = ({
     setStoredManager(storedManagerId)
   },[data])
 
+  console.log("lead discussion",LeadDiscussion)
+
   if (!data) {
     return (
       <div className="flex justify-center item center p-2 h-full">

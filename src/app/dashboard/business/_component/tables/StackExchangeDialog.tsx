@@ -157,6 +157,8 @@ export const StackBussinessExchangeDialog = ({
     setStoredManager(storedManagerID);
   },[data]);
 
+  console.log("Bussiness Discussion",bussinessDisscussionData)
+
 
   const handleDeleteDisscussion = ({
     id,
