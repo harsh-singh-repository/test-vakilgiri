@@ -6,10 +6,10 @@ import RoleEditForm from "./roleEditForm";
 import { RoleModal } from "./roleEditModal";
 
 interface ActionCellProps {
-  rowId: string | number; // You can use this to identify the row if needed
+  rowId: string; 
 }
 
-const ActionCell: React.FC<ActionCellProps> = () => {
+const ActionCell: React.FC<ActionCellProps> = ({rowId}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
@@ -18,22 +18,22 @@ const ActionCell: React.FC<ActionCellProps> = () => {
   return (
     <div className="flex gap-1 justify-end mr-2">
       <button
-        className="w-8 h-8 bg-blue-950 text-white rounded-md flex items-center justify-center hover:bg-red-600 hover:text-white"
+        className="w-[25px] h-[25px] bg-[#091747] text-white rounded-md flex items-center justify-center hover:bg-[#f21300] hover:text-white"
         title="Settings"
         onClick={handleOpenModal}
       >
-        <Settings size={16} />
+        <Settings size={14} strokeWidth={"2"} />
       </button>
       <button
-        className="w-8 h-8 bg-red-600 text-white rounded-md flex items-center justify-center hover:bg-blue-950 hover:text-white"
+        className="w-[25px] h-[25px] bg-[#f21300] text-white rounded-md flex items-center justify-center hover:bg-[#091747] hover:text-white"
         title="Delete"
       >
-        <Trash2 size={16} />
+        <Trash2 size={14} strokeWidth={"2"}/>
       </button>
       {isModalOpen && (
         <RoleModal isOpen={isModalOpen} onClose={handleCloseModal}>
           <div className="p-4">
-            <RoleEditForm close={handleCloseModal} />
+            <RoleEditForm close={handleCloseModal} id={rowId} />
           </div>
         </RoleModal>
       )}

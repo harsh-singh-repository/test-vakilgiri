@@ -30,7 +30,7 @@ const ServiceInfo: React.FC<ServiceInfoProps> = ({ id,name }) => {
     try {
       console.log(serviceId)
       const response = await fetch(
-        `https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/content/${id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/content/${id}`,
         {
           method: "GET",
           headers: {

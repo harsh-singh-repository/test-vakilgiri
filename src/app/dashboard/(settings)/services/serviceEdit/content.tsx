@@ -53,7 +53,7 @@ const Content: React.FC<ContentProps> = ({ contentfetch,setContentfetch, service
     const fetchData = async () => {
       const session = await getSession();
       try {
-        const response = await fetch(`https://vg-backend-082f56fdbc53.herokuapp.com/api/v1/content/${service.id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/content/${service.id}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${session?.user.accessToken}`,

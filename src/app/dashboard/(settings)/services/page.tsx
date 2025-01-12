@@ -7,8 +7,8 @@ import { columns } from "./columns";
 import { getSession } from "next-auth/react";
 import { Category, CategoryResponse, ServiceResponse, Services } from "./types";
 import AddService from "./_components/serviceForm";
-import { FormModal } from './_components/formModal';
 import { Plus } from "lucide-react";
+import Modal from "@/components/model/custom-modal";
 export async function getServices(): Promise<Services[]> {
   const session = await getSession();
   if (!session?.user?.accessToken) {
@@ -145,9 +145,9 @@ export default function DemoPage() {
       </div>
 
       {showAddServices && (
-        <FormModal isOpen={showAddServices} onClose={() => setShowAddServices(false)}>
+        <Modal isOpen={showAddServices} onClose={() => setShowAddServices(false)}>
           <AddService close={handleClose} fetch={handleFetch} category={categoryData} />
-        </FormModal>
+        </Modal>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-7 gap-2 h-[100%]">

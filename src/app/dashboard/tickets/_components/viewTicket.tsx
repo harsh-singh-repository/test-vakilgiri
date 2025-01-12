@@ -37,6 +37,7 @@ interface Ticket {
   categoryId: string;
   createdAt: string;
   modifiedAt: string;
+  updatedAt:string;
   slug: string | null;
   managerId: string | null;
   creatorId: string;
@@ -67,6 +68,7 @@ interface TicketReply {
   replyBody: string;
   createdAt: string;
   modifiedAt: string;
+  updatedAt:string;
   creatorId: string;
   creator: {
     id: string;
@@ -88,6 +90,22 @@ type User = {
   kycStatus: string;
 };
 
+interface Manager{
+  id: string;
+            managerType: string;
+            adminStaff: {
+                id: string;
+                user: {
+                    id: string;
+                    firstName: string;
+                    lastName: string;
+                    userRoles: string;
+                },
+                officialEmail: string;
+                officialMobile: string;
+            },
+            professional: string;
+}
 const ViewTicket: React.FC<ViewTicketProps> = ({
   ticket,
   close,
@@ -99,7 +117,7 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
   const [replies, setReplies] = useState<TicketReply[]>([]);
   const[replyfetchagain,setReplyfetchagain]=useState(false)
   const [allUsers, setAllUsers] = useState<User[]>([]);
-
+  const [managers,setManagers]=useState<Manager[]>([]);
   const handleReplyFetchagain=()=>{
     setReplyfetchagain(true)
   }
@@ -275,7 +293,9 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
 
   const formatDate = (isoDate: string): string => {
     const date = new Date(isoDate);
-  
+   if (isNaN(date.getTime())) {
+        throw new Error("Invalid date format");
+    }
     const day = date.getDate();
     const month = date.toLocaleString('default', { month: 'long' }); // Full month name
     const year = date.getFullYear();
@@ -297,16 +317,17 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
   
     return `${day}${daySuffix(day)} ${month}, ${year}, ${hours}:${minutes} ${amPm}`;
   };
+
   return (
     <div className="p-3 min-w-[300px] mx-auto">
       <div className="flex justify-between mb-1">
         <div className="flex gap-2">
           <div className="text-[18px] font-poppins font-semibold">
-            {`Tickets | #${data.sn} | ${new Date(data.modifiedAt)
+            {`Tickets | #${data.sn} | ${new Date(data.updatedAt)
               .toLocaleDateString("en-GB")
               .replaceAll("/", "-")}`}
           </div>
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center mb-1">
             {(data.status === "Open" && (
               <div className="bg-[#f21300] text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
                 Open
@@ -318,7 +339,7 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
                 </div>
               )) ||
               (data.status === "New" && (
-                <div className="bg-[#bdbdbd] text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">
+                <div className="bg-[#091747] text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">
                   New
                 </div>
               ))}
@@ -335,13 +356,13 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
       <div className="grid xl:grid-cols-5 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-2">
         <div className="grid xl:col-span-3 lg:col-span-2 md:col-span-1 sm:col-span-1">
           <div className="flex flex-col gap-2">
-          <div className="bg-gray-200 rounded-xl p-4 flex items-center font-poppins text-[#091747] h-[32px]">
-            <strong>Category:</strong>
-            {` ${data.category.name}`}
+          <div className="bg-[#E9E9E9] rounded-xl p-4 flex items-center font-poppins text-[#091747] h-[32px] text-[14px]">
+            <strong>{`Category`}</strong>
+            {`: ${data.category.name}`}
           </div>
-          <div className="bg-gray-200 flex items-center font-poppins text-[#091747] rounded-xl p-4 h-[32px]">
-            <strong>Subject:</strong>
-            {` ${data.subject}`}
+          <div className="bg-[#E9E9E9] flex items-center font-poppins text-[#091747] rounded-xl p-4 h-[32px] text-[14px]">
+            <strong>Subject</strong>
+            {`: ${data.subject}`}
           </div>
           <div>
   <ScrollArea className="min-h-10 max-h-80 flex flex-col gap-4">
@@ -358,11 +379,11 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
                 style={{ boxShadow: "10px 10px 15px -3px rgba(0, 0, 0, 0.2)" }}
               />
           </div>
-          <div className="flex flex-col leading-none gap-2">
+          <div className="flex flex-col leading-none gap-1">
             <div className="font-bold text-[14px] font-poppins text-[#091747]">{reply.creator?.firstName || "Unknown"}</div>
             <div className="text-[#091747] text-[14px] font-poppins">{reply.replyBody || "No content"}</div>
             <div className="text-[10px] text-[#f21300] font-poppins font-medium">
-              {reply.modifiedAt ? formatDate(reply.modifiedAt) : "No date available"}
+              {reply.updatedAt ? formatDate(reply.updatedAt) : "No date available"}
             </div>
           </div>
         </div>
@@ -384,8 +405,8 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
 }
           
         </div>
-        <div className="grid xl:col-span-2 lg:col-span-1 md:col-span-1 sm:col-span-1">
-          <div className="bg-gray-200 p-2 h-16 rounded-xl flex flex-col">
+        <div className="grid xl:col-span-2 lg:col-span-1 md:col-span-1 sm:col-span-1 w-full">
+          <div className="bg-[#E9E9E9] p-2 h-16 rounded-xl flex flex-col">
             <div className="ml-3">
               <strong>Manager</strong>
             </div>
@@ -408,7 +429,7 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
               <div className="relative">
         {/* Trigger Button */}
         <div
-          className="flex items-center justify-center w-6 h-6 rounded-full border border-dashed border-black text-[#f21300] font-bold cursor-pointer hover:bg-gray-200"
+          className="flex items-center justify-center w-6 h-6 rounded-full border border-dashed border-black text-[#f21300] font-bold cursor-pointer hover:bg-[#E9E9E9]"
           onClick={toggleDropdown}
         >
           +
@@ -452,10 +473,10 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-5 bg-gray-200 mt-2 h-16 rounded-xl gap-1 items-center">
+          <div className="grid grid-cols-5 bg-[#E9E9E9] mt-2 h-16 rounded-xl gap-1 items-center">
             {/* Avatar Section */}
             <div className="col-span-1 flex justify-center items-center">
-              <div className="rounded-full w-14 h-14 overflow-hidden">
+              <div className="rounded-full w-12 h-12 overflow-hidden">
                 <Avatar className="w-full h-full">
                   <AvatarImage
                     src="https://github.com/shadcn.png"
@@ -467,7 +488,7 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
             </div>
 
             {/* Name Section */}
-            <div className="col-span-4 flex flex-col justify-center leading-none text-sm">
+            <div className="col-span-4 flex flex-col justify-center leading-none text-[13px]">
               <div>
                 <strong>Name:</strong>
                 {` ${data.creator.firstName}`}
@@ -482,33 +503,33 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
               </div>
             </div>
           </div>
-          <div className="bg-gray-200 p-2 mt-2 rounded-xl">
+          <div className="bg-[#E9E9E9] p-2 mt-2 rounded-xl">
             <strong>Ticket info</strong>
           </div>
           <div className="p-2 flex flex-col gap-2">
-            <strong className="ml-3">Previous Ticket</strong>
-            <div className="flex justify-between bg-gray-200 p-4 rounded-xl">
+            <strong className="ml-1 text-[15px]">Previous Ticket</strong>
+            <div className="flex justify-between bg-[#E9E9E9] p-2 rounded-xl">
               <div className="flex flex-col leading-tight">
                 {/* {sameCreatorTickets.map((tkt, index) => {
                   return <div key={index}>{`${tkt.sn} - ${tkt.subject}`}</div>;
                 })} */}
-                <div className="text-lg"><strong>{`${sameCreatorTickets[0].sn} - `}</strong>{`${sameCreatorTickets[0].subject}`}</div>
-                <div className="text-[#f21300] text-sm font-medium">{formatDate(sameCreatorTickets[0]?.modifiedAt)}</div>
+                <div className="text-[14px]"><strong>{`${sameCreatorTickets[0].sn} - `}</strong>{`${sameCreatorTickets[0].subject}`}</div>
+                <div className="text-[#f21300] text-[10px] font-medium">{formatDate(sameCreatorTickets[0]?.updatedAt)}</div>
               </div>
               <div className="flex gap-2">
               <div className="flex justify-center items-center">
             {(sameCreatorTickets[0].status === "Open" && (
-              <div className="bg-red-500 text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
+              <div className="bg-[#f21300] text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
                 Open
               </div>
             )) ||
               (sameCreatorTickets[0].status === "Closed" && (
-                <div className="bg-green-500 text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
+                <div className="bg-[#008626] text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
                   Closed
                 </div>
               )) ||
               (sameCreatorTickets[0].status === "New" && (
-                <div className="bg-gray-400 text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">
+                <div className="bg-[#091747] text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">
                   New
                 </div>
               ))}
@@ -521,49 +542,54 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
           </div>
               </div>
             </div>
-            <div className="flex justify-between bg-gray-200 p-4 rounded-xl">
-              <div className="flex flex-col leading-tight">
-                {/* {sameCreatorTickets.map((tkt, index) => {
-                  return <div key={index}>{`${tkt.sn} - ${tkt.subject}`}</div>;
-                })} */}
-                <div className="text-lg"><strong>{`${sameCreatorTickets[1]?.sn} - `}</strong>{`${sameCreatorTickets[1]?.subject}`}</div>
-                <div className="text-[#f21300] text-sm font-medium">{formatDate(sameCreatorTickets[1]?.modifiedAt)}</div>
-              </div>
-              <div className="flex gap-2">
-              <div className="flex justify-center items-center">
-            {(sameCreatorTickets[1]?.status === "Open" && (
-              <div className="bg-red-500 text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
-                Open
-              </div>
-            )) ||
-              (sameCreatorTickets[1]?.status === "Closed" && (
-                <div className="bg-green-500 text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
-                  Closed
+            {
+              sameCreatorTickets[1] && (
+                <div className="flex justify-between bg-[#E9E9E9] p-2 rounded-xl">
+                <div className="flex flex-col leading-tight">
+                  {/* {sameCreatorTickets.map((tkt, index) => {
+                    return <div key={index}>{`${tkt.sn} - ${tkt.subject}`}</div>;
+                  })} */}
+                  <div className="text-lg"><strong>{`${sameCreatorTickets[1]?.sn} - `}</strong>{`${sameCreatorTickets[1]?.subject}`}</div>
+                  <div className="text-[#f21300] text-sm font-medium">{formatDate(sameCreatorTickets[1]?.updatedAt)}</div>
+                </div>
+                <div className="flex gap-2">
+                <div className="flex justify-center items-center">
+              {(sameCreatorTickets[1]?.status === "Open" && (
+                <div className="bg-[#f21300] text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
+                  Open
                 </div>
               )) ||
-              (sameCreatorTickets[1]?.status === "New" && (
-                <div className="bg-gray-400 text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">
-                  New
-                </div>
-              ))}
-          </div>
-          <div className="flex justify-center items-center">
-          <Button
-            className="bg-[#042559] text-white p-1 h-6 text-md" onClick={()=>setData(sameCreatorTickets[1] || '')}>
-            <IoMdEye  />
-          </Button>
-          </div>
-              </div>
+                (sameCreatorTickets[1]?.status === "Closed" && (
+                  <div className="bg-[#008626] text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">
+                    Closed
+                  </div>
+                )) ||
+                (sameCreatorTickets[1]?.status === "New" && (
+                  <div className="bg-[#091747] text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">
+                    New
+                  </div>
+                ))}
             </div>
+            <div className="flex justify-center items-center">
+            <Button
+              className="bg-[#042559] text-white p-1 h-6 text-md" onClick={()=>setData(sameCreatorTickets[1] || '')}>
+              <IoMdEye  />
+            </Button>
+            </div>
+                </div>
+              </div>
+              )
+            }
+           
           </div>
-          <div className="bg-gray-200 p-2 flex flex-col rounded-xl">
+          <div className="bg-[#E9E9E9] p-2 flex flex-col rounded-xl">
             <div>
-              <strong>Ticket Status</strong>
+              <strong className="text-[13px] text-[#091747] font-poppins font-bold">Ticket Status</strong>
             </div>
             <div className="mt-2 flex items-center gap-2">
               {/* Rounded-xl select component */}
               <select
-                className="rounded-xl p-2 border w-full border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+                className="rounded-lg px-2 border w-full border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               >
@@ -574,7 +600,7 @@ const ViewTicket: React.FC<ViewTicketProps> = ({
 
               {/* Save button */}
               <button
-                className="bg-[#091747] text-white px-4 py-2 rounded-xl hover:bg-blue-950"
+                className="bg-[#091747] text-white px-2 py-2 rounded-xl hover:bg-blue-950"
                 onClick={handleSave}
               >
                 <IoIosSave />

@@ -8,8 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
-import { Cross2Icon } from "@radix-ui/react-icons";
 import { MaterialInput } from "@/components/material-input";
+import { ImCross } from "react-icons/im";
 
 const formSchema = z.object({
   labelName: z.string().min(1, "Label name is required"),
@@ -71,7 +71,7 @@ export default function LabelForm({ onSubmit,close }: LabelFormProps) {
     <div className="w-80">
       <div className="flex justify-between w-full mb-2">
             <h1 className="text-lg font-bold">Custom Fee</h1>
-            <button onClick={close} className="text-red-600 font-bold bg-white"><Cross2Icon/></button>
+            <button onClick={close} className="text-[#f21300] font-bold bg-white"><ImCross size={14}/></button>
       </div>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">

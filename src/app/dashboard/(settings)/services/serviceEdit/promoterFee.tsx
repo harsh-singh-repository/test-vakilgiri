@@ -6,7 +6,7 @@ interface QuotationProps {
   data: Services;
 }
 
-interface PromoterWiseFee {
+export interface PromoterWiseFee {
   [promoterCount: string]: {
     id: string;
     amount: number;

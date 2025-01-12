@@ -11,41 +11,11 @@ export type Project = {
   status: string;
 };
 
-export interface GetTransactionType {
-  amount: number;
-  approvedById: string | null;
-  approvedOn: string | null;
-  businessId: string | null;
-  createdAt: string;
-  creatorId: string;
-  customerEmail: string;
-  customerMobile: string;
-  customerName: string;
-  description: string | null;
-  expireBy: string | null;
-  id: string;
-  paymentMode: string | null;
-  paymentsId: string | null;
-  projectId: string | null;
-  referenceId: string;
-  remarks: string | null;
-  screenshot: string;
-  shortUrl: string | null;
-  slug: string;
-  status: string;
-  transactionDate: string;
-  transactionId: string | null;
-  transactionMode: string;
-  transactionType: string;
-  updatedAt: string;
-  userWalletId: string;
-}
-
 // Mock data source for projects
 const fakeProjects = {
   records: Array.from({ length: 50 }, (_, index) => ({
     date: new Date(Date.now() - Math.random() * 1e10).toISOString().split('T')[0], // Random past date
-    paymentId: `PAY-${index + 1}`,
+    paymentId: `UPG${index + 1}`,
     invoiceId: `INV-${index + 1}`,
     business: `Business ${Math.ceil(Math.random() * 5)}`, // Random business
     project: `Project ${Math.ceil(Math.random() * 10)}`, // Random project

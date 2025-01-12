@@ -81,7 +81,7 @@ const EditTicket: React.FC<EditTicketProps> = ({ data, close,categories,handleFe
      <div className="flex items-center justify-between w-full mb-2">
   <div className="flex justify-center w-full font-bold text-xl">{`Edit: ${data.sn}`}</div>
   <div className="flex justify-end cursor-pointer" onClick={close}>
-    <div className='p-1 bg-blue-950 rounded-xl text-white'> <X /></div>
+    <div className='p-1 bg-[#091747] rounded-xl text-white'> <X /></div>
   </div>
 </div>
       <div className='w-full bg-gray-300 p-2 flex flex-col gap-1 rounded-xl mb-3'>

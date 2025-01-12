@@ -32,6 +32,7 @@ export type Ticket = {
     categoryId: string;
     createdAt: string;
     modifiedAt: string;
+    updatedAt:string;
     slug: string | null;
     managerId: string | null;
     creatorId: string;
@@ -57,9 +58,9 @@ export const TicketColumns:(categories:TicketCategory[],tickets:Ticket[], handle
     cell:({row})=>{
       return (
         <div className="flex flex-col">
-          <div className="text-[#091747] text-sm font-semibold">{row.original.sn}</div>
-          <div className="text-[#091747] text-sm font-medium">
-  {new Date(row.original.modifiedAt).toLocaleDateString('en-GB').replaceAll('/','-')}
+          <div className="text-[#091747] text-[14px] font-semibold font-poppins">{row.original.sn}</div>
+          <div className="text-[#091747] text-[11px] font-medium font-poppins">
+  {new Date(row.original.updatedAt).toLocaleDateString('en-GB').replaceAll('/','-')}
 </div>
           </div>
       )
@@ -80,7 +81,7 @@ export const TicketColumns:(categories:TicketCategory[],tickets:Ticket[], handle
       console.log(matchedCategory,2)
     // const id = matchedCategory?.id;
         return (
-          <div className="text-[#091747] text-sm font-medium">
+          <div className="text-[#091747] text-[14px] font-poppins font-medium">
             {matchedCategory?.name}
           </div>
         )
@@ -91,7 +92,7 @@ export const TicketColumns:(categories:TicketCategory[],tickets:Ticket[], handle
     header: "Subject",
     cell:({row})=>{
         return (
-          <div className="text-[#091747] text-sm font-medium">{row.original.subject}</div>
+          <div className="text-[#091747] text-[14px] font-poppins font-medium">{row.original.subject}</div>
         )
     }
   },
@@ -114,7 +115,7 @@ export const TicketColumns:(categories:TicketCategory[],tickets:Ticket[], handle
               ||
               row.original.status==='Closed' && <div className="bg-[#008626] text-white rounded-full h-4 w-12 flex justify-center items-center text-xs">Closed</div>
               ||
-              row.original.status==='New' && <div className="bg-[#bdbdbd] text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">New</div>
+              row.original.status==='New' && <div className="bg-[#091747] text-white rounded-full h-4 w-10 flex justify-center items-center text-xs">New</div>
             }
           </div>
         )

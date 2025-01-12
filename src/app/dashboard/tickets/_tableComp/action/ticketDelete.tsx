@@ -1,26 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { getSession } from 'next-auth/react';
 import React from 'react'
+import { Ticket } from '../ticketColumn';
 
-interface content{
-    id: string;
-  description: string;
-  icon: string;
-  priority: number;
-  serviceId: string;
-  taskType: string;
-  title: string;
-  type: string;
-  creatorId: string;
-  createdAt: string;
-  modifiedAt: string;
-  slug: string | null;
-}
 interface contentDeleteProps{
-    data:content;
+    data:Ticket;
     close: () => void;
 }
-const ContentDelete:React.FC<contentDeleteProps>=({data,close})=> {
+const TicketDelete:React.FC<contentDeleteProps>=({data,close})=> {
     console.log(data)
     const handleDelete = async (id: string) => {
         try {
@@ -31,7 +18,7 @@ const ContentDelete:React.FC<contentDeleteProps>=({data,close})=> {
             return;
           }
     
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/content/${id}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/${id}`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${session?.user.accessToken}`,
@@ -42,13 +29,13 @@ const ContentDelete:React.FC<contentDeleteProps>=({data,close})=> {
           const result = await response.json();
     
           if (response.ok && result.success) {
-            console.log(`Content with ID ${id} deleted successfully.`);
+            console.log(`ticket with ID ${id} deleted successfully.`);
             close(); 
           } else {
-            console.error(`Failed to delete content: ${result.message || response.statusText}`);
+            console.error(`Failed to delete ticket: ${result.message || response.statusText}`);
           }
         } catch (error) {
-          console.error("Error during content deletion:", error);
+          console.error("Error during ticket deletion:", error);
         }
       };
   return (
@@ -57,11 +44,11 @@ const ContentDelete:React.FC<contentDeleteProps>=({data,close})=> {
   <img src="/bin.gif" alt="Bin" />
 </div>
 <h1 className='text-lg font-bold'>Are you sure?</h1>
-<p className='text-red-500 font-bold'>You are going to delete {data.type}</p>
+<p className='text-red-500 font-bold'>You are going to delete {data.sn}</p>
 <Button className='mt-2 w-32 bg-red-600 p-2 hover:bg-red-600' onClick={()=>handleDelete(data.id)}>Delete</Button>
 <Button variant={'outline'} onClick={close} className='mt-2 mb-4'>Cancel</Button>
     </div>
   )
 }
 
-export default ContentDelete
+export default TicketDelete
