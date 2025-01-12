@@ -263,6 +263,18 @@ export interface CreateLeadData{
 }
 
 
+export interface UserRegisterType{
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  mobileNumber: string;
+  pan: string;
+  gender: "Male" | "Female" | "Other";
+  dob: string;
+}
+
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;

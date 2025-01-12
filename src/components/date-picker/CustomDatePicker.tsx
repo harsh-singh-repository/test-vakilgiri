@@ -24,7 +24,12 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setCurrentValue(newValue);
-    if (onChange) onChange(newValue);
+  
+    if (onChange) {
+      // Convert the string to a Date object
+      const dateObject = new Date(newValue);
+      onChange(dateObject.toISOString());
+    }
   };
 
   return (

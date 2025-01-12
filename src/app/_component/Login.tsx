@@ -25,9 +25,6 @@ import { LoginformSchema } from "../_types/zodSchema";
 import { toast } from "sonner";
 
 // Define schema with gender and birthdate fields
-
-
-
 const Login: React.FC<LoginProps> = ({
   handleForgetPassword,
   handleRegistration,
@@ -55,7 +52,6 @@ const Login: React.FC<LoginProps> = ({
       password: data.password,
     });
     setloader(false);
-    console.log(result);
     if (result?.error) {
       if (result.error === "CredentialsSignin") {
         toast.error("Incorrect Email or password")

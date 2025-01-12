@@ -14,7 +14,7 @@ import {
   MdOutlinePhoneCallback, MdEditDocument, MdOutlineArrowDropUp,
   MdOutlineArrowDropDown, MdHeadsetMic,
 } from "react-icons/md";
-import { FaFolder, FaClock, FaUserCircle } from "react-icons/fa";
+import { FaFolder, FaClock, FaUserCircle, FaRegClipboard } from "react-icons/fa";
 import { GiSmartphone } from "react-icons/gi";
 import { GrPowerReset } from "react-icons/gr";
 import { BsFillHouseAddFill, BsGearFill } from "react-icons/bs";
@@ -52,6 +52,12 @@ const items = [
     title: "Business",
     url: "/dashboard/business",
     icon: BriefcaseBusiness,
+    classname: ""
+  },
+  {
+    title: "Registration",
+    url: "/dashboard/registration",
+    icon: FaRegClipboard,
     classname: ""
   },
   {

@@ -61,8 +61,8 @@ export default function LeadsPage() {
             className="w-full md:max-w-sm ml-auto bg-white p-[5px] text-[14px] lg:w-[249px] h-[30px] placeholder:text-black/40"
             />
 
-              <div className="bg-[#f21300] text-white max-h-fit max-w-fit rounded-lg cursor-pointer p-1" onClick={openModal}>
-                <Plus strokeWidth={"5"}/>
+              <div className="bg-[#f21300] text-white max-h-[25px] min-h-[25px] min-w-[25px] max-w-[25px] rounded-sm cursor-pointer p-1" onClick={openModal}>
+              <Plus strokeWidth={"5"} size={"18"}/>
               </div>
           </div>
               <Modal isOpen={isModalOpen} onClose={closeModal} className="w-[400px] border-[#f21300] border-2"> 
