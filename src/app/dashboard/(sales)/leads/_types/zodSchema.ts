@@ -68,7 +68,7 @@ export const CreateLeadformSchema = z.object({
     businessId: z.string().min(2, {
       message: "Business name must be at least 2 characters.",
     }).optional(),
-    client: z.string({
+    clientId: z.string({
       required_error: "Please select a contact person",
     }).optional(),
     firstName: z.string().min(2, {

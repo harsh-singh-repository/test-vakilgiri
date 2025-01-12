@@ -137,10 +137,23 @@ export interface clientDetailsType{
   userRoles: string| null;
 }
 
+interface BusinessUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  emailStatus: string;
+  mobileNumber: string;
+  pan: string;
+  aadhaar: string | null;
+  userRoles: string;
+}
+
 export interface BussinessSearchType{
     id: string;
     businessName: string;
     businessPan: string;
+    businessUsers: BusinessUser[]
     businessType: string; // Extend as needed
     businessStatus: string | null; // Nullable field
 }

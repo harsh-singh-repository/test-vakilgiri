@@ -1,16 +1,21 @@
 import { z } from "zod"
 
 export const RegisterformSchema = z.object({
-    firstname: z.string().min(1, { message: "First Name is required" }),
-    lastname: z.string().min(1, { message: "Last Name is required" }),
+    firstName: z.string().min(1, { message: "First Name is required" }),
+    lastName: z.string().min(1, { message: "Last Name is required" }),
     email: z.string().email({ message: "Invalid email address" }),
-    mobile_number: z.string().min(10, { message: "Invalid mobile number" }),
+    mobileNumber: z.string().min(10, { message: "Invalid mobile number" }),
     pan: z.string().min(10, { message: "PAN number should be 10 characters" }),
-    dob: z.date({ required_error: "Birthdate is required" }),
+    dob: z
+    .string()
+    .regex(
+      /^\d{4}-\d{2}-\d{2}$/,
+      "BirthDate is Required."
+    ),
     password: z.string().min(8, { message: "Password must be at least 8 characters" }),
-    confirm_password: z.string().min(8, { message: "Please confirm your password" }),
+    confirmPassword: z.string().min(8, { message: "Please confirm your password" }),
     gender: z.enum(["Male", "Female", "Other"]),
-  }).refine((data) => data.password === data.confirm_password, {
+  }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
   })
@@ -27,7 +32,8 @@ export const RegisterformSchema = z.object({
   });
 
 export const OtpFormSchema = z.object({
-    pin: z.string().min(6, {
+    otp: z.string().min(6, {
         message: "Your one-time password must be 6 characters.",
     }),
+    email:z.string().email({ message: "Invalid email address" }),
 });
