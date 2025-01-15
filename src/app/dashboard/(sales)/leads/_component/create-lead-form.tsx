@@ -33,6 +33,7 @@ import { MaterialInput } from "@/components/material-input";
 import { useSearchBussinessQuery } from "@/hooks/business/manage-business";
 import { useState } from "react";
 import { BussinessSearchType } from "../_types";
+import { AxiosError } from "axios";
 
 interface onCloseProp {
   onClose: () => void;
@@ -53,6 +54,8 @@ interface BusinessUser {
 export default function CreateLeadForm({ onClose }: onCloseProp) {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const [loader, setLoader] = useState<boolean>(false);
 
   const [selectClient, setSetClient] = useState<BusinessUser[] | null>(null);
   const [bussinessId, setBussinessId] = useState<string>("");
@@ -93,15 +96,28 @@ export default function CreateLeadForm({ onClose }: onCloseProp) {
 
   function onSubmit(values: z.infer<typeof CreateLeadformSchema>) {
     console.log(values);
-
+    setLoader(true);
     addLeads(values, {
       onSuccess: () => {
+        setLoader(false);
         toast.success("Leads created Successfully");
         query.invalidateQueries({ queryKey: ["leads"] });
         onClose();
       },
       onError: (error) => {
-        toast.error(`Failed to create lead: ${error}`);
+        setLoader(false);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to Add Busssiness: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors{
+          toast.error(`An unexpected error occurred: ${error}`);
+        }
       },
     });
   }
@@ -226,13 +242,11 @@ export default function CreateLeadForm({ onClose }: onCloseProp) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {selectClient?.map(
-                            (client: BusinessUser) => (
-                              <SelectItem key={client.id} value={client.id}>
-                                {client.firstName + " " + client.lastName}
-                              </SelectItem>
-                            )
-                          )}
+                          {selectClient?.map((client: BusinessUser) => (
+                            <SelectItem key={client.id} value={client.id}>
+                              {client.firstName + " " + client.lastName}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -408,7 +422,7 @@ export default function CreateLeadForm({ onClose }: onCloseProp) {
                 form.formState.isValid ? "bg-[#F32311]" : "bg-gray-500"
               }`}
             >
-              Submit
+              {loader ? "Loading..." : "Submit"}
             </Button>
           </form>
         </Form>

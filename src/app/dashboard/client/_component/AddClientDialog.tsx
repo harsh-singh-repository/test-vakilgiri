@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -91,6 +91,8 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
   const { mutate: addUser } = useAddClient();
   const queryClient = useQueryClient();
 
+  const [loader,setLoader] = useState<boolean>(false)
+
   const form = useForm<AddClientFormValues>({
     resolver: zodResolver(AddClientFormSchema),
     defaultValues: {
@@ -112,13 +114,16 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
   });
 
   function onSubmit(data: AddClientFormValues) {
+    setLoader(true)
     addUser(data, {
       onSuccess: () => {
+        setLoader(false)
         toast.success("Client created successfully!");
         queryClient.invalidateQueries({ queryKey: ["clients"] });
         onClose();
       },
       onError: (error) => {
+        setLoader(false)
         if (error instanceof AxiosError) {
           const errorMessage =
             error.response?.data?.message || "An unexpected error occurred.";
@@ -456,7 +461,7 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
             type="submit"
             className="w-full bg-[#F21300] hover:bg-[#d11100] text-white"
           >
-            Create Client
+            {loader ? "Loading..." : "Create Client"}
           </Button>
         </form>
       </Form>

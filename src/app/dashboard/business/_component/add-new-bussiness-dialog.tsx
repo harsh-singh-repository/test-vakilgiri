@@ -61,7 +61,7 @@ interface AddNewBussinessDialogProp {
 
 const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
   // const [date, setDate] = React.useState<Date>();
-  // const [logo, setLogo] = React.useState<string | null>(null);
+  const [loader, setLoader] = React.useState<boolean>(false);
 
   const queryClient = useQueryClient();
 
@@ -88,14 +88,17 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
   });
 
   const onSubmit = (data: z.infer<typeof AddBussinessformSchema>) => {
+    setLoader(true);
     console.log("formdata", data);
     addBussiness(data, {
       onSuccess: () => {
+        setLoader(false);
         toast.success("Bussiness Added Succesfully");
         queryClient.invalidateQueries({ queryKey: ["bussiness"] });
         queryClient.invalidateQueries({ queryKey: ["bussinessCount"] });
       },
       onError: (error) => {
+        setLoader(false)
         if (error instanceof AxiosError) {
           // Safely access the response data
           const errorMessage =
@@ -497,7 +500,7 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
                   className="py-1 px-2 w-32 text-xs bg-[#F21300] hover:bg-[#091747] text-white"
                   type="submit"
                 >
-                  Save and Procced
+                  {loader ? "Loading..." : "Save and Proceed" }
                 </Button>
               </div>
               {/* </div> */}

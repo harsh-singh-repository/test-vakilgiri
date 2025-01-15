@@ -5,7 +5,13 @@ export const RegisterformSchema = z.object({
     lastName: z.string().min(1, { message: "Last Name is required" }),
     email: z.string().email({ message: "Invalid email address" }),
     mobileNumber: z.string().min(10, { message: "Invalid mobile number" }),
-    pan: z.string().min(10, { message: "PAN number should be 10 characters" }),
+    pan:  z
+    .string()
+    .min(1, "PAN is required")
+    .transform((value) => value.toUpperCase())
+    .refine((value) => /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value), {
+        message: "Invalid PAN format",
+    }),
     dob: z
     .string()
     .regex(

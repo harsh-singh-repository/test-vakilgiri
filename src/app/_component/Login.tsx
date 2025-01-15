@@ -51,18 +51,21 @@ const Login: React.FC<LoginProps> = ({
       email: data.email,
       password: data.password,
     });
-    setloader(false);
+
     if (result?.error) {
+      setloader(false);
       if (result.error === "CredentialsSignin") {
-        toast.error("Incorrect Email or password")
+        toast.error("Incorrect Email or Password");
       } else {
-        toast.error(`Login failed : ${result.error}`)
+        toast.error(`Login failed: ${result.error}`);
       }
     }
 
     if (result?.url) {
-      toast.success("Login Successful")
+      toast.success("Login Successful");
       router.push("/dashboard");
+    } else {
+      setloader(false);
     }
   }
 
@@ -150,9 +153,7 @@ const Login: React.FC<LoginProps> = ({
 
           {/* Submit Button */}
           <Button type="submit" className="hover:bg-[#091747] bg-[#f21300]">
-            {
-              loader ? <Loader2 className="animate-spin" /> : "Login"
-            }
+            {loader ? <Loader2 className="animate-spin" /> : "Login"}
           </Button>
 
           {/* Forget Password */}

@@ -80,12 +80,22 @@ export  const AddClientformSchema = z.object({
     mobileNumber: z.string().min(10, "Mobile number must be 10 digits").default("").optional(),
     aadhaar: z.string().min(12, "Aadhaar number must be 12 digits").default("").optional(),
     din: z.string().default("").optional(),
-    dob: z.string().default("").optional(),
-    dscInfo: z.enum(["None", "Not_Applicable", "With_Vakilgiri", "With_Client"]).default("Not_Applicable").optional(),
+    dob: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Due date must be in the format 'yyyy-MM-dd'.")
+      .optional(),
+    dscInfo: z.enum(["None", "Not_Applicable", "With_Vakilgiri", "With_Client"]).default("None").optional(),
+    dscExpiry: z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Due date must be in the format 'yyyy-MM-dd'.")
+  .default("")
+  .optional(),
+    dscVault: z.string().optional(),
     email: z.string().email("Invalid email address").default("").optional(),
     kycStatus: z.enum(["Pending", "Approved"]).default("Pending").optional(),
     loginStatus: z.enum(["Active", "Inactive"]).default("Active").optional(),
   });
+  
 
   export const discussionSchema = z.object({
     discussion: z.string().min(1, "Discussion is required"),

@@ -11,9 +11,12 @@ import { useGetDeleteReminder } from '@/hooks/reminder/manage-reminder';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
 const ActionButton = ({id,dialogType,reminderId}:{id:string,dialogType:string,reminderId:string}) => {
 
-  const query = useQueryClient()
+  const query = useQueryClient();
+
+  const [loader,setLoader] = useState(false);
 
   const [openDialogId, setOpenDialogId] = useState<string>(""); // State for dialog ID
   
@@ -25,12 +28,15 @@ const ActionButton = ({id,dialogType,reminderId}:{id:string,dialogType:string,re
   const closeModal = () => setIsModalOpen(false);
 
   const onHandleDeleteClick = (id:string) =>{
+    setLoader(true)
    deleteReminder(id,{
-    onSuccess:()=>{
+     onSuccess:()=>{
+      setLoader(false);
       toast.success("Reminder Deleted");
       query.invalidateQueries({queryKey:["reminder"]})
     },
     onError: (error) => {
+      setLoader(false)
       if (error instanceof AxiosError) {
         const errorMessage =
           error.response?.data?.message || "An unexpected error occurred.";
@@ -70,7 +76,7 @@ const ActionButton = ({id,dialogType,reminderId}:{id:string,dialogType:string,re
       </Modal> }
 
       <Button className='bg-[#f21300] text-white w-6 h-7 text-sm' onClick={()=>{onHandleDeleteClick(reminderId)}}>
-        <RiDeleteBin6Line />
+      {loader ? <Loader2 className="animate-spin" /> : <RiDeleteBin6Line/>}
       </Button>
     </div>
   )

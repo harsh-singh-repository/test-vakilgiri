@@ -3,12 +3,6 @@ import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Form,
   FormControl,
@@ -25,9 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { CalendarIcon } from "lucide-react";
-// import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -40,6 +31,8 @@ import {
 } from "@/hooks/business/manage-business";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
 // import { toast } from "sonner";
 
 const bussinessType = [
@@ -75,6 +68,7 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
   // const [date, setDate] = React.useState<Date>();
   const { data } = useGetBussinessById(bussinessId);
   const queryClient = useQueryClient();
+
   // const [logo, setLogo] = React.useState<string | null>(null);
   const [defaultValues, setDefaultValues] = useState<
     z.infer<typeof BussinessIdformSchema>
@@ -106,7 +100,7 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
           ? {
               businessType: data?.businessType ?? "", // Will default to "type1" due to `default`
               businessName: data?.businessName ?? "", // Default empty string
-              businessRegDate: data?.businessRegDate.split('T')[0] ?? undefined, // Default to null
+              businessRegDate: data?.businessRegDate.split("T")[0] ?? undefined, // Default to null
               businessPan: data?.businessPan ?? "",
               businessRegNo: data?.businessRegNo ?? "",
               businessMobile: data?.businessMobile ?? "",
@@ -152,12 +146,25 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
 
     editBussiness(data, {
       onSuccess: () => {
+        setSubmitted(false);
         toast.success("Bussiness upadated Successfully");
         queryClient.invalidateQueries({ queryKey: ["bussinessId"] });
         queryClient.invalidateQueries({ queryKey: ["bussinessCount"] });
       },
       onError: (error) => {
-        toast.error(`Failed to update Bussiness: ${error}`);
+        setSubmitted(false);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to Add Busssiness: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors{
+          toast.error(`An unexpected error occurred: ${error}`);
+        }
       },
     });
     // Handle form submission
@@ -204,7 +211,7 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
                               <SelectContent>
                                 {bussinessType.map((bussiness, index) => (
                                   <SelectItem key={index} value={bussiness}>
-                                    {bussiness.replace("_"," ")}
+                                    {bussiness.replace("_", " ")}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
@@ -235,54 +242,27 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
                     )}
                   />
                   {/* <div className="flex gap-3 items-center"> */}
-                    <FormField
-                      control={form.control}
-                      name="businessRegDate"
-                      render={({ field, fieldState: { error } }) => (
-                        <div className="flex gap-3 items-center">
-                          <FormLabel className="text-[13px] w-[6.75rem]">Date</FormLabel>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <FormControl>
-                                <Button
-                                  variant="outline"
-                                  className={cn(
-                                    "w-[340px] justify-start text-left text-xs font-normal",
-                                    !field.value && "text-muted-foreground",
-                                    error &&
-                                      "border-red-500 focus:border-red-500 focus:ring-red-500"
-                                  )}
-                                >
-                                  <CalendarIcon
-                                    className="mr-2 h-4 w-4"
-                                    aria-hidden="true"
-                                  />
-                                  {field.value
-                                    ? format(new Date(field.value), "PPP")
-                                    : "Pick a date"}
-                                </Button>
-                              </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                              <Calendar
-                                mode="single"
-                                selected={
-                                  field.value
-                                    ? new Date(field.value)
-                                    : undefined
-                                }
-                                onSelect={(date) =>
-                                  field.onChange(
-                                    date ? format(date, "yyyy-MM-dd") : ""
-                                  )
-                                }
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                      )}
-                    />
+                  <FormField
+                    control={form.control}
+                    name="businessRegDate"
+                    render={({ field}) => (
+                      <div className="flex gap-3 items-center">
+                        <FormLabel className="text-[13px] w-[6.75rem]">
+                          Date
+                        </FormLabel>
+                        <CustomDatePicker
+                          className="w-[340px] text-[13px]"
+                          value={field.value || ""}
+                          onChange={(date) =>
+                            field.onChange(
+                              date ? format(new Date(date), "yyyy-MM-dd") : ""
+                            )
+                          }
+                        />
+                        <FormMessage/>
+                      </div>
+                    )}
+                  />
                   {/* </div> */}
                   <FormField
                     control={form.control}
@@ -537,7 +517,7 @@ const BussinessIdForm = ({ bussinessId }: BussinessIdSettingsPageProps) => {
                   className="py-1 px-2 w-32 text-[13px] bg-[#F21300] hover:bg-[#091747] text-white"
                   type="submit"
                 >
-                  Update
+                  {submitted ? "Loading..." : "Update"}
                 </Button>
               </div>
               {/* </div> */}

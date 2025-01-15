@@ -20,7 +20,7 @@ import { OtpVerifyForm } from "./OtpVerify";
 import { RegisterProps } from "../_types";
 import { RegisterformSchema } from "../_types/zodSchema";
 import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useRegisterUser, useVerifyEmail } from "@/hooks/auth/manage-auth";
@@ -38,6 +38,8 @@ export default function Register({ alreadyLogin }: RegisterProps) {
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  
+   const [loader, setloader] = useState<boolean>(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -76,7 +78,8 @@ export default function Register({ alreadyLogin }: RegisterProps) {
   
   async function onSubmit(data: z.infer<typeof RegisterformSchema>) {
     setError(null);
-  
+    setloader(true);
+
     try {
       // Simulate API call for user registration
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -104,6 +107,8 @@ export default function Register({ alreadyLogin }: RegisterProps) {
     } catch (err) {
       console.error(err);
       setError("An error occurred while submitting the form. Please try again.");
+    }finally{
+      setloader(false);
     }
   }
   
@@ -305,8 +310,8 @@ export default function Register({ alreadyLogin }: RegisterProps) {
           </div>
 
           <div>
-            <Button className="w-full bg-[#f21300] text-white hover:bg-[#d11100]">
-              Verify Email with OTP
+            <Button className="w-full bg-[#f21300] text-white hover:bg-[#d11100]" >
+            {loader ? <Loader2 className="animate-spin" /> : "Verfify Email With Otp"}
             </Button>
           </div>
 

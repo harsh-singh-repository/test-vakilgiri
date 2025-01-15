@@ -27,12 +27,17 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { Oval } from "react-loader-spinner";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Component({ clientId }: clientIdProps) {
   const { data } = useGetClientsById(clientId);
   const { mutate } = useEditClient(clientId);
 
-  console.log("Client ID data",data)
+  const [loader,setLoader] = useState<boolean>();
+
+  console.log("Client ID data",data);
+
+  const queryClient = useQueryClient();
 
   const [defaultValues, setDefaultValues] = useState<
     z.infer<typeof AddressformSchema>
@@ -73,11 +78,15 @@ export default function Component({ clientId }: clientIdProps) {
   }, [defaultValues, form])
 
   function onSubmit(values: z.infer<typeof AddressformSchema>) {
+    setLoader(true)
     mutate(values,{
       onSuccess:()=>{
-         toast.success("Client Updated Successfully.")
+        setLoader(false);
+         toast.success("Client Updated Successfully.");
+         queryClient.invalidateQueries({ queryKey: ["clients"] });
       },
       onError:(error)=>{
+        setLoader(false);
         if (error instanceof AxiosError) {
           // Safely access the response data
           const errorMessage = error.response?.data?.message || "An unexpected error occurred.";
@@ -214,7 +223,7 @@ export default function Component({ clientId }: clientIdProps) {
               type="submit"
               className="bg-red-600 hover:bg-red-700 text-white"
             >
-              Save Address
+              {loader ? "Loading...":"Save Address"}
             </Button>
           </div>
         </form>

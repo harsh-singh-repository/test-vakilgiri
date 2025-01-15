@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -13,23 +13,25 @@ import {
   Form,
   FormControl,
   FormField,
-//   FormLabel,
+  //   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 // import { Textarea } from "@/components/ui/textarea";
-import { CalendarIcon} from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 // import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {userRegisterByRoleSchema} from "../_types/zodSchema";
+import { userRegisterByRoleSchema } from "../_types/zodSchema";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { MaterialInput } from "@/components/material-input";
 import CustomSelect from "@/components/custom-select";
 import { AxiosError } from "axios";
 import { useAddStaffRoles } from "@/hooks/user/manage-user";
+import { tree } from "next/dist/build/templates/app-page";
+import CustomDatePicker from "@/components/date-picker/CustomDatePicker";
 
 const states = [
   { key: "Arunachal_Pradesh", name: "Arunachal Pradesh" },
@@ -61,7 +63,7 @@ const role = [
   { key: "Admin", name: "Admin" },
   { key: "Staff_Manager", name: "Staff" },
   { key: "Client", name: "Client" },
-//   { key: "retailer", name: "Retailer" },
+  //   { key: "retailer", name: "Retailer" },
 ];
 
 // const bussinessType = [
@@ -85,11 +87,13 @@ interface onCloseProp {
 
 const CreateStaff = ({ onClose }: onCloseProp) => {
   // const [date, setDate] = React.useState<Date>();
-//   const [logo, setLogo] = React.useState<string | null>(null);
+  //   const [logo, setLogo] = React.useState<string | null>(null);
 
   const queryClient = useQueryClient();
 
-  const { mutate: addStaffRoles} = useAddStaffRoles();
+  const [loader, setLoader] = useState(false);
+
+  const { mutate: addStaffRoles } = useAddStaffRoles();
 
   const form = useForm<z.infer<typeof userRegisterByRoleSchema>>({
     resolver: zodResolver(userRegisterByRoleSchema),
@@ -108,44 +112,47 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
       address2: "",
       pincode: "",
       userRoles: "Staff_Manager",
-      loginStatus:"Active"
+      loginStatus: "Active",
     },
   });
 
   const onSubmit = (data: z.infer<typeof userRegisterByRoleSchema>) => {
     console.log("formdata", data);
-    addStaffRoles(data,{
-        onSuccess:()=>{
-             toast.success("Role add to Staff.")
-             queryClient.invalidateQueries({queryKey:["userStaff"]})
-        },
-        onError:(error)=>{
-            if (error instanceof AxiosError) {
-                // Safely access the response data
-                const errorMessage =
-                  error.response?.data?.message || "An unexpected error occurred.";
-                // console.log("Axios Error Message:", errorMessage);
-    
-                // Display error message in toast
-                toast.error(`Failed to Add role: ${errorMessage}`);
-              } else {
-                // Handle non-Axios errors
-                toast.error("An unexpected error occurred.");
-              }
+    setLoader(true);
+    addStaffRoles(data, {
+      onSuccess: () => {
+        setLoader(false);
+        toast.success("Role add to Staff.");
+        queryClient.invalidateQueries({ queryKey: ["userStaff"] });
+      },
+      onError: (error) => {
+        setLoader(false);
+        if (error instanceof AxiosError) {
+          // Safely access the response data
+          const errorMessage =
+            error.response?.data?.message || "An unexpected error occurred.";
+          // console.log("Axios Error Message:", errorMessage);
+
+          // Display error message in toast
+          toast.error(`Failed to Add role: ${errorMessage}`);
+        } else {
+          // Handle non-Axios errors
+          toast.error("An unexpected error occurred.");
         }
-    })
+      },
+    });
   };
 
-//   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = e.target.files?.[0];
-//     if (file) {
-//       const reader = new FileReader();
-//       reader.onloadend = () => {
-//         setLogo(reader.result as string);
-//       };
-//       reader.readAsDataURL(file);
-//     }
-//   };
+  //   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     const file = e.target.files?.[0];
+  //     if (file) {
+  //       const reader = new FileReader();
+  //       reader.onloadend = () => {
+  //         setLogo(reader.result as string);
+  //       };
+  //       reader.readAsDataURL(file);
+  //     }
+  //   };
 
   return (
     <div className="">
@@ -155,9 +162,9 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
             Add Staff
           </div>
         </div>
-      <span className="inline text-[14px] bg-[#091747] text-left px-2 py-1 font-medium rounded-full max-w-fit text-white">
-        Personal Details
-      </span>
+        <span className="inline text-[14px] bg-[#091747] text-left px-2 py-1 font-medium rounded-full max-w-fit text-white">
+          Personal Details
+        </span>
       </div>
 
       <Form {...form}>
@@ -202,8 +209,8 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
               <FormField
                 control={form.control}
                 name="lastName"
-                render={({field}) => (
-                    <div>
+                render={({ field }) => (
+                  <div>
                     {/* <FormLabel className="text-xs">Business Name</FormLabel> */}
                     <FormControl>
                       <MaterialInput
@@ -242,7 +249,7 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
               render={({ field }) => (
                 <div>
                   <FormControl>
-                  <CustomSelect
+                    <CustomSelect
                       {...field}
                       className="w-full"
                       placeholder="Gender"
@@ -262,7 +269,7 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
               render={({ field }) => (
                 <div>
                   <FormControl>
-                  <MaterialInput
+                    <MaterialInput
                       {...field}
                       className="text-xs"
                       placeholder="Mobile Number"
@@ -278,46 +285,16 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
               name="dob"
               render={({ field, fieldState: { error } }) => (
                 <div>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left text-xs font-normal",
-                              !field.value && "text-muted-foreground",
-                              error &&
-                                "border-red-500 focus:border-red-500 focus:ring-red-500"
-                            )}
-                          >
-                            <CalendarIcon
-                              className="mr-2 h-4 w-4"
-                              aria-hidden="true"
-                            />
-                            {field.value
-                              ? format(new Date(field.value), "PPP")
-                              : "Date of Birth"}
-                          </Button>
-                        </FormControl>
-
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={
-                            field.value ? new Date(field.value) : undefined
-                          }
-                          onSelect={(date) =>
-                            field.onChange(
-                              date ? format(date, "yyyy-MM-dd") : ""
-                            )
-                          }
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage/>
-                  </div>
+                  <CustomDatePicker
+                  value={field.value || ""}
+                  onChange={(date) =>
+                    field.onChange(
+                      date ? format(new Date(date), "yyyy-MM-dd") : ""
+                    )
+                  }
+                />
+                  <FormMessage />
+                </div>
               )}
             />
 
@@ -327,7 +304,7 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
               render={({ field }) => (
                 <div>
                   <FormControl>
-                  <CustomSelect
+                    <CustomSelect
                       {...field}
                       className="w-full"
                       placeholder="Staff Role"
@@ -408,7 +385,7 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
                 </div>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="state"
@@ -446,7 +423,7 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
               )}
             />
 
-             <FormField
+            <FormField
               control={form.control}
               name="loginStatus"
               render={({ field }) => (
@@ -465,7 +442,6 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
                 </div>
               )}
             />
-
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -503,11 +479,10 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
                 </div>
               )}
             /> */}
-
           </div>
 
           <div className="flex flex-col sm:flex-row justify-end items-start sm:items-center gap-2">
-          <div
+            <div
               className="py-2 px-3 max-w-fit text-xs bg-[#091747] text-white rounded-md text-center cursor-pointer"
               onClick={onClose}
             >
@@ -517,7 +492,7 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
               className="py-1 px-2 w-32 text-xs bg-[#F21300] hover:bg-[#091747] text-white "
               type="submit"
             >
-              Create Login
+              {loader ? "Loading...." : "Submit"}
             </Button>
           </div>
         </form>

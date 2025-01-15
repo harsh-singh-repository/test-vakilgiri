@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { StackLeadsExchangeDialog } from './StackLeadsExchangeDialog';
 import Modal from '@/components/model/custom-modal';
 import { AxiosError } from 'axios';
+import { Loader2 } from 'lucide-react';
 
 interface ActionButtonProps{
   id:string,
@@ -15,6 +16,8 @@ interface ActionButtonProps{
 const ActionButton: React.FC<ActionButtonProps> = ({ id }) => { 
 
   const query = useQueryClient();
+
+  const [loader,setLoader] = useState(false);
   
   const {mutate:deleteLeads} = useDeleteLeads();// Destructure id from props
 
@@ -27,13 +30,15 @@ const ActionButton: React.FC<ActionButtonProps> = ({ id }) => {
 
   const handleDeleteLeads = (id:string)=>{
     console.log("My id",id);
+    setLoader(true);
      deleteLeads(id,{
       onSuccess:()=>{
+        setLoader(false);
         toast.success(`Leads Deleted Successfully`)
         query.invalidateQueries({queryKey:["leads"]})
-
       },
       onError:(error)=>{
+        setLoader(false);
         if (error instanceof AxiosError) {
           // Safely access the response data
           const errorMessage =
@@ -68,7 +73,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ id }) => {
          <StackLeadsExchangeDialog openDialogId={openDialogId} onClose={closeModal}/> 
       </Modal>
       <Button className="bg-[#f21300] text-white w-6 h-7 text-sm" onClick={()=>handleDeleteLeads(id)}>
-        <RiDeleteBin6Line />
+      {loader ? <Loader2 className="animate-spin" /> : <RiDeleteBin6Line/>}
       </Button>
     </div>
   );

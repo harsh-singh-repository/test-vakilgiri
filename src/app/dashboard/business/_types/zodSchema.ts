@@ -79,7 +79,10 @@ export const AddBussinessformSchema = z.object({
     .min(1, "Registered address is required")
     .optional(),
   city: z.string().min(1, "City is required"),
-  businessPincode: z.string().min(6, "Pin code must be 6 digits").max(6),
+  businessPincode: z
+  .string()
+  .regex(/^\d{6}$/, "Invalid pincode")
+  .default(""),
   businessEmail: z.string().min(1, "Enter EmailId"),
   business_logo: z
     .instanceof(File)
