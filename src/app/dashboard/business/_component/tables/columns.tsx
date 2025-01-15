@@ -53,7 +53,7 @@ export const columns: ColumnDef<Business>[] = [
     header: 'D.O.I',
     cell:({row})=>{
       return(
-          <span>{row.original.businessRegDate.split("T")[0]}</span>
+          <span>{row.original.businessRegDate?.split("T")[0]}</span>
       )
     }
   },
@@ -62,7 +62,7 @@ export const columns: ColumnDef<Business>[] = [
     header: 'Estimates',
     cell:({row})=>{
       return(
-          <span>{row.original.estimate.length}</span>
+          <span>{row.original.estimate?.length}</span>
       )
     }
   },
@@ -71,7 +71,7 @@ export const columns: ColumnDef<Business>[] = [
     header: 'Projects',
     cell:({row})=>{
       return(
-          <span>{row.original.projects.length}</span>
+          <span>{row.original.projects?.length}</span>
       )
     }
   },
