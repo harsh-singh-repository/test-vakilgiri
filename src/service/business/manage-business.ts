@@ -1,6 +1,6 @@
 // THIS IS EXMAPLE
 import axios from 'axios';
-import {AddFileType, BussinessDiscussionType, BussinessReminderTypes, CreateBussiness, editBussinessDetails } from '../../types';
+import {AddFileType, BusinessRegistation, BussinessDiscussionType, BussinessReminderTypes, CreateBussiness, editBussinessDetails } from '../../types';
 import axiosInstance from '@/lib/axiosInstance';
 import { getSession } from 'next-auth/react';
 
@@ -22,7 +22,9 @@ const BUSINESS_API = {
     ASSIGN_CONTACT_PERSON:(id:string  | string [] | undefined)=>`/business/${id}/contact-person`,
     REMOVE_MANAGER:(id:string) => `/business/${id}/managers`,
     CLIENT_TO_BUSSINESS:(id:string|string[]|undefined)=>`/business/${id}/clients`,
-    GET_FILES:(id:string | string [] | undefined) => `/files/business/${id}`
+    GET_FILES:(id:string | string [] | undefined) => `/files/business/${id}`,
+    BUSSINESS_REGISTRATION:(id:string | string [] | undefined) => `/registration/${id}`,
+    BUSSINESS_REGISTRTATION_EDIT:(id:string)=>`/registration/${id}`
 } as const;
 
 export const bussinessService = {
@@ -30,6 +32,15 @@ export const bussinessService = {
     getBussinessById: async (id: string | string[] | undefined) => {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.GET_BY_ID(id)}`);
         return response.data.data;
+    },
+
+    getBussinessRegistration: async (id: string | string[] | undefined) => {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.BUSSINESS_REGISTRATION(id)}`);
+        return response.data.data;
+    },
+    
+    getBussinessRegistrationEdit: async (id: string,registration:BusinessRegistation) => {
+        return await axiosInstance.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.BUSSINESS_REGISTRTATION_EDIT(id)}`,registration);
     },
 
     get: async () => {

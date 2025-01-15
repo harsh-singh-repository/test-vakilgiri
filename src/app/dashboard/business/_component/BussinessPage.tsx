@@ -71,48 +71,43 @@ export default function BusinessPage() {
         pageCount={Math.ceil(filteredData?.length / pageLimit)}
       />
     </div>
-  ) : (
+  ): (
     <div className="bg-white p-3">
       <div className="flex gap-x-3 items-center">
         <div
           className="bg-[#042559] text-white max-w-fit p-2 cursor-pointer rounded-md"
           onClick={() => setAddBussiness(true)}
         >
-          <ChevronsLeft className="h-4 w-4"/>
+          <ChevronsLeft className="h-4 w-4" />
         </div>
-        <div>
         <div className="flex flex-col">
-        <div className="text-[#091747] text-[22px] font-semibold">
-          Link Your Bussiness
-        </div>
-        <div className="text-[#F21300] text-[12px] leading-none font-medium">
-          Please fill all the information correctly to get the most out of
-          Vakilgiri.
+          <div className="text-[#091747] text-[22px] font-semibold">Link Your Business</div>
+          <div className="text-[#F21300] text-[12px] leading-none font-medium">
+            Please fill all the information correctly to get the most out of Vakilgiri.
+          </div>
         </div>
       </div>
-        </div>
-      </div>
-      <Tabs defaultValue="Add Bussiness" className="w-full mt-3 ">
+      <Tabs defaultValue="Add Business" className="w-full mt-3">
         <TabsList className="text-[#042559]">
-          <TabsTrigger value="Add Bussiness">Add Bussiness</TabsTrigger>
-          <TabsTrigger value="regestartion">Registration</TabsTrigger>
+          <TabsTrigger value="Add Business">Add Business</TabsTrigger>
+          <TabsTrigger value="registration">Registration</TabsTrigger>
           <TabsTrigger value="social">Social Media</TabsTrigger>
           <TabsTrigger value="documents">Documents</TabsTrigger>
         </TabsList>
-        <TabsContent value="Add Bussiness">
-          <AddNewBussinessDialog/>
+        <TabsContent value="Add Business">
+          <AddNewBussinessDialog />
         </TabsContent>
-        <TabsContent value="regestartion">
-            <AddBussinessRegistrationLayout/>
+        <TabsContent value="registration">
+          <AddBussinessRegistrationLayout/>
         </TabsContent>
         <TabsContent value="social" className="p-6">
-              <div className="inline text-[10px] bg-[#091747] text-left px-2 py-1 font-semibold rounded-md max-w-fit text-white">
-                Social media
-              </div>
-            <UpdateSocials/>
+          <div className="inline text-[10px] bg-[#091747] text-left px-2 py-1 font-semibold rounded-md max-w-fit text-white">
+            Social media
+          </div>
+          <UpdateSocials/>
         </TabsContent>
         <TabsContent value="documents" className="p-6">
-           <BussinessDocuments/>
+          <BussinessDocuments/>
         </TabsContent>
       </Tabs>
     </div>

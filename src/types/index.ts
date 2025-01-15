@@ -232,6 +232,17 @@ export interface AddFileType{
   Visibility?: boolean,
 }
 
+export interface BusinessRegistation{
+  businessDarpan?: string;
+  businessDarpanVerified: boolean;
+  csr?: string;
+  csrVerified: boolean;
+  gst?: string;
+  gstVerified: boolean;
+  msme?: string;
+  msmeVerified: boolean;
+}
+
 export interface AddFileTypeClient{
   clientId:string | string[] | undefined,
   File_Name:string,

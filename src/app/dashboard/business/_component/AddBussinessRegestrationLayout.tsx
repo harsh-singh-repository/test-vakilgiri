@@ -15,26 +15,63 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-
-const formSchema = z.object({
-  hasCsr: z.boolean().default(false),
-  csrNumber: z.string().optional(),
-  hasMsme: z.boolean().default(false),
-  msmeNumber: z.string().optional(),
-  hasGst: z.boolean().default(false),
-  gstNumber: z.string().optional(),
-  hasNgoDarpan: z.boolean().default(false),
-  darpanNumber: z.string().optional(),
+const formSchema = z
+.object({
+    businessDarpan: z.string().optional(),
+    businessDarpanVerified: z.boolean().default(false),
+    csr: z.string().optional(),
+    csrVerified: z.boolean().default(false),
+    gst: z.string().optional(),
+    gstVerified: z.boolean().default(false),
+    msme: z.string().optional(),
+    msmeVerified: z.boolean().default(false),
 })
+.refine(
+    (data) =>
+        !data.businessDarpanVerified ||
+        (data.businessDarpan && data.businessDarpan.trim() !== ""),
+    {
+        message:
+            "businessDarpan cannot be null or empty if businessDarpanVerified is true",
+        path: ["businessDarpan"], // Specify the field causing the error
+    },
+)
+.refine(
+    (data) => !data.csrVerified || (data.csr && data.csr.trim() !== ""),
+    {
+        message: "csr cannot be null or empty if csrVerified is true",
+        path: ["csr"],
+    },
+)
+.refine(
+    (data) => !data.gstVerified || (data.gst && data.gst.trim() !== ""),
+    {
+        message: "gst cannot be null or empty if gstVerified is true",
+        path: ["gst"],
+    },
+)
+.refine(
+    (data) => !data.msmeVerified || (data.msme && data.msme.trim() !== ""),
+    {
+        message: "msme cannot be null or empty if msmeVerified is true",
+        path: ["msme"],
+       },
+    );
 
 export default function AddBussinessRegistrationLayout() {
+
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      hasCsr: false,
-      hasMsme: false,
-      hasGst: false,
-      hasNgoDarpan: false,
+      businessDarpan: "",
+      businessDarpanVerified: false,
+      csr:"",
+      csrVerified:false,
+      gst:"",
+      gstVerified:false,
+      msme:"",
+      msmeVerified:false,
     },
   })
 
@@ -62,7 +99,7 @@ export default function AddBussinessRegistrationLayout() {
                     </div>
                     <FormField
                       control={form.control}
-                      name="hasCsr"
+                      name="csrVerified"
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
@@ -76,10 +113,10 @@ export default function AddBussinessRegistrationLayout() {
                       )}
                     />
                   </div>
-                  {form.watch("hasCsr") && (
+                  {form.watch("csrVerified") && (
                     <FormField
                       control={form.control}
-                      name="csrNumber"
+                      name="csr"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>CSR-1 Reg. Number</FormLabel>
@@ -104,7 +141,7 @@ export default function AddBussinessRegistrationLayout() {
                     </div>
                     <FormField
                       control={form.control}
-                      name="hasMsme"
+                      name="msmeVerified"
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
@@ -118,10 +155,10 @@ export default function AddBussinessRegistrationLayout() {
                       )}
                     />
                   </div>
-                  {form.watch("hasMsme") && (
+                  {form.watch("msmeVerified") && (
                     <FormField
                       control={form.control}
-                      name="msmeNumber"
+                      name="msme"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>MSME Reg. Number</FormLabel>
@@ -148,7 +185,7 @@ export default function AddBussinessRegistrationLayout() {
                     </div>
                     <FormField
                       control={form.control}
-                      name="hasGst"
+                      name="gstVerified"
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
@@ -162,10 +199,10 @@ export default function AddBussinessRegistrationLayout() {
                       )}
                     />
                   </div>
-                  {form.watch("hasGst") && (
+                  {form.watch("gstVerified") && (
                     <FormField
                       control={form.control}
-                      name="gstNumber"
+                      name="gst"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>GST Number</FormLabel>
@@ -190,7 +227,7 @@ export default function AddBussinessRegistrationLayout() {
                     </div>
                     <FormField
                       control={form.control}
-                      name="hasNgoDarpan"
+                      name="businessDarpanVerified"
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
@@ -204,10 +241,10 @@ export default function AddBussinessRegistrationLayout() {
                       )}
                     />
                   </div>
-                  {form.watch("hasNgoDarpan") && (
+                  {form.watch("businessDarpanVerified") && (
                     <FormField
                       control={form.control}
-                      name="darpanNumber"
+                      name="businessDarpan"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>NGO Darpan</FormLabel>

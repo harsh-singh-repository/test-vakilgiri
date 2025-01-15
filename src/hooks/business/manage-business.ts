@@ -1,14 +1,6 @@
 import {  useMutation, useQuery} from '@tanstack/react-query';
-// import { handleMutationSuccess, handleMutationError } from '@/lib/mutation-utils';
-// // import { UserPayload } from '@/types/index.d';
-// import { useCustomToast } from '@/components/providers/toaster-provider';
-// import { 
-//     // ApiResponse, 
-//     // CreateClientData, 
-//     EditClientData 
-// } from '@/types';
 import { bussinessService } from '@/service/business/manage-business';
-import {AddFileType, BussinessDiscussionType, BussinessReminderTypes, editBussinessDetails } from '@/types';
+import {AddFileType, BusinessRegistation, BussinessDiscussionType, BussinessReminderTypes, editBussinessDetails } from '@/types';
 
 export const useGetBussiness = () => {
     const query =  useQuery({
@@ -17,6 +9,20 @@ export const useGetBussiness = () => {
     });
     return query;
 };
+
+export const useGetBussinessRegistaration = (id:string|string[]|undefined) => {
+    const query =  useQuery({
+        queryKey: ['bussiness'],
+        queryFn:()=> bussinessService.getBussinessRegistration(id),
+    });
+    return query;
+};
+
+export const useEditBusinessRegistration = (id:string) => {
+    return useMutation({
+       mutationFn:(registration:BusinessRegistation)=>bussinessService.getBussinessRegistrationEdit(id,registration),
+    })
+ };
 
 export const useGetBussinessCount = () => {
     const query =  useQuery({

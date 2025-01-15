@@ -86,6 +86,9 @@ const Personal_Form = ({clientId}:clientIdProps) => {
   }, [defaultValues, form])
 
 
+  // const withVakailGiri = form.watch("dscInfo");
+
+
   function onSubmit(values: z.infer<typeof PersonalDataformSchema>) {
     mutate(values,{
       onSuccess:()=>{
