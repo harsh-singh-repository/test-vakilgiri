@@ -1,7 +1,7 @@
 // ClientPage.tsx
 "use client";
 import React, {useState } from "react";
-import { ChevronsLeft, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { columns } from "./table/columns";
 import { StaffTable } from "./table/client-table";
@@ -9,7 +9,6 @@ import ClientCard from "./table/client-card";
 import { useSearchParams } from "next/navigation";
 import {Oval} from "react-loader-spinner"
 import { useGetAllStaff} from "@/hooks/user/manage-user";
-import EditStaff from "./EditStaff";
 import Modal from "@/components/model/custom-modal";
 import CreateStaff from "./CreateStaff";
 import { StaffType } from "../_types/types";
@@ -18,7 +17,6 @@ import { StaffType } from "../_types/types";
 export default function StaffPage() {
   
   const {data} = useGetAllStaff();
-  const [staffEdit,setStaffEdit] = useState<boolean>(false);
 
 
   const staffUsers: StaffType[] = (data || []).filter((user: StaffType) => user.userRoles === "Staff_Manager");
@@ -59,7 +57,7 @@ export default function StaffPage() {
   }
 
   return (
-     (!staffEdit ? <div className="flex-1 space-y-4 p-4 pt-6 md:p-4">
+     <div className="flex-1 space-y-4 p-4 pt-6 md:p-4">
         {/* <Breadcrumbs items={breadcrumbItems} /> */}
         <div className="flex items-start justify-between">
           <div className="text-xl font-semibold text-[#042559]">{`Staff (${staffUsers.length})`}</div>
@@ -88,25 +86,11 @@ export default function StaffPage() {
           searchKey="search"
           searchValue={searchValue}
           pageNo={page}
-          columns={columns(setStaffEdit)}
+          columns={columns}
           totalUsers={staffUsers.length}
           data={staffUsers}
           pageCount={Math.ceil(staffUsers.length / pageLimit)}
         />
-      </div> : 
-      <div className="p-3">
-          <div className="p-3 bg-white rounded-md shadow-md border-gray-100 flex flex-col gap-y-2">
-              <div className="flex felx-col gap-3 items-center">
-              <div className="bg-[#042559] text-white cursor-pointer max-w-fit px-1 py-1 rounded-md" onClick={()=>setStaffEdit(false)}>
-                  <ChevronsLeft className="h-4 w-4"/>
-              </div>
-              <div>
-                <h1 className="text-[22px] font-medium">Edit staff for client</h1>
-              </div>
-              </div>
-              <EditStaff/>
-          </div>
-      </div>  
-    )
+      </div> 
   );
 }

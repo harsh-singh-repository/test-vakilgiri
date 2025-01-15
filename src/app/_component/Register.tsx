@@ -308,14 +308,6 @@ export default function Register({ alreadyLogin }: RegisterProps) {
             <Button className="w-full bg-[#f21300] text-white hover:bg-[#d11100]">
               Verify Email with OTP
             </Button>
-
-            <Modal isOpen={isModalOpen} onClose={closeModal} className="p-4">
-              <OtpVerifyForm
-                onClose={closeModal}
-                email={otpEmail}
-                password={passwordValue}
-              />
-            </Modal>
           </div>
 
           {error && <p className="text-center text-red-500">{error}</p>}
@@ -332,6 +324,13 @@ export default function Register({ alreadyLogin }: RegisterProps) {
           </div>
         </form>
       </Form>
+      <Modal isOpen={isModalOpen} onClose={closeModal} className="p-4">
+              <OtpVerifyForm
+                onClose={closeModal}
+                email={otpEmail}
+                password={passwordValue}
+              />
+      </Modal>
     </div>
   );
 }

@@ -1,21 +1,16 @@
 'use client'
 
-import { useState } from 'react'
-import { Star } from 'lucide-react'
+import { Star } from 'lucide-react';
 
 interface StarToggleProps {
-  onChange?: (filled: boolean) => void
-  defaultFilled?: boolean
+  onChange: (filled: boolean) => void;
+  filled: boolean;
 }
 
-export function StarToggle({ onChange, defaultFilled = false }: StarToggleProps) {
-  const [filled, setFilled] = useState(defaultFilled)
-
+export function StarToggle({ onChange, filled }: StarToggleProps) {
   const handleToggle = () => {
-    const newFilled = !filled
-    setFilled(newFilled)
-    onChange?.(newFilled)
-  }
+    onChange(!filled);
+  };
 
   return (
     <button
@@ -30,6 +25,6 @@ export function StarToggle({ onChange, defaultFilled = false }: StarToggleProps)
         }`}
       />
     </button>
-  )
+  );
 }
 

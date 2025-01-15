@@ -9,7 +9,7 @@ interface PaymentDetail {
 
 interface PaymentDetailCardProp{
     onClose:()=>void;
-    openDialogId?:string;
+    openDialogId:string;
 }
 
 export default function PaymentDetailCard({onClose,openDialogId}:PaymentDetailCardProp) {

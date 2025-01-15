@@ -212,13 +212,13 @@ const ClientShowcase = () => {
               </div>
             </div>
           ))}
+        </div>
            <Modal isOpen={isClientModalOpen} onClose={closeClientModal}>
             <StackExchangeDialog
               onClose={closeClientModal}
               openDialogId={clientDialogId}
             />
           </Modal>
-        </div>
       </div>
       <div
         // key={table.tableId}

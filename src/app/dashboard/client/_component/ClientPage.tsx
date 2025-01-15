@@ -9,11 +9,17 @@ import ClientCard from "./client-card";
 import { useSearchParams } from "next/navigation";
 import AddClientDialog from "./AddClientDialog";
 import { Oval } from "react-loader-spinner";
-import { useGetClients } from "@/hooks/clients/manage-client";
+import {
+  useGetClients,
+  useSearchClinetQuery,
+} from "@/hooks/clients/manage-client";
 import Modal from "@/components/model/custom-modal";
 
 export default function ClientPageContent() {
-  const {data} = useGetClients();
+  const [searchValue, setSearchValue] = useState("");
+
+  const { data } = useGetClients();
+  const { data: SearchedData } = useSearchClinetQuery(searchValue);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,18 +27,18 @@ export default function ClientPageContent() {
   const closeModal = () => setIsModalOpen(false);
 
   console.log("ClinetData", data);
+  console.log("SeachedData", SearchedData);
   // const [open, setOpen] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
   const pageLimit = searchParams.get("limit")
     ? Number(searchParams.get("limit"))
-    : 10;
-  const [searchValue, setSearchValue] = useState(
-    searchParams.get("search") || ""
-  );
+    : 20;
 
-  if(!data){
+  const paginatedData = data?.slice((page - 1) * pageLimit, page * pageLimit);
+
+  if (!data) {
     return (
       <div className="flex justify-center items-center h-full">
         <Oval
@@ -54,26 +60,34 @@ export default function ClientPageContent() {
         <div className="text-xl font-semibold text-[#042559]">{`Clients (${data?.length})`}</div>
 
         <div className="flex justify-center item-center gap-4">
-        <div className='flex gap-2 items-center'>
-          <Input
-            placeholder="Type here..."
-            value={searchValue}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchValue(event.target.value)}
-            className="w-full md:max-w-sm ml-auto bg-white p-[5px] text-[14px] lg:w-[249px] h-[30px] placeholder:text-black/40"
+          <div className="flex gap-2 items-center">
+            <Input
+              placeholder="Type here..."
+              value={searchValue}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                setSearchValue(event.target.value)
+              }
+              className="w-full md:max-w-sm ml-auto bg-white p-[5px] text-[14px] lg:w-[249px] h-[30px] placeholder:text-black/40"
             />
 
-              <div className="bg-[#f21300] text-white max-h-[25px] min-h-[25px] min-w-[25px] max-w-[25px] rounded-sm cursor-pointer p-1" onClick={openModal}>
-                <Plus strokeWidth={"5"} size={"18"}/>
-              </div>
+            <div
+              className="bg-[#f21300] text-white max-h-[25px] min-h-[25px] min-w-[25px] max-w-[25px] rounded-sm cursor-pointer p-1"
+              onClick={openModal}
+            >
+              <Plus strokeWidth={"5"} size={"18"} />
+            </div>
           </div>
-          <Modal isOpen={isModalOpen} onClose={closeModal} className="rounded-2xl">
-              <AddClientDialog onClose={closeModal}/>
-          </Modal> 
+          <Modal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            className="rounded-2xl"
+          >
+            <AddClientDialog onClose={closeModal} />
+          </Modal>
         </div>
       </div>
 
       <ClientCard />
-
 
       {data && (
         <ClientTable
@@ -81,8 +95,8 @@ export default function ClientPageContent() {
           searchValue={searchValue}
           pageNo={page}
           columns={columns}
-          totalUsers={data.length}
-          data={data}
+          totalUsers={data?.length}
+          data={paginatedData}
           pageCount={Math.ceil(data.length / pageLimit)}
         />
       )}

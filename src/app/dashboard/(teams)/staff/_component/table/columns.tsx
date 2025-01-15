@@ -7,7 +7,7 @@ import { StaffType } from '../../_types/types';
 // import { CellAction } from './cell-action';
 
 
-export const columns = (setStaffEdit: React.Dispatch<React.SetStateAction<boolean>>) : ColumnDef<StaffType>[] => [
+export const columns: ColumnDef<StaffType>[] = [
   {
     accessorKey: 'profile-image',
     header: '',
@@ -96,9 +96,10 @@ export const columns = (setStaffEdit: React.Dispatch<React.SetStateAction<boolea
   {
     accessorKey: 'action',
     header: 'Action',
-    cell:()=>{
+    cell:({row})=>{
+      const id = row.original.id
       return(
-         <ActionButton setStaffEdit={setStaffEdit}/>
+         <ActionButton openDialogId={id}/>
       )
     }
   }

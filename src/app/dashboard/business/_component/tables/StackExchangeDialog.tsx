@@ -692,7 +692,7 @@ export const StackBussinessExchangeDialog = ({
             </div>
             <div className="text-[10px] bg-[#A301D5] max-w-fit  text-white px-2 rounded-full mt-1">
               <span className="font-medium">
-                {data?.businessType.replace("_", " ")}
+                {data?.businessType?.replace("_", " ")}
               </span>
             </div>
             <div className="text-[10px] bg-[#A0A0A0] max-w-fit  text-white px-2 rounded-full mt-1">

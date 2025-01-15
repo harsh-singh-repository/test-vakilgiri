@@ -313,8 +313,7 @@ const Personal_Form = ({clientId}:clientIdProps) => {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="Pending">Pending</SelectItem>
-                          <SelectItem value="Completed">Completed</SelectItem>
-                          <SelectItem value="Rejected">Rejected</SelectItem>
+                          <SelectItem value="Approved">Approved</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormItem>

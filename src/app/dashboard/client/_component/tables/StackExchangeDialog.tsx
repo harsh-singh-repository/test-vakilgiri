@@ -4,7 +4,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
 import { format } from "date-fns";
 import {
   PlusCircle,
@@ -382,7 +381,7 @@ export const StackExchangeDialog = ({
                           className="flex flex-row gap-2 items-center bg-[#E9E9E9] rounded-md px-2 py-1 "
                           key={index}
                         >
-                          <RxAvatar size={25} />
+                           <Image height={"30"} width={"30"} alt="avatar" src={Profile}/>
                           <div className="flex flex-col w-full">
                             <span className="font-bold">Nahar Singh</span>
                             <span className="font-medium">

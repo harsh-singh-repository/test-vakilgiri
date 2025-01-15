@@ -1,13 +1,12 @@
 "use client"
-// import { IoMdMail } from "react-icons/io"
-import { FaStackExchange } from "react-icons/fa"
-import { MdEdit } from "react-icons/md"
+
+import { FaEye, FaStackExchange } from "react-icons/fa"
 import { Button } from '@/components/ui/button'
 
 import { useRouter } from 'next/navigation'
 import { useState } from "react"
-import { StackBussinessExchangeDialog } from "./StackExchangeDialog"
 import Modal from "@/components/model/custom-modal"
+import { StackExchangeDialog } from "@/app/dashboard/client/_component/tables/StackExchangeDialog"
 
 interface ActionButtonProps {
   id: string;
@@ -24,7 +23,7 @@ const ActionButton = ({id}:ActionButtonProps) => {
   const router = useRouter()
 
   const handleEditClick = () => {
-    router.push(`/dashboard/business/${id}`)
+    router.push(`/dashboard/client/${id}`)
   }
 
   return (
@@ -37,13 +36,13 @@ const ActionButton = ({id}:ActionButtonProps) => {
             <FaStackExchange />
           </Button>
           <Modal isOpen={isModalOpen} onClose={closeModal} className="rounded-2xl">
-             <StackBussinessExchangeDialog openDialogId={openDialogId} onClose={closeModal}/>
+              <StackExchangeDialog onClose={closeModal} openDialogId={openDialogId}/>
           </Modal>
       <Button
         className="bg-[#042559] text-white w-6 h-7 text-sm hover:bg-[#f21300]"
         onClick={handleEditClick}
       >
-        <MdEdit />
+        <FaEye/>
       </Button>
     </div>
   )

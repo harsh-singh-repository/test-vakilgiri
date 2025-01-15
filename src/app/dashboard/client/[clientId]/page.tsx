@@ -133,7 +133,7 @@ function Page() {
         </TabsContent>
         <TabsContent value="All Profile" className="mt-12 h-[100vh] px-5">
           <div className="flex flex-col items-center gap-3 md:flex-col lg:flex-row lg:items-start">
-            <Card className="px-[12px] py-[10px] w-[40%]">
+            <Card className="px-[12px] py-[10px] w-full">
               <div className="flex flex-row items-center gap-3">
                 <Image
                   height={50}
@@ -169,7 +169,7 @@ function Page() {
                   <Personal_Form clientId={clientId} />
                 </TabsContent>
                 <TabsContent value="address">
-                  <Component />
+                  <Component clientId={clientId} />
                 </TabsContent>
                 <TabsContent value="documents">
                   <div className="flex flex-col items-end">

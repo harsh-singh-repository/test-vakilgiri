@@ -98,9 +98,8 @@ export const columns: ColumnDef<GetPaymentsInterface>[] = [
     header: () => {
       return <div className="text-center">Action</div>;
     },
-    cell: ({row}) => {
-      const openDialogId = row.original.id
-      return <ActionButton openDialogId={openDialogId}/>;
+    cell: () => {
+      return <ActionButton/>;
     },
   },
 ];

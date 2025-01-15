@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FaPencilAlt, FaRegCreditCard } from 'react-icons/fa';
 import { FaEye } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
-import Modal from '@/components/model/custom-modal';
-import PaymentDetailCard from './PaymentDetailCard';
 
-const ActionButton = ({openDialogId}:{openDialogId:string}) => {
+const ActionButton = () => {
   // Define the onClick functions for each button
+  const handleFileClick = () => {
+    console.log('File button clicked!');
+  };
 
   const handleViewClick = () => {
     console.log('View button clicked!');
@@ -16,25 +17,15 @@ const ActionButton = ({openDialogId}:{openDialogId:string}) => {
     console.log('Sync button clicked!');
   };
 
-
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-
   return (
     <div className="flex justify-center items-center gap-1">
       {/* File Button - Red */}
       <Button
-        className="bg-[#031747] text-white w-8 h-8 text-sm flex justify-center items-center hover:bg-[#f21300]" onClick={()=>openModal()}
+        onClick={handleFileClick}
+        className="bg-[#031747] text-white w-8 h-8 text-sm flex justify-center items-center hover:bg-[#f21300]"
       >
         <FaEye/>
       </Button>
-
-      <Modal isOpen={isModalOpen} onClose={closeModal} className="rounded-2xl">
-        <PaymentDetailCard onClose={closeModal} openDialogId={openDialogId}/>
-      </Modal>
 
       {/* Eye Button - Blue */}
       <Button

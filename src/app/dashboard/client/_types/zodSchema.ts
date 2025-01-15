@@ -65,11 +65,11 @@ export  const AddClientformSchema = z.object({
   });
 
   export const AddressformSchema = z.object({
-    address1: z.string().min(1, { message: 'This field is mandatory' }),
-    address2: z.string().min(1, { message: 'This field is mandatory' }),
-    city: z.string().min(1, { message: 'This field is mandatory' }),
-    state: z.string().min(1, { message: 'This field is mandatory' }),
-    pincode: z.string().regex(/^\d{6}$/, { message: 'Enter a valid 6-digit pincode' }),
+    address1: z.string().min(1, { message: 'This field is mandatory' }).optional(),
+    address2: z.string().min(1, { message: 'This field is mandatory' }).optional(),
+    city: z.string().min(1, { message: 'This field is mandatory' }).optional(),
+    state: z.string().min(1, { message: 'This field is mandatory' }).optional(),
+    pincode: z.string().regex(/^\d{6}$/, { message: 'Enter a valid 6-digit pincode' }).optional(),
   })
 
   export const PersonalDataformSchema = z.object({

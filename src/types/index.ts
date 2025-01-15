@@ -104,6 +104,10 @@ export interface EditClientData {
   gender?: "Male" | "Female" | "Other";
   kycStatus?: "Pending" | "Completed" | "Rejected";
   loginStatus?: "Active" | "Inactive";
+  address1?:string;
+  address2?:string;
+  city?:string;
+  pincode?:string;
 }
 
 export interface StaffDataTypes{

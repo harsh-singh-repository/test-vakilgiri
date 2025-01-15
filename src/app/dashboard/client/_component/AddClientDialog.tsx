@@ -50,7 +50,7 @@ const AddClientFormSchema = z.object({
   Alternate_Mobile_Number: z.string().optional(),
   Address_1: z.string().min(1, "Address is required"),
   Address_2: z.string().optional(),
-  Aadhaar: z.string().min(12, "Aadhaar must be 12 digits").max(12),
+  Aadhaar: z.string().min(12, "Aadhaar must be 12 digits").max(12).optional(),
   sendMailToClient: z.boolean(),
 })
 
@@ -89,19 +89,14 @@ export default function AddClientDialog({ onClose }: AddClientDialogProps) {
       onSuccess: () => {
         toast.success("Client created successfully!")
         queryClient.invalidateQueries({ queryKey: ["clients"] })
-        form.reset()
+        onClose()
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
-          // Safely access the response data
           const errorMessage =
             error.response?.data?.message || "An unexpected error occurred.";
-          // console.log("Axios Error Message:", errorMessage);
-
-          // Display error message in toast
           toast.error(`Error: ${errorMessage}`);
         } else {
-          // Handle non-Axios errors
           toast.error("An unexpected error occurred.");
         }
       },
