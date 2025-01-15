@@ -88,7 +88,6 @@ export interface CreateClientData {
   Alternate_Mobile_Number?: string; // Optional
   Address_2?: string; // Optional
   Aadhaar?: string; // Optional
-  sendMailToClient: boolean;
 }
 
 export interface EditClientData {
@@ -102,7 +101,7 @@ export interface EditClientData {
   dscInfo?:"None"|"Not_Applicable" |  "With_Vakilgiri" | "With_Client"
   email?: string;
   gender?: "Male" | "Female" | "Other";
-  kycStatus?: "Pending" | "Completed" | "Rejected";
+  kycStatus?: "Pending" | "Completed" | "Rejected" | "Approved";
   loginStatus?: "Active" | "Inactive";
   address1?:string;
   address2?:string;
@@ -159,19 +158,19 @@ export interface GetPaymentsInterface{
 
 
 export interface CreateBussiness{
-  business_type: string;
-  business_name: string;
-  business_reg_no: string;
-  business_reg_date: string;
-  business_pan: string;
-  business_mobile: string;
-  state: string;
-  business_address_1: string;
-  business_address_2?: string;
+  businessType: string;
+  businessName: string;
+  businessRegNo: string;
+  businessRegDate: string;
+  businessPan: string;
+  businessMobile: string;
+  state?: z.infer<typeof stateZodSchema>;
+  businessAddress1: string;
+  businessAddress2?: string;
   city: string;
-  business_pincode: string;
-  business_email: string;
-  business_logo?: File | null;
+  businessPincode: string;
+  businessEmail: string;
+  businessLogo?: File | null;
   about: string;
   terms_conditions: boolean;
 }

@@ -5,20 +5,19 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import AddFileNewBussiness from "./AddFileNewBussiness";
 
-
 export default function BussinessDocuments() {
   const documents = [
     {
       id: 1,
       name: "Upload Trust Deed/ Certificate of Incorporation/ Society Deed",
     },
-    { id: 2, name: "Upload Pan Card of your NGO"},
-    { id: 3, name: "Upload 12AB (Provisional/ Final) Certificate",},
-    { id: 4, name: "Upload 80G (Provisional/ Final) Certificate"},
-    { id: 5, name: "Upload FCRA Certificate"},
-    { id: 6, name: "Upload NGO Darpan/ Niti Aayog Certificate"},
-    { id: 7, name: "Upload CSR-1 Certificate"},
-    { id: 8, name: "Upload GST Certificate",}
+    { id: 2, name: "Upload Pan Card of your NGO" },
+    { id: 3, name: "Upload 12AB (Provisional/ Final) Certificate" },
+    { id: 4, name: "Upload 80G (Provisional/ Final) Certificate" },
+    { id: 5, name: "Upload FCRA Certificate" },
+    { id: 6, name: "Upload NGO Darpan/ Niti Aayog Certificate" },
+    { id: 7, name: "Upload CSR-1 Certificate" },
+    { id: 8, name: "Upload GST Certificate" },
   ];
 
   // const handleFileChange = (id: number, file: File | null) => {
@@ -28,7 +27,6 @@ export default function BussinessDocuments() {
   // };
 
   const [isAddFileModalOpen, setIsAddFileModalOpen] = useState(false);
-
 
   const openAddFileModal = () => setIsAddFileModalOpen(true);
   const closeAddFileModal = () => setIsAddFileModalOpen(false);
@@ -57,9 +55,9 @@ export default function BussinessDocuments() {
           </div>
         ))}
       </div>
-              <Modal isOpen={isAddFileModalOpen} onClose={closeAddFileModal}>
-                  <AddFileNewBussiness onClose={closeAddFileModal}/>
-                </Modal>
+      <Modal isOpen={isAddFileModalOpen} onClose={closeAddFileModal}>
+        <AddFileNewBussiness onClose={closeAddFileModal} />
+      </Modal>
 
       <div className="space-y-4">
         <div className="inline text-[10px] bg-[#091747] text-left px-2 py-1 font-semibold rounded-md max-w-fit text-white">

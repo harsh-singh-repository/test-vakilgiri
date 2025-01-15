@@ -18,20 +18,23 @@ export const businessTypeZodSchema = z.enum(
   { required_error: "Business type is required" }
 );
 
-export const stateZodSchema = z.enum([
-  "Arunachal_Pradesh",
-  "Andhra_Pradesh",
-  "Chhattisgarh",
-  "Assam",
-  "Bihar",
-  "Haryana",
-  "Goa",
-  "Rajasthan",
-  "Uttar_Pradesh",
-  "Tamil_Nadu",
-  "Others",
-],
-{ required_error: "Select state" });
+export const stateZodSchema = z.enum(
+  [
+    "Arunachal_Pradesh",
+    "Andhra_Pradesh",
+    "Chhattisgarh",
+    "Assam",
+    "Bihar",
+    "Haryana",
+    "Goa",
+    "Rajasthan",
+    "Uttar_Pradesh",
+    "Tamil_Nadu",
+    "Others",
+    "Gujarat",
+  ],
+  { required_error: "Select state" }
+);
 
 export const panZodSchema = z
   .string()
@@ -45,9 +48,8 @@ export const dateZodSchema = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format, expected YYYY-MM-DD");
 
-
 export const AddBussinessformSchema = z.object({
-  business_type: z.enum([
+  businessType: z.enum([
     "Choose Bussiness Type",
     "Private_Limited",
     "Proprietorship",
@@ -62,23 +64,23 @@ export const AddBussinessformSchema = z.object({
     "OPC",
     "Nidhi_Limited",
   ]),
-  business_name: z.string().min(1, "Business name is required"),
-  business_reg_no: z.string().min(1, "CIN/Reg no. is required"),
-  business_reg_date: z.string().min(1, "Date is Required"),
-  business_pan: z.string().min(10, "PAN Card must be 10 characters").max(10),
-  business_mobile: z
+  businessName: z.string().min(1, "Business name is required"),
+  businessRegNo: z.string().min(1, "CIN/Reg no. is required"),
+  businessRegDate: z.string().min(1, "Date is Required"),
+  businessPan: z.string().min(10, "PAN Card must be 10 characters").max(10),
+  businessMobile: z
     .string()
     .min(10, "Official number must be 10 digits")
     .max(10),
-  state: stateZodSchema,
-  business_address_1: z.string().min(1, "Registered address is required"),
-  business_address_2: z
+  state: stateZodSchema.optional(),
+  businessAddress1: z.string().min(1, "Registered address is required"),
+  businessAddress2: z
     .string()
     .min(1, "Registered address is required")
     .optional(),
   city: z.string().min(1, "City is required"),
-  business_pincode: z.string().min(6, "Pin code must be 6 digits").max(6),
-  business_email: z.string().min(1, "Enter EmailId"),
+  businessPincode: z.string().min(6, "Pin code must be 6 digits").max(6),
+  businessEmail: z.string().min(1, "Enter EmailId"),
   business_logo: z
     .instanceof(File)
     .refine((file) => file.size <= 5000000, {

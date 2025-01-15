@@ -56,7 +56,7 @@ export const clientService = {
 
     create: async (clientData: CreateClientData) => {
         return await axiosInstance.post(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.CREATE}`, clientData,);
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${CLIENT_API.CREATE}`, clientData);
     },
 
     edit: async (clientData: EditClientData, id: string | string [] | undefined) => {

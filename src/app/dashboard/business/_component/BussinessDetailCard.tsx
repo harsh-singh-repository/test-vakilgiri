@@ -26,7 +26,7 @@ const BussinessDetailCard = ({bussinessId}:BussinessDetailCardProps) => {
             <div className="flex gap-x-1"><span className="font-bold">Paidup Capital:</span><span className='font-medium'>{data?.paidUpCapital}</span></div>
             <div className="flex gap-x-2 font-bold">
                 <div className="px-2 bg-[#A800F0] rounded-md">
-                     <span className="text-[10px] text-white">{data?.businessType.replace("_"," ")}</span>
+                     <span className="text-[10px] text-white">{data?.businessType?.replace("_"," ")}</span>
                 </div>
                 <div className="px-2 bg-[#008827] rounded-md">
                      <span className="text-[10px] text-white">{data?.businessStatus}</span>
@@ -37,7 +37,7 @@ const BussinessDetailCard = ({bussinessId}:BussinessDetailCardProps) => {
            Contact Person
         </div>
         <div className="flex flex-col text-[#091747] text-xs mt-2 gap-y-1">
-        <div className="flex gap-x-1"><span className="font-bold">Client:</span><span className='font-medium'>{data?.contactPerson?.firstName + " " + data?.contactPerson?.lastName}</span></div>
+        <div className="flex gap-x-1"><span className="font-bold">Client:</span><span className='font-medium'>{data.contactPerson != undefined ? data?.contactPerson?.firstName + " " + data?.contactPerson?.lastName : "N/A"}</span></div>
         <div className="flex gap-x-1"><span className="font-bold">Mobile:</span><span className='font-medium'>{data?.contactPerson?.mobileNumber}</span></div>
         <div className="flex gap-x-1"><span className="font-bold">Email:</span><span className='font-medium'>{data?.contactPerson?.email}</span></div>
                 <div className="px-2 bg-[#FFB200] rounded-md max-w-fit">
@@ -49,7 +49,7 @@ const BussinessDetailCard = ({bussinessId}:BussinessDetailCardProps) => {
         </div>
         <div className="flex flex-col text-[#091747] text-xs mt-2 gap-y-1">
         <div className="flex gap-x-1"><span className="font-bold">Creator:</span><span className='font-medium'>{data?.creator?.firstName + " " + data?.creator?.lastName}</span></div>
-            <span className="font-bold">Created On:</span>
+            <span className="font-bold">Created On:{data.createdAt.toLocaleDateString()}</span>
             <span className="font-bold">Manager:</span>
         </div>
       </div>

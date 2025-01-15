@@ -117,9 +117,6 @@ export default function BusinessPage() {
             </div>
           </div>
 
-          {/* <Modal isOpen={isModalOpen} onClose={closeModal} className='p-4'> */}
-
-          {/* </Modal> */}
         </div>
       </div>
 

@@ -16,6 +16,7 @@ import { useRef, useState } from "react"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
 import { useAddFiletoClient } from "@/hooks/clients/manage-client"
+import { useQueryClient } from "@tanstack/react-query"
 
 // Zod schema
 const fileSchema = z.object({
@@ -38,9 +39,7 @@ interface OnCloseProp {
 }
 
 export default function AddFileToClient({ onClose,clientId}: OnCloseProp) {
-
   const { mutate: AddFiles } = useAddFiletoClient()
-
 
   const form = useForm<FileUploadForm>({
     resolver: zodResolver(fileSchema),
@@ -54,6 +53,7 @@ export default function AddFileToClient({ onClose,clientId}: OnCloseProp) {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [fileName, setFileName] = useState<string>("")
+  const queryClient = useQueryClient();
 
   const onSubmit = (data: FileUploadForm) => {
     console.log("Submitted Data:", data);
@@ -63,6 +63,9 @@ export default function AddFileToClient({ onClose,clientId}: OnCloseProp) {
     AddFiles(data,{
       onSuccess: () => {
         toast.success("File Uploaded Successfully")
+        queryClient.invalidateQueries({
+          queryKey: ["clientFiles"]
+        });
         onClose()
       },
       onError: (error) => {

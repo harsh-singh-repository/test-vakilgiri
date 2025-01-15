@@ -83,7 +83,7 @@ export  const AddClientformSchema = z.object({
     dob: z.string().default("").optional(),
     dscInfo: z.enum(["None", "Not_Applicable", "With_Vakilgiri", "With_Client"]).default("Not_Applicable").optional(),
     email: z.string().email("Invalid email address").default("").optional(),
-    kycStatus: z.enum(["Pending", "Completed", "Rejected"]).default("Pending").optional(),
+    kycStatus: z.enum(["Pending", "Approved"]).default("Pending").optional(),
     loginStatus: z.enum(["Active", "Inactive"]).default("Active").optional(),
   });
 

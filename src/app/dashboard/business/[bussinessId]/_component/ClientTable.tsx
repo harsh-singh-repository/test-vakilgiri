@@ -207,7 +207,7 @@ export function ClientTable<TData, TValue>({
           <Select
             value={`${pageSize}`}
             onValueChange={(value) => setPagination({ pageIndex, pageSize: Number(value) })}
-          >
+          > 
             <SelectTrigger className="h-8 w-[70px]">
               <SelectValue placeholder={`${pageSize}`} />
             </SelectTrigger>

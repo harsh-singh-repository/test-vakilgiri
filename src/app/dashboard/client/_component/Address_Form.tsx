@@ -98,7 +98,7 @@ export default function Component({ clientId }: clientIdProps) {
     "Karnataka",
     "Kerala",
     "Tamil Nadu",
-    "Telangana",
+    "Gujarat",
     // Add other states as needed
   ];
 

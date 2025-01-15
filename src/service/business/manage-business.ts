@@ -48,7 +48,7 @@ export const bussinessService = {
     },
 
     create: async (businessData: CreateBussiness) => {
-        return await axiosInstance.post(
+        return await axiosInstance.post(    
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${BUSINESS_API.CREATE}`, businessData);
     },
 

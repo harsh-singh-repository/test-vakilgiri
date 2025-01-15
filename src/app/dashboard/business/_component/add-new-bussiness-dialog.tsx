@@ -32,6 +32,7 @@ const states = [
   { key: "Assam", name: "Assam" },
   { key: "Bihar", name: "Bihar" },
   { key: "Haryana", name: "Haryana" },
+  { key: "Gujarat", name: "Gujarat" },
   { key: "Goa", name: "Goa" },
   { key: "Rajasthan", name: "Rajasthan" },
   { key: "Uttar_Pradesh", name: "Uttar Pradesh" },
@@ -69,18 +70,18 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
   const form = useForm<z.infer<typeof AddBussinessformSchema>>({
     resolver: zodResolver(AddBussinessformSchema),
     defaultValues: {
-      business_type: "Private_Limited",
-      business_name: "",
-      business_reg_date: "",
-      business_pan: "",
-      business_reg_no: "",
-      business_mobile: "",
-      business_address_1: "",
-      business_address_2: "",
-      business_logo: null,
+      businessType: "Private_Limited",
+      businessName: "",
+      businessRegDate: "",
+      businessPan: "",
+      businessRegNo: "",
+      businessMobile: "",
+      businessAddress1: "",
+      businessAddress2: "",
+      businessPincode: "",
+      businessEmail: "",
       city: "",
-      business_email: "",
-      business_pincode: "",
+      state: "Bihar",
       about: "",
       terms_conditions: false,
     },
@@ -141,7 +142,7 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
                 <div className="flex gap-3 flex-col w-full">
                   <div className="flex gap-3 items-center">
                     <FormField
-                      name="business_type"
+                      name="businessType"
                       control={form.control}
                       render={({ field }) => (
                         <div className="flex items-center">
@@ -172,7 +173,7 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
                   </div>
                   <FormField
                     control={form.control}
-                    name="business_name"
+                    name="businessName"
                     render={({ field }) => (
                       <div>
                         <div className="flex gap-3 items-center">
@@ -193,7 +194,7 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
                   {/* <div className="flex gap-3 items-center"> */}
                   <FormField
                     control={form.control}
-                    name="business_reg_date"
+                    name="businessRegDate"
                     render={({ field}) => (
                       <div className="flex gap-3 items-center">
                         <label className="text-[13px] w-[6.75rem] font-medium">
@@ -214,7 +215,7 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
                   {/* </div> */}
                   <FormField
                     control={form.control}
-                    name="business_pan"
+                    name="businessPan"
                     render={({ field }) => (
                       <FormItem>
                         <div className="flex gap-3 items-center">
@@ -234,7 +235,7 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
                   />
                   <FormField
                     control={form.control}
-                    name="business_email"
+                    name="businessEmail"
                     render={({ field }) => (
                       <FormItem>
                         <div className="flex gap-3 items-center">
@@ -289,7 +290,7 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
                 <div className="flex gap-3 flex-col w-full">
                   <FormField
                     control={form.control}
-                    name="business_address_2"
+                    name="businessAddress2"
                     render={({ field }) => (
                       <FormItem>
                         <div className="flex gap-3 items-center">
@@ -309,7 +310,7 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
                   />
                   <FormField
                     control={form.control}
-                    name="business_reg_no"
+                    name="businessRegNo"
                     render={({ field }) => (
                       <FormItem>
                         <div className="flex gap-3 items-center">
@@ -329,7 +330,7 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
                   />
                   <FormField
                     control={form.control}
-                    name="business_mobile"
+                    name="businessMobile"
                     render={({ field }) => (
                       <FormItem>
                         <div className="flex gap-3 items-center">
@@ -349,7 +350,7 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
                   />
                   <FormField
                     control={form.control}
-                    name="business_address_1"
+                    name="businessAddress1"
                     render={({ field }) => (
                       <FormItem>
                         <div className="flex gap-3 items-center">
@@ -389,7 +390,7 @@ const AddNewBussinessDialog = ({ style }: AddNewBussinessDialogProp) => {
                   />
                   <FormField
                     control={form.control}
-                    name="business_pincode"
+                    name="businessPincode"
                     render={({ field }) => (
                       <FormItem>
                         <div className="flex gap-3 items-center">

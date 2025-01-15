@@ -16,6 +16,7 @@ import { useRef, useState } from "react"
 import { useAddFile } from "@/hooks/business/manage-business"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
+import { useQueryClient } from "@tanstack/react-query"
 
 // Zod schema
 const fileSchema = z.object({
@@ -52,6 +53,7 @@ export default function AddFile({ onClose}: OnCloseProp) {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [fileName, setFileName] = useState<string>("")
+  const queryClient = useQueryClient()
 
   const onSubmit = (data: FileUploadForm) => {
     console.log("Submitted Data:", data);
@@ -61,6 +63,7 @@ export default function AddFile({ onClose}: OnCloseProp) {
     AddFiles(data,{
       onSuccess: () => {
         toast.success("File Uploaded Successfully")
+        queryClient.invalidateQueries({ queryKey: ["bussinessFiles"] })
         onClose()
       },
       onError: (error) => {

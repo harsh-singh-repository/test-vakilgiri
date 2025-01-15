@@ -260,7 +260,6 @@ export const StackBussinessExchangeDialog = ({
       <div className="flex justify-center item center p-2 h-full">
         <RotatingLines
           visible={true}
-          height="50"
           width="50"
           strokeColor="#f21300"
           strokeWidth="2"
@@ -710,9 +709,11 @@ export const StackBussinessExchangeDialog = ({
               <div className="text-[12px]">
                 <span className="font-bold">Client:</span>{" "}
                 <span className="font-medium">
-                  {data?.businessUsers[0]?.firstName +
-                    " " +
-                    data?.businessUsers[0]?.lastName}
+                  {
+                    data.businessUsers.length > 0 ? (data?.businessUsers[0]?.firstName +
+                      " " +
+                      data?.businessUsers[0]?.lastName) : "No Client"
+                  }
                 </span>
               </div>
               <div className="text-[12px]">
