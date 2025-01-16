@@ -1,5 +1,6 @@
 import { useMutation, useQuery} from '@tanstack/react-query';
 import { userServices } from '@/service/user/manage-user';
+import { officialStaffDetails } from '@/types';
 
 export const useGetUsers = () => {
     const query =  useQuery({
@@ -20,5 +21,11 @@ export const useGetAllStaff = () => {
 export const useAddStaffRoles = () => {
     return useMutation({
         mutationFn: userServices.create,
+    });
+};
+
+export const useAddStaffOfficials = (id:string|string[]|undefined) => {
+    return useMutation({
+        mutationFn:(staffDetails:officialStaffDetails)=> userServices.edit(staffDetails,id),
     });
 };

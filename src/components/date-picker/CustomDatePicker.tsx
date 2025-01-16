@@ -26,12 +26,10 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
     setCurrentValue(newValue);
   
     if (onChange) {
-      // Convert the string to a Date object
-      const dateObject = new Date(newValue);
-      onChange(dateObject.toISOString());
+      onChange(newValue); // Pass the date string in "YYYY-MM-DD" format
     }
   };
-
+  
   return (
     <input
       type="date"

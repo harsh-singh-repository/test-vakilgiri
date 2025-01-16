@@ -31,7 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Modal from "@/components/model/custom-modal";
+// import Modal from "@/components/model/custom-modal";
 
 export default function Register({ alreadyLogin }: RegisterProps) {
   const [otpEmail, setOtpEmail] = useState<string>("");
@@ -41,10 +41,11 @@ export default function Register({ alreadyLogin }: RegisterProps) {
   
    const [loader, setloader] = useState<boolean>(false);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+   const [transition,setTransition] = useState<boolean>(false);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+
+  // const openModal = () => setIsModalOpen(true);
+  // const closeModal = () => setIsModalOpen(false);
 
   const { mutate:RegisterUser } = useRegisterUser();
 
@@ -89,15 +90,12 @@ export default function Register({ alreadyLogin }: RegisterProps) {
       await RegisterUser(data, {
         onSuccess: async () => {
           toast.success("User Registered");
-  
+          
           // Automatically send email verification
           await VerifyEmail({ email: data.email }, {
             onSuccess: () => {
               toast.success("Verification email sent!");
-              if (!isModalOpen) {
-                openModal();
-              }
-             // Open OTP verification modal
+               setTransition(true);
             },
             onError: handleError,
           });
@@ -120,11 +118,18 @@ export default function Register({ alreadyLogin }: RegisterProps) {
       <span className="text-[#002537] font-medium text-base">
         Please register to your account and start the adventure
       </span>
-
-      <Form {...form}>
+      
+      <div className="w-full max-w-md">
+      <div className="relative overflow-hidden" style={{ height: '450px' }}>
+         
+      <div
+            className="absolute w-full transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(${transition ? '-100%' : '0'})` }}
+          >
+            <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="grid w-full max-w-sm items-center gap-1 text-left"
+          className="grid w-full max-w-sm items-center gap-1 text-left mt-1"
         >
           <FormField
             control={form.control}
@@ -329,13 +334,16 @@ export default function Register({ alreadyLogin }: RegisterProps) {
           </div>
         </form>
       </Form>
-      <Modal isOpen={isModalOpen} onClose={closeModal} className="p-4">
+          </div>
+
+           <div className="absolute transition-transform duration-500 ease-in-out" style={{ transform: `translateX(${transition ? '0' : '100%'})` }}>
               <OtpVerifyForm
-                onClose={closeModal}
                 email={otpEmail}
                 password={passwordValue}
-              />
-      </Modal>
+                />
+                </div>
+      </div>
+      </div>
     </div>
   );
 }

@@ -25,9 +25,10 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { Input } from "@/components/ui/input";
 
 
-export function OtpVerifyForm({onClose,email,password}: {onClose:()=>void,email:string,password:string}) {
+export function OtpVerifyForm({email,password}: {email:string,password:string}) {
     const form = useForm<z.infer<typeof OtpFormSchema>>({
         resolver: zodResolver(OtpFormSchema),
         defaultValues: {
@@ -46,7 +47,6 @@ export function OtpVerifyForm({onClose,email,password}: {onClose:()=>void,email:
         await VerifyOtp(data, {
           onSuccess: async () => {
             toast.success("Email Verified Successfully");
-            onClose();
       
             const result = await signIn("credentials", {
               redirect: false,
@@ -82,10 +82,10 @@ export function OtpVerifyForm({onClose,email,password}: {onClose:()=>void,email:
       
 
     return (
-        <div className="sm:max-w-[425px]">
+        <div className="sm:max-w-[425px] mt-8 ml-9">
             <div>
-                <div>Email Verification</div>
-                <div className="text-[#F20101]">
+                <div className="font-medium text-lg">Email Verification</div>
+                <div className="text-[#F20101] font-medium">
                     Verify the entered email
                 </div>
             </div>
@@ -95,19 +95,10 @@ export function OtpVerifyForm({onClose,email,password}: {onClose:()=>void,email:
                         control={form.control}
                         name="otp"
                         render={({ field }) => (
-                            <FormItem>
+                            <FormItem className="flex justify-center item-center flex-col w-full">
                                 <FormLabel>One-Time Password</FormLabel>
                                 <FormControl>
-                                    <InputOTP maxLength={6} {...field}>
-                                        <InputOTPGroup>
-                                            <InputOTPSlot index={0} />
-                                            <InputOTPSlot index={1} />
-                                            <InputOTPSlot index={2} />
-                                            <InputOTPSlot index={3} />
-                                            <InputOTPSlot index={4} />
-                                            <InputOTPSlot index={5} />
-                                        </InputOTPGroup>
-                                    </InputOTP>
+                                    <Input  placeholder="Enter OTP" {...field}/>
                                 </FormControl>
                                 <FormDescription>
                                     Please enter the one-time password sent to your email.

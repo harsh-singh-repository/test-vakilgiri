@@ -95,6 +95,8 @@ export interface EditClientData {
   firstName?: string;
   lastName?: string;
   mobileNumber?: string;
+  dcsExpire?:Date;
+  dscVault?:string;
   pan?: string;
   dob?: string;
   din?: string;
@@ -107,6 +109,20 @@ export interface EditClientData {
   address2?:string;
   city?:string;
   pincode?:string;
+}
+
+export interface officialStaffDetails{
+  officialEmail?: string; // Optional, must be a valid email string with a maximum length of 50
+  officialMobile?: string; // Optional, max length of 15
+  department?: "HR"| "IT"| "Finance"| "Marketing" | null | undefined; // Optional, type defined elsewhere
+  COPid?: string; // Optional
+  membershipNo?: string; // Optional
+  // expertise?: Record<string, any>; // Optional JSON field
+  joiningDate?: string|undefined; // Optional, must conform to dateZodSchema
+  cessationDate?: string|undefined; // Optional, must conform to dateZodSchema
+  joiningSalary?: number; // Optional
+  currentSalary?: number; // Optional
+  slug?: string; // Optional
 }
 
 export interface StaffDataTypes{

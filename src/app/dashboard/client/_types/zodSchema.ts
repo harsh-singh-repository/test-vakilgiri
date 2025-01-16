@@ -71,8 +71,9 @@ export  const AddClientformSchema = z.object({
     state: z.string().min(1, { message: 'This field is mandatory' }).optional(),
     pincode: z.string().regex(/^\d{6}$/, { message: 'Enter a valid 6-digit pincode' }).optional(),
   })
-
-  export const PersonalDataformSchema = z.object({
+  
+  export const PersonalDataformSchema = z
+  .object({
     pan: z.string().min(10, "PAN Card must be 10 characters").default("").optional(),
     firstName: z.string().min(1, "First name is required").default("").optional(),
     lastName: z.string().min(1, "Last name is required").default("").optional(),
@@ -84,18 +85,29 @@ export  const AddClientformSchema = z.object({
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/, "Due date must be in the format 'yyyy-MM-dd'.")
       .optional(),
-    dscInfo: z.enum(["None", "Not_Applicable", "With_Vakilgiri", "With_Client"]).default("None").optional(),
+    dscInfo: z.enum(["None", "Not_Applicable", "With_Vakilgiri", "With_Client"]).default("None"),
     dscExpiry: z
-  .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, "Due date must be in the format 'yyyy-MM-dd'.")
-  .default("")
-  .optional(),
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Due date must be in the format 'yyyy-MM-dd'.").optional(), // Allow empty string
     dscVault: z.string().optional(),
     email: z.string().email("Invalid email address").default("").optional(),
     kycStatus: z.enum(["Pending", "Approved"]).default("Pending").optional(),
     loginStatus: z.enum(["Active", "Inactive"]).default("Active").optional(),
-  });
-  
+  })
+  .refine(
+    (data) => {
+      // Require dscExpiry only when dscInfo is 'With_Vakilgiri'
+      if (data.dscInfo === "With_Vakilgiri") {
+        return !!data.dscExpiry && data.dscExpiry.trim() !== "";
+      }
+      return true;
+    },
+    {
+      message: "DSC Expiry date is required if DSC Info is 'With Vakilgiri'.",
+      path: ["dscExpiry"],
+    }
+  );
+
 
   export const discussionSchema = z.object({
     discussion: z.string().min(1, "Discussion is required"),

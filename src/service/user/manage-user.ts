@@ -1,10 +1,11 @@
 import axiosInstance from "@/lib/axiosInstance";
-import { StaffDataTypes } from "@/types";
+import { officialStaffDetails, StaffDataTypes } from "@/types";
 
 const USER_API = {
     GET_ALL_ASSIGNED_MANAGER : `/manager`,
     GET_ALL_STAFF : `/user`,
-    CREATE_ROLES:`/user/registerByRole`
+    CREATE_ROLES:`/user/registerByRole`,
+    EDIT_STAFF:(id:string | string [] | undefined)=>`/user/admin-staff/${id}`
 }
 
 export const userServices = {
@@ -20,6 +21,9 @@ export const userServices = {
         return await axiosInstance.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}${USER_API.CREATE_ROLES}`, StaffData);
     },
-
+    edit: async (StaffData: officialStaffDetails,id:string[]|string|undefined) => {
+        return await axiosInstance.put(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}${USER_API.EDIT_STAFF(id)}`, StaffData);
+    },
 
 }

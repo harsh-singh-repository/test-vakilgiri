@@ -80,7 +80,7 @@ const Personal_Form = ({ clientId }: clientIdProps) => {
               dob: data.dob?.split("T")[0] ?? "",
               aadhaar: data.aadhaar ?? "112312312321",
               din: data.din ?? "",
-              dscExpiry:data?.dscExpiry,
+              dscExpiry:data?.dscExpiry.split("T")[0] ?? "",
               dscVault:data?.dscVault,
               dscInfo: data.dscInfo ?? "None",
               loginStatus: data.loginStatus ?? "Active",
@@ -113,6 +113,7 @@ const Personal_Form = ({ clientId }: clientIdProps) => {
   };
 
   function onSubmit(values: z.infer<typeof PersonalDataformSchema>) {
+    console.log("Valuess",values);
     setLoader(true);
     mutate(values, {
       onSuccess: () => {
