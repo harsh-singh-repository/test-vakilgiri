@@ -7,16 +7,16 @@ const ClientCard = () => {
   const {data} = useGetAllStaff();
 
 
-  const staffUsers: StaffType[] = (data || []).filter((user: StaffType) => user.userRoles === "Staff_Manager");
-  const ActiveUsers: StaffType[] = (data || []).filter((user: StaffType) => user.loginStatus === "Active" &&  user.userRoles === "Staff_Manager");
-  const InactiveUsers: StaffType[] = (data || []).filter((user: StaffType) => user.loginStatus === "Inactive" &&  user.userRoles === "Staff_Manager");
+  const staffUsers: StaffType[] = (data || []).filter((user: StaffType) => user.userRoles === "Mediator");
+  const ActiveUsers: StaffType[] = (data || []).filter((user: StaffType) => user.loginStatus === "Active" && user.userRoles === "Mediator");
+  const InactiveUsers: StaffType[] = (data || []).filter((user: StaffType) => user.loginStatus === "Inactive" && user.userRoles === "Mediator");
 
   console.log("Inactive Length",InactiveUsers?.length)
 
     const clientCardData = [
         {
             logo: <MdPerson2 size={"45"} />,
-            title: "All Staff",
+            title: "All Mediators",
             value: staffUsers?.length,
             iconBgColor: "bg-[#0917c84d]",
             bgColor: "bg-[#ccd7ff]",

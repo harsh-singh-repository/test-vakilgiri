@@ -116,7 +116,7 @@ export const userRegisterByRoleSchema = z
             .string()
             .regex(/^\d{6}$/, "Invalid pincode")
             .min(1, "Pincode is required"),
-            userRoles: z.enum(["Client", "Staff_Manager", "Admin","Mediator","Retailer","Professional"]),
+        userRoles: z.enum(["Client", "Staff_Manager", "Admin","Mediator","Retailer","Professional"]),
 
         loginStatus : z.enum(["None","Active","Inactive"]),
     })

@@ -107,7 +107,11 @@ const items = [
     classname: "",
     children: [
       { title: "Professionals", url: "/dashboard/professionals", icon: BiSolidBriefcase, classname: "" },
-      { title: "Staff", url: "/dashboard/staff", icon: FaUserCircle, classname: "" }
+      { title: "Staff", url: "/dashboard/staff", icon: FaUserCircle, classname: "" },
+      { title: "Admin", url: "/dashboard/admin", icon: FaUserCircle, classname: "" },
+      { title: "Client", url: "/dashboard/clinet", icon: FaUserCircle, classname: "" },
+      { title: "Mediators", url: "/dashboard/mediators", icon: FaUserCircle, classname: "" },
+      { title: "Retailers", url: "/dashboard/retailer", icon: FaUserCircle, classname: "" }
     ]
   },
   {

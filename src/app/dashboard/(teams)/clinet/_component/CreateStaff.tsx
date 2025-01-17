@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 // import { Textarea } from "@/components/ui/textarea";
+// import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -56,6 +57,7 @@ const role = [
   { key: "Mediator", name: "Mediator" },
   { key: "Professional", name: "Professional" },
   { key: "Retailer", name: "Retailer" },
+  //   { key: "retailer", name: "Retailer" },
 ];
 
 // const bussinessType = [
@@ -275,7 +277,7 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
             <FormField
               control={form.control}
               name="dob"
-              render={({field}) => (
+              render={({ field}) => (
                 <div>
                   <CustomDatePicker
                   value={field.value || ""}

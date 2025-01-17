@@ -57,7 +57,6 @@ const role = [
   { key: "Professional", name: "Professional" },
   { key: "Retailer", name: "Retailer" },
 ];
-
 // const bussinessType = [
 //   { key: "Private_Limited", name: "Private Limited" },
 //   { key: "Proprietorship", name: "Proprietorship" },
@@ -275,7 +274,7 @@ const CreateStaff = ({ onClose }: onCloseProp) => {
             <FormField
               control={form.control}
               name="dob"
-              render={({field}) => (
+              render={({ field }) => (
                 <div>
                   <CustomDatePicker
                   value={field.value || ""}

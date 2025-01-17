@@ -139,7 +139,7 @@ export interface StaffDataTypes{
   address2?: string; // Optional
   city: string; // Required, at least 1 character
   pincode: string; // Must be exactly 6 digits
-  userRoles: "Client" | "Staff_Manager" | "Admin"; // Enum for user roles
+  userRoles: "Client" | "Staff_Manager" | "Admin" | "Mediator" | "Retailer"|"Professional"; // Enum for user roles
   loginStatus: "None" | "Active" | "Inactive"; // Enum for login status
 }
 export interface GetPaymentsInterface{
